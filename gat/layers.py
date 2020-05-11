@@ -1,12 +1,12 @@
 import torch
 from torch.nn import Parameter
 import torch.nn.functional as F
-from torch_geometric.nn.conv import MessagePassing
 from torch_geometric.utils import remove_self_loops, add_self_loops, softmax
+from message_passing import MessagePassing
 
 from inits import glorot, zeros
 
-import torch.cuda.nvtx as nvtx
+from utils import nvtx_push, nvtx_pop
 
 class GATConv(MessagePassing):
     r"""The graph attentional operator from the `"Graph Attention Networks"
@@ -48,8 +48,8 @@ class GATConv(MessagePassing):
             :class:`torch_geometric.nn.conv.MessagePassing`.
     """
     def __init__(self, in_channels, out_channels, heads=1, concat=True,
-                 negative_slope=0.2, dropout=0, bias=True):
-        super(GATConv, self).__init__(aggr='add')
+                 negative_slope=0.2, dropout=0, bias=True, gpu=False):
+        super(GATConv, self).__init__(aggr='add', gpu=gpu)
 
         self.in_channels = in_channels
         self.out_channels = out_channels
@@ -57,6 +57,7 @@ class GATConv(MessagePassing):
         self.concat = concat
         self.negative_slope = negative_slope
         self.dropout = dropout
+        self.gpu = gpu
 
         self.weight = Parameter(torch.Tensor(in_channels,
                                              heads * out_channels))
@@ -85,16 +86,16 @@ class GATConv(MessagePassing):
                                            num_nodes=x.size(self.node_dim))
 
         if torch.is_tensor(x):
-            nvtx.range_push("vertex-cal")
+            nvtx_push(self.gpu, "vertex-cal")
             x = torch.matmul(x, self.weight) # vertex cal
-            nvtx.range_pop()
+            nvtx_pop(self.gpu)
         else:
             x = (None if x[0] is None else torch.matmul(x[0], self.weight),
                  None if x[1] is None else torch.matmul(x[1], self.weight))
 
-        nvtx.range_push("edge-cal")
+        nvtx_push(self.gpu, "edge-cal")
         x = self.propagate(edge_index, size=size, x=x) # edge cal
-        nvtx.range_pop()
+        nvtx_pop(self.gpu)
         return x
 
     def message(self, edge_index_i, x_i, x_j, size_i):

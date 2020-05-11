@@ -5,7 +5,8 @@ from torch_geometric.utils import add_remaining_self_loops
 
 from message_passing import MessagePassing
 from inits import glorot, zeros
-import torch.cuda.nvtx as nvtx
+
+from utils import nvtx_push, nvtx_pop
 
 class GCNConv(MessagePassing):
     r"""The graph convolutional operator from the `"Semi-supervised
@@ -40,15 +41,17 @@ class GCNConv(MessagePassing):
             :class:`torch_geometric.nn.conv.MessagePassing`.
     """
 
-    def __init__(self, in_channels, out_channels, improved=False, cached=False,
-                 bias=True, normalize=True, **kwargs):
-        super(GCNConv, self).__init__(aggr='add', **kwargs)
+    def __init__(self, in_channels, out_channels, gpu=False, improved=False, cached=False,
+                 bias=True, normalize=True):
+        super(GCNConv, self).__init__(aggr='add', gpu=gpu)
 
         self.in_channels = in_channels
         self.out_channels = out_channels
         self.improved = improved
         self.cached = cached
         self.normalize = normalize
+
+        self.gpu = gpu
 
         self.weight = Parameter(torch.Tensor(in_channels, out_channels))
 
@@ -87,9 +90,9 @@ class GCNConv(MessagePassing):
 
     def forward(self, x, edge_index, edge_weight=None):
         """"""
-        nvtx.range_push("vertex-cal")
+        nvtx_push(self.gpu, "vertex-cal")
         x = torch.matmul(x, self.weight) # vertex cal
-        nvtx.range_pop()
+        nvtx_pop(self.gpu)
         if self.cached and self.cached_result is not None:
             if edge_index.size(1) != self.cached_num_edges:
                 raise RuntimeError(
@@ -99,7 +102,7 @@ class GCNConv(MessagePassing):
                         self.cached_num_edges, edge_index.size(1)))
 
         if not self.cached or self.cached_result is None:
-            nvtx.range_push("cal_norm")
+            nvtx_push(self.gpu, "cal_norm")
             self.cached_num_edges = edge_index.size(1)
             if self.normalize:
                 edge_index, norm = self.norm(edge_index, x.size(
@@ -107,12 +110,12 @@ class GCNConv(MessagePassing):
             else:
                 norm = edge_weight
             self.cached_result = edge_index, norm
-            nvtx.range_pop()
+            nvtx_pop(self.gpu)
 
         edge_index, norm = self.cached_result
-        nvtx.range_push("edge-cal")
+        nvtx_push(self.gpu, "edge-cal")
         x = self.propagate(edge_index, x=x, norm=norm) # edge cal
-        nvtx.range_pop()
+        nvtx_pop(self.gpu)
         return x
 
     def message(self, x_j, norm):

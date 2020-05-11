@@ -5,7 +5,6 @@ from torch_geometric.utils import remove_self_loops, add_self_loops, softmax
 
 from inits import glorot, zeros
 
-import torch.cuda.nvtx as nvtx
 
 class MaxAggregate(MessagePassing):
     """

@@ -6,41 +6,41 @@ from gcn.layers import GCNConv
 
 from inits import glorot
 
-import torch.cuda.nvtx as nvtx
-import sys
-sys.path.append("/home/wangzhaokang/wangyunpan/pyg-gnns")
+from utils import nvtx_push, nvtx_pop
 
 class GCN(Module):
     """
     GCN layer
     """
-    def __init__(self, layers, n_features, n_classes, hidden_dims, dropout):
+    def __init__(self, layers, n_features, n_classes, hidden_dims, dropout, gpu=False):
         super(GCN, self).__init__()
         self.n_features, self.n_classes = n_features, n_classes
         self.layers, self.hidden_dims = layers, hidden_dims
         self.dropout = dropout
+        self.gpu = gpu
 
         self.weight_in = Parameter(torch.Tensor(n_features, hidden_dims))
         self.weight_out = Parameter(torch.Tensor(hidden_dims, n_classes))
         self.conv = [GCNConv(in_channels=hidden_dims,
-                             out_channels=hidden_dims) for i in range(layers)]
+                             out_channels=hidden_dims, gpu=gpu) for i in range(layers)]
         glorot(self.weight_in.data)
         glorot(self.weight_out.data)
 
     def forward(self, x, edge_index):
-        nvtx.range_push("input-transform")
+        nvtx_push(self.gpu, "input-transform")
         x = torch.matmul(x, self.weight_in)
-        nvtx.range_pop()
+        nvtx_pop(self.gpu)
 
         for i in range(self.layers):
-            nvtx.range_push("layer" + str(i))
-            x = F.relu(self.conv[i](x, edge_index))
+            nvtx_push(self.gpu, "layer" + str(i))
+            x = self.conv[i](x, edge_index)
+            x = F.relu(x)
             x = F.dropout(x, p=self.dropout, training=self.training)
-            nvtx.range_pop()
+            nvtx_pop(self.gpu)
 
-        nvtx.range_push("output-transform")
+        nvtx_push(self.gpu, "output-transform")
         x = torch.matmul(x, self.weight_out)
-        nvtx.range_pop()
+        nvtx_pop(self.gpu)
         return F.log_softmax(x, dim=1)
 
 

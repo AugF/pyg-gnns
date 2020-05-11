@@ -5,7 +5,7 @@ import torch
 from torch_sparse import SparseTensor
 from torch_scatter import gather_csr, scatter, segment_csr
 
-import torch.cuda.nvtx as nvtx
+from utils import nvtx_push, nvtx_pop
 
 msg_aggr_special_args = set([
     'adj_t',
@@ -53,7 +53,7 @@ class MessagePassing(torch.nn.Module):
             (default: :obj:`0`)
     """
 
-    def __init__(self, aggr="add", flow="source_to_target", node_dim=0):
+    def __init__(self, aggr="add", flow="source_to_target", node_dim=0, gpu=False):
         super(MessagePassing, self).__init__()
 
         self.aggr = aggr
@@ -64,6 +64,8 @@ class MessagePassing(torch.nn.Module):
 
         self.node_dim = node_dim
         assert self.node_dim >= 0
+
+        self.gpu = gpu # added by wyp, in 2020-5-11
 
         self.__msg_aggr_params__ = inspect.signature(
             self.message_and_aggregate).parameters
@@ -252,9 +254,9 @@ class MessagePassing(torch.nn.Module):
         assert len(size) == 2
 
         # We collect all arguments used for message passing in `kwargs`.
-        nvtx.range_push("collect")
+        nvtx_push(self.gpu, "collect")
         kwargs = self.__collect__(edge_index, size, mp_type, kwargs)
-        nvtx.range_pop()
+        nvtx_pop(self.gpu)
 
         # Try to run `message_and_aggregate` first and see if it succeeds:
         if mp_type == 'adj_t' and self.__fuse__ and not self.__explain__:
@@ -266,10 +268,10 @@ class MessagePassing(torch.nn.Module):
 
         # Otherwise, run both functions in separation.
         if mp_type == 'edge_index' or not self.__fuse__ or self.__explain__:
-            nvtx.range_push("message")
+            nvtx_push(self.gpu, "message")
             msg_kwargs = self.__distribute__(self.__msg_params__, kwargs)
             out = self.message(**msg_kwargs)
-            nvtx.range_pop()
+            nvtx_pop(self.gpu)
 
             if self.__explain__:
                 edge_mask = self.__edge_mask__.sigmoid()
@@ -279,15 +281,15 @@ class MessagePassing(torch.nn.Module):
                 assert out.size(0) == edge_mask.size(0)
                 out = out * edge_mask.view(-1, 1)
 
-            nvtx.range_push("aggreagate")
+            nvtx_push(self.gpu, "aggregate")
             aggr_kwargs = self.__distribute__(self.__aggr_params__, kwargs)
             out = self.aggregate(out, **aggr_kwargs)
-            nvtx.range_pop()
+            nvtx_pop(self.gpu)
 
-        nvtx.range_push("update")
+        nvtx_push(self.gpu, "update")
         update_kwargs = self.__distribute__(self.__update_params__, kwargs)
         out = self.update(out, **update_kwargs)
-        nvtx.range_pop()
+        nvtx_pop(self.gpu)
         return out
 
 
