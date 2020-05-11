@@ -96,20 +96,18 @@ if __name__ == '__main__':
             accs.append(acc)
         return accs
 
-    def main():
-        for epoch in range(11):
-            nvtx.range_push("epoch " + epoch)
-            nvtx.range_push("train")
-            train()
-            nvtx.range_pop()
-            log = 'Epoch: {:03d}, Train: {:.4f}, Val: {:.4f}, Test: {:.4f}'
-            print(log.format(epoch, *test()))
-            nvtx.range_pop()
-
     with torch.cuda.profiler.profile():
-        main() # warmip cuda memory allocator and profiler
+        train()
         with torch.autograd.profiler.emit_nvtx(record_shapes=True):
-            main()
+            for epoch in range(10):
+                nvtx.range_push("epoch " + epoch)
+                nvtx.range_push("train")
+                train()
+                nvtx.range_pop()
+                log = 'Epoch: {:03d}, Train: {:.4f}, Val: {:.4f}, Test: {:.4f}'
+                print(log.format(epoch, *test()))
+                nvtx.range_pop()
+
 
 
 
