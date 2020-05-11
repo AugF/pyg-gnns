@@ -1,18 +1,21 @@
+"""
+dataset.py
+将flickr, com-amazon, reddit, com-lj的格式进行进一步转化为pyg的InMemoryDataset类型
+"""
 import json
 import os.path as osp
 
 import torch
 import numpy as np
 import scipy.sparse as sp
-from google_drive_downloader import GoogleDriveDownloader as gdd
 from torch_geometric.data import InMemoryDataset, Data
 
 
-class Flickr(InMemoryDataset):
-    r"""The Flickr dataset from the `"GraphSAINT: Graph Sampling Based
-    Inductive Learning Method" <https://arxiv.org/abs/1907.04931>`_ paper,
-    containing descriptions and common properties of images.
-
+class DataProcess(InMemoryDataset):
+    r"""
+    首先，按照https://github.com/GraphSAINT/GraphSAINT中介绍的将数据集data预处理成adj_full.npz, adj_train.npz, role.json, class_map,json, feats.json
+    这里借鉴的是PyG对https://pytorch-geometric.readthedocs.io/en/latest/_modules/torch_geometric/datasets/flickr.html#Flickr
+    将数据集变为PyG的数据集的格式，并后续采用它的预处理方法
     Args:
         root (string): Root directory where the dataset should be saved.
         transform (callable, optional): A function/transform that takes in an
@@ -25,14 +28,9 @@ class Flickr(InMemoryDataset):
             being saved to disk. (default: :obj:`None`)
     """
 
-    adj_full_id = '1crmsTbd1-2sEXsGwa2IKnIB7Zd3TmUsy'
-    feats_id = '1join-XdvX3anJU_MLVtick7MgeAQiWIZ'
-    class_map_id = '1uxIkbtg5drHTsKt-PAsZZ4_yJmgFmle9'
-    role_id = '1htXCtuktuCW8TR8KiKfrFDAxUgekQoV7'
-
     def __init__(self, root, transform=None, pre_transform=None):
-        super(Flickr, self).__init__(root, transform, pre_transform)
-        self.data, self.slices = torch.load(self.processed_paths[0])
+        super(DataProcess, self).__init__(root, transform, pre_transform)
+        self.data, self.slices = torch.load(self.processed_paths[0]) # 直接这里返回就可以
 
     @property
     def raw_file_names(self):
@@ -41,19 +39,6 @@ class Flickr(InMemoryDataset):
     @property
     def processed_file_names(self):
         return 'data.pt'
-
-    def download(self):
-        path = osp.join(self.raw_dir, 'adj_full.npz')
-        gdd.download_file_from_google_drive(self.adj_full_id, path)
-
-        path = osp.join(self.raw_dir, 'feats.npy')
-        gdd.download_file_from_google_drive(self.feats_id, path)
-
-        path = osp.join(self.raw_dir, 'class_map.json')
-        gdd.download_file_from_google_drive(self.class_map_id, path)
-
-        path = osp.join(self.raw_dir, 'role.json')
-        gdd.download_file_from_google_drive(self.role_id, path)
 
     def process(self):
         f = np.load(osp.join(self.raw_dir, 'adj_full.npz'))
@@ -94,10 +79,3 @@ class Flickr(InMemoryDataset):
 
     def __repr__(self):
         return '{}()'.format(self.__class__.__name__)
-
-
-if __name__ == '__main__':
-    name = "Flickr"
-    path = osp.join(osp.dirname(osp.realpath(__file__)), 'data', name)
-    flickr = Flickr(root=path)
-    flickr.download()

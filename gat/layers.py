@@ -5,7 +5,6 @@ from torch_geometric.utils import remove_self_loops, add_self_loops, softmax
 from message_passing import MessagePassing
 
 from inits import glorot, zeros
-
 from utils import nvtx_push, nvtx_pop
 
 

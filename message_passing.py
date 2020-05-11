@@ -192,7 +192,6 @@ class MessagePassing(torch.nn.Module):
             out[key] = data
         return out
 
-
     def propagate(self, edge_index, size=None, **kwargs):
         r"""The initial call to start propagating messages.
 
@@ -306,7 +305,6 @@ class MessagePassing(torch.nn.Module):
 
         return x_j
 
-
     def aggregate(self, inputs, index, ptr=None, dim_size=None):
         r"""Aggregates messages from neighbors as
         :math:`\square_{j \in \mathcal{N}(i)}`.
@@ -334,9 +332,7 @@ class MessagePassing(torch.nn.Module):
         This function will only gets called in case it is implemented and
         propagation takes place based on a :obj:`torch_sparse.SparseTensor`.
         """
-
         return NotImplemented
-
 
     def update(self, inputs):
         r"""Updates node embeddings in analogy to
@@ -345,5 +341,5 @@ class MessagePassing(torch.nn.Module):
         Takes in the output of aggregation as first argument and any argument
         which was initially passed to :meth:`propagate`.
         """
-
         return inputs
+

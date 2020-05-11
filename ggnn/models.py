@@ -5,7 +5,6 @@ from torch.nn import Parameter, Module
 from ggnn.layers import GatedGraphConv
 
 from inits import glorot
-
 from utils import nvtx_push, nvtx_pop
 
 

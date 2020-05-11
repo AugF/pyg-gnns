@@ -11,7 +11,6 @@ from utils import get_dataset, nvtx_push, nvtx_pop
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--dataset', type=str, default='Cora')
-parser.add_argument('--random_splits', type=bool, default=False)
 
 parser.add_argument('--model', type=str, default='gaan')
 parser.add_argument('--layers', type=int, default=2)
@@ -41,7 +40,7 @@ if args.gpu:
     torch.cuda.manual_seed(args.seed)
 
 # 1. load data
-dataset = get_dataset(args.dataset, args.random_splits)
+dataset = get_dataset(args.dataset)
 data = dataset[0]
 
 # 2. model
