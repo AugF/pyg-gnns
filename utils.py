@@ -6,7 +6,7 @@ import torch_geometric.transforms as T
 import torch.cuda.nvtx as nvtx
 
 def get_dataset(name, normalize_features=False, transform=None):
-    path = osp.join(osp.dirname(osp.realpath(__file__)), '.', 'data', name)
+    path = osp.join(osp.dirname(osp.realpath(__file__)), 'data')
     dataset = Planetoid(path, name)
 
     if transform is not None and normalize_features:
@@ -26,3 +26,4 @@ def nvtx_push(flag, info):
 def nvtx_pop(flag):
     if flag:
         nvtx.range_pop()
+
