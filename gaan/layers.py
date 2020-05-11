@@ -1,17 +1,18 @@
 import torch
 from torch.nn import Parameter
-from torch_geometric.nn.conv import MessagePassing
 from torch_geometric.utils import remove_self_loops, add_self_loops, softmax
 
+from message_passing import MessagePassing
 from inits import glorot, zeros
+from utils import nvtx_push, nvtx_pop
 
 
 class MaxAggregate(MessagePassing):
     """
     max aggregate
     """
-    def __init__(self):
-        super(MaxAggregate, self).__init__(aggr="max")
+    def __init__(self, gpu=False):
+        super(MaxAggregate, self).__init__(aggr="max", gpu=gpu)
 
     def forward(self, x, edge_index):
         x = self.propagate(edge_index, size=(x.size(0), x.size(0)), x=x)
@@ -28,8 +29,8 @@ class MeanAggregate(MessagePassing):
     """
     mean aggregate
     """
-    def __init__(self):
-        super(MeanAggregate, self).__init__(aggr='mean')
+    def __init__(self, gpu=False):
+        super(MeanAggregate, self).__init__(aggr='mean', gpu=gpu)
 
     def forward(self, x, edge_index):
         return self.propagate(edge_index, size=(x.size(0), x.size(0)), x=x)
@@ -43,11 +44,11 @@ class MeanAggregate(MessagePassing):
 
 class GaANConv(MessagePassing):
     """
-    参考论文：GaAN
+    GaAN layer
     """
     def __init__(self, in_channels, out_channels, d_a, d_v, d_m, heads,
-                 bias=True):
-        super(GaANConv, self).__init__(aggr='add')
+                 bias=True, gpu=False):
+        super(GaANConv, self).__init__(aggr='add', gpu=gpu)
 
         self.in_channels = in_channels
         self.out_channels = out_channels
@@ -56,14 +57,15 @@ class GaANConv(MessagePassing):
         self.mid_units = d_a
         self.value_units = d_v
         self.max_pooling_units = d_m
+        self.gpu = gpu
 
         self.weight_neigh = Parameter(torch.Tensor(in_channels, heads * d_a))
         self.weight_edge = Parameter(torch.Tensor(1, heads, 2 * d_a))
         self.weight_data = Parameter(torch.Tensor(in_channels, heads * d_v))
         self.weight_att = Parameter(torch.Tensor(in_channels + heads * d_v, out_channels))
 
-        self.maxaggregate = MaxAggregate()
-        self.meanaggregate = MeanAggregate()
+        self.maxaggregate = MaxAggregate(gpu=gpu)
+        self.meanaggregate = MeanAggregate(gpu=gpu)
         self.weight_max_polling = Parameter(torch.Tensor(in_channels, d_m))
         self.weight_gate = Parameter(torch.Tensor(in_channels * 2 + d_m, heads))
 
@@ -83,28 +85,26 @@ class GaANConv(MessagePassing):
         glorot(self.weight_gate.data)
         zeros(self.bias)
 
-
     def forward(self, x, edge_index, size=None):
-        """"""
         if size is None and torch.is_tensor(x):
             edge_index, _ = remove_self_loops(edge_index)
             edge_index, _ = add_self_loops(edge_index,
                                            num_nodes=x.size(self.node_dim))
 
         # attentions = multi-head
-        nvtx.range_push("edge-cal_attentions")
+        nvtx_push(self.gpu, "edge-cal_attentions")
         attentions = self.propagate(edge_index, size=size, x=x) # edge_cal
-        nvtx.range_pop()
+        nvtx_pop(self.gpu)
 
-        nvtx.range_push("edge-cal_gateMax")
+        nvtx_push(self.gpu, "edge-cal_gateMax")
         gate_max = self.maxaggregate(torch.matmul(x, self.weight_max_polling), edge_index) # edge_cal
-        nvtx.range_pop()
+        nvtx_pop(self.gpu)
 
-        nvtx.range_push("edge-cal_gateMean")
+        nvtx_push(self.gpu, "edge-cal_gateMean")
         gate_min = self.meanaggregate(x, edge_index)  # edge_cal
-        nvtx.range_pop()
+        nvtx_pop(self.gpu)
 
-        nvtx.range_push("vertex-cal")
+        nvtx_push(self.gpu, "vertex-cal")
         # gate = FC_theta_g(xi || max || mean)
         # ti = gate * multi-head
         output = torch.matmul(torch.cat([x, gate_max, gate_min], dim=-1), self.weight_gate).view(-1, self.heads, 1) # vertex_cal
@@ -112,9 +112,8 @@ class GaANConv(MessagePassing):
 
         # yi = FC_theta_o(xi || ti)
         output = torch.matmul(torch.cat([x, output.view(-1, self.heads * self.value_units)], dim=-1), self.weight_att) # vertex cal
-        nvtx.range_pop()
+        nvtx_pop(self.gpu)
         return output
-
 
     def message(self, edge_index_i, x_i, x_j, size_i):
         # Compute attention coefficients.

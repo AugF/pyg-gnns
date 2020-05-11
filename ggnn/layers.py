@@ -1,9 +1,11 @@
 import torch
 from torch import Tensor
 from torch.nn import Parameter as Param
-from torch_geometric.nn.conv import MessagePassing
+from message_passing import MessagePassing
 from inits import uniform
-import torch.cuda.nvtx as nvtx
+
+from utils import nvtx_push, nvtx_pop
+
 
 class GatedGraphConv(MessagePassing):
     r"""The gated graph convolution operator from the `"Gated Graph Sequence
@@ -39,11 +41,12 @@ class GatedGraphConv(MessagePassing):
                  num_layers,
                  aggr='add',
                  bias=True,
-                 **kwargs):
-        super(GatedGraphConv, self).__init__(aggr=aggr, **kwargs)
+                 gpu=False):
+        super(GatedGraphConv, self).__init__(aggr=aggr, gpu=gpu)
 
         self.out_channels = out_channels
         self.num_layers = num_layers
+        self.gpu = gpu
 
         self.weight = Param(Tensor(num_layers, out_channels, out_channels))
         self.rnn = torch.nn.GRUCell(out_channels, out_channels, bias=bias)
@@ -51,9 +54,8 @@ class GatedGraphConv(MessagePassing):
         self.reset_parameters()
 
     def reset_parameters(self):
-        uniform(self.out_channels, self.weight)
+        uniform(self.out_channels, self.weight) # uniform
         self.rnn.reset_parameters()
-
 
     def forward(self, x, edge_index, edge_weight=None):
         """"""
@@ -67,19 +69,18 @@ class GatedGraphConv(MessagePassing):
             h = torch.cat([h, zero], dim=1)
 
         for i in range(self.num_layers):
-            nvtx.range_push("layer" + str(i))
-            nvtx.range_push("vertex-cal")
+            nvtx_push(self.gpu, "layer" + str(i))
+            nvtx_push(self.gpu, "vertex-cal")
             m = torch.matmul(h, self.weight[i]) # vertex cal
-            nvtx.range_pop()
-            nvtx.range_push("edge-cal")
+            nvtx_pop(self.gpu)
+            nvtx_push(self.gpu, "edge-cal")
             m = self.propagate(edge_index, x=m, edge_weight=edge_weight) # edge cal
-            nvtx.range_pop()
-            nvtx.range_push("vertex-cal")
+            nvtx_pop(self.gpu)
+            nvtx_push(self.gpu, "vertex-cal")
             h = self.rnn(m, h) # vertex cal
-            nvtx.range_pop()
+            nvtx_pop(self.gpu)
 
         return h
-
 
     def message(self, x_j, edge_weight):
         if edge_weight is not None:
@@ -89,3 +90,4 @@ class GatedGraphConv(MessagePassing):
     def __repr__(self):
         return '{}({}, num_layers={})'.format(
             self.__class__.__name__, self.out_channels, self.num_layers)
+

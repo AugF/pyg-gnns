@@ -2,23 +2,23 @@ import torch
 
 import torch.nn.functional as F
 from torch.nn import Parameter, Module
+
 from gaan.layers import GaANConv
 from inits import glorot
+from utils import nvtx_push, nvtx_pop
 
-import torch.cuda.nvtx as nvtx
-import sys
-sys.path.append("/home/wangzhaokang/wangyunpan/pyg-gnns")
 
 class GaAN(Module):
     """
-
+    GaAN model
     """
     def __init__(self, layers, n_features, n_classes, hidden_dims,
-                 heads, d_v, d_a, d_m, dropout=0.2, negative_slop=0.1):
+                 heads, d_v, d_a, d_m, dropout=0.2, negative_slop=0.1, gpu=False):
         super(GaAN, self).__init__()
         self.n_features, self.n_classes = n_features, n_classes
         self.layers, self.hidden_dims = layers, hidden_dims
         self.dropout, self.negative_slop = dropout, negative_slop
+        self.gpu = gpu
 
         self.weight_in = Parameter(torch.Tensor(n_features, hidden_dims))
         self.weight_out = Parameter(torch.Tensor(hidden_dims, n_classes))
@@ -28,19 +28,20 @@ class GaAN(Module):
         glorot(self.weight_out.data)
 
     def forward(self, x, edge_index):
-        nvtx.range_push("input-transform")
+        nvtx_push(self.gpu, "input-transform")
         x = torch.matmul(x, self.weight_in)
-        nvtx.range_pop()
+        nvtx_pop(self.gpu)
 
         for i in range(self.layers):
-            nvtx.range_push("layer" + str(i))
-            x = F.leaky_relu(self.conv[i](x, edge_index), self.negative_slop)
+            nvtx_push(self.gpu, "layer" + str(i))
+            x = self.conv[i](x, edge_index)
+            x = F.leaky_relu(x, self.negative_slop)
             x = F.dropout(x, p=self.dropout, training=self.training)
-            nvtx.range_pop()
+            nvtx_pop(self.gpu)
 
-        nvtx.range_push("output-transform")
+        nvtx_push(self.gpu, "output-transform")
         x = torch.matmul(x, self.weight_out)
-        nvtx.range_pop()
+        nvtx_pop(self.gpu)
         return F.log_softmax(x, dim=1)
 
 

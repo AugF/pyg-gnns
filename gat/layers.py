@@ -8,6 +8,7 @@ from inits import glorot, zeros
 
 from utils import nvtx_push, nvtx_pop
 
+
 class GATConv(MessagePassing):
     r"""The graph attentional operator from the `"Graph Attention Networks"
     <https://arxiv.org/abs/1710.10903>`_ paper
@@ -77,7 +78,6 @@ class GATConv(MessagePassing):
         glorot(self.att)
         zeros(self.bias)
 
-
     def forward(self, x, edge_index, size=None):
         """"""
         if size is None and torch.is_tensor(x):
@@ -129,3 +129,4 @@ class GATConv(MessagePassing):
         return '{}({}, {}, heads={})'.format(self.__class__.__name__,
                                              self.in_channels,
                                              self.out_channels, self.heads)
+

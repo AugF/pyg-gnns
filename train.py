@@ -13,11 +13,11 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--dataset', type=str, default='Cora')
 parser.add_argument('--random_splits', type=bool, default=False)
 
-parser.add_argument('--model', type=str, default='gat')
+parser.add_argument('--model', type=str, default='gaan')
 parser.add_argument('--layers', type=int, default=2)
 parser.add_argument('--hidden_dims', type=int, default=128)
 parser.add_argument('--heads', type=int, default=8)
-parser.add_argument('--d_v', type=int, default=24)
+parser.add_argument('--d_v', type=int, default=24) # d_v * heads = hidden_dims?
 parser.add_argument('--d_a', type=int, default=24)
 parser.add_argument('--d_m', type=int, default=64)
 
@@ -69,7 +69,7 @@ elif args.model == 'gaan':
         layers=args.layers,
         n_features=dataset.num_features, n_classes=dataset.num_classes,
         hidden_dims=args.hidden_dims,
-        heads=args.head, d_v=args.d_v,  # todo
+        heads=args.heads, d_v=args.d_v,  # todo
         d_a=args.d_a, d_m=args.d_m
     )
 

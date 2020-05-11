@@ -7,6 +7,7 @@ from gat.layers import GATConv
 from inits import glorot
 from utils import nvtx_push, nvtx_pop
 
+
 class GAT(Module):
     """
     GAT model

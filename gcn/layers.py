@@ -5,8 +5,8 @@ from torch_geometric.utils import add_remaining_self_loops
 
 from message_passing import MessagePassing
 from inits import glorot, zeros
-
 from utils import nvtx_push, nvtx_pop
+
 
 class GCNConv(MessagePassing):
     r"""The graph convolutional operator from the `"Semi-supervised
@@ -68,7 +68,6 @@ class GCNConv(MessagePassing):
         self.cached_result = None
         self.cached_num_edges = None
 
-
     @staticmethod
     def norm(edge_index, num_nodes, edge_weight=None, improved=False,
              dtype=None):
@@ -86,7 +85,6 @@ class GCNConv(MessagePassing):
         deg_inv_sqrt[deg_inv_sqrt == float('inf')] = 0
 
         return edge_index, deg_inv_sqrt[row] * edge_weight * deg_inv_sqrt[col]
-
 
     def forward(self, x, edge_index, edge_weight=None):
         """"""
@@ -129,3 +127,5 @@ class GCNConv(MessagePassing):
     def __repr__(self):
         return '{}({}, {})'.format(self.__class__.__name__, self.in_channels,
                                    self.out_channels)
+
+
