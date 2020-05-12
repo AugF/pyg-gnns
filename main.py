@@ -11,7 +11,7 @@ from gcn.models import GCN
 from utils import get_dataset, nvtx_push, nvtx_pop
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--dataset', type=str, default='com-amazon', help="dataset: [cora, flickr, com-amazon, reddit, com-lj]")
+parser.add_argument('--dataset', type=str, default='cora', help="dataset: [cora, flickr, com-amazon, reddit, com-lj]")
 
 parser.add_argument('--model', type=str, default='gcn', help="gnn models: [gcn, ggnn, gat, gaan]")
 parser.add_argument('--layers', type=int, default=2, help="layers for hidden layer")

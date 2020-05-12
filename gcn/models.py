@@ -23,8 +23,12 @@ class GCN(Module):
 
         self.weight_in = Parameter(torch.Tensor(n_features, hidden_dims)).to(device)
         self.weight_out = Parameter(torch.Tensor(hidden_dims, n_classes)).to(device)
-        self.conv = [GCNConv(in_channels=hidden_dims,
-                             out_channels=hidden_dims, gpu=gpu) for i in range(layers)]
+        self.conv = torch.nn.ModuleList(
+            [
+                GCNConv(in_channels=hidden_dims, out_channels=hidden_dims, gpu=gpu, cached=True)
+                for i in range(layers)
+            ]
+        )
         glorot(self.weight_in.data)
         glorot(self.weight_out.data)
 
