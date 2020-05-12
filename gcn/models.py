@@ -18,6 +18,7 @@ class GCN(Module):
         self.n_features, self.n_classes = n_features, n_classes
         self.layers, self.hidden_dims = layers, hidden_dims
         self.dropout = dropout
+        self.gpu = gpu
         device = torch.device('cuda' if gpu else 'cpu')
 
         self.weight_in = Parameter(torch.Tensor(n_features, hidden_dims)).to(device)
