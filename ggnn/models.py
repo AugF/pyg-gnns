@@ -21,8 +21,8 @@ class GGNN(Module):
         self.weight_in = Parameter(torch.Tensor(n_features, hidden_dims)).to(device)
         self.weight_out = Parameter(torch.Tensor(hidden_dims, n_classes)).to(device)
         self.conv = GatedGraphConv(out_channels=hidden_dims, num_layers=layers, gpu=gpu)
-        glorot(self.weight_in.data)
-        glorot(self.weight_out.data)
+        glorot(self.weight_in)
+        glorot(self.weight_out)
 
     def forward(self, x, edge_index):
         nvtx_push(self.gpu, "input-transform")

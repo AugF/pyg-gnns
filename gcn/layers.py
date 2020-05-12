@@ -50,7 +50,7 @@ class GCNConv(MessagePassing):
         self.improved = improved
         self.cached = cached
         self.normalize = normalize
-
+        self.gpu = gpu
         device = torch.device('cuda' if gpu else 'cpu')
 
         self.weight = Parameter(torch.Tensor(in_channels, out_channels)).to(device)

@@ -78,12 +78,12 @@ class GaANConv(MessagePassing):
         self.reset_parameters()
 
     def reset_parameters(self):
-        glorot(self.weight_neigh.data)
-        glorot(self.weight_edge.data)
-        glorot(self.weight_data.data)
-        glorot(self.weight_att.data)
-        glorot(self.weight_max_polling.data)
-        glorot(self.weight_gate.data)
+        glorot(self.weight_neigh)
+        glorot(self.weight_edge)
+        glorot(self.weight_data)
+        glorot(self.weight_att)
+        glorot(self.weight_max_polling)
+        glorot(self.weight_gate)
         zeros(self.bias)
 
     def forward(self, x, edge_index, size=None):
