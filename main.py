@@ -29,8 +29,8 @@ parser.add_argument('--negative_slop', type=float, default=0.1, help="leaky_relu
 parser.add_argument('--record_shapes', action='store_true', default=False, help="nvtx or autograd's profile to record shape")
 
 args = parser.parse_args()
-
 gpu = not args.cpu and torch.cuda.is_available()
+print(args)
 
 # 0. set manual seed
 np.random.seed(args.seed)
