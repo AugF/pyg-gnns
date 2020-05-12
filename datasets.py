@@ -51,7 +51,7 @@ class DataProcess(InMemoryDataset):
         x = np.load(osp.join(self.raw_dir, 'feats.npy'))
         x = torch.from_numpy(x).to(torch.float)
 
-        ys = [-1] * x.size(0)
+        ys = [0] * x.size(0) # com-amazon中.cmty_txt没有包含全部
         with open(osp.join(self.raw_dir, 'class_map.json')) as f:
             class_map = json.load(f)
             for key, item in class_map.items():

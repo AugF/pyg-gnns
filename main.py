@@ -2,6 +2,7 @@ import torch
 import torch.nn.functional as F
 import numpy as np
 import argparse
+import time
 
 from gaan.models import GaAN
 from ggnn.models import GGNN
@@ -10,9 +11,9 @@ from gcn.models import GCN
 from utils import get_dataset, nvtx_push, nvtx_pop
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--dataset', type=str, default='cora', help="dataset: [cora, flickr, com-amazon, reddit, com-lj]")
+parser.add_argument('--dataset', type=str, default='com-amazon', help="dataset: [cora, flickr, com-amazon, reddit, com-lj]")
 
-parser.add_argument('--model', type=str, default='gaan', help="gnn models: [gcn, ggnn, gat, gaan]")
+parser.add_argument('--model', type=str, default='gcn', help="gnn models: [gcn, ggnn, gat, gaan]")
 parser.add_argument('--layers', type=int, default=2, help="layers for hidden layer")
 parser.add_argument('--hidden_dims', type=int, default=128, help="hidden layer output dims")
 parser.add_argument('--heads', type=int, default=8, help="gat or gaan model: heads")
@@ -39,7 +40,7 @@ if gpu:
     torch.cuda.manual_seed(args.seed)
 
 # 1. load data
-dataset = get_dataset(args.dataset)
+dataset = get_dataset(args.dataset, normalize_features=True)
 data = dataset[0]
 
 # 2. model
@@ -81,7 +82,8 @@ optimizer = torch.optim.Adam(model.parameters(),
                              weight_decay=args.weight_decay)
 
 
-def train():
+def train(epoch):
+    t = time.time()
     nvtx_push(gpu, "forward")
     model.train()
     loss = F.nll_loss(model(data.x, data.edge_index)[data.train_mask], data.y[data.train_mask])
@@ -91,6 +93,8 @@ def train():
     loss.backward()
     optimizer.step()
     nvtx_pop(gpu)
+    log = 'Epoch: {:03d}, train_loss: {:.8f}, train_time: {:.4f}s'
+    print(log.format(epoch, loss.item(), time.time() - t))
 
 
 def test():
@@ -104,9 +108,9 @@ def test():
 
 if not gpu:
     for epoch in range(10):
-        train()
-        log = 'Epoch: {:03d}, Train: {:.4f}, Val: {:.4f}, Test: {:.4f}'
-        print(log.format(epoch, *test()))
+        train(epoch)
+        log = 'Accuracy: Train: {:.4f}, Val: {:.4f}, Test: {:.4f}'
+        print(log.format(*test()))
 else:
     with torch.cuda.profiler.profile():
         train()
@@ -114,11 +118,11 @@ else:
             for epoch in range(10):
                 nvtx_push(gpu, "epochs" + str(epoch))
                 nvtx_push(gpu, "train")
-                train()
+                train(epoch)
                 nvtx_pop(gpu)
                 nvtx_push(gpu, "eval")
-                log = 'Epoch: {:03d}, Train: {:.4f}, Val: {:.4f}, Test: {:.4f}'
-                print(log.format(epoch, *test()))
+                log = 'Accuracy: Train: {:.4f}, Val: {:.4f}, Test: {:.4f}'
+                print(log.format(*test()))
                 nvtx_pop(gpu)
                 nvtx_pop(gpu)
 
