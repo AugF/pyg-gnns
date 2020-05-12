@@ -16,7 +16,8 @@ class GAT(Module):
                  heads, dropout=0.2, negative_slop=0.1, gpu=False):
         super(GAT, self).__init__()
         self.n_features, self.n_classes = n_features, n_classes
-        self.layers, self.hidden_dims = layers, hidden_dims
+        self.layers, self.hidden_dims, self.heads = layers, hidden_dims, heads
+        self.dropout, self.negative_slop = dropout, negative_slop
         self.gpu = gpu
 
         self.weight_in = Parameter(torch.Tensor(n_features, hidden_dims * heads))
@@ -48,6 +49,11 @@ class GAT(Module):
         nvtx_pop(self.gpu)
         return F.log_softmax(x, dim=1)
 
+    def __repr__(self):
+        return '{}(layers={}, n_features={}, n_classes={}, hidden_dims={}, heads={}' \
+               ', dropout={}, negative_slop={}, gpu={})'.format(
+            self.__class__.__name__, self.layers, self.n_features, self.n_classes, self.hidden_dims,
+            self.heads, self.dropout, self.negative_slop, self.gpu) + '\n' + str(self.conv)
 
 
 

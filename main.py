@@ -2,6 +2,7 @@ import torch
 import torch.nn.functional as F
 import numpy as np
 import argparse
+import time
 
 from gaan.models import GaAN
 from ggnn.models import GGNN
@@ -10,37 +11,36 @@ from gcn.models import GCN
 from utils import get_dataset, nvtx_push, nvtx_pop
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--dataset', type=str, default='Cora')
+parser.add_argument('--dataset', type=str, default='com-amazon', help="dataset: [cora, flickr, com-amazon, reddit, com-lj]")
 
-parser.add_argument('--model', type=str, default='gcn')
-parser.add_argument('--layers', type=int, default=2)
-parser.add_argument('--hidden_dims', type=int, default=128)
-parser.add_argument('--heads', type=int, default=8)
-parser.add_argument('--d_v', type=int, default=24) # d_v * heads = hidden_dims?
-parser.add_argument('--d_a', type=int, default=24)
-parser.add_argument('--d_m', type=int, default=64)
+parser.add_argument('--model', type=str, default='gcn', help="gnn models: [gcn, ggnn, gat, gaan]")
+parser.add_argument('--layers', type=int, default=2, help="layers for hidden layer")
+parser.add_argument('--hidden_dims', type=int, default=128, help="hidden layer output dims")
+parser.add_argument('--heads', type=int, default=8, help="gat or gaan model: heads")
+parser.add_argument('--d_v', type=int, default=24, help="gaan model: vertex's dim") # d_v * heads = hidden_dims?
+parser.add_argument('--d_a', type=int, default=24, help="gaan model, each vertex's dim in edge attention ")
+parser.add_argument('--d_m', type=int, default=64, help="gaan model: gate: max aggregator's dim")
 
-parser.add_argument('--seed', type=int, default=1)
-parser.add_argument('--gpu', type=bool, default=True)
-parser.add_argument('--lr', type=float, default=0.01)
-parser.add_argument('--weight_decay', type=float, default=0.0005)
-parser.add_argument('--dropout', type=float, default=0.1)
-parser.add_argument('--negative_slop', type=float, default=0.1)
-
-parser.add_argument('--record_shapes', type=bool, default=True)
+parser.add_argument('--seed', type=int, default=1, help="random seed")
+parser.add_argument('--cpu', action='store_true', default=False, help='use cpu, not use gpu')
+parser.add_argument('--lr', type=float, default=0.01, help="adam's learning rate")
+parser.add_argument('--weight_decay', type=float, default=0.0005, help="adam's weight decay")
+parser.add_argument('--dropout', type=float, default=0.1, help="layer dropout")
+parser.add_argument('--negative_slop', type=float, default=0.1, help="leaky_relu's para")
+parser.add_argument('--record_shapes', action='store_true', default=False, help="nvtx or autograd's profile to record shape")
 
 args = parser.parse_args()
-
-args.gpu = args.gpu and torch.cuda.is_available()
+gpu = not args.cpu and torch.cuda.is_available()
+print(args)
 
 # 0. set manual seed
 np.random.seed(args.seed)
 torch.manual_seed(args.seed)
-if args.gpu:
+if gpu:
     torch.cuda.manual_seed(args.seed)
 
 # 1. load data
-dataset = get_dataset(args.dataset)
+dataset = get_dataset(args.dataset, normalize_features=True)
 data = dataset[0]
 
 # 2. model
@@ -48,20 +48,20 @@ if args.model == 'gcn':
     model = GCN(
         layers=args.layers,
         n_features=dataset.num_features, n_classes=dataset.num_classes,
-        hidden_dims=args.hidden_dims, dropout=args.dropout
+        hidden_dims=args.hidden_dims, dropout=args.dropout, gpu=gpu
     )
 elif args.model == 'gat':
     model = GAT(
         layers=args.layers,
         n_features=dataset.num_features, n_classes=dataset.num_classes,
         hidden_dims=args.hidden_dims // args.heads, heads=args.heads,
-        dropout=args.dropout, negative_slop=args.negative_slop
+        dropout=args.dropout, negative_slop=args.negative_slop, gpu=gpu
     )
 elif args.model == 'ggnn':
     model = GGNN(
         layers=args.layers,
         n_features=dataset.num_features, n_classes=dataset.num_classes,
-        hidden_dims=args.hidden_dims
+        hidden_dims=args.hidden_dims, gpu=gpu
     )
 elif args.model == 'gaan':
     model = GaAN(
@@ -69,11 +69,12 @@ elif args.model == 'gaan':
         n_features=dataset.num_features, n_classes=dataset.num_classes,
         hidden_dims=args.hidden_dims,
         heads=args.heads, d_v=args.d_v,  # todo
-        d_a=args.d_a, d_m=args.d_m
+        d_a=args.d_a, d_m=args.d_m, gpu=gpu
     )
 
+print(model)
 # set to gpu
-device = torch.device('cuda' if args.gpu else 'cpu')
+device = torch.device('cuda' if gpu else 'cpu')
 model, data = model.to(device), data.to(device)
 
 optimizer = torch.optim.Adam(model.parameters(),
@@ -81,16 +82,19 @@ optimizer = torch.optim.Adam(model.parameters(),
                              weight_decay=args.weight_decay)
 
 
-def train():
-    nvtx_push(args.gpu, "forward")
+def train(epoch):
+    t = time.time()
+    nvtx_push(gpu, "forward")
     model.train()
     loss = F.nll_loss(model(data.x, data.edge_index)[data.train_mask], data.y[data.train_mask])
     optimizer.zero_grad()
-    nvtx_pop(args.gpu)
-    nvtx_push(args.gpu, "backward")
+    nvtx_pop(gpu)
+    nvtx_push(gpu, "backward")
     loss.backward()
     optimizer.step()
-    nvtx_pop(args.gpu)
+    nvtx_pop(gpu)
+    log = 'Epoch: {:03d}, train_loss: {:.8f}, train_time: {:.4f}s'
+    print(log.format(epoch, loss.item(), time.time() - t))
 
 
 def test():
@@ -102,25 +106,25 @@ def test():
         accs.append(acc)
     return accs
 
-if not args.gpu:
+if not gpu:
     for epoch in range(10):
-        train()
-        log = 'Epoch: {:03d}, Train: {:.4f}, Val: {:.4f}, Test: {:.4f}'
-        print(log.format(epoch, *test()))
+        train(epoch)
+        log = 'Accuracy: Train: {:.4f}, Val: {:.4f}, Test: {:.4f}'
+        print(log.format(*test()))
 else:
     with torch.cuda.profiler.profile():
-        train()
+        train(-1)
         with torch.autograd.profiler.emit_nvtx(record_shapes=args.record_shapes):
             for epoch in range(10):
-                nvtx_push(args.gpu, "epochs" + str(epoch))
-                nvtx_push(args.gpu, "train")
-                train()
-                nvtx_pop(args.gpu)
-                nvtx_push(args.gpu, "eval")
-                log = 'Epoch: {:03d}, Train: {:.4f}, Val: {:.4f}, Test: {:.4f}'
-                print(log.format(epoch, *test()))
-                nvtx_pop(args.gpu)
-                nvtx_pop(args.gpu)
+                nvtx_push(gpu, "epochs" + str(epoch))
+                nvtx_push(gpu, "train")
+                train(epoch)
+                nvtx_pop(gpu)
+                nvtx_push(gpu, "eval")
+                log = 'Accuracy: Train: {:.4f}, Val: {:.4f}, Test: {:.4f}'
+                print(log.format(*test()))
+                nvtx_pop(gpu)
+                nvtx_pop(gpu)
 
 
 

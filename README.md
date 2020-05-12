@@ -2,47 +2,31 @@
 
 基于pytorch-geometric的图神经网络评测
 
-[message-passing](https://pytorch-geometric.readthedocs.io/en/latest/modules/nn.html#module-torch_geometric.nn.conv.message_passing)
+### 1. description
+#### 1.1 dataset
+dataset
+- cora
+- flickr
+- com-amazon
+- reddit
+- com-lj
+    
+dataset格式(N为边数, F为特征数， C为类别数）
+- adj_full.npz: a sparse matrix in csr format, ['indptr', 'indices', 'data', 'shape'], N * N
+- feats.npy: a numpy array, N * F
+- role.json: a dictionary of three keys. Key 'tr' corresponds to the list of all training node indices. Key va corresponds to the list of all validation node indices. Key te corresponds to the list of all test node indices. Note that in the raw data, nodes may have string-type ID. You would need to re-assign numerical ID (0 to N-1) to the nodes, so that you can index into the matrices of adj, features and class labels.
+- class_map.json:a dictionary of length N. Each key is a node index, and each value is either a length C binary list (for multi-class classification) or an integer scalar (0 to C-1, for single-class classification)
 
-![](docs/pics/message-passing.png)
+#### 1.2 model
+1. gcn
+2. ggnn
+3. gat
+4. gaan
 
-### 1. 简要介绍
-#### 1.1 GCN
+### 2. Usage
+`
+python main.py --help   
+`
 
-![](docs/pics/gcn.png)
 
-#### 1.2 GatedGraph
-
-![](docs/pics/gatedgraph.png)
-
-#### 1.3 GAT
-
-![](docs/pics/gat.png)
-
-#### 1.4 GaAN
-
-主要公式：
-
-![](docs/pics/gaan-2.png)
-
-1. Attentions与GAT不同之处为：
-
-![](docs/pics/gaan_1.png)
-
-2. Gated计算公式
-
-![](docs/pics/gaan-3.png)
-
-### 2. 精度, 准确率结果cora数据集
-200轮，在推荐精度下的结果
-
-- gcn: 0.814
-- ggnn: 0.662
-- gat: 0.824
-- gaan: 0.726
-
-### 3. todo
-1. 将数据集整理为dataloader格式
-2. 修改参数接口 
-
-两种数据划分的方式
+    

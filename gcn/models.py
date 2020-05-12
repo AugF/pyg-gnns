@@ -44,7 +44,10 @@ class GCN(Module):
         nvtx_pop(self.gpu)
         return F.log_softmax(x, dim=1)
 
-
+    def __repr__(self):
+        return '{}(layers={}, n_features={}, n_classes={}, hidden_dims={}, dropout={}, gpu={})'.format(
+            self.__class__.__name__, self.layers, self.n_features, self.n_classes, self.hidden_dims,
+            self.dropout, self.gpu) + '\n' + str(self.conv)
 
 
 

@@ -132,3 +132,9 @@ class GaANConv(MessagePassing):
         if self.bias is not None:
             aggr_out = aggr_out + self.bias
         return aggr_out
+
+    def __repr__(self):
+        return '{}(in_channels={}, out_channels={}, d_a={}, d_v={}, d_m={}, heads={})'.format(
+            self.__class__.__name__, self.in_channels, self.out_channels, self.mid_units, self.value_units,
+            self.max_pooling_units, self.heads
+        )
