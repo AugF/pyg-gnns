@@ -12,7 +12,7 @@ from utils import get_dataset, nvtx_push, nvtx_pop
 parser = argparse.ArgumentParser()
 parser.add_argument('--dataset', type=str, default='Cora')
 
-parser.add_argument('--model', type=str, default='gaan')
+parser.add_argument('--model', type=str, default='gcn')
 parser.add_argument('--layers', type=int, default=2)
 parser.add_argument('--hidden_dims', type=int, default=128)
 parser.add_argument('--heads', type=int, default=8)
