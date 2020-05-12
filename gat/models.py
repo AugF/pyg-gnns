@@ -25,12 +25,14 @@ class GAT(Module):
         self.weight_in = Parameter(torch.Tensor(n_features, hidden_dims * heads)).to(device)
         self.weight_out = Parameter(torch.Tensor(hidden_dims * heads, n_classes)).to(device)
         self.dropout = dropout
-        self.conv = [GATConv(in_channels=hidden_dims * heads,
-                             out_channels=hidden_dims,
-                             heads=heads,
-                             dropout=dropout,
-                             negative_slope=negative_slop,
-                             gpu=gpu) for i in range(layers)]
+        self.conv = torch.nn.ModuleList(
+            [
+                GATConv(in_channels=hidden_dims * heads, out_channels=hidden_dims,
+                        heads=heads, dropout=dropout, negative_slope=negative_slop,
+                        gpu=gpu)
+                for i in range(layers)
+             ]
+        )
         glorot(self.weight_in.data)
         glorot(self.weight_out.data)
 

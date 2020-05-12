@@ -26,10 +26,13 @@ class GaAN(Module):
         self.weight_in = Parameter(torch.Tensor(n_features, hidden_dims)).to(device)
         self.weight_out = Parameter(torch.Tensor(hidden_dims, n_classes)).to(device)
 
-        self.conv = [GaANConv(in_channels=hidden_dims,
-                              out_channels=hidden_dims,
-                              d_a=d_a, d_m=d_m, d_v=d_v, heads=heads,
-                              gpu=gpu) for i in range(layers)]
+        self.conv = torch.nn.ModuleList(
+            [
+                GaANConv(in_channels=hidden_dims, out_channels=hidden_dims,
+                         d_a=d_a, d_m=d_m, d_v=d_v, heads=heads, gpu=gpu)
+                for i in range(layers)
+            ]
+        )
         glorot(self.weight_in.data)
         glorot(self.weight_out.data)
 
