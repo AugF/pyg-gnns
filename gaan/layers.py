@@ -58,19 +58,20 @@ class GaANConv(MessagePassing):
         self.value_units = d_v
         self.max_pooling_units = d_m
         self.gpu = gpu
+        device = torch.device('cuda' if gpu else 'cpu')
 
-        self.weight_neigh = Parameter(torch.Tensor(in_channels, heads * d_a))
-        self.weight_edge = Parameter(torch.Tensor(1, heads, 2 * d_a))
-        self.weight_data = Parameter(torch.Tensor(in_channels, heads * d_v))
-        self.weight_att = Parameter(torch.Tensor(in_channels + heads * d_v, out_channels))
+        self.weight_neigh = Parameter(torch.Tensor(in_channels, heads * d_a)).to(device)
+        self.weight_edge = Parameter(torch.Tensor(1, heads, 2 * d_a)).to(device)
+        self.weight_data = Parameter(torch.Tensor(in_channels, heads * d_v)).to(device)
+        self.weight_att = Parameter(torch.Tensor(in_channels + heads * d_v, out_channels)).to(device)
 
         self.maxaggregate = MaxAggregate(gpu=gpu)
         self.meanaggregate = MeanAggregate(gpu=gpu)
-        self.weight_max_polling = Parameter(torch.Tensor(in_channels, d_m))
-        self.weight_gate = Parameter(torch.Tensor(in_channels * 2 + d_m, heads))
+        self.weight_max_polling = Parameter(torch.Tensor(in_channels, d_m)).to(device)
+        self.weight_gate = Parameter(torch.Tensor(in_channels * 2 + d_m, heads)).to(device)
 
         if bias:
-            self.bias = Parameter(torch.Tensor(self.heads, self.value_units))
+            self.bias = Parameter(torch.Tensor(self.heads, self.value_units)).to(device)
         else:
             self.register_parameter('bias', None)
 
