@@ -20,10 +20,8 @@ class GAT(Module):
         self.dropout, self.negative_slop = dropout, negative_slop
         self.gpu = gpu
 
-        device = torch.device('cuda' if gpu else 'cpu')
-
-        self.weight_in = Parameter(torch.Tensor(n_features, hidden_dims * heads)).to(device)
-        self.weight_out = Parameter(torch.Tensor(hidden_dims * heads, n_classes)).to(device)
+        self.weight_in = Parameter(torch.Tensor(n_features, hidden_dims * heads))
+        self.weight_out = Parameter(torch.Tensor(hidden_dims * heads, n_classes))
         self.dropout = dropout
         self.conv = torch.nn.ModuleList(
             [
