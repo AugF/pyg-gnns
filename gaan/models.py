@@ -21,8 +21,10 @@ class GaAN(Module):
         self.d_v, self.d_a, self.d_m = d_v, d_a, d_m
         self.gpu = gpu
 
-        self.weight_in = Parameter(torch.Tensor(n_features, hidden_dims))
-        self.weight_out = Parameter(torch.Tensor(hidden_dims, n_classes))
+        device = torch.device('cuda' if gpu else 'cpu')
+
+        self.weight_in = Parameter(torch.Tensor(n_features, hidden_dims)).to(device)
+        self.weight_out = Parameter(torch.Tensor(hidden_dims, n_classes)).to(device)
 
         self.conv = [GaANConv(in_channels=hidden_dims,
                               out_channels=hidden_dims,
