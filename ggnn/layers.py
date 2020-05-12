@@ -47,10 +47,9 @@ class GatedGraphConv(MessagePassing):
         self.out_channels = out_channels
         self.num_layers = num_layers
         self.gpu = gpu
-        device = torch.device('cuda' if gpu else 'cpu')
 
-        self.weight = Param(Tensor(num_layers, out_channels, out_channels)).to(device)
-        self.rnn = torch.nn.GRUCell(out_channels, out_channels, bias=bias).to(device)
+        self.weight = Param(Tensor(num_layers, out_channels, out_channels))
+        self.rnn = torch.nn.GRUCell(out_channels, out_channels, bias=bias)
 
         self.reset_parameters()
 

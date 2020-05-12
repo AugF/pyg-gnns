@@ -58,16 +58,15 @@ class GATConv(MessagePassing):
         self.negative_slope = negative_slope
         self.dropout = dropout
         self.gpu = gpu
-        device = torch.device('cuda' if gpu else 'cpu')
 
         self.weight = Parameter(torch.Tensor(in_channels,
-                                             heads * out_channels)).to(device)
-        self.att = Parameter(torch.Tensor(1, heads, 2 * out_channels)).to(device)
+                                             heads * out_channels))
+        self.att = Parameter(torch.Tensor(1, heads, 2 * out_channels))
 
         if bias and concat:
-            self.bias = Parameter(torch.Tensor(heads * out_channels)).to(device)
+            self.bias = Parameter(torch.Tensor(heads * out_channels))
         elif bias and not concat:
-            self.bias = Parameter(torch.Tensor(out_channels)).to(device)
+            self.bias = Parameter(torch.Tensor(out_channels))
         else:
             self.register_parameter('bias', None)
 

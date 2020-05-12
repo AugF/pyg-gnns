@@ -19,10 +19,9 @@ class GCN(Module):
         self.layers, self.hidden_dims = layers, hidden_dims
         self.dropout = dropout
         self.gpu = gpu
-        device = torch.device('cuda' if gpu else 'cpu')
 
-        self.weight_in = Parameter(torch.Tensor(n_features, hidden_dims)).to(device)
-        self.weight_out = Parameter(torch.Tensor(hidden_dims, n_classes)).to(device)
+        self.weight_in = Parameter(torch.Tensor(n_features, hidden_dims))
+        self.weight_out = Parameter(torch.Tensor(hidden_dims, n_classes))
         self.conv = torch.nn.ModuleList(
             [
                 GCNConv(in_channels=hidden_dims, out_channels=hidden_dims, gpu=gpu, cached=True)
