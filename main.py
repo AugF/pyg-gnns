@@ -113,7 +113,7 @@ if not gpu:
         print(log.format(*test()))
 else:
     with torch.cuda.profiler.profile():
-        train()
+        train(-1)
         with torch.autograd.profiler.emit_nvtx(record_shapes=args.record_shapes):
             for epoch in range(10):
                 nvtx_push(gpu, "epochs" + str(epoch))
