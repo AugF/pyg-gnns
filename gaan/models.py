@@ -23,7 +23,10 @@ class GaAN(Module):
         self.weight_in = Parameter(torch.Tensor(n_features, hidden_dims))
         self.weight_out = Parameter(torch.Tensor(hidden_dims, n_classes))
 
-        self.conv = [GaANConv(hidden_dims, hidden_dims, d_a, d_v, d_m, heads) for i in range(layers)]
+        self.conv = [GaANConv(in_channels=hidden_dims,
+                              out_channels=hidden_dims,
+                              d_a=d_a, d_m=d_m, d_v=d_v, heads=heads,
+                              gpu=gpu) for i in range(layers)]
         glorot(self.weight_in.data)
         glorot(self.weight_out.data)
 
