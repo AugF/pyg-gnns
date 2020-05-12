@@ -29,8 +29,9 @@ class GCN(Module):
                 for i in range(layers)
             ]
         )
-        glorot(self.weight_in.data)
-        glorot(self.weight_out.data)
+
+        glorot(self.weight_in)
+        glorot(self.weight_out)
 
     def forward(self, x, edge_index):
         nvtx_push(self.gpu, "input-transform")
