@@ -15,7 +15,7 @@ class GGNN(Module):
     def __init__(self, layers, n_features, n_classes, hidden_dims, gpu=False):
         super(GGNN, self).__init__()
         self.n_features, self.n_classes = n_features, n_classes
-        self.layers = layers
+        self.layers, self.hidden_dims = layers, hidden_dims
         self.gpu = gpu
 
         self.weight_in = Parameter(torch.Tensor(n_features, hidden_dims))
