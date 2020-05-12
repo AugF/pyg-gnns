@@ -71,6 +71,7 @@ elif args.model == 'gaan':
         d_a=args.d_a, d_m=args.d_m, gpu=gpu
     )
 
+print(model)
 # set to gpu
 device = torch.device('cuda' if gpu else 'cpu')
 model, data = model.to(device), data.to(device)

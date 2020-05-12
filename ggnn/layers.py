@@ -88,6 +88,7 @@ class GatedGraphConv(MessagePassing):
         return x_j
 
     def __repr__(self):
-        return '{}({}, num_layers={})'.format(
-            self.__class__.__name__, self.out_channels, self.num_layers)
+        return '{}({}, num_layers={}, aggr={})'.format(
+            self.__class__.__name__, self.out_channels, self.num_layers, self.aggr)
+
 

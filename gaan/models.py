@@ -16,8 +16,9 @@ class GaAN(Module):
                  heads, d_v, d_a, d_m, dropout=0.2, negative_slop=0.1, gpu=False):
         super(GaAN, self).__init__()
         self.n_features, self.n_classes = n_features, n_classes
-        self.layers, self.hidden_dims = layers, hidden_dims
+        self.layers, self.hidden_dims, self.heads = layers, hidden_dims, heads
         self.dropout, self.negative_slop = dropout, negative_slop
+        self.d_v, self.d_a, self.d_m = d_v, d_a, d_m
         self.gpu = gpu
 
         self.weight_in = Parameter(torch.Tensor(n_features, hidden_dims))
@@ -47,6 +48,12 @@ class GaAN(Module):
         nvtx_pop(self.gpu)
         return F.log_softmax(x, dim=1)
 
+    def __repr__(self):
+        return '{}(layers={}, n_features={}, n_classes={}, hidden_dims={}, heads={},' \
+               'd_v={}, d_a={}, d_m={}, dropout={}, negative_slop={}, gpu={})'.format(
+            self.__class__.__name__, self.layers, self.n_features, self.n_classes,
+            self.hidden_dims, self.heads, self.d_v, self.d_a, self.d_m, self.dropout,
+            self.negative_slop, self.gpu) + '\n' + str(self.conv)
 
 
 
