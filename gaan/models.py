@@ -57,7 +57,7 @@ class GaAN(Module):
                'd_v={}, d_a={}, d_m={}, dropout={}, negative_slop={}, gpu={})'.format(
             self.__class__.__name__, self.layers, self.n_features, self.n_classes,
             self.hidden_dims, self.heads, self.d_v, self.d_a, self.d_m, self.dropout,
-            self.negative_slop, self.gpu) + '\n' + str(self.conv)
+            self.negative_slop, self.gpu) + '\nLayer(conv->leaky_relu->dropout)\n' + str(self.conv)
 
 
 

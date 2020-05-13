@@ -56,7 +56,7 @@ class GAT(Module):
         return '{}(layers={}, n_features={}, n_classes={}, head_dims={}, heads={}' \
                ', dropout={}, negative_slop={}, gpu={})'.format(
             self.__class__.__name__, self.layers, self.n_features, self.n_classes, self.head_dims,
-            self.heads, self.dropout, self.negative_slop, self.gpu) + '\n' + str(self.conv)
+            self.heads, self.dropout, self.negative_slop, self.gpu) + '\nLayer(dropout->conv->elu)\n' + str(self.conv)
 
 
 

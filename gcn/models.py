@@ -53,7 +53,7 @@ class GCN(Module):
     def __repr__(self):
         return '{}(layers={}, n_features={}, n_classes={}, hidden_dims={}, dropout={}, gpu={})'.format(
             self.__class__.__name__, self.layers, self.n_features, self.n_classes, self.hidden_dims,
-            self.dropout, self.gpu) + '\n' + str(self.conv)
+            self.dropout, self.gpu) + '\nLayer(conv->relu->dropout)\n' + str(self.conv)
 
 
 
