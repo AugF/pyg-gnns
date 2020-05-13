@@ -54,7 +54,7 @@ elif args.model == 'gat':
     model = GAT(
         layers=args.layers,
         n_features=dataset.num_features, n_classes=dataset.num_classes,
-        hidden_dims=args.hidden_dims // args.heads, heads=args.heads,
+        head_dims=args.hidden_dims // args.heads, heads=args.heads,
         dropout=args.dropout, negative_slop=args.negative_slop, gpu=gpu
     )
 elif args.model == 'ggnn':
