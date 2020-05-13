@@ -94,7 +94,9 @@ def train(epoch):
     optimizer.step()
     nvtx_pop(gpu)
     log = 'Epoch: {:03d}, train_loss: {:.8f}, train_time: {:.4f}s'
-    print(log.format(epoch, loss.item(), time.time() - t))
+    t = time.time() - t
+    print(log.format(epoch, loss.item(), t))
+    return t
 
 
 def test():
@@ -115,16 +117,18 @@ else:
     with torch.cuda.profiler.profile():
         train(-1)
         with torch.autograd.profiler.emit_nvtx(record_shapes=args.record_shapes):
+            t = 0
             for epoch in range(10):
                 nvtx_push(gpu, "epochs" + str(epoch))
                 nvtx_push(gpu, "train")
-                train(epoch)
+                t += train(epoch)
                 nvtx_pop(gpu)
                 nvtx_push(gpu, "eval")
                 log = 'Accuracy: Train: {:.4f}, Val: {:.4f}, Test: {:.4f}'
                 print(log.format(*test()))
                 nvtx_pop(gpu)
                 nvtx_pop(gpu)
+            print("Average train time: {}s".format(t / 10))
 
 
 
