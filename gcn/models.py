@@ -12,8 +12,9 @@ from utils import nvtx_push, nvtx_pop
 class GCN(Module):
     """
     GCN layer
+    dropout set: https://github.com/tkipf/pygcn/blob/master/pygcn/train.py
     """
-    def __init__(self, layers, n_features, n_classes, hidden_dims, dropout, gpu=False):
+    def __init__(self, layers, n_features, n_classes, hidden_dims, dropout=0.5, gpu=False):
         super(GCN, self).__init__()
         self.n_features, self.n_classes = n_features, n_classes
         self.layers, self.hidden_dims = layers, hidden_dims
@@ -52,7 +53,7 @@ class GCN(Module):
     def __repr__(self):
         return '{}(layers={}, n_features={}, n_classes={}, hidden_dims={}, dropout={}, gpu={})'.format(
             self.__class__.__name__, self.layers, self.n_features, self.n_classes, self.hidden_dims,
-            self.dropout, self.gpu) + '\n' + str(self.conv)
+            self.dropout, self.gpu) + '\nLayer(conv->relu->dropout)\n' + str(self.conv)
 
 
 

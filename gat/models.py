@@ -11,21 +11,22 @@ from utils import nvtx_push, nvtx_pop
 class GAT(Module):
     """
     GAT model
+    dropout, negative_slop set: https://github.com/Diego999/pyGAT/blob/master/train.py
     """
-    def __init__(self, layers, n_features, n_classes, hidden_dims,
-                 heads, dropout=0.2, negative_slop=0.1, gpu=False):
+    def __init__(self, layers, n_features, n_classes, head_dims,
+                 heads, dropout=0.6, negative_slop=0.2, gpu=False):
         super(GAT, self).__init__()
         self.n_features, self.n_classes = n_features, n_classes
-        self.layers, self.hidden_dims, self.heads = layers, hidden_dims, heads
+        self.layers, self.head_dims, self.heads = layers, head_dims, heads
         self.dropout, self.negative_slop = dropout, negative_slop
         self.gpu = gpu
 
-        self.weight_in = Parameter(torch.Tensor(n_features, hidden_dims * heads))
-        self.weight_out = Parameter(torch.Tensor(hidden_dims * heads, n_classes))
+        self.weight_in = Parameter(torch.Tensor(n_features, head_dims * heads))
+        self.weight_out = Parameter(torch.Tensor(head_dims * heads, n_classes))
         self.dropout = dropout
         self.conv = torch.nn.ModuleList(
             [
-                GATConv(in_channels=hidden_dims * heads, out_channels=hidden_dims,
+                GATConv(in_channels=head_dims * heads, out_channels=head_dims,
                         heads=heads, dropout=dropout, negative_slope=negative_slop,
                         gpu=gpu)
                 for i in range(layers)
@@ -52,10 +53,10 @@ class GAT(Module):
         return F.log_softmax(x, dim=1)
 
     def __repr__(self):
-        return '{}(layers={}, n_features={}, n_classes={}, hidden_dims={}, heads={}' \
+        return '{}(layers={}, n_features={}, n_classes={}, head_dims={}, heads={}' \
                ', dropout={}, negative_slop={}, gpu={})'.format(
-            self.__class__.__name__, self.layers, self.n_features, self.n_classes, self.hidden_dims,
-            self.heads, self.dropout, self.negative_slop, self.gpu) + '\n' + str(self.conv)
+            self.__class__.__name__, self.layers, self.n_features, self.n_classes, self.head_dims,
+            self.heads, self.dropout, self.negative_slop, self.gpu) + '\nLayer(dropout->conv->elu)\n' + str(self.conv)
 
 
 
