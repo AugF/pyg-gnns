@@ -17,7 +17,7 @@ parser.add_argument('--model', type=str, default='gcn', help="gnn models: [gcn, 
 parser.add_argument('--layers', type=int, default=2, help="layers for hidden layer")
 parser.add_argument('--hidden_dims', type=int, default=64, help="hidden layer output dims")
 parser.add_argument('--heads', type=int, default=8, help="gat or gaan model: heads")
-parser.add_argument('--head_dim', type=int, default=8, help="gat model: head dims") # head_dims * heads = hidden_dims
+parser.add_argument('--head_dims', type=int, default=8, help="gat model: head dims") # head_dims * heads = hidden_dims
 parser.add_argument('--d_v', type=int, default=8, help="gaan model: vertex's dim") # d_v * heads = hidden_dims?
 parser.add_argument('--d_a', type=int, default=8, help="gaan model: each vertex's dim in edge attention") # d_a = head_dims
 parser.add_argument('--d_m', type=int, default=64, help="gaan model: gate: max aggregator's dim, default=64")
