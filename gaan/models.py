@@ -11,9 +11,10 @@ from utils import nvtx_push, nvtx_pop
 class GaAN(Module):
     """
     GaAN model
+    dropout, negative_slop set: GaAN: Gated attention networks for learning on large and spatiotemporal graphs 5.3
     """
     def __init__(self, layers, n_features, n_classes, hidden_dims,
-                 heads, d_v, d_a, d_m, dropout=0.2, negative_slop=0.1, gpu=False):
+                 heads, d_v, d_a, d_m, dropout=0.1, negative_slop=0.1, gpu=False):
         super(GaAN, self).__init__()
         self.n_features, self.n_classes = n_features, n_classes
         self.layers, self.hidden_dims, self.heads = layers, hidden_dims, heads

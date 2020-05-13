@@ -11,9 +11,10 @@ from utils import nvtx_push, nvtx_pop
 class GAT(Module):
     """
     GAT model
+    dropout, negative_slop set: https://github.com/Diego999/pyGAT/blob/master/train.py
     """
     def __init__(self, layers, n_features, n_classes, head_dims,
-                 heads, dropout=0.2, negative_slop=0.1, gpu=False):
+                 heads, dropout=0.6, negative_slop=0.2, gpu=False):
         super(GAT, self).__init__()
         self.n_features, self.n_classes = n_features, n_classes
         self.layers, self.head_dims, self.heads = layers, head_dims, heads

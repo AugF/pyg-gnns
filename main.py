@@ -15,18 +15,17 @@ parser.add_argument('--dataset', type=str, default='cora', help="dataset: [cora,
 
 parser.add_argument('--model', type=str, default='gcn', help="gnn models: [gcn, ggnn, gat, gaan]")
 parser.add_argument('--layers', type=int, default=2, help="layers for hidden layer")
-parser.add_argument('--hidden_dims', type=int, default=128, help="hidden layer output dims")
+parser.add_argument('--hidden_dims', type=int, default=64, help="hidden layer output dims")
 parser.add_argument('--heads', type=int, default=8, help="gat or gaan model: heads")
-parser.add_argument('--d_v', type=int, default=24, help="gaan model: vertex's dim") # d_v * heads = hidden_dims?
-parser.add_argument('--d_a', type=int, default=24, help="gaan model, each vertex's dim in edge attention ")
-parser.add_argument('--d_m', type=int, default=64, help="gaan model: gate: max aggregator's dim")
+parser.add_argument('--head_dim', type=int, default=8, help="gat model: head dims") # head_dims * heads = hidden_dims
+parser.add_argument('--d_v', type=int, default=8, help="gaan model: vertex's dim") # d_v * heads = hidden_dims?
+parser.add_argument('--d_a', type=int, default=8, help="gaan model: each vertex's dim in edge attention") # d_a = head_dims
+parser.add_argument('--d_m', type=int, default=64, help="gaan model: gate: max aggregator's dim, default=64")
 
 parser.add_argument('--seed', type=int, default=1, help="random seed")
 parser.add_argument('--cpu', action='store_true', default=False, help='use cpu, not use gpu')
 parser.add_argument('--lr', type=float, default=0.01, help="adam's learning rate")
 parser.add_argument('--weight_decay', type=float, default=0.0005, help="adam's weight decay")
-parser.add_argument('--dropout', type=float, default=0.1, help="layer dropout")
-parser.add_argument('--negative_slop', type=float, default=0.1, help="leaky_relu's para")
 parser.add_argument('--record_shapes', action='store_true', default=False, help="nvtx or autograd's profile to record shape")
 
 args = parser.parse_args()
@@ -48,14 +47,13 @@ if args.model == 'gcn':
     model = GCN(
         layers=args.layers,
         n_features=dataset.num_features, n_classes=dataset.num_classes,
-        hidden_dims=args.hidden_dims, dropout=args.dropout, gpu=gpu
+        hidden_dims=args.hidden_dims, gpu=gpu
     )
 elif args.model == 'gat':
     model = GAT(
         layers=args.layers,
         n_features=dataset.num_features, n_classes=dataset.num_classes,
-        head_dims=args.hidden_dims // args.heads, heads=args.heads,
-        dropout=args.dropout, negative_slop=args.negative_slop, gpu=gpu
+        head_dims=args.head_dims, heads=args.heads, gpu=gpu
     )
 elif args.model == 'ggnn':
     model = GGNN(
@@ -68,7 +66,7 @@ elif args.model == 'gaan':
         layers=args.layers,
         n_features=dataset.num_features, n_classes=dataset.num_classes,
         hidden_dims=args.hidden_dims,
-        heads=args.heads, d_v=args.d_v,  # todo
+        heads=args.heads, d_v=args.d_v,
         d_a=args.d_a, d_m=args.d_m, gpu=gpu
     )
 
@@ -107,6 +105,7 @@ def test():
         acc = pred.eq(data.y[mask]).sum().item() / mask.sum().item()
         accs.append(acc)
     return accs
+
 
 if not gpu:
     for epoch in range(10):
