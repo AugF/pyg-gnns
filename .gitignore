@@ -2,7 +2,4 @@
 data/*
 *.pyc
 test/*
-preprocess/com-amazon/*
-preprocess/com-ppi/*
-preprocess/ppi/*
-preprocess/reddit/*
+__pycache__/*
