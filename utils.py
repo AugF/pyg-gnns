@@ -7,7 +7,7 @@ from datasets import DataProcess
 import torch.cuda.nvtx as nvtx
 
 
-def get_dataset(name, normalize_features=False, transform=None): # todo
+def get_dataset(name, normalize_features=False, transform=None): #
     if name == "cora":
         path = osp.join(osp.dirname(osp.realpath(__file__)), 'data')
         dataset = Planetoid(path, name)
@@ -33,3 +33,6 @@ def nvtx_pop(flag):
     if flag:
         nvtx.range_pop()
 
+
+if __name__ == '__main__':
+    data = get_dataset("reddit")

@@ -79,6 +79,7 @@ class GatedGraphConv(MessagePassing):
             nvtx_push(self.gpu, "vertex-cal")
             h = self.rnn(m, h) # vertex cal
             nvtx_pop(self.gpu)
+            nvtx_pop(self.gpu)
 
         return h
 
