@@ -93,7 +93,7 @@ def train(epoch):
     nvtx_pop(gpu)
     log = 'Epoch: {:03d}, train_loss: {:.8f}, train_time: {:.4f}s'
     t = time.time() - t
-    print(log.format(epoch, loss.item(), t))
+    print(log.format(epoch, loss.data.item(), t))
     return t
 
 
@@ -122,6 +122,7 @@ else:
                 nvtx_push(gpu, "train")
                 t += train(epoch)
                 nvtx_pop(gpu)
+
                 nvtx_push(gpu, "eval")
                 log = 'Accuracy: Train: {:.4f}, Val: {:.4f}, Test: {:.4f}'
                 print(log.format(*test()))
