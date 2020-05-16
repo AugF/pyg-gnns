@@ -108,7 +108,7 @@ def test():
 
 
 if not gpu:
-    for epoch in range(10):
+    for epoch in range(20):
         train(epoch)
         log = 'Accuracy: Train: {:.4f}, Val: {:.4f}, Test: {:.4f}'
         print(log.format(*test()))
@@ -117,7 +117,7 @@ else:
         train(-1)
         with torch.autograd.profiler.emit_nvtx(record_shapes=args.record_shapes):
             t = 0
-            for epoch in range(10):
+            for epoch in range(20):
                 nvtx_push(gpu, "epochs" + str(epoch))
                 nvtx_push(gpu, "train")
                 t += train(epoch)
