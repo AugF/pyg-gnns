@@ -14,6 +14,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--dataset', type=str, default='com-lj', help="dataset: [cora, flickr, com-amazon, reddit, com-lj]")
 
 parser.add_argument('--model', type=str, default='gcn', help="gnn models: [gcn, ggnn, gat, gaan]")
+parser.add_argument('--epochs', type=int, default=10, help="epochs for traning")
 parser.add_argument('--layers', type=int, default=2, help="layers for hidden layer")
 parser.add_argument('--hidden_dims', type=int, default=64, help="hidden layer output dims")
 parser.add_argument('--heads', type=int, default=8, help="gat or gaan model: heads")
@@ -108,7 +109,7 @@ def test():
 
 
 if not gpu:
-    for epoch in range(20):
+    for epoch in range(args.epochs):
         train(epoch)
         log = 'Accuracy: Train: {:.4f}, Val: {:.4f}, Test: {:.4f}'
         print(log.format(*test()))
@@ -117,7 +118,7 @@ else:
         train(-1)
         with torch.autograd.profiler.emit_nvtx(record_shapes=args.record_shapes):
             t = 0
-            for epoch in range(20):
+            for epoch in range(args.epochs + 1):
                 nvtx_push(gpu, "epochs" + str(epoch))
                 nvtx_push(gpu, "train")
                 t += train(epoch)
