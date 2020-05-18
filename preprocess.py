@@ -64,10 +64,8 @@ def get_adj_and_map(raw_dir, name, classes):
 
 # 2. get feats.npy
 def get_feats(raw_dir, nodes, features, seed=1):
-    feats = np.zeros((nodes, features))
-    for i in range(nodes):
-        for j in range(features):
-            feats[i][j] = np.random.randint(0, 2)
+    np.random.seed(seed)
+    feats = np.random.randn(nodes, features)
     np.save(raw_dir + "/feats", feats)
 
 
