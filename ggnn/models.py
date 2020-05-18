@@ -26,7 +26,7 @@ class GGNN(Module):
 
     def forward(self, x, edge_index):
         nvtx_push(self.gpu, "input-transform")
-        x = torch.matmul(x, self.weight_in)
+        x = torch.spmm(x, self.weight_in)
         nvtx_pop(self.gpu)
         x = self.conv(x, edge_index)
         nvtx_push(self.gpu, "output_transform")

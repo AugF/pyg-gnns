@@ -11,7 +11,7 @@ from gcn.models import GCN
 from utils import get_dataset, nvtx_push, nvtx_pop
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--dataset', type=str, default='com-lj', help="dataset: [cora, flickr, com-amazon, reddit, com-lj]")
+parser.add_argument('--dataset', type=str, default='cora', help="dataset: [cora, flickr, com-amazon, reddit, com-lj]")
 
 parser.add_argument('--model', type=str, default='gcn', help="gnn models: [gcn, ggnn, gat, gaan]")
 parser.add_argument('--epochs', type=int, default=10, help="epochs for traning")
@@ -109,7 +109,7 @@ def test():
 
 
 if not gpu:
-    for epoch in range(args.epochs):
+    for epoch in range(args.epochs + 1):
         train(epoch)
         log = 'Accuracy: Train: {:.4f}, Val: {:.4f}, Test: {:.4f}'
         print(log.format(*test()))
@@ -118,7 +118,7 @@ else:
         train(-1)
         with torch.autograd.profiler.emit_nvtx(record_shapes=args.record_shapes):
             t = 0
-            for epoch in range(args.epochs + 1):
+            for epoch in range(args.epochs):
                 nvtx_push(gpu, "epochs" + str(epoch))
                 nvtx_push(gpu, "train")
                 t += train(epoch)

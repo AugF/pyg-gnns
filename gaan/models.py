@@ -37,7 +37,7 @@ class GaAN(Module):
 
     def forward(self, x, edge_index):
         nvtx_push(self.gpu, "input-transform")
-        x = torch.matmul(x, self.weight_in)
+        x = torch.spmm(x, self.weight_in)
         nvtx_pop(self.gpu)
 
         for i in range(self.layers):
