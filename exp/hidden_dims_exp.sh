@@ -3,12 +3,12 @@
 dir_head="hidden_dims_exp/multi_head"
 dir_non_head="hidden_dims_exp/non_multi_head"
 
-if [! -d $dir_head ]
+if [ ! -d $dir_head ]
 then
     mkdir -p $dir_head
 fi
 
-if [! -d $dir_non_head ]
+if [ ! -d $dir_non_head ]
 then
     mkdir -p $dir_non_head
 fi
@@ -24,14 +24,14 @@ do
             val="model=${model}, dataset=${data}, heads=4, head_dims=${hds}"
             echo ${val}
             echo ${val} >> "${dir_head}.log"
-            nsys profile -t cuda, osrt, nvtx -o "${dir_head}/${model}_${data}_4_${hds}" -w true python ../main.py --dataset $data --model $model --heads 4 --head_dims $hds --d_a $hds --d_v $hds >> "${dir_head}.log"
+            nsys profile -t cuda,osrt,nvtx -o "${dir_head}/${model}_${data}_4_${hds}" -w true python ../main.py --dataset $data --model $model --heads 4 --head_dims $hds --d_a $hds --d_v $hds >> "${dir_head}.log"
         done
         for head in 1 2 8 16 # head_dims fix at 64, heads changes
         do
             val="model=${model}, dataset=${data}, heads=${head}, head_dims=64"
             echo ${val}
             echo ${val} >> "${dir_head}.log"
-            nsys profile -t cuda, osrt, nvtx -o "${dir_head}/${model}_${data}_${head}_64" -w true python ../main.py --dataset $data --model $model --heads $head --head_dims 64 >> "${dir_head}.log"
+            nsys profile -t cuda,osrt,nvtx -o "${dir_head}/${model}_${data}_${head}_64" -w true python ../main.py --dataset $data --model $model --heads $head --head_dims 64 >> "${dir_head}.log"
         done
     done
 done
@@ -47,7 +47,7 @@ do
             val="model=${model}, dataset=${data}, hidden_dims=${hds}"
             echo -e "${val}\n"
             echo -e "${val}\n" >> "${dir_non_head}.log"
-            nsys profile -t cuda, osrt, nvtx -o "${dir_non_head}/${model}_${data}_${hds}" -w true python ../main.py --dataset $data --model $model --hidden_dims $hds >> "${dir_non_head}.log"
+            nsys profile -t cuda,osrt,nvtx -o "${dir_non_head}/${model}_${data}_${hds}" -w true python ../main.py --dataset $data --model $model --hidden_dims $hds >> "${dir_non_head}.log"
         done
     done
 done

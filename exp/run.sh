@@ -5,4 +5,3 @@ bash ./config_exp.sh
 bash ./super_paras_exp.sh
 bash ./hidden_dims_exp.sh
 bash ./layers_exp.sh
-bash ./scalablity_exp.sh

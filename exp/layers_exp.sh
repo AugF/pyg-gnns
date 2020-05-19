@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # for layers experiment
-dir_layer="layer_exp"
+dir_layer="layers_exp"
 
 if [ ! -d $dir_layer ]
 then
@@ -17,7 +17,7 @@ do
             val="model=${model}, dataset=${data}, layers=${l}"
             echo ${val}
             echo ${val} >> "${dir_layer}.log"
-            nsys profile -t cuda, osrt, nvtx -o "${dir_layer}/${model}_${data}_${l}" -w true python ../main.py --dataset $data --model $model --layers $l >> "${dir_layer}.log"
+            nsys profile -t cuda,osrt,nvtx -o "${dir_layer}/${model}_${data}_${l}" -w true python ../main.py --dataset $data --model $model --layers $l >> "${dir_layer}.log"
         done
     done
 done
