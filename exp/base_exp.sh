@@ -16,8 +16,8 @@ do
             for model in ${models[@]}
             do
                 val="model=${model}, data=${data}, hidden_dims=${hd}, heads=${h}"
-                echo -e "${val}\n"
-                echo -e "${val}\n" >> "${dir_base}.log"
+                echo ${val}
+                echo ${val} >> "${dir_base}.log"
                 t=`expr $hd / $h`
                 python ../main.py --dataset $data --model $model --hidden_dims $hd --heads $h --head_dims $t --d_a $t --d_v $t >> "${dir_base}.log"
             done

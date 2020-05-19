@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # lr and weight_decay experiment
-dir_sp="sp_exp"
+dir_sp="super_paras_exp"
 vars=(0.00001 0.0001 0.001 0.01 0.1 0.2 0.4 0.6 0.8)
 
 echo "begin super parameters experiment..."

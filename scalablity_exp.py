@@ -3,7 +3,7 @@ import snap # in linux, need py35, py36 or py37
 import json
 import os
 import scipy.sparse as sp
-
+import gc
 # https://snap.stanford.edu/snappy/doc/reference/GenRMat.html
 # directed graph
 
@@ -34,30 +34,16 @@ def input_feature_exp(seed=1):
 
 
 # 2. graph scalablity
-def gen_graph(graph, raw_dir, nodes, edges, features=32, classes=10, tr=0.50, va=0.25, seed=1):
+def gen_graph(raw_dir, nodes, edges, features=32, classes=10, tr=0.50, va=0.25, seed=1):
     np.random.seed(seed)
-    # 1. adj_full.npz
-    row = []
-    col = []
-    for e in graph.Edges():
-        r, c = e.GetSrcNId(), e.GetDstNId()
-        row.append(r)
-        col.append(c)
-        row.append(c)
-        col.append(r)
-    f = sp.csr_matrix(([1] * 2 * edges, (row, col)), shape=(nodes, nodes)) # directed -> undirected, edges*2
-    np.savez(raw_dir + "/adj_full", data=f.data, indptr=f.indptr, indices=f.indices, shape=f.shape)
-    # 2. id_map.json
-    #id_map = {i: i for i in range(nodes)}
-    #with open(raw_dir + "/id_map.json", "w") as f:
-    #    json.dump(id_map, f)
-
-    # 3. class_map.json
+    print("get class_map.json...")
+    # 1. class_map.json
     class_map = {i: np.random.randint(0, classes) for i in range(nodes)}
-    with open(raw_dir + "/id_map.json", "w") as f:
+    with open(raw_dir + "/class_map.json", "w") as f:
         json.dump(class_map, f)
-
-    # 4. role.json: tr, va, te
+    
+    print("get role.json...")
+    # 2. role.json: tr, va, te
     idx = np.arange(nodes)
     np.random.shuffle(idx)
     tr, va = int(nodes * tr), int(nodes * (tr + va))
@@ -68,43 +54,102 @@ def gen_graph(graph, raw_dir, nodes, edges, features=32, classes=10, tr=0.50, va
 
     with open(raw_dir + "/role.json", "w") as f:
         json.dump(role, f)
-
-    # feats.npy
+    
+    print("get feats.npy...")
+    # 3. feats.npy
     feats = np.random.randn(nodes, features)
     np.save(raw_dir + "/feats", feats)
 
 
 def graph_scale_exp(seed=1):
     Rnd = snap.TRnd()
-    # 2.1 degree=25, n=100k, 500k, 1m, 5m
+    # 2.1 degree=25, n=10k, 50k, 100k, 500k
     ns = [1000000, 5000000]
     names = ['1m', '5m'] # [100k, 500k, 1m, 5m]
     degree_fix = 25
-    for i, n in enumerate(ns):
-        graph = snap.GenRMat(n, n * degree_fix, .6, .1, .15, Rnd)
+    for i, nodes in enumerate(ns):
+        edges = nodes * degree_fix
+        print("nodes={}, edges={}".format(nodes, edges))
+        graph = snap.GenRMat(nodes, edges, .6, .1, .15, Rnd)
         raw_dir = "data/graph_" + names[i] + "_25/raw"
         print(raw_dir)
         if not os.path.exists(raw_dir):
             os.makedirs(raw_dir)
-        gen_graph(graph, raw_dir, nodes=n, edges=n * degree_fix)
+
+        print("get adj_full.npz...")
+        # 1. gen adj_full
+        row = []
+        col = []
+        for e in graph.Edges():
+            r, c = e.GetSrcNId(), e.GetDstNId()
+            row.append(r)
+            col.append(c)
+            row.append(c)
+            col.append(r)
+        f = sp.csr_matrix(([1] * 2 * edges, (row, col)), shape=(nodes, nodes)) # directed -> undirected, edges*2
+        np.savez(raw_dir + "/adj_full", data=f.data, indptr=f.indptr, indices=f.indices, shape=f.shape)
+        gen_graph(raw_dir, nodes, edges, seed)
 
     # 2.2 n=500k, degree=10, 25, 50, 75, 100
     degrees = [10, 50, 75, 100]  # 25 omit
     nodes = 500000
     for d in degrees:
-        graph = snap.GenRMat(nodes, nodes * d, .6, .1, .15, Rnd)
+        edges = nodes * d
+        graph = snap.GenRMat(nodes, edges, .6, .1, .15, Rnd)
         raw_dir = "data/graph_500k_" + str(d) + "/raw"
         print(raw_dir)
         if not os.path.exists(raw_dir):
             os.makedirs(raw_dir)
-        gen_graph(graph, raw_dir, nodes=500000, edges=nodes * d, seed=seed)
+
+        print("get adj_full.npz...")
+        # gen adj_full
+        row = []
+        col = []
+        for e in graph.Edges():
+            r, c = e.GetSrcNId(), e.GetDstNId()
+            row.append(r)
+            col.append(c)
+            row.append(c)
+            col.append(r)
+        f = sp.csr_matrix(([1] * 2 * edges, (row, col)), shape=(nodes, nodes)) # directed -> undirected, edges*2
+        np.savez(raw_dir + "/adj_full", data=f.data, indptr=f.indptr, indices=f.indices, shape=f.shape)
+        del f
+        del graph
+        gen_graph(raw_dir, nodes, edges, seedseed)
 
 
 if __name__ == '__main__':
     #print("begin input feature experiment...")
     #input_feature_exp()
     print("begin graph scale experiment...")
-    graph_scale_exp()
+    
+    Rnd = snap.TRnd()
+    degrees = [10, 50, 75, 100]  # 25 omit
+    nodes = 500000
+    for d in degrees:
+        edges = nodes * d
+        graph = snap.GenRMat(nodes, edges, .6, .1, .15, Rnd)
+        raw_dir = "data/graph_500k_" + str(d) + "/raw"
+        print(raw_dir)
+        if not os.path.exists(raw_dir):
+            os.makedirs(raw_dir)
+
+        print("get adj_full.npz...")
+        # gen adj_full
+        row = []
+        col = []
+        for e in graph.Edges():
+            r, c = e.GetSrcNId(), e.GetDstNId()
+            row.append(r)
+            col.append(c)
+            row.append(c)
+            col.append(r)
+        f = sp.csr_matrix(([1] * 2 * edges, (row, col)), shape=(nodes, nodes)) # directed -> undirected, edges*2
+        np.savez(raw_dir + "/adj_full", data=f.data, indptr=f.indptr, indices=f.indices, shape=f.shape)
+        del f
+        del graph
+        gen_graph(raw_dir, nodes, edges, seedseed)
+
 
 
 

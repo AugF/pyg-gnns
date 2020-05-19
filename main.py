@@ -129,7 +129,7 @@ else:
                 print(log.format(*test()))
                 nvtx_pop(gpu)
                 nvtx_pop(gpu)
-            print("Average train time: {}s".format(t / 10))
+            print("Average train time: {}s".format(t / args.epochs))
 
 
 
