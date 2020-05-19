@@ -1,5 +1,5 @@
 import numpy as np
-import snap
+import snap # in linux, need py35, py36 or py37
 import json
 import os
 import scipy.sparse as sp
@@ -20,7 +20,7 @@ def input_feature_exp(seed=1):
         for r in ratios:  #
             feats = np.random.randn(nodes[i], 500)
             feats = np.where(feats <= r, 0, 1)
-            np.save(name + "_" + str(r) + "/raw/feat", feats)
+            np.save(name + "_500_" + str(r * 100) + "/raw/feat", feats)
 
     # 1.2 ratio=0.2, dims=250, 500, 750, 1000, 1250
     dims = [250, 750, 1000, 1250]
@@ -28,7 +28,7 @@ def input_feature_exp(seed=1):
         for d in dims:  #
             feats = np.random.randn(nodes[i], d)
             feats = np.where(feats <= 0.2, 0, 1)
-            np.save(name + "_" + str(d) + "/raw/feat", feats)
+            np.save(name + "_" + str(d) + "_20/raw/feat", feats)
 
 
 # 2. graph scalablity
@@ -93,6 +93,11 @@ def graph_scale_exp(seed=1):
         if not os.path.exists(raw_dir):
             os.makedirs(raw_dir)
         gen_graph(graph, raw_dir, nodes=500000, edges=nodes * d, seed=seed)
+
+
+if __name__ == '__main__':
+    input_feature_exp()
+    graph_scale_exp()
 
 
 

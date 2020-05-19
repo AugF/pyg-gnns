@@ -27,7 +27,7 @@ parser.add_argument('--seed', type=int, default=1, help="random seed")
 parser.add_argument('--cpu', action='store_true', default=False, help='use cpu, not use gpu')
 parser.add_argument('--lr', type=float, default=0.01, help="adam's learning rate")
 parser.add_argument('--weight_decay', type=float, default=0.0005, help="adam's weight decay")
-parser.add_argument('--record_shapes', action='store_true', default=False, help="nvtx or autograd's profile to record shape")
+parser.add_argument('--no_record_shapes', action='store_false', default=True, help="nvtx or autograd's profile to record shape")
 
 args = parser.parse_args()
 gpu = not args.cpu and torch.cuda.is_available()
@@ -116,7 +116,7 @@ if not gpu:
 else:
     with torch.cuda.profiler.profile():
         train(-1)
-        with torch.autograd.profiler.emit_nvtx(record_shapes=args.record_shapes):
+        with torch.autograd.profiler.emit_nvtx(record_shapes=not args.no_record_shapes):
             t = 0
             for epoch in range(args.epochs):
                 nvtx_push(gpu, "epochs" + str(epoch))
