@@ -73,7 +73,7 @@ elif args.model == 'gaan':
 
 print(model)
 # set to gpu
-device = torch.device('cuda' if gpu else 'cpu')
+device = torch.device('cuda:0' if gpu else 'cpu')
 model, data = model.to(device), data.to(device)
 
 optimizer = torch.optim.Adam(model.parameters(),

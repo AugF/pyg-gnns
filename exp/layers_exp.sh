@@ -8,16 +8,16 @@ then
 fi
 
 echo "begin layers experiment..."
-for data in flickr com-amazon
+for data in flickr com-amazon 
 do
-    for model in gcn ggnn
+    for model in gcn ggnn gat gaan
     do
-        for l in 16 32 64 128 256 512 1024 # hidden_dims changes
+        for l in 1 2 3 4 5 #layers changes
         do
             val="model=${model}, dataset=${data}, layers=${l}"
             echo ${val}
-            echo ${val} >> "${dir_layer}.log"
-            nsys profile -t cuda,osrt,nvtx -o "${dir_layer}/${model}_${data}_${l}" -w true python ../main.py --dataset $data --model $model --layers $l >> "${dir_layer}.log"
+            nsys profile -t cuda,osrt,nvtx -o "${dir_layer}/${model}_${data}_${l}" -w true python ../main.py --dataset $data --model $model --layers $l
         done
     done
 done
+        exit

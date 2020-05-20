@@ -3,12 +3,21 @@ import snap # in linux, need py35, py36 or py37
 import json
 import os
 import scipy.sparse as sp
-import gc
 # https://snap.stanford.edu/snappy/doc/reference/GenRMat.html
 # directed graph
 
+def input_dense_feature_exp(seed=1):
+    datasets = ['flickr', 'com-amazon']
+    nodes = [89250, 334863]
+    dims = [16, 32, 64, 128, 256, 512]
+    np.random.seed(seed)
+    for i, name in enumerate(datasets):
+        for d in dims:
+          feats = np.random.randn(nodes[i], d)
+          np.save("data/" + name + "_" + str(d) + "/raw/feats", feats) 
+    
 
-def input_feature_exp(seed=1):
+def input_sparse_feature_exp(seed=1):
     # 1. input feature dimension
     datasets = ['flickr', 'com-amazon']
     nodes = [89250, 334863]
@@ -113,42 +122,13 @@ def graph_scale_exp(seed=1):
             col.append(r)
         f = sp.csr_matrix(([1] * 2 * edges, (row, col)), shape=(nodes, nodes)) # directed -> undirected, edges*2
         np.savez(raw_dir + "/adj_full", data=f.data, indptr=f.indptr, indices=f.indices, shape=f.shape)
-        del f
-        del graph
-        gen_graph(raw_dir, nodes, edges, seedseed)
+        gen_graph(raw_dir, nodes, edges, seed)
 
 
 if __name__ == '__main__':
-    #print("begin input feature experiment...")
-    #input_feature_exp()
-    print("begin graph scale experiment...")
-    
-    Rnd = snap.TRnd()
-    degrees = [10, 50, 75, 100]  # 25 omit
-    nodes = 500000
-    for d in degrees:
-        edges = nodes * d
-        graph = snap.GenRMat(nodes, edges, .6, .1, .15, Rnd)
-        raw_dir = "data/graph_500k_" + str(d) + "/raw"
-        print(raw_dir)
-        if not os.path.exists(raw_dir):
-            os.makedirs(raw_dir)
+    print("begin input feature experiment...")
+    input_dense_feature_exp()
 
-        print("get adj_full.npz...")
-        # gen adj_full
-        row = []
-        col = []
-        for e in graph.Edges():
-            r, c = e.GetSrcNId(), e.GetDstNId()
-            row.append(r)
-            col.append(c)
-            row.append(c)
-            col.append(r)
-        f = sp.csr_matrix(([1] * 2 * edges, (row, col)), shape=(nodes, nodes)) # directed -> undirected, edges*2
-        np.savez(raw_dir + "/adj_full", data=f.data, indptr=f.indptr, indices=f.indices, shape=f.shape)
-        del f
-        del graph
-        gen_graph(raw_dir, nodes, edges, seedseed)
 
 
 

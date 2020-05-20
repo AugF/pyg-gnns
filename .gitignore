@@ -1,5 +1,6 @@
 .idea/*
 data/*
+exp/*
 *.pyc
 test/*
 __pycache__/*

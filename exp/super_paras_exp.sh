@@ -11,11 +11,10 @@ do
     do
         val="name=${name}, var=${var}"
         echo $val
-        echo $val >> "${dir_sp}.log"
-        python ../main.py --model gcn --hidden_dims 16 --dataset com-lj --$name $var >> "${dir_sp}.log"
-        python ../main.py --model ggnn --hidden_dims 64 --dataset reddit --$name $var >> "${dir_sp}.log"
-        python ../main.py --model gat --hidden_dims 8 --dataset reddit --heads 4 --head_dims 2 --$name $var >> "${dir_sp}.log"
-        python ../main.py --model gaan --hidden_dims 64 --dataset com-amazon --$name $var >> "${dir_sp}.log"
+        python ../main.py --model gcn --hidden_dims 16 --dataset com-lj --$name $var
+        python ../main.py --model ggnn --hidden_dims 64 --dataset reddit --$name $var
+        python ../main.py --model gat --hidden_dims 8 --dataset reddit --heads 4 --head_dims 2 --$name $var
+        python ../main.py --model gaan --hidden_dims 64 --dataset com-amazon --$name $var
     done
 done
 

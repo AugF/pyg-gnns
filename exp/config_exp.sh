@@ -23,8 +23,7 @@ do
         do
             val="configuration=${i}, model=${model}, dataset=${data}"
             echo ${val}
-            echo ${val} >> "${dir_config}.log"
-            nsys profile -t cuda,osrt,nvtx -o "${dir_config}/config${i}_${model}_${data}" -w true python ../main.py --dataset ${data} --model ${model} --hidden_dims ${hidden_dims[i]} --heads ${heads[i]} --head_dims ${head_dims[i]} --heads ${heads[i]} --d_a ${d_a[i]} --d_v ${d_v[i]} >> "${dir_config}.log"
+            nsys profile -t cuda,osrt,nvtx -o "${dir_config}/config${i}_${model}_${data}" -w true python ../main.py --dataset ${data} --model ${model} --hidden_dims ${hidden_dims[i]} --heads ${heads[i]} --head_dims ${head_dims[i]} --heads ${heads[i]} --d_a ${d_a[i]} --d_v ${d_v[i]}
         done
     done
 done
