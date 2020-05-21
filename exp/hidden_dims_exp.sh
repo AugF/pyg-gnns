@@ -1,29 +1,50 @@
 #!/usr/bin/env bash
-# experiment for configuration
-dir_config="config_exp"
+# for hidden feature dimension experiment
+dir_head="hidden_dims_exp/multi_head"
+dir_non_head="hidden_dims_exp/non_multi_head"
 
-if [ ! -d $dir_config ]
+if [ ! -d $dir_head ]
 then
-    mkdir $dir_config
+    mkdir -p $dir_head
 fi
 
-datasets=(flickr com-amazon reddit com-lj)
-models=(gcn ggnn gat gaan)
-hidden_dims=(64 16 8)
-heads=(8 4 4)
-head_dims=(8 4 2)
-d_a=(8 4 2)
-d_v=(8 4 2)
+if [ ! -d $dir_non_head ]
+then
+    mkdir -p $dir_non_head
+fi
 
-for i in 0 1 2
+# multi-head
+echo "begin multi-head experiment..."
+for data in flickr com-amazon
 do
-    for data in ${datasets[@]}
+    for model in gat gaan
     do
-        for model in ${models[@]}
+        for hds in 8 16 32 64 128 256 # heads fix at 4, head_dims changes
         do
-            val="configuration=${i}, model=${model}, dataset=${data}"
+            val="model=${model}, dataset=${data}, heads=4, head_dims=${hds}"
             echo ${val}
-            nsys profile -t cuda,osrt,nvtx -o "${dir_config}/config${i}_${model}_${data}" -w true python ../main.py --dataset ${data} --model ${model} --hidden_dims ${hidden_dims[i]} --heads ${heads[i]} --head_dims ${head_dims[i]} --heads ${heads[i]} --d_a ${d_a[i]} --d_v ${d_v[i]}
+            nsys profile -t cuda,osrt,nvtx -o "${dir_head}/${model}_${data}_4_${hds}" -w true python ../main.py --dataset $data --model $model --heads 4 --head_dims $hds --d_a $hds --d_v $hds
+        done
+        for head in 1 2 8 16 # head_dims fix at 64, heads changes
+        do
+            val="model=${model}, dataset=${data}, heads=${head}, head_dims=64"
+            echo ${val}
+            nsys profile -t cuda,osrt,nvtx -o "${dir_head}/${model}_${data}_${head}_64" -w true python ../main.py --dataset $data --model $model --heads $head --head_dims 64 --d_a 64 --d_v 64
+        done
+    done
+done
+
+echo "begin non-multi-head experiment..."
+# non-multi-head
+for data in flickr com-amazon
+do
+    for model in gcn ggnn
+    do
+        for hds in 16 32 64 128 256 512 1024 # hidden_dims changes
+        do
+            val="model=${model}, dataset=${data}, hidden_dims=${hds}"
+            echo $val
+            nsys profile -t cuda,osrt,nvtx -o "${dir_non_head}/${model}_${data}_${hds}" -w true python ../main.py --dataset $data --model $model --hidden_dims $hds
         done
     done
 done

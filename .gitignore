@@ -5,3 +5,4 @@ data/*
 *.pyc
 test/*
 __pycache__/*
+scalablity_exp.py
