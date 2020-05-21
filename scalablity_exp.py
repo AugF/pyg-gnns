@@ -14,7 +14,7 @@ def input_dense_feature_exp(seed=1):
     for i, name in enumerate(datasets):
         for d in dims:
           feats = np.random.randn(nodes[i], d)
-          np.save("data/" + name + "_" + str(d) + "/raw/feats", feats) 
+          np.save("epochs/" + name + "_" + str(d) + "/raw/feats", feats)
     
 
 def input_sparse_feature_exp(seed=1):
@@ -30,7 +30,7 @@ def input_sparse_feature_exp(seed=1):
         for r in ratios:  #
             feats = np.random.randn(nodes[i], 500)
             feats = np.where(feats <= r, 0, 1)
-            np.save("data/" + name + "_500_" + str(int(r * 100)) + "/raw/feats", feats)
+            np.save("epochs/" + name + "_500_" + str(int(r * 100)) + "/raw/feats", feats)
 
     print("begin features dims exp..")
     # 1.2 ratio=0.2, dims=250, 500, 750, 1000, 1250
@@ -39,7 +39,7 @@ def input_sparse_feature_exp(seed=1):
         for d in dims:  #
             feats = np.random.randn(nodes[i], d)
             feats = np.where(feats <= 0.2, 0, 1)
-            np.save("data/" + name + "_" + str(d) + "_20/raw/feats", feats)
+            np.save("epochs/" + name + "_" + str(d) + "_20/raw/feats", feats)
 
 
 # 2. graph scalablity
@@ -80,7 +80,7 @@ def graph_scale_exp(seed=1):
         edges = nodes * degree_fix
         print("nodes={}, edges={}".format(nodes, edges))
         graph = snap.GenRMat(nodes, edges, .6, .1, .15, Rnd)
-        raw_dir = "data/graph_" + names[i] + "_25/raw"
+        raw_dir = "epochs/graph_" + names[i] + "_25/raw"
         print(raw_dir)
         if not os.path.exists(raw_dir):
             os.makedirs(raw_dir)
@@ -105,7 +105,7 @@ def graph_scale_exp(seed=1):
     for d in degrees:
         edges = nodes * d
         graph = snap.GenRMat(nodes, edges, .6, .1, .15, Rnd)
-        raw_dir = "data/graph_500k_" + str(d) + "/raw"
+        raw_dir = "epochs/graph_500k_" + str(d) + "/raw"
         print(raw_dir)
         if not os.path.exists(raw_dir):
             os.makedirs(raw_dir)

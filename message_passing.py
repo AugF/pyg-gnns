@@ -220,7 +220,7 @@ class MessagePassing(torch.nn.Module):
                 and assumed to be quadratic.
                 This argument is ignored in case :obj:`edge_index` is a
                 :obj:`torch_sparse.SparseTensor`. (default: :obj:`None`)
-            **kwargs: Any additional data which is needed to construct and
+            **kwargs: Any additional epochs which is needed to construct and
                 aggregate messages, and to update node embeddings.
         """
 

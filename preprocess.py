@@ -87,7 +87,7 @@ def get_role(raw_dir, nodes, tr, va, seed=1):
 if __name__ == '__main__':
     name = "com-lj"
     features, classes, tr, va = 32, 10, 0.50, 0.25
-    raw_dir = osp.join(osp.dirname(osp.realpath(__file__)), 'data', name, "raw")
+    raw_dir = osp.join(osp.dirname(osp.realpath(__file__)), 'epochs', name, "raw")
 
     print("get_adj_and_map...")
     nodes, edges = get_adj_and_map(raw_dir=raw_dir,

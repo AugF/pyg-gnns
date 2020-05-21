@@ -9,10 +9,10 @@ import torch.cuda.nvtx as nvtx
 
 def get_dataset(name, normalize_features=False, transform=None): #
     if name == "cora":
-        path = osp.join(osp.dirname(osp.realpath(__file__)), 'data')
+        path = osp.join(osp.dirname(osp.realpath(__file__)), 'epochs')
         dataset = Planetoid(path, name)
     else:
-        path = osp.join(osp.dirname(osp.realpath(__file__)), 'data', name)
+        path = osp.join(osp.dirname(osp.realpath(__file__)), 'epochs', name)
         dataset = DataProcess(root=path)
 
     if transform is not None and normalize_features:

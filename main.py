@@ -39,7 +39,7 @@ torch.manual_seed(args.seed)
 if gpu:
     torch.cuda.manual_seed(args.seed)
 
-# 1. load data
+# 1. load epochs
 dataset = get_dataset(args.dataset, normalize_features=True)
 data = dataset[0]
 

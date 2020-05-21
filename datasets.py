@@ -19,12 +19,12 @@ class DataProcess(InMemoryDataset):
     Args:
         root (string): Root directory where the dataset should be saved.
         transform (callable, optional): A function/transform that takes in an
-            :obj:`torch_geometric.data.Data` object and returns a transformed
-            version. The data object will be transformed before every access.
+            :obj:`torch_geometric.epochs.Data` object and returns a transformed
+            version. The epochs object will be transformed before every access.
             (default: :obj:`None`)
         pre_transform (callable, optional): A function/transform that takes in
-            an :obj:`torch_geometric.data.Data` object and returns a
-            transformed version. The data object will be transformed before
+            an :obj:`torch_geometric.epochs.Data` object and returns a
+            transformed version. The epochs object will be transformed before
             being saved to disk. (default: :obj:`None`)
     """
 
@@ -38,11 +38,11 @@ class DataProcess(InMemoryDataset):
 
     @property
     def processed_file_names(self):
-        return 'data.pt'
+        return 'epochs.pt'
 
     def process(self):
         f = np.load(osp.join(self.raw_dir, 'adj_full.npz'))
-        adj = sp.csr_matrix((f['data'], f['indices'], f['indptr']), f['shape'])
+        adj = sp.csr_matrix((f['epochs'], f['indices'], f['indptr']), f['shape'])
         adj = adj.tocoo()
         row = torch.from_numpy(adj.row).to(torch.long)
         col = torch.from_numpy(adj.col).to(torch.long)
