@@ -105,8 +105,7 @@ def dfs(roots, maps): # 通过dfs来输出层次结构
     return ans
 
 
-def convert(file_name):
-    file_path = os.path.join(os.path.dirname(__file__), 'files', file_name)
+def convert(file_path):
     con = sqlite3.connect(file_path + '.sqlite')
     cur = con.cursor()
 
@@ -128,4 +127,28 @@ def convert(file_name):
 
 if __name__ == '__main__':
     file_name = "config0_ggnn_reddit"
-    convert(file_name)
+    file_path = os.path.join(os.path.dirname(__file__), 'files', file_name)
+    # convert(file_name)
+    # 后续读取，第一层，第二层读
+    with open(file_path + "_cuda.json") as f:
+        dicts = json.load(f)
+
+    def get_time(period):
+        return period[1] - period[0]
+
+    # epochs
+    epochs = []
+    forwards = []
+    backwards = []
+    evals = []
+    for key in dicts.keys():
+        if 'epochs' not in key: continue
+        epochs.append(get_time(dicts[key][0]))
+        forwards.append(get_time(dicts[key][1]['train'][1]['forward'][0]))
+        backwards.append(get_time(dicts[key][1]['train'][1]['backward'][0]))
+        evals.append(get_time(dicts[key][1]['eval'][0]))
+
+    print(epochs)
+    print(forwards)
+    print(backwards)
+    print(evals)
