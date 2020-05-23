@@ -72,9 +72,9 @@ def gen_graph(raw_dir, nodes, edges, features=32, classes=10, tr=0.50, va=0.25, 
 
 def graph_scale_exp(seed=1):
     Rnd = snap.TRnd()
-    # 2.1 degree=25, n=10k, 50k, 100k, 500k
-    ns = [1000000, 5000000]
-    names = ['1m', '5m'] # [100k, 500k, 1m, 5m]
+    # 2.1 degree=25, n=1k, 25k, 50k, 75k, 100k
+    ns = [1000, 25000, 50000, 75000, 100000]
+    names = ['1k', '25k', '50k', '75k', '100k']
     degree_fix = 25
     for i, nodes in enumerate(ns):
         edges = nodes * degree_fix
@@ -97,15 +97,15 @@ def graph_scale_exp(seed=1):
             col.append(r)
         f = sp.csr_matrix(([1] * 2 * edges, (row, col)), shape=(nodes, nodes)) # directed -> undirected, edges*2
         np.savez(raw_dir + "/adj_full", data=f.data, indptr=f.indptr, indices=f.indices, shape=f.shape)
-        gen_graph(raw_dir, nodes, edges, seed)
+        gen_graph(raw_dir, nodes, edges)
 
     # 2.2 n=500k, degree=10, 25, 50, 75, 100
     degrees = [10, 50, 75, 100]  # 25 omit
-    nodes = 500000
+    nodes = 50000
     for d in degrees:
         edges = nodes * d
         graph = snap.GenRMat(nodes, edges, .6, .1, .15, Rnd)
-        raw_dir = "epochs/graph_500k_" + str(d) + "/raw"
+        raw_dir = "data/graph_50k_" + str(d) + "/raw"
         print(raw_dir)
         if not os.path.exists(raw_dir):
             os.makedirs(raw_dir)
@@ -122,12 +122,12 @@ def graph_scale_exp(seed=1):
             col.append(r)
         f = sp.csr_matrix(([1] * 2 * edges, (row, col)), shape=(nodes, nodes)) # directed -> undirected, edges*2
         np.savez(raw_dir + "/adj_full", data=f.data, indptr=f.indptr, indices=f.indices, shape=f.shape)
-        gen_graph(raw_dir, nodes, edges, seed)
+        gen_graph(raw_dir, nodes, edges)
 
 
 if __name__ == '__main__':
-    print("begin input feature experiment...")
-    input_dense_feature_exp()
+    print("begin experiment...")
+    graph_scale_exp()
 
 
 

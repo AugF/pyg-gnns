@@ -1,6 +1,8 @@
+exp/*
+!exp/*.sh
 .idea/*
 data/*
-exp
 *.pyc
 test/*
 __pycache__/*
+scalablity_exp.py
