@@ -1,3 +1,17 @@
+"""
+convert.py
+获取cuda的nvtx的运行时
+
+input: .sqlite:
+    获取方法:
+    nsys profile -t cuda,osrt,nvtx -o report -w true python main.py
+    nsys export --type sqlite report.qdrep
+output:
+    查看方法：https://jsoneditoronline.org/
+    格式：Node{key: {0: (start_time, end_time}, 1: {Node, ..., Node}}
+    file_name_cpu.json
+    file_name_cuda.json
+"""
 import os
 import sys
 import json
@@ -51,13 +65,14 @@ def create(input):
     return roots, maps
 
 
-def cal_cuda_time(maps):
+def cal_cuda_time(maps, cur):
     """
     cal cuda time
     :param maps:
     :return:
     """
     sql_runtime = "select correlationId from cupti_activity_kind_runtime where start >= ? and end <= ?"
+    cnt = 1
     for node in maps:
         key, value = node.key, node.value
         start_time = sys.maxsize
@@ -74,14 +89,15 @@ def cal_cuda_time(maps):
                     start_time = min(start_time, event[0])
                     end_time = max(end_time, event[1])
                     event = events.fetchone()
-
         node.value = (start_time, end_time)
+        cnt += 1
+        if cnt % 10 == 0:
+            print("finish {}".format(cnt))
 
 
 def dfs(roots, maps): # 通过dfs来输出层次结构
     if not roots:
         return None
-
     ans = {}
     for root in roots:
         key, val = maps[root].key, maps[root].value
@@ -89,20 +105,27 @@ def dfs(roots, maps): # 通过dfs来输出层次结构
     return ans
 
 
-if __name__ == '__main__':
-    file_name = "config0_ggnn_reddit"
-    dir_path = os.path.join(os.path.dirname(__file__), 'files')
-    con = sqlite3.connect(os.path.join(dir_path, file_name + '.sqlite'))
+def convert(file_name):
+    file_path = os.path.join(os.path.dirname(__file__), 'files', file_name)
+    con = sqlite3.connect(file_path + '.sqlite')
     cur = con.cursor()
 
     nvtx_sql = "select start, end, text from nvtx_events"
     res = cur.execute(nvtx_sql).fetchall()
     roots, maps = create(res)
+    # write cpu.json
     ans = dfs(roots, maps)
-    with open(file_name + "_cpu.json", "w") as f:
+    with open(file_path + "_cpu.json", "w") as f:
         json.dump(ans, f)
-    cal_cuda_time(maps)
+
+    cal_cuda_time(maps, cur)
+    # write cuda.json
     ans = dfs(roots, maps)
-    with open(file_name + "_cuda.json", "w") as f:
+    with open(file_path + "_cuda.json", "w") as f:
         json.dump(ans, f)
     con.close()
+
+
+if __name__ == '__main__':
+    file_name = "config0_ggnn_reddit"
+    convert(file_name)
