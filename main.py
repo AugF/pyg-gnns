@@ -16,8 +16,8 @@ parser.add_argument('--dataset', type=str, default='cora', help="dataset: [cora,
                                                                     "amazon-computers, amazon-photo, coauthor-physics, pubmed]")
 
 parser.add_argument('--model', type=str, default='gat', help="gnn models: [gcn, ggnn, gat, gaan]")
-parser.add_argument('--epochs', type=int, default=20, help="epochs for training")
-parser.add_argument('--layers', type=int, default=4, help="layers for hidden layer")
+parser.add_argument('--epochs', type=int, default=50, help="epochs for training")
+parser.add_argument('--layers', type=int, default=2, help="layers for hidden layer")
 parser.add_argument('--hidden_dims', type=int, default=64, help="hidden layer output dims")
 parser.add_argument('--heads', type=int, default=8, help="gat or gaan model: heads")
 parser.add_argument('--head_dims', type=int, default=8, help="gat model: head dims") # head_dims * heads = hidden_dims
