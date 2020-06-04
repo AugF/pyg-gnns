@@ -96,8 +96,11 @@ def train(epoch):
     t = time.time()
     nvtx_push(gpu, "forward")
     model.train()
-    loss = F.nll_loss(F.log_softmax(model(data.x, data.edge_index), dim=1)[data.train_mask], data.y[data.train_mask])
+    out = model(data.x, data.edge_index)
+    nvtx_push(gpu, "loss")
+    loss = F.nll_loss(F.log_softmax(out, dim=1)[data.train_mask], data.y[data.train_mask])
     optimizer.zero_grad()
+    nvtx_pop(gpu)
     nvtx_pop(gpu)
     nvtx_push(gpu, "backward")
     loss.backward()
@@ -111,11 +114,14 @@ def train(epoch):
 
 def test():
     model.eval()
-    logits, accs = F.log_softmax(model(data.x, data.edge_index), dim=1), []
+    out = model(data.x, data.edge_index)
+    nvtx.push(gpu, "other")
+    logits, accs = F.log_softmax(out, dim=1), []
     for _, mask in data('train_mask', 'val_mask', 'test_mask'):
         pred = logits[mask].max(1)[1]
         acc = pred.eq(data.y[mask]).sum().item() / mask.sum().item()
         accs.append(acc)
+    nvtx_pop(gpu)
     return accs
 
 
