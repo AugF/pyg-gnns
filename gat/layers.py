@@ -4,6 +4,7 @@ import torch.nn.functional as F
 from torch_geometric.utils import remove_self_loops, add_self_loops, softmax
 from message_passing import MessagePassing
 
+from torch_geometric.nn import GATConv
 from inits import glorot, zeros
 from utils import nvtx_push, nvtx_pop
 
@@ -93,9 +94,18 @@ class GATConv(MessagePassing):
                  None if x[1] is None else torch.matmul(x[1], self.weight))
 
         nvtx_push(self.gpu, "edge-cal")
-        x = self.propagate(edge_index, size=size, x=x) # edge cal
+        out = self.propagate(edge_index, size=size, x=x) # edge cal
         nvtx_pop(self.gpu)
-        return x
+
+        if self.concat:
+            out = out.view(-1, self.heads * self.out_channels)
+        else:
+            out = out.mean(dim=1)
+
+        if self.bias is not None:
+            out = out + self.bias
+
+        return out
 
     def message(self, edge_index_i, x_i, x_j, size_i):
         # Compute attention coefficients.

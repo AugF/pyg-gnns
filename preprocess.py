@@ -77,14 +77,14 @@ def get_role(raw_dir, nodes, tr, va, seed=1):
     tr, va = int(nodes * tr), int(nodes * (tr + va))
     role = {'tr': idx[: tr].tolist(),
             'va': idx[tr: va].tolist(),
-            'te': idx[va: ].tolist()
+            'te': idx[va:].tolist()
             }
 
     with open(raw_dir + "/role.json", "w") as f:
         json.dump(role, f)
 
 
-if __name__ == '__main__':
+def generate_com_lj():
     name = "com-lj"
     features, classes, tr, va = 32, 10, 0.50, 0.25
     raw_dir = osp.join(osp.dirname(osp.realpath(__file__)), 'epochs', name, "raw")
@@ -99,3 +99,11 @@ if __name__ == '__main__':
     get_feats(raw_dir=raw_dir, nodes=nodes, features=features)
     print("get role...")
     get_role(raw_dir=raw_dir, nodes=nodes, tr=tr, va=va)
+
+
+if __name__ == '__main__':
+    names = ['amazon-computers', 'amazon-photo', 'coauthor-physis']
+    nodes = [13752, 7650, 34493]
+    for i, name in enumerate(names):
+        raw_dir = "data/" + name + '/raw'
+        get_role(raw_dir=raw_dir, nodes=nodes[i], tr=0.50, va=0.25)

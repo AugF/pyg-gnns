@@ -28,5 +28,16 @@ dataset格式(N为边数, F为特征数， C为类别数）
 python main.py --help   
 `
 
+一些修改：
+
+对于多标签分类问题
+
+1. yelp引入的关于多标签分类的问题
+
+- 单标签分类：F.log_softmax(x, 1)
+- 多标签分类：
+
+
+
 
     

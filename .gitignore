@@ -2,6 +2,7 @@ exp/*
 !exp/*.sh
 .idea/*
 data/*
+analysis/*
 *.pyc
 test/*
 __pycache__/*

@@ -20,7 +20,7 @@ class GGNN(Module):
 
         self.weight_in = Parameter(torch.Tensor(n_features, hidden_dims))
         self.weight_out = Parameter(torch.Tensor(hidden_dims, n_classes))
-        self.conv = GatedGraphConv(out_channels=hidden_dims, num_layers=layers, gpu=gpu)
+        self.convs = GatedGraphConv(out_channels=hidden_dims, num_layers=layers, gpu=gpu)
         glorot(self.weight_in)
         glorot(self.weight_out)
 
@@ -28,14 +28,14 @@ class GGNN(Module):
         nvtx_push(self.gpu, "input-transform")
         x = torch.spmm(x, self.weight_in)
         nvtx_pop(self.gpu)
-        x = self.conv(x, edge_index)
-        nvtx_push(self.gpu, "output_transform")
+        x = self.convs(x, edge_index)
+        nvtx_push(self.gpu, "output-transform")
         x = torch.matmul(x, self.weight_out)
         nvtx_pop(self.gpu)
-        return F.log_softmax(x, dim=1)
+        return x
 
     def __repr__(self):
         return '{}(layers={}, n_features={}, n_classes={}, hidden_dims={}, gpu={})'.format(
             self.__class__.__name__, self.layers, self.n_features, self.n_classes,
-            self.hidden_dims, self.gpu) + '\n' + str(self.conv)
+            self.hidden_dims, self.gpu) + '\n' + str(self.convs)
 

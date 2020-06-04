@@ -70,13 +70,13 @@ class GatedGraphConv(MessagePassing):
 
         for i in range(self.num_layers):
             nvtx_push(self.gpu, "layer" + str(i))
-            nvtx_push(self.gpu, "vertex-cal")
+            nvtx_push(self.gpu, "vertex-cal_1")
             m = torch.matmul(h, self.weight[i]) # vertex cal
             nvtx_pop(self.gpu)
             nvtx_push(self.gpu, "edge-cal")
             m = self.propagate(edge_index, x=m, edge_weight=edge_weight) # edge cal
             nvtx_pop(self.gpu)
-            nvtx_push(self.gpu, "vertex-cal")
+            nvtx_push(self.gpu, "vertex-cal_2")
             h = self.rnn(m, h) # vertex cal
             nvtx_pop(self.gpu)
             nvtx_pop(self.gpu)
