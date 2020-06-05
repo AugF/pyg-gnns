@@ -102,10 +102,9 @@ def generate_com_lj():
 
 
 if __name__ == '__main__':
-    # names = ['amazon-computers', 'amazon-photo', 'coauthor-physics']
-    # nodes = [13752, 7650, 34493]
-    names = ['com-amazon', 'com-lj']
-    nodes = [334863, 3997962]
+    names = ['amazon-computers', 'amazon-photo', 'coauthor-physics']
+    nodes = [13752, 7650, 34493]
     for i, name in enumerate(names):
+        print(name)
         raw_dir = "data/" + name + '/raw'
         get_role(raw_dir=raw_dir, nodes=nodes[i], tr=0.70, va=0.15)

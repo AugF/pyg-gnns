@@ -3,19 +3,19 @@ import torch.nn.functional as F
 import numpy as np
 import argparse
 import time
+import os.path as osp
 
 from gaan.models import GaAN
 from ggnn.models import GGNN
 from gat.models import GAT
 from gcn.models import GCN
 from utils import get_dataset, get_split_by_file, nvtx_push, nvtx_pop
-from preprocess import get_role
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--dataset', type=str, default='cora', help="dataset: [cora, flickr, com-amazon, reddit, com-lj,"
                                                                     "amazon-computers, amazon-photo, coauthor-physics, pubmed]")
 
-parser.add_argument('--model', type=str, default='gat', help="gnn models: [gcn, ggnn, gat, gaan]")
+parser.add_argument('--model', type=str, default='gcn', help="gnn models: [gcn, ggnn, gat, gaan]")
 parser.add_argument('--epochs', type=int, default=50, help="epochs for training")
 parser.add_argument('--layers', type=int, default=2, help="layers for hidden layer")
 parser.add_argument('--hidden_dims', type=int, default=64, help="hidden layer output dims")
@@ -47,12 +47,9 @@ dataset = get_dataset(args.dataset, normalize_features=True)
 data = dataset[0]
 
 print(data.num_nodes, data.num_edges, dataset.num_features, dataset.num_classes)
-
 # add train, val, test split
 if args.dataset in ['amazon-computers', 'amazon-photo', 'coauthor-physics']:
-    raw_dir = "data/" + args.dataset + '/raw'
-    get_role(raw_dir=raw_dir, nodes=data.num_nodes, tr=0.50, va=0.25)
-    file_path = "data/" + args.dataset + "/raw/role.json"
+    file_path = osp.join(osp.dirname(osp.realpath(__file__)), "data/" + args.dataset + "/raw/role.json")
     data.train_mask, data.val_mask, data.test_mask = get_split_by_file(file_path, data.num_nodes)
 
 # 2. model
@@ -148,7 +145,6 @@ else:
                 nvtx_pop(gpu)
                 nvtx_pop(gpu)
             print("Average train time: {}s".format(t / args.epochs))
-
 
 
 

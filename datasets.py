@@ -42,7 +42,7 @@ class DataProcess(InMemoryDataset):
 
     def process(self):
         f = np.load(osp.join(self.raw_dir, 'adj_full.npz'))
-        adj = sp.csr_matrix((f['epochs'], f['indices'], f['indptr']), f['shape'])
+        adj = sp.csr_matrix((f['data'], f['indices'], f['indptr']), f['shape'])
         adj = adj.tocoo()
         row = torch.from_numpy(adj.row).to(torch.long)
         col = torch.from_numpy(adj.col).to(torch.long)
