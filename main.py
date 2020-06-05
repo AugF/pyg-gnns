@@ -47,6 +47,7 @@ dataset = get_dataset(args.dataset, normalize_features=True)
 data = dataset[0]
 
 print(data.num_nodes, data.num_edges, dataset.num_features, dataset.num_classes)
+
 # add train, val, test split
 if args.dataset in ['amazon-computers', 'amazon-photo', 'coauthor-physics']:
     raw_dir = "data/" + args.dataset + '/raw'
@@ -115,7 +116,7 @@ def train(epoch):
 def test():
     model.eval()
     out = model(data.x, data.edge_index)
-    nvtx.push(gpu, "other")
+    nvtx_push(gpu, "other")
     logits, accs = F.log_softmax(out, dim=1), []
     for _, mask in data('train_mask', 'val_mask', 'test_mask'):
         pred = logits[mask].max(1)[1]

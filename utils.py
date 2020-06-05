@@ -66,6 +66,12 @@ def get_split_by_file(file_path, nodes): # 通过读取roles.json文件来获取
     test_mask[torch.tensor(role['te'])] = True
     return train_mask, val_mask, test_mask
 
+
+def cal_sparse(x, m, n):
+    x_bool = np.where(x == 0, 1, 0)
+    return x_bool.mean(), m / n
+
+
 def nvtx_push(flag, info):
     if flag:
         nvtx.range_push(info)
@@ -77,5 +83,8 @@ def nvtx_pop(flag):
 
 
 if __name__ == '__main__':
-    data = get_dataset("reddit")
+    datasets = ['amazon-photo', 'pubmed', 'amazon-computers', 'coauthor-physics', 'flickr', 'com-amazon']
+    for data in datasets:
+        dataset = get_dataset(data, normalize_features=False)[0]
+        print(data, cal_sparse(dataset.x, dataset.num_edges, dataset.num_nodes))
 
