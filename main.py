@@ -3,6 +3,8 @@ import torch.nn.functional as F
 import numpy as np
 import argparse
 import time
+import sys
+import json
 import os.path as osp
 
 from gaan.models import GaAN
@@ -10,6 +12,8 @@ from ggnn.models import GGNN
 from gat.models import GAT
 from gcn.models import GCN
 from utils import get_dataset, get_split_by_file, nvtx_push, nvtx_pop
+
+memory_labels = ["allocated_bytes.all.current", "allocated_bytes.all.peak", "reserved_bytes.all.current", "reserved_bytes.all.peak"]
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--dataset', type=str, default='cora', help="dataset: [cora, flickr, com-amazon, reddit, com-lj,"
@@ -31,6 +35,7 @@ parser.add_argument('--device', type=str, default='cuda:0', help='[cpu, cuda:id]
 parser.add_argument('--lr', type=float, default=0.01, help="adam's learning rate")
 parser.add_argument('--weight_decay', type=float, default=0.0005, help="adam's weight decay")
 parser.add_argument('--no_record_shapes', action='store_false', default=True, help="nvtx or autograd's profile to record shape")
+parser.add_argument('--json_path', type=str, default='out.json', help="json file path for memory")
 
 args = parser.parse_args()
 gpu = not args.cpu and torch.cuda.is_available()
@@ -83,6 +88,7 @@ elif args.model == 'gaan':
 print(model)
 # set to gpu
 device = torch.device('cuda:0' if gpu else 'cpu')
+
 model, data = model.to(device), data.to(device)
 
 optimizer = torch.optim.Adam(model.parameters(),
@@ -90,8 +96,13 @@ optimizer = torch.optim.Adam(model.parameters(),
                              weight_decay=args.weight_decay)
 
 
-def train(epoch):
+def train(epoch, df):
     t = time.time()
+
+    # add forward start
+    res = torch.cuda.memory_stats()
+    df[epoch]['forward_start'] = [res[i] for i in memory_labels]
+
     nvtx_push(gpu, "forward")
     model.train()
     out = model(data.x, data.edge_index)
@@ -100,10 +111,20 @@ def train(epoch):
     optimizer.zero_grad()
     nvtx_pop(gpu)
     nvtx_pop(gpu)
+
+    # add forward end
+    res = torch.cuda.memory_stats()
+    df[epoch]['forward_end'] = [res[i] for i in memory_labels]
+
     nvtx_push(gpu, "backward")
     loss.backward()
     optimizer.step()
     nvtx_pop(gpu)
+
+    # add backward end
+    res = torch.cuda.memory_stats()
+    df[epoch]['backward_end'] = [res[i] for i in memory_labels]
+
     log = 'Epoch: {:03d}, train_loss: {:.8f}, train_time: {:.4f}s'
     t = time.time() - t
     print(log.format(epoch, loss.data.item(), t))
@@ -122,29 +143,38 @@ def test():
     nvtx_pop(gpu)
     return accs
 
-
 if not gpu:
     for epoch in range(args.epochs + 1):
         train(epoch)
         log = 'Accuracy: Train: {:.4f}, Val: {:.4f}, Test: {:.4f}'
         print(log.format(*test()))
 else:
+    df = {} # add df
     with torch.cuda.profiler.profile():
-        train(-1)
+        df[-1] = {}
+        train(-1, df)
         with torch.autograd.profiler.emit_nvtx(record_shapes=not args.no_record_shapes):
             t = 0
             for epoch in range(args.epochs):
+                df[epoch] = {}
                 nvtx_push(gpu, "epochs" + str(epoch))
                 nvtx_push(gpu, "train")
-                t += train(epoch)
+                t += train(epoch, df)
                 nvtx_pop(gpu)
-
                 nvtx_push(gpu, "eval")
                 log = 'Accuracy: Train: {:.4f}, Val: {:.4f}, Test: {:.4f}'
                 print(log.format(*test()))
+                
+                # add 
+                res = torch.cuda.memory_stats()
+                df[epoch]['eval_end'] = [res[i] for i in memory_labels]
+                
                 nvtx_pop(gpu)
                 nvtx_pop(gpu)
             print("Average train time: {}s".format(t / args.epochs))
+
+    with open(args.json_path, "w") as f:
+        json.dump(df, f)
 
 
 
