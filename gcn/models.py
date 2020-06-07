@@ -4,8 +4,7 @@ import torch.nn.functional as F
 from torch.nn import Module
 from gcn.layers import GCNConv
 
-from utils import nvtx_push, nvtx_pop
-
+from utils import nvtx_push, nvtx_pop, log_memory
 
 class GCN(Module):
     """
@@ -34,16 +33,20 @@ class GCN(Module):
         :param edge_index:
         :return:
         """
+        device = torch.device('cuda' if self.gpu else 'cpu')
+
         for i in range(self.layers - 1):
             nvtx_push(self.gpu, "layer" + str(i))
             x = self.convs[i](x, edge_index)
             x = F.relu(x)
             x = F.dropout(x, p=self.dropout, training=self.training)
             nvtx_pop(self.gpu)
+            log_memory(device, 'layer' + str(i))
 
         nvtx_push(self.gpu, "layer" + str(self.layers - 1))
         x = self.convs[-1](x, edge_index)
         nvtx_pop(self.gpu)
+        log_memory(device, "layer" + str(self.layers - 1))
         return x
 
     def __repr__(self):

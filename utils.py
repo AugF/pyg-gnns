@@ -11,6 +11,8 @@ from torch_geometric.datasets.coauthor import Coauthor
 
 import torch.cuda.nvtx as nvtx
 
+memory_labels = ["allocated_bytes.all.current", "allocated_bytes.all.peak", "reserved_bytes.all.current", "reserved_bytes.all.peak"]
+df = {}
 
 def get_dataset(name, normalize_features=False, transform=None): #
     if name in ["cora", "pubmed"]:
@@ -80,6 +82,15 @@ def nvtx_push(flag, info):
 def nvtx_pop(flag):
     if flag:
         nvtx.range_pop()
+
+
+def log_memory(device, label):
+    res = torch.cuda.memory_stats()
+    torch.cuda.reset_max_memory_allocated(device)
+    if label not in df.keys():
+        df[label] = [[res[i] for i in memory_labels]]
+    else:
+        df[label].append([res[i] for i in memory_labels])
 
 
 if __name__ == '__main__':

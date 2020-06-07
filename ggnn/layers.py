@@ -4,7 +4,7 @@ from torch.nn import Parameter as Param
 from message_passing import MessagePassing
 from inits import uniform
 
-from utils import nvtx_push, nvtx_pop
+from utils import nvtx_push, nvtx_pop, log_memory
 
 
 class GatedGraphConv(MessagePassing):
@@ -59,6 +59,7 @@ class GatedGraphConv(MessagePassing):
 
     def forward(self, x, edge_index, edge_weight=None):
         """"""
+        device = torch.device('cuda' if self.gpu else 'cpu')
         h = x if x.dim() == 2 else x.unsqueeze(-1)
         if h.size(1) > self.out_channels:
             raise ValueError('The number of input channels is not allowed to '
@@ -80,6 +81,7 @@ class GatedGraphConv(MessagePassing):
             h = self.rnn(m, h) # vertex cal
             nvtx_pop(self.gpu)
             nvtx_pop(self.gpu)
+            log_memory(device, "layer" + str(i))
 
         return h
 

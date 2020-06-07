@@ -5,7 +5,7 @@ from torch.nn import Parameter, Module
 from ggnn.layers import GatedGraphConv
 
 from inits import glorot
-from utils import nvtx_push, nvtx_pop
+from utils import nvtx_push, nvtx_pop, log_memory
 
 
 class GGNN(Module):
@@ -25,13 +25,17 @@ class GGNN(Module):
         glorot(self.weight_out)
 
     def forward(self, x, edge_index):
+        device = torch.device('cuda' if self.gpu else 'cpu')
         nvtx_push(self.gpu, "input-transform")
         x = torch.spmm(x, self.weight_in)
         nvtx_pop(self.gpu)
+        log_memory(device, "input-transform")
+
         x = self.convs(x, edge_index)
         nvtx_push(self.gpu, "output-transform")
         x = torch.matmul(x, self.weight_out)
         nvtx_pop(self.gpu)
+        log_memory(device, "output-transform")
         return x
 
     def __repr__(self):
