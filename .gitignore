@@ -1,4 +1,5 @@
 exp/*
+*exp/*
 !exp/*.sh
 .idea/*
 data/*
