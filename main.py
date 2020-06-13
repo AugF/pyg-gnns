@@ -132,7 +132,7 @@ def train(epoch):
     log = 'Epoch: {:03d}, train_loss: {:.8f}, train_time: {:.4f}s'
     t = time.time() - t
     print(log.format(epoch, loss.data.item(), t))
-    return t
+    return 
 
 @torch.no_grad()
 def test():
@@ -157,11 +157,10 @@ else:
     with torch.cuda.profiler.profile():
         train(-1)
         with torch.autograd.profiler.emit_nvtx(record_shapes=not args.no_record_shapes):
-            t = 0
             for epoch in range(args.epochs):
                 nvtx_push(gpu, "epochs" + str(epoch))
                 nvtx_push(gpu, "train")
-                t += train(epoch)
+                train(epoch)
                 nvtx_pop(gpu)
                 nvtx_push(gpu, "eval")
                 log = 'Accuracy: Train: {:.4f}, Val: {:.4f}, Test: {:.4f}'
@@ -172,7 +171,6 @@ else:
                 
                 nvtx_pop(gpu)
                 nvtx_pop(gpu)
-            print("Average train time: {}s".format(t / args.epochs))
 
     from utils import df
     with open(args.json_path, "w") as f:
