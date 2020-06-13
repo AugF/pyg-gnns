@@ -1,6 +1,5 @@
 exp/*
 *log
-*sh
 *exp/*
 !*exp/*.sh
 .idea/*
