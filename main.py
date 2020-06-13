@@ -11,7 +11,7 @@ from gaan.models import GaAN
 from ggnn.models import GGNN
 from gat.models import GAT
 from gcn.models import GCN
-from utils import get_dataset, get_split_by_file, nvtx_push, nvtx_pop, log_memory
+from utils import get_dataset, get_split_by_file, nvtx_push, nvtx_pop, log_memory, small_datasets
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--dataset', type=str, default='cora', help="dataset: [cora, flickr, com-amazon, reddit, com-lj,"
@@ -38,12 +38,18 @@ parser.add_argument('--json_path', type=str, default='out.json', help="json file
 args = parser.parse_args()
 gpu = not args.cpu and torch.cuda.is_available()
 print(args)
+print(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())))
 
 # 0. set manual seed
 np.random.seed(args.seed)
 torch.manual_seed(args.seed)
 if gpu:
     torch.cuda.manual_seed(args.seed)
+
+# for feats experiment
+dataset_info = args.dataset.split('_')
+if dataset_info[0] in small_datasets and len(dataset_info) > 1:
+    args.dataset = dataset_info[0]
 
 # 1. load epochs
 dataset = get_dataset(args.dataset, normalize_features=True)
@@ -55,29 +61,36 @@ if args.dataset in ['amazon-computers', 'amazon-photo', 'coauthor-physics']:
     file_path = osp.join(osp.dirname(osp.realpath(__file__)), "data/" + args.dataset + "/raw/role.json")
     data.train_mask, data.val_mask, data.test_mask = get_split_by_file(file_path, data.num_nodes)
 
+num_features = dataset.num_features
+if dataset_info[0] in small_datasets and len(dataset_info) > 1:
+    file_path = "data/feats_x/" + '_'.join(dataset_info) + '_feats.npy'
+    if osp.exists(file_path):
+        data.x = torch.from_numpy(np.load(file_path)).to(torch.float) # 因为这里是随机生成的，不考虑normal features
+        num_features = data.x.size(1)
+
 # 2. model
 if args.model == 'gcn':
     model = GCN(
         layers=args.layers,
-        n_features=dataset.num_features, n_classes=dataset.num_classes,
+        n_features=num_features, n_classes=dataset.num_classes,
         hidden_dims=args.hidden_dims, gpu=gpu
     )
 elif args.model == 'gat':
     model = GAT(
         layers=args.layers,
-        n_features=dataset.num_features, n_classes=dataset.num_classes,
+        n_features=num_features, n_classes=dataset.num_classes,
         head_dims=args.head_dims, heads=args.heads, gpu=gpu
     )
 elif args.model == 'ggnn':
     model = GGNN(
         layers=args.layers,
-        n_features=dataset.num_features, n_classes=dataset.num_classes,
+        n_features=num_features, n_classes=dataset.num_classes,
         hidden_dims=args.hidden_dims, gpu=gpu
     )
 elif args.model == 'gaan':
     model = GaAN(
         layers=args.layers,
-        n_features=dataset.num_features, n_classes=dataset.num_classes,
+        n_features=num_features, n_classes=dataset.num_classes,
         hidden_dims=args.hidden_dims,
         heads=args.heads, d_v=args.d_v,
         d_a=args.d_a, d_m=args.d_m, gpu=gpu
@@ -85,8 +98,7 @@ elif args.model == 'gaan':
 
 print(model)
 # set to gpu
-device = torch.device('cuda' if gpu else 'cpu')
-
+device = torch.device(args.device if gpu else 'cpu')
 model, data = model.to(device), data.to(device)
 
 optimizer = torch.optim.Adam(model.parameters(),
