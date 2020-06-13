@@ -33,10 +33,12 @@ parser.add_argument('--device', type=str, default='cuda:0', help='[cpu, cuda:id]
 parser.add_argument('--lr', type=float, default=0.01, help="adam's learning rate")
 parser.add_argument('--weight_decay', type=float, default=0.0005, help="adam's weight decay")
 parser.add_argument('--no_record_shapes', action='store_false', default=True, help="nvtx or autograd's profile to record shape")
-parser.add_argument('--json_path', type=str, default='out.json', help="json file path for memory")
+parser.add_argument('--json_path', type=str, default='', help="json file path for memory")
 
 args = parser.parse_args()
 gpu = not args.cpu and torch.cuda.is_available()
+flag = not args.json_path == ''
+print("flag", flag)
 print(args)
 print(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())))
 
@@ -72,19 +74,19 @@ if args.model == 'gcn':
     model = GCN(
         layers=args.layers,
         n_features=num_features, n_classes=dataset.num_classes,
-        hidden_dims=args.hidden_dims, gpu=gpu
+        hidden_dims=args.hidden_dims, gpu=gpu, flag=flag
     )
 elif args.model == 'gat':
     model = GAT(
         layers=args.layers,
         n_features=num_features, n_classes=dataset.num_classes,
-        head_dims=args.head_dims, heads=args.heads, gpu=gpu
+        head_dims=args.head_dims, heads=args.heads, gpu=gpu, flag=flag
     )
 elif args.model == 'ggnn':
     model = GGNN(
         layers=args.layers,
         n_features=num_features, n_classes=dataset.num_classes,
-        hidden_dims=args.hidden_dims, gpu=gpu
+        hidden_dims=args.hidden_dims, gpu=gpu, flag=flag
     )
 elif args.model == 'gaan':
     model = GaAN(
@@ -92,7 +94,7 @@ elif args.model == 'gaan':
         n_features=num_features, n_classes=dataset.num_classes,
         hidden_dims=args.hidden_dims,
         heads=args.heads, d_v=args.d_v,
-        d_a=args.d_a, d_m=args.d_m, gpu=gpu
+        d_a=args.d_a, d_m=args.d_m, gpu=gpu, flag=flag
     )
 
 print(model)
@@ -108,7 +110,7 @@ def train(epoch):
     t = time.time()
 
     # add forward start
-    log_memory(device, 'forward_start')
+    log_memory(flag, device, 'forward_start')
 
     nvtx_push(gpu, "forward")
     model.train()
@@ -118,7 +120,7 @@ def train(epoch):
     optimizer.zero_grad()
     nvtx_pop(gpu)
     nvtx_pop(gpu)
-    log_memory(device, 'forward_end')
+    log_memory(flag, device, 'forward_end')
 
     # add forward end
     nvtx_push(gpu, "backward")
@@ -127,7 +129,7 @@ def train(epoch):
     nvtx_pop(gpu)
 
     # add backward end
-    log_memory(device, 'backward_end')
+    log_memory(flag, device, 'backward_end')
 
     log = 'Epoch: {:03d}, train_loss: {:.8f}, train_time: {:.4f}s'
     t = time.time() - t
@@ -138,7 +140,7 @@ def train(epoch):
 def test():
     model.eval()
     out = model(data.x, data.edge_index)
-    log_memory(device, 'other_start')    
+    log_memory(flag, device, 'other_start')    
     nvtx_push(gpu, "other")
     logits, accs = F.log_softmax(out, dim=1), []
     for _, mask in data('train_mask', 'val_mask', 'test_mask'):
@@ -167,14 +169,15 @@ else:
                 print(log.format(*test()))
                 
                 # add 
-                log_memory(device, 'eval_end')
+                log_memory(flag, device, 'eval_end')
                 
                 nvtx_pop(gpu)
                 nvtx_pop(gpu)
-
-    from utils import df
-    with open(args.json_path, "w") as f:
-        json.dump(df, f)
+                
+    if flag:
+        from utils import df
+        with open(args.json_path, "w") as f:
+            json.dump(df, f)
 
 
 

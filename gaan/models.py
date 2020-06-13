@@ -14,13 +14,14 @@ class GaAN(Module):
     dropout, negative_slop set: GaAN: Gated attention networks for learning on large and spatiotemporal graphs 5.3
     """
     def __init__(self, layers, n_features, n_classes, hidden_dims,
-                 heads, d_v, d_a, d_m, dropout=0.1, negative_slop=0.1, gpu=False):
+                 heads, d_v, d_a, d_m, dropout=0.1, negative_slop=0.1, gpu=False, flag=False):
         super(GaAN, self).__init__()
         self.n_features, self.n_classes = n_features, n_classes
         self.layers, self.hidden_dims, self.heads = layers, hidden_dims, heads
         self.dropout, self.negative_slop = dropout, negative_slop
         self.d_v, self.d_a, self.d_m = d_v, d_a, d_m
         self.gpu = gpu
+        self.flag = flag
 
         shapes = [n_features] + [hidden_dims] * (layers - 1) + [n_classes]
         self.convs = torch.nn.ModuleList(
@@ -40,12 +41,12 @@ class GaAN(Module):
             x = F.leaky_relu(x, self.negative_slop)
             x = F.dropout(x, p=self.dropout, training=self.training)
             nvtx_pop(self.gpu)
-            log_memory(device, 'layer' + str(i))
+            log_memory(self.flag, device, 'layer' + str(i))
 
         nvtx_push(self.gpu, "layer" + str(self.layers - 1))
         x = self.convs[-1](x, edge_index)
         nvtx_pop(self.gpu)
-        log_memory(device, "layer" + str(self.layers - 1))
+        log_memory(self.flag, device, "layer" + str(self.layers - 1))
         return x
 
     def __repr__(self):

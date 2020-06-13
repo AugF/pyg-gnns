@@ -11,12 +11,13 @@ class GCN(Module):
     GCN layer
     dropout set: https://github.com/tkipf/pygcn/blob/master/pygcn/train.py
     """
-    def __init__(self, layers, n_features, n_classes, hidden_dims, dropout=0.5, gpu=False):
+    def __init__(self, layers, n_features, n_classes, hidden_dims, dropout=0.5, gpu=False, flag=False):
         super(GCN, self).__init__()
         self.n_features, self.n_classes = n_features, n_classes
         self.layers, self.hidden_dims = layers, hidden_dims
         self.dropout = dropout
         self.gpu = gpu
+        self.flag = flag
 
         shapes = [n_features] + [hidden_dims] * (layers - 1) + [n_classes]
         self.convs = torch.nn.ModuleList(
@@ -41,12 +42,12 @@ class GCN(Module):
             x = F.relu(x)
             x = F.dropout(x, p=self.dropout, training=self.training)
             nvtx_pop(self.gpu)
-            log_memory(device, 'layer' + str(i))
+            log_memory(self.flag, device, 'layer' + str(i))
 
         nvtx_push(self.gpu, "layer" + str(self.layers - 1))
         x = self.convs[-1](x, edge_index)
         nvtx_pop(self.gpu)
-        log_memory(device, "layer" + str(self.layers - 1))
+        log_memory(self.flag, device, "layer" + str(self.layers - 1))
         return x
 
     def __repr__(self):

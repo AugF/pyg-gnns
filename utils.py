@@ -87,13 +87,14 @@ def nvtx_pop(flag):
         nvtx.range_pop()
 
 
-def log_memory(device, label):
-    res = torch.cuda.memory_stats()
-    torch.cuda.reset_max_memory_allocated(device)
-    if label not in df.keys():
-        df[label] = [[res[i] for i in memory_labels]]
-    else:
-        df[label].append([res[i] for i in memory_labels])
+def log_memory(flag, device, label):
+    if flag:
+        res = torch.cuda.memory_stats()
+        torch.cuda.reset_max_memory_allocated(device)
+        if label not in df.keys():
+            df[label] = [[res[i] for i in memory_labels]]
+        else:
+            df[label].append([res[i] for i in memory_labels])
 
 
 if __name__ == '__main__':

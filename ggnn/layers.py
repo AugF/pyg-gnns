@@ -41,12 +41,13 @@ class GatedGraphConv(MessagePassing):
                  num_layers,
                  aggr='add',
                  bias=True,
-                 gpu=False):
+                 gpu=False, flag=False):
         super(GatedGraphConv, self).__init__(aggr=aggr, gpu=gpu)
 
         self.out_channels = out_channels
         self.num_layers = num_layers
         self.gpu = gpu
+        self.flag = flag
 
         self.weight = Param(Tensor(num_layers, out_channels, out_channels))
         self.rnn = torch.nn.GRUCell(out_channels, out_channels, bias=bias)
@@ -81,7 +82,7 @@ class GatedGraphConv(MessagePassing):
             h = self.rnn(m, h) # vertex cal
             nvtx_pop(self.gpu)
             nvtx_pop(self.gpu)
-            log_memory(device, "layer" + str(i))
+            log_memory(self.flag, device, "layer" + str(i))
 
         return h
 
