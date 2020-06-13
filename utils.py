@@ -12,7 +12,7 @@ from torch_geometric.datasets.coauthor import Coauthor
 import torch.cuda.nvtx as nvtx
 
 memory_labels = ["allocated_bytes.all.current", "allocated_bytes.all.peak", "reserved_bytes.all.current", "reserved_bytes.all.peak"]
-small_datasets =  ['amazon-computers', 'amazon-photo', 'coauthor-physics', 'pubmed', 'flickr', 'com-amazon']
+small_datasets =  ['amazon-photo', 'pubmed', 'amazon-computers', 'coauthor-physics', 'flickr', 'com-amazon']
 small_nodes = [7650, 19717, 13752, 34493, 89250, 334863]
 
 df = {}
