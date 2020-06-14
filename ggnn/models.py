@@ -17,7 +17,7 @@ class GGNN(Module):
         self.n_features, self.n_classes = n_features, n_classes
         self.layers, self.hidden_dims = layers, hidden_dims
         self.gpu = gpu
-        self.flag
+        self.flag = flag
 
         self.weight_in = Parameter(torch.Tensor(n_features, hidden_dims))
         self.weight_out = Parameter(torch.Tensor(hidden_dims, n_classes))
