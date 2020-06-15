@@ -38,7 +38,7 @@ parser.add_argument('--json_path', type=str, default='', help="json file path fo
 args = parser.parse_args()
 gpu = not args.cpu and torch.cuda.is_available()
 flag = not args.json_path == ''
-print("flag", flag)
+
 print(args)
 print(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())))
 
@@ -68,6 +68,9 @@ if dataset_info[0] in small_datasets and len(dataset_info) > 1:
     if osp.exists(file_path):
         data.x = torch.from_numpy(np.load(file_path)).to(torch.float) # 因为这里是随机生成的，不考虑normal features
         num_features = data.x.size(1)
+
+print(data.x)
+sys.exit(0)
 
 # 2. model
 if args.model == 'gcn':

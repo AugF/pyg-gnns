@@ -23,7 +23,7 @@ do
             fi
             val="configuration=0, model=${model}, dataset=${data}, var=${var}"
             echo ${val}
-            python "${base_path}/../main.py" --dataset "${data}_${var}_20" --model ${model} --json_path ${json_path}
+            python -u "${base_path}/../main.py" --dataset "${data}_${var}_20" --model ${model} --json_path ${json_path}
         done
     done
 done

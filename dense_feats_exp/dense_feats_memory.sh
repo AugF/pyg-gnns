@@ -9,7 +9,7 @@ fi
 
 
 datasets=(amazon-photo pubmed amazon-computers coauthor-physics flickr com-amazon)
-models=(gcn ggnn gat gaan)
+models=(ggnn)
 fds=(16 32 64 128 256 512)
 
 for model in ${models[@]}
@@ -24,7 +24,7 @@ do
             fi
             val="configuration=0, model=${model}, dataset=${data}, dense_feat_dims=${fd}"
             echo ${val}
-            python "${base_path}/../main.py" --dataset "${data}_${fd}" --model ${model} --json_path "${dir_config}/config0_${model}_${data}_${fd}.json"
+            python -u "${base_path}/../main.py" --dataset "${data}_${fd}" --model ${model} --json_path "${dir_config}/config0_${model}_${data}_${fd}.json"
         done
     done
 done

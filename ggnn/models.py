@@ -21,7 +21,7 @@ class GGNN(Module):
 
         self.weight_in = Parameter(torch.Tensor(n_features, hidden_dims))
         self.weight_out = Parameter(torch.Tensor(hidden_dims, n_classes))
-        self.convs = GatedGraphConv(out_channels=hidden_dims, num_layers=layers, gpu=gpu)
+        self.convs = GatedGraphConv(out_channels=hidden_dims, num_layers=layers, gpu=gpu, flag=flag)
         glorot(self.weight_in)
         glorot(self.weight_out)
 
