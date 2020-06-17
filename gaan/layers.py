@@ -15,7 +15,7 @@ class MaxAggregate(MessagePassing):
         super(MaxAggregate, self).__init__(aggr="max", gpu=gpu)
 
     def forward(self, x, edge_index):
-        x = self.propagate(edge_index, size=(x.size(0), x.size(0)), x=x)
+        x = self.propagate(edge_index, x=x)
         return x
 
     def message(self, x_j):
@@ -33,7 +33,7 @@ class MeanAggregate(MessagePassing):
         super(MeanAggregate, self).__init__(aggr='mean', gpu=gpu)
 
     def forward(self, x, edge_index):
-        return self.propagate(edge_index, size=(x.size(0), x.size(0)), x=x)
+        return self.propagate(edge_index, x=x)
 
     def message(self, x_j):
         return x_j
@@ -93,18 +93,21 @@ class GaANConv(MessagePassing):
 
         # attentions = multi-head
         nvtx_push(self.gpu, "edge-cal_attentions")
-        attentions = self.propagate(edge_index, size=size, x=x) # edge_cal
+        attentions = self.propagate(edge_index, x=(x, x[:size])) # edge_cal
         nvtx_pop(self.gpu)
-
+        
         nvtx_push(self.gpu, "edge-cal_gateMax")
-        gate_max = self.maxaggregate(torch.matmul(x, self.weight_max_polling), edge_index) # edge_cal
+        ht = torch.matmul(x, self.weight_max_polling)
+        gate_max = self.maxaggregate((ht, ht[:size]), edge_index) # edge_cal
         nvtx_pop(self.gpu)
 
         nvtx_push(self.gpu, "edge-cal_gateMean")
-        gate_min = self.meanaggregate(x, edge_index)  # edge_cal
+        gate_min = self.meanaggregate((x, x[:size]), edge_index)  # edge_cal
         nvtx_pop(self.gpu)
 
         nvtx_push(self.gpu, "vertex-cal")
+        
+        x = x[:size]
         # gate = FC_theta_g(xi || max || mean)
         # ti = gate * multi-head
         output = torch.matmul(torch.cat([x, gate_max, gate_min], dim=-1), self.weight_gate).view(-1, self.heads, 1) # vertex_cal

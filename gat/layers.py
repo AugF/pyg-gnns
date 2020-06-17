@@ -94,7 +94,7 @@ class GATConv(MessagePassing):
                  None if x[1] is None else torch.matmul(x[1], self.weight))
 
         nvtx_push(self.gpu, "edge-cal")
-        out = self.propagate(edge_index, size=size, x=x) # edge cal
+        out = self.propagate(edge_index, x=(x, x[:size])) # edge cal 修改了对应的接口
         nvtx_pop(self.gpu)
 
         if self.concat:

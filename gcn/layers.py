@@ -75,8 +75,8 @@ class GCNConv(MessagePassing):
                                      device=edge_index.device)
 
         fill_value = 1 if not improved else 2
-        edge_index, edge_weight = add_remaining_self_loops(
-            edge_index, edge_weight, fill_value, num_nodes)
+        # edge_index, edge_weight = add_remaining_self_loops(
+        #     edge_index, edge_weight, fill_value, num_nodes) # ? todo 
 
         row, col = edge_index
         deg = scatter_add(edge_weight, row, dim=0, dim_size=num_nodes)
@@ -85,33 +85,36 @@ class GCNConv(MessagePassing):
 
         return edge_index, deg_inv_sqrt[row] * edge_weight * deg_inv_sqrt[col]
 
-    def forward(self, x, edge_index, edge_weight=None):
+    def forward(self, x, edge_index, edge_weight=None, size=None):
         """"""
         nvtx_push(self.gpu, "vertex-cal")
         x = torch.matmul(x, self.weight) # vertex cal
         nvtx_pop(self.gpu)
-        if self.cached and self.cached_result is not None:
-            if edge_index.size(1) != self.cached_num_edges:
-                raise RuntimeError(
-                    'Cached {} number of edges, but found {}. Please '
-                    'disable the caching behavior of this layer by removing '
-                    'the `cached=True` argument in its constructor.'.format(
-                        self.cached_num_edges, edge_index.size(1)))
+        
+        # if self.cached and self.cached_result is not None:
+        #     if edge_index.size(1) != self.cached_num_edges:
+        #         raise RuntimeError(
+        #             'Cached {} number of edges, but found {}. Please '
+        #             'disable the caching behavior of this layer by removing '
+        #             'the `cached=True` argument in its constructor.'.format(
+        #                 self.cached_num_edges, edge_index.size(1)))
 
-        if not self.cached or self.cached_result is None:
-            nvtx_push(self.gpu, "cal_norm")
-            self.cached_num_edges = edge_index.size(1)
-            if self.normalize:
-                edge_index, norm = self.norm(edge_index, x.size(
+        # if not self.cached or self.cached_result is None:
+        #     nvtx_push(self.gpu, "cal_norm")
+        #     self.cached_num_edges = edge_index.size(1)
+        #     if self.normalize:
+        #         edge_index, norm = self.norm(edge_index, x.size(
+        #             self.node_dim), edge_weight, self.improved, x.dtype)
+        #     else:
+        #         norm = edge_weight
+        #     self.cached_result = edge_index, norm
+        #     nvtx_pop(self.gpu)
+
+        edge_index, norm = self.norm(edge_index, x.size(
                     self.node_dim), edge_weight, self.improved, x.dtype)
-            else:
-                norm = edge_weight
-            self.cached_result = edge_index, norm
-            nvtx_pop(self.gpu)
-
-        edge_index, norm = self.cached_result
+        
         nvtx_push(self.gpu, "edge-cal")
-        x = self.propagate(edge_index, x=x, norm=norm) # edge cal
+        x = self.propagate(edge_index, x=(x, x[:size]), norm=norm) # edge cal
         nvtx_pop(self.gpu)
         return x
 

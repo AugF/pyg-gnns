@@ -2,6 +2,8 @@ import torch
 from torch import Tensor
 from torch.nn import Parameter as Param
 from message_passing import MessagePassing
+import torch.nn.functional as F
+
 from inits import uniform
 
 from utils import nvtx_push, nvtx_pop, log_memory
@@ -50,7 +52,7 @@ class GatedGraphConv(MessagePassing):
         self.flag = flag
 
         self.weight = Param(Tensor(num_layers, out_channels, out_channels))
-        self.rnn = torch.nn.GRUCell(out_channels, out_channels, bias=bias)
+        self.rnn = torch.nn.GRUCell(out_channels, out_channels, bias=bias) # gru是共享权重的
 
         self.reset_parameters()
 
@@ -58,7 +60,7 @@ class GatedGraphConv(MessagePassing):
         uniform(self.out_channels, self.weight) # uniform
         self.rnn.reset_parameters()
 
-    def forward(self, x, edge_index, edge_weight=None):
+    def forward(self, x, adjs, edge_weight=None, size=None):
         """"""
         device = torch.device('cuda' if self.gpu else 'cpu')
         h = x if x.dim() == 2 else x.unsqueeze(-1)
@@ -70,22 +72,56 @@ class GatedGraphConv(MessagePassing):
             zero = h.new_zeros(h.size(0), self.out_channels - h.size(1))
             h = torch.cat([h, zero], dim=1)
 
-        for i in range(self.num_layers):
-            nvtx_push(self.gpu, "layer" + str(i))
-            nvtx_push(self.gpu, "vertex-cal_1")
+        for i, (edge_index, _, size) in enumerate(adjs):
             m = torch.matmul(h, self.weight[i]) # vertex cal
-            nvtx_pop(self.gpu)
-            nvtx_push(self.gpu, "edge-cal")
-            m = self.propagate(edge_index, x=m, edge_weight=edge_weight) # edge cal
-            nvtx_pop(self.gpu)
-            nvtx_push(self.gpu, "vertex-cal_2")
-            h = self.rnn(m, h) # vertex cal
-            nvtx_pop(self.gpu)
-            nvtx_pop(self.gpu)
-            log_memory(self.flag, device, "layer" + str(i))
+            m = self.propagate(edge_index, x=(m, m[:size[1]]), edge_weight=edge_weight) # edge cal
+            h = self.rnn(m, h[:size[1]]) # vertex cal todo: 这里也有改变
 
         return h
+        
+        # for i in range(self.num_layers):
+        #     nvtx_push(self.gpu, "layer" + str(i))
+        #     nvtx_push(self.gpu, "vertex-cal_1")
+        #     m = torch.matmul(h, self.weight[i]) # vertex cal
+        #     nvtx_pop(self.gpu)
+        #     nvtx_push(self.gpu, "edge-cal")
+        #     m = self.propagate(edge_index, x=m, edge_weight=edge_weight) # edge cal
+        #     nvtx_pop(self.gpu)
+        #     nvtx_push(self.gpu, "vertex-cal_2")
+        #     h = self.rnn(m, h) # vertex cal
+        #     nvtx_pop(self.gpu)
+        #     nvtx_pop(self.gpu)
+        #     log_memory(self.flag, device, "layer" + str(i))
 
+        # return h
+
+    def inference(self, x_all, subgraph_loader, pbar):
+        device = torch.device('cuda' if self.gpu else 'cpu')
+
+        # Compute representations of nodes layer by layer, using *all*
+        # available edges. This leads to faster computation in contrast to
+        # immediately computing the final representations of each batch.
+        for i in range(self.num_layers):
+            xs = []
+            for batch_size, n_id, adj in subgraph_loader:
+                edge_index, _, size = adj.to(device)
+                x = x_all[n_id].to(device)
+                
+                # GRU单元
+                m = torch.matmul(x, self.weight[i]) # vertex cal
+                m = self.propagate(edge_index, x=(m, m[:size[1]]), edge_weight=None) # edge cal
+                x = self.rnn(m, x[:size[1]]) # vertex cal todo: 这里也有改变
+                
+                if i != self.num_layers - 1:
+                    x = F.relu(x)
+                xs.append(x.cpu())
+                pbar.update(batch_size)
+
+            x_all = torch.cat(xs, dim=0)
+
+        return x_all.to(device)
+    
+    
     def message(self, x_j, edge_weight):
         if edge_weight is not None:
             return edge_weight.view(-1, 1) * x_j

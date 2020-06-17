@@ -2,6 +2,7 @@ import torch
 
 import torch.nn.functional as F
 from torch.nn import Parameter, Module
+from tqdm import tqdm
 
 from gaan.layers import GaANConv
 from inits import glorot
@@ -32,23 +33,58 @@ class GaAN(Module):
             ]
         )
 
-    def forward(self, x, edge_index):
+    def forward(self, x, adjs):
         device = torch.device('cuda' if self.gpu else 'cpu')
 
-        for i in range(self.layers - 1):
-            nvtx_push(self.gpu, "layer" + str(i))
-            x = self.convs[i](x, edge_index)
-            x = F.leaky_relu(x, self.negative_slop)
-            x = F.dropout(x, p=self.dropout, training=self.training)
-            nvtx_pop(self.gpu)
-            log_memory(self.flag, device, 'layer' + str(i))
+        # for i in range(self.layers - 1):
+        #     nvtx_push(self.gpu, "layer" + str(i))
+        #     x = self.convs[i](x, edge_index)
+        #     x = F.leaky_relu(x, self.negative_slop)
+        #     x = F.dropout(x, p=self.dropout, training=self.training)
+        #     nvtx_pop(self.gpu)
+        #     log_memory(self.flag, device, 'layer' + str(i))
 
-        nvtx_push(self.gpu, "layer" + str(self.layers - 1))
-        x = self.convs[-1](x, edge_index)
-        nvtx_pop(self.gpu)
-        log_memory(self.flag, device, "layer" + str(self.layers - 1))
-        return x
+        # nvtx_push(self.gpu, "layer" + str(self.layers - 1))
+        # x = self.convs[-1](x, edge_index)
+        # nvtx_pop(self.gpu)
+        # log_memory(self.flag, device, "layer" + str(self.layers - 1))
+        # return x
+        for i, (edge_index, _, size) in enumerate(adjs):
+            # x_target = x[:size[1]]  # Target nodes are always placed first.
+            x = self.convs[i](x, edge_index, size=size[1])
+            if i != self.layers - 1:
+                x = F.relu(x)
+                x = F.dropout(x, p=0.5, training=self.training)
+                
+        return F.log_softmax(x, dim=-1)
 
+    def inference(self, x_all, subgraph_loader):
+        device = torch.device('cuda' if self.gpu else 'cpu')
+        
+        pbar = tqdm(total=x_all.size(0) * self.layers)
+        pbar.set_description('Evaluating')
+
+        # Compute representations of nodes layer by layer, using *all*
+        # available edges. This leads to faster computation in contrast to
+        # immediately computing the final representations of each batch.
+        for i in range(self.layers):
+            xs = []
+            for batch_size, n_id, adj in subgraph_loader:
+                edge_index, _, size = adj.to(device)
+                x = x_all[n_id].to(device)
+                x = self.convs[i](x, edge_index, size=size[1])
+                if i != self.layers - 1:
+                    x = F.relu(x)
+                xs.append(x.cpu())
+
+                pbar.update(batch_size)
+
+            x_all = torch.cat(xs, dim=0)
+
+        pbar.close()
+
+        return x_all
+    
     def __repr__(self):
         return '{}(layers={}, n_features={}, n_classes={}, hidden_dims={}, heads={},' \
                'd_v={}, d_a={}, d_m={}, dropout={}, negative_slop={}, gpu={})'.format(

@@ -3,6 +3,7 @@ import torch
 import torch.nn.functional as F
 from torch.nn import Parameter, Module
 from ggnn.layers import GatedGraphConv
+from tqdm import tqdm
 
 from inits import glorot
 from utils import nvtx_push, nvtx_pop, log_memory
@@ -28,7 +29,7 @@ class GGNN(Module):
     def forward(self, x, edge_index):
         device = torch.device('cuda' if self.gpu else 'cpu')
         nvtx_push(self.gpu, "input-transform")
-        x = torch.spmm(x, self.weight_in)
+        x = torch.mm(x, self.weight_in)
         nvtx_pop(self.gpu)
         log_memory(self.flag, device, "input-transform")
 
@@ -37,8 +38,24 @@ class GGNN(Module):
         x = torch.matmul(x, self.weight_out)
         nvtx_pop(self.gpu)
         log_memory(self.flag, device, "output-transform")
-        return x
+        return F.log_softmax(x, dim=-1)
 
+    def inference(self, x_all, subgraph_loader):
+        device = torch.device('cuda' if self.gpu else 'cpu')
+        pbar = tqdm(total=x_all.size(0) * self.layers)
+        pbar.set_description('Evaluating')
+
+        x_all = torch.mm(x_all, self.weight_in)
+        # Compute representations of nodes layer by layer, using *all*
+        # available edges. This leads to faster computation in contrast to
+        # immediately computing the final representations of each batch.
+        
+        x_all = self.convs.inference(x_all, subgraph_loader, pbar)
+        x_all = torch.mm(x_all, self.weight_out)
+        pbar.close()
+
+        return x_all
+    
     def __repr__(self):
         return '{}(layers={}, n_features={}, n_classes={}, hidden_dims={}, gpu={})'.format(
             self.__class__.__name__, self.layers, self.n_features, self.n_classes,
