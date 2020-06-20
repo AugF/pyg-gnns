@@ -35,20 +35,6 @@ class GaAN(Module):
 
     def forward(self, x, adjs):
         device = torch.device('cuda' if self.gpu else 'cpu')
-
-        # for i in range(self.layers - 1):
-        #     nvtx_push(self.gpu, "layer" + str(i))
-        #     x = self.convs[i](x, edge_index)
-        #     x = F.leaky_relu(x, self.negative_slop)
-        #     x = F.dropout(x, p=self.dropout, training=self.training)
-            # nvtx_pop(self.gpu)
-            # log_memory(self.flag, device, 'layer' + str(i))
-
-        # nvtx_push(self.gpu, "layer" + str(self.layers - 1))
-        # x = self.convs[-1](x, edge_index)
-        # nvtx_pop(self.gpu)
-        # log_memory(self.flag, device, "layer" + str(self.layers - 1))
-        # return x
         
         if isinstance(adjs, list):
             for i, (edge_index, _, size) in enumerate(adjs):
@@ -58,6 +44,7 @@ class GaAN(Module):
                     x = F.leaky_relu(x, self.negative_slop)
                     x = F.dropout(x, p=self.dropout, training=self.training)
                 nvtx_pop(self.gpu)
+                log_memory(self.flag, device, 'layer' + str(i))
         else:
             for i in range(self.layers):
                 nvtx_push(self.gpu, "layer" + str(i))
@@ -66,6 +53,7 @@ class GaAN(Module):
                     x = F.leaky_relu(x, self.negative_slop)
                     x = F.dropout(x, p=self.dropout, training=self.training)
                 nvtx_pop(self.gpu)
+                log_memory(self.flag, device, 'layer' + str(i))
                 
         return F.log_softmax(x, dim=-1)
 

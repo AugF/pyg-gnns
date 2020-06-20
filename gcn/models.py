@@ -56,6 +56,7 @@ class GCN(Module):
                     x = F.relu(x)
                     x = F.dropout(x, p=self.dropout, training=self.training)
                 nvtx_pop(self.gpu)
+                log_memory(self.flag, device, 'layer' + str(i))
         else:
             for i in range(self.layers):
                 nvtx_push(self.gpu, "layer" + str(i))
@@ -65,6 +66,7 @@ class GCN(Module):
                     x = F.relu(x)
                     x = F.dropout(x, p=self.dropout, training=self.training)
                 nvtx_pop(self.gpu)
+                log_memory(self.flag, device, 'layer' + str(i))
                 
         return F.log_softmax(x, dim=-1)
 

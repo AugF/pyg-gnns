@@ -42,20 +42,6 @@ class GAT(Module):
 
     def forward(self, x, adjs):
         device = torch.device('cuda' if self.gpu else 'cpu')
-
-        # for i in range(self.layers - 1):
-        #     nvtx_push(self.gpu, "layer" + str(i))
-        #     x = F.dropout(x, p=self.dropout, training=self.training)
-        #     x = self.convs[i](x, edge_index)
-        #     x = F.elu(x)
-        #     nvtx_pop(self.gpu)
-        #     log_memory(self.flag, device, 'layer' + str(i))
-
-        # nvtx_push(self.gpu, "layer" + str(self.layers - 1))
-        # x = F.dropout(x, p=self.dropout, training=self.training)
-        # x = self.convs[-1](x, edge_index)
-        # nvtx_pop(self.gpu)
-        # log_memory(self.flag, device, "layer" + str(self.layers - 1))  
         
         if isinstance(adjs, list):
             for i, (edge_index, _, size) in enumerate(adjs):
@@ -65,6 +51,7 @@ class GAT(Module):
                 if i != self.layers - 1:
                     x = F.elu(x)
                 nvtx_pop(self.gpu)
+                log_memory(self.flag, device, 'layer' + str(i))
         else:
             for i in range(self.layers):
                 nvtx_push(self.gpu, "layer" + str(i))
@@ -73,6 +60,7 @@ class GAT(Module):
                 if i != self.layers - 1:
                     x = F.elu(x)
                 nvtx_pop(self.gpu)
+                log_memory(self.flag, device, 'layer' + str(i))
                 
         return F.log_softmax(x, dim=-1)
     

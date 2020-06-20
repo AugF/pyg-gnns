@@ -85,6 +85,7 @@ class GatedGraphConv(MessagePassing):
                 h = self.rnn(m, h[:size[1]]) # vertex cal todo: 这里也有改变
                 nvtx_pop(self.gpu)
                 nvtx_pop(self.gpu)
+                log_memory(self.flag, device, 'layer' + str(i))
         else:
             for i in range(self.num_layers):
                 nvtx_push(self.gpu, "layer" + str(i))
@@ -98,6 +99,7 @@ class GatedGraphConv(MessagePassing):
                 h = self.rnn(m, h)
                 nvtx_pop(self.gpu)
                 nvtx_pop(self.gpu)
+                log_memory(self.flag, device, 'layer' + str(i))
         return h
     
 
