@@ -26,14 +26,14 @@ class GGNN(Module):
         glorot(self.weight_in)
         glorot(self.weight_out)
 
-    def forward(self, x, edge_index):
+    def forward(self, x, adjs):
         device = torch.device('cuda' if self.gpu else 'cpu')
         nvtx_push(self.gpu, "input-transform")
         x = torch.mm(x, self.weight_in)
         nvtx_pop(self.gpu)
         log_memory(self.flag, device, "input-transform")
 
-        x = self.convs(x, edge_index)
+        x = self.convs(x, adjs)
         nvtx_push(self.gpu, "output-transform")
         x = torch.matmul(x, self.weight_out)
         nvtx_pop(self.gpu)
@@ -45,16 +45,13 @@ class GGNN(Module):
         pbar = tqdm(total=x_all.size(0) * self.layers)
         pbar.set_description('Evaluating')
 
-        x_all = torch.mm(x_all, self.weight_in)
-        # Compute representations of nodes layer by layer, using *all*
-        # available edges. This leads to faster computation in contrast to
-        # immediately computing the final representations of each batch.
+        x_all = torch.mm(x_all.to(device), self.weight_in) # 尽最大可能第键槽内存
         
-        x_all = self.convs.inference(x_all, subgraph_loader, pbar)
-        x_all = torch.mm(x_all, self.weight_out)
+        x_all = self.convs.inference(x_all.cpu(), subgraph_loader, pbar)
+        x_all = torch.mm(x_all.to(device), self.weight_out)
         pbar.close()
 
-        return x_all
+        return x_all.cpu()
     
     def __repr__(self):
         return '{}(layers={}, n_features={}, n_classes={}, hidden_dims={}, gpu={})'.format(

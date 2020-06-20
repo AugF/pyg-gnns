@@ -72,28 +72,34 @@ class GatedGraphConv(MessagePassing):
             zero = h.new_zeros(h.size(0), self.out_channels - h.size(1))
             h = torch.cat([h, zero], dim=1)
 
-        for i, (edge_index, _, size) in enumerate(adjs):
-            m = torch.matmul(h, self.weight[i]) # vertex cal
-            m = self.propagate(edge_index, x=(m, m[:size[1]]), edge_weight=edge_weight) # edge cal
-            h = self.rnn(m, h[:size[1]]) # vertex cal todo: 这里也有改变
-
+        if isinstance(adjs, list):
+            for i, (edge_index, _, size) in enumerate(adjs):
+                nvtx_push(self.gpu, "layer" + str(i))
+                nvtx_push(self.gpu, "vertex-cal_1")
+                m = torch.matmul(h, self.weight[i]) # vertex cal
+                nvtx_pop(self.gpu)  
+                nvtx_push(self.gpu, "edge-cal")
+                m = self.propagate(edge_index, x=(m, m[:size[1]]), edge_weight=edge_weight) # edge cal
+                nvtx_pop(self.gpu)
+                nvtx_push(self.gpu, "vertex-cal_2")
+                h = self.rnn(m, h[:size[1]]) # vertex cal todo: 这里也有改变
+                nvtx_pop(self.gpu)
+                nvtx_pop(self.gpu)
+        else:
+            for i in range(self.num_layers):
+                nvtx_push(self.gpu, "layer" + str(i))
+                nvtx_push(self.gpu, "vertex-cal_1")
+                m = torch.matmul(h, self.weight[i])
+                nvtx_pop(self.gpu)  
+                nvtx_push(self.gpu, "edge-cal")
+                m = self.propagate(adjs, x=m, edge_weight=edge_weight)
+                nvtx_pop(self.gpu)
+                nvtx_push(self.gpu, "vertex-cal_2")
+                h = self.rnn(m, h)
+                nvtx_pop(self.gpu)
+                nvtx_pop(self.gpu)
         return h
-        
-        # for i in range(self.num_layers):
-        #     nvtx_push(self.gpu, "layer" + str(i))
-        #     nvtx_push(self.gpu, "vertex-cal_1")
-        #     m = torch.matmul(h, self.weight[i]) # vertex cal
-        #     nvtx_pop(self.gpu)
-        #     nvtx_push(self.gpu, "edge-cal")
-        #     m = self.propagate(edge_index, x=m, edge_weight=edge_weight) # edge cal
-        #     nvtx_pop(self.gpu)
-        #     nvtx_push(self.gpu, "vertex-cal_2")
-        #     h = self.rnn(m, h) # vertex cal
-        #     nvtx_pop(self.gpu)
-        #     nvtx_pop(self.gpu)
-        #     log_memory(self.flag, device, "layer" + str(i))
-
-        # return h
+    
 
     def inference(self, x_all, subgraph_loader, pbar):
         device = torch.device('cuda' if self.gpu else 'cpu')
@@ -119,7 +125,7 @@ class GatedGraphConv(MessagePassing):
 
             x_all = torch.cat(xs, dim=0)
 
-        return x_all.to(device)
+        return x_all
     
     
     def message(self, x_j, edge_weight):

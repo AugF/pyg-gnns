@@ -86,28 +86,38 @@ class GaANConv(MessagePassing):
         zeros(self.bias)
 
     def forward(self, x, edge_index, size=None):
+        # attentions = multi-head
         if size is None and torch.is_tensor(x):
             edge_index, _ = remove_self_loops(edge_index)
             edge_index, _ = add_self_loops(edge_index,
-                                           num_nodes=x.size(self.node_dim))
-
-        # attentions = multi-head
+                                            num_nodes=x.size(self.node_dim))
+                   
         nvtx_push(self.gpu, "edge-cal_attentions")
-        attentions = self.propagate(edge_index, x=(x, x[:size])) # edge_cal
+        if size is not None:
+            attentions = self.propagate(edge_index, x=(x, x[:size])) # edge_cal
+        else:
+            attentions = self.propagate(edge_index, x=x)
         nvtx_pop(self.gpu)
         
         nvtx_push(self.gpu, "edge-cal_gateMax")
         ht = torch.matmul(x, self.weight_max_polling)
-        gate_max = self.maxaggregate((ht, ht[:size]), edge_index) # edge_cal
+        if size is not None:
+            gate_max = self.maxaggregate((ht, ht[:size]), edge_index) # edge_cal
+        else:
+            gate_max = self.maxaggregate(ht, edge_index) # edge_cal
         nvtx_pop(self.gpu)
 
         nvtx_push(self.gpu, "edge-cal_gateMean")
-        gate_min = self.meanaggregate((x, x[:size]), edge_index)  # edge_cal
+        if size is not None:
+            gate_min = self.meanaggregate((x, x[:size]), edge_index)  # edge_cal
+        else:
+            gate_min = self.meanaggregate(x, edge_index)  # edge_cal
         nvtx_pop(self.gpu)
 
         nvtx_push(self.gpu, "vertex-cal")
         
-        x = x[:size]
+        if size is not None:
+            x = x[:size]
         # gate = FC_theta_g(xi || max || mean)
         # ti = gate * multi-head
         output = torch.matmul(torch.cat([x, gate_max, gate_min], dim=-1), self.weight_gate).view(-1, self.heads, 1) # vertex_cal

@@ -41,20 +41,31 @@ class GaAN(Module):
         #     x = self.convs[i](x, edge_index)
         #     x = F.leaky_relu(x, self.negative_slop)
         #     x = F.dropout(x, p=self.dropout, training=self.training)
-        #     nvtx_pop(self.gpu)
-        #     log_memory(self.flag, device, 'layer' + str(i))
+            # nvtx_pop(self.gpu)
+            # log_memory(self.flag, device, 'layer' + str(i))
 
         # nvtx_push(self.gpu, "layer" + str(self.layers - 1))
         # x = self.convs[-1](x, edge_index)
         # nvtx_pop(self.gpu)
         # log_memory(self.flag, device, "layer" + str(self.layers - 1))
         # return x
-        for i, (edge_index, _, size) in enumerate(adjs):
-            # x_target = x[:size[1]]  # Target nodes are always placed first.
-            x = self.convs[i](x, edge_index, size=size[1])
-            if i != self.layers - 1:
-                x = F.relu(x)
-                x = F.dropout(x, p=0.5, training=self.training)
+        
+        if isinstance(adjs, list):
+            for i, (edge_index, _, size) in enumerate(adjs):
+                nvtx_push(self.gpu, "layer" + str(i))
+                x = self.convs[i](x, edge_index, size=size[1])
+                if i != self.layers - 1:
+                    x = F.leaky_relu(x, self.negative_slop)
+                    x = F.dropout(x, p=self.dropout, training=self.training)
+                nvtx_pop(self.gpu)
+        else:
+            for i in range(self.layers):
+                nvtx_push(self.gpu, "layer" + str(i))
+                x = self.convs[i](x, adjs)
+                if i != self.layers - 1:
+                    x = F.leaky_relu(x, self.negative_slop)
+                    x = F.dropout(x, p=self.dropout, training=self.training)
+                nvtx_pop(self.gpu)
                 
         return F.log_softmax(x, dim=-1)
 
