@@ -89,12 +89,12 @@ class GATConv(MessagePassing):
             nvtx_push(self.gpu, "vertex-cal")
             x = torch.matmul(x, self.weight) # vertex cal
             nvtx_pop(self.gpu)
-        else:
-            x = (None if x[0] is None else torch.matmul(x[0], self.weight),
-                 None if x[1] is None else torch.matmul(x[1], self.weight))
-
+            
         nvtx_push(self.gpu, "edge-cal")
-        out = self.propagate(edge_index, x=(x, x[:size])) # edge cal 修改了对应的接口
+        
+        if size is not None:
+            x = (x, x[:size])
+        out = self.propagate(edge_index, x=x) # edge cal 修改了对应的接口
         nvtx_pop(self.gpu)
 
         if self.concat:
