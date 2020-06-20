@@ -1,6 +1,7 @@
 import os.path as osp
 
 import numpy as np
+import scipy.sparse as sp
 import torch
 import json
 import torch_geometric.transforms as T
@@ -19,10 +20,10 @@ df = {}
 
 def get_dataset(name, normalize_features=False, transform=None): #
     if name in ["cora", "pubmed"]:
-        path = osp.join(osp.dirname(osp.realpath(__file__)), 'data')
+        path = osp.join('/data/wangzhaokang/wangyunpan/data')
         dataset = Planetoid(path, name, split='full')
     else:
-        path = osp.join(osp.dirname(osp.realpath(__file__)), 'data', name)
+        path = osp.join('/data/wangzhaokang/wangyunpan/data', name)
         if name in ["amazon-computers", "amazon-photo"]:
             dataset = Amazon(path, name[7:])
         elif name == "coauthor-physics":
@@ -38,6 +39,16 @@ def get_dataset(name, normalize_features=False, transform=None): #
         dataset.transform = transform
 
     return dataset
+
+
+def normalize(mx):
+    """Row-normalize sparse matrix"""
+    rowsum = np.array(mx.sum(1))
+    r_inv = np.power(rowsum, -1).flatten()
+    r_inv[np.isinf(r_inv)] = 0.
+    r_mat_inv = sp.diags(r_inv)
+    mx = r_mat_inv.dot(mx)
+    return mx
 
 
 def get_train_val_test_split(nodes, tr, va, seed=1):
