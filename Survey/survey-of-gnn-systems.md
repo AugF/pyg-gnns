@@ -21,7 +21,7 @@ author: Zhaokang Wang
   - [实验评估](#%e5%ae%9e%e9%aa%8c%e8%af%84%e4%bc%b0)
 - [DGL](#dgl)
 - [Architectural Implications of Graph Neural Networks](#architectural-implications-of-graph-neural-networks)
-- [Characterizing and Understanding GCNs on GPU [[Yan-2020]](#ref-Yan-2020)](#characterizing-and-understanding-gcns-on-gpu-yan-2020)
+- [Characterizing and Understanding GCNs on GPU [Yan-2020]](#characterizing-and-understanding-gcns-on-gpu-yan-2020)
 - [参考文献](#%e5%8f%82%e8%80%83%e6%96%87%e7%8c%ae)
 
 # [AliGraph](#ref-aligraph)
@@ -253,7 +253,7 @@ GNN相比传统DL的最大特点是引入了Sparse Matrix Operation。
 
 <a name="fig-aignn-tab3">![aignn-tab3](survey-of-gnn-systems.assets/AIGNN-Tab3.png)</a>
 
-# Characterizing and Understanding GCNs on GPU [[Yan-2020]](#ref-Yan-2020)
+# Characterizing and Understanding GCNs on GPU [[Yan-2020](#ref-Yan-2020)]
 
 本文分析了GCN类的算法在inference阶段的特性，同时与经典的图分析算法（PageRank）和基于MLP的经典神经网络做了特性对比分析。
 
