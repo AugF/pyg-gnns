@@ -7,6 +7,7 @@ from torch_geometric.nn import SAGEConv
 
 import sys
 import time
+import json
 import argparse
 from tqdm import tqdm
 import numpy as np
@@ -17,14 +18,14 @@ from ggnn.models import GGNN
 from gat.models import GAT
 from gcn.models import GCN
 
-from utils import get_dataset, normalize, get_split_by_file, nvtx_push, nvtx_pop, log_memory, small_datasets
+from utils import get_dataset, norm, normalize, get_split_by_file, nvtx_push, nvtx_pop, log_memory, small_datasets
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--dataset', type=str, default='cora', help="dataset: [cora, flickr, com-amazon, reddit, com-lj,"
                                                                     "amazon-computers, amazon-photo, coauthor-physics, pubmed]")
 
 parser.add_argument('--model', type=str, default='gcn', help="gnn models: [gcn, ggnn, gat, gaan]")
-parser.add_argument('--epochs', type=int, default=50, help="epochs for training")
+parser.add_argument('--epochs', type=int, default=2, help="epochs for training")
 parser.add_argument('--layers', type=int, default=2, help="layers for hidden layer")
 parser.add_argument('--hidden_dims', type=int, default=64, help="hidden layer output dims")
 parser.add_argument('--heads', type=int, default=8, help="gat or gaan model: heads")
@@ -109,15 +110,11 @@ loader_time = time.time() - loader_time
 # 3. set model
 if args.model == 'gcn':
     # 预先计算edge_weight出来
-    adj = sp.coo_matrix((np.ones(data.edge_index.shape[1]), (data.edge_index[0, :], data.edge_index[1, :])),
-                        shape=(data.x.shape[0], data.x.shape[0]),
-                        dtype=np.float32)
-    adj = adj + adj.T.multiply(adj.T > adj) - adj.multiply(adj.T > adj)
-    adj = normalize(adj + sp.eye(adj.shape[0]))
+    norm = norm(data.edge_index, data.x.shape[0])
     model = GCN(
         layers=args.layers,
         n_features=num_features, n_classes=dataset.num_classes,
-        hidden_dims=args.hidden_dims, gpu=gpu, flag=flag, adj=adj
+        hidden_dims=args.hidden_dims, gpu=gpu, flag=flag, norm=norm
     )
 elif args.model == 'gat':
     model = GAT(
@@ -168,7 +165,6 @@ def train(epoch):
             sampling_time += time.time() - iter_time
 
             nvtx_push(gpu, "batch" + str(cnt))
-            
             log_memory(flag, device, 'forward_start')
             nvtx_push(gpu, "forward")
             begin_time = time.time()
@@ -179,6 +175,7 @@ def train(epoch):
                 loss = F.nll_loss(out[batch.train_mask], batch.y[batch.train_mask])
                 batch_size = batch.train_mask.sum().item()
             elif args.mode == 'graphsage':
+                print("edge_index", data.edge_index[:, 7413], data.edge_index.shape)
                 batch_size, n_id, adjs = batch
                 adjs = [adj.to(device) for adj in adjs] # 这里等于成熟
                 out = model(x[n_id], adjs)
@@ -233,6 +230,7 @@ if not gpu:
 else:
     with torch.cuda.profiler.profile():
         train(-1)
+        log_memory(flag, device, 'warmup end')
         with torch.autograd.profiler.emit_nvtx(record_shapes=not args.no_record_shapes):
             for epoch in range(args.epochs):
                 nvtx_push(gpu, "epochs" + str(epoch))
@@ -249,7 +247,6 @@ else:
                         f'Val: {val_acc:.4f}, test: {test_acc:.4f}')
                 # add 
                 nvtx_pop(gpu)
-                log_memory(flag, device, 'eval_end')                
                 nvtx_pop(gpu)
                 
     if flag:

@@ -35,7 +35,7 @@ class GGNN(Module):
 
         x = self.convs(x, adjs)
         nvtx_push(self.gpu, "output-transform")
-        x = torch.matmul(x, self.weight_out)
+        x = torch.mm(x, self.weight_out)
         nvtx_pop(self.gpu)
         log_memory(self.flag, device, "output-transform")
         return F.log_softmax(x, dim=-1)

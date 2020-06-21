@@ -1,4 +1,5 @@
 import torch
+import sys
 
 import torch.nn.functional as F
 from torch.nn import Module
@@ -13,7 +14,7 @@ class GCN(Module):
     GCN layer
     dropout set: https://github.com/tkipf/pygcn/blob/master/pygcn/train.py
     """
-    def __init__(self, layers, n_features, n_classes, hidden_dims, adj, dropout=0.5, gpu=False, flag=False): # add adj
+    def __init__(self, layers, n_features, n_classes, hidden_dims, norm, dropout=0.5, gpu=False, flag=False): # add adj
         super(GCN, self).__init__()
         self.n_features, self.n_classes = n_features, n_classes
         self.layers, self.hidden_dims = layers, hidden_dims
@@ -28,15 +29,7 @@ class GCN(Module):
                 for layer in range(layers)
             ]
         )
-        self.adj = adj
-
-    def get_norm(self, edge_index):
-        edge_weight = []
-        adj = self.adj.todense()
-        for i in range(edge_index.shape[1]):
-            e = edge_index[:, i]
-            edge_weight.append(adj[e[0], e[1]])
-        return torch.FloatTensor(edge_weight)
+        self.norm = norm.to('cuda')
     
     def forward(self, x, adjs):
         """
@@ -48,10 +41,9 @@ class GCN(Module):
         device = torch.device('cuda' if self.gpu else 'cpu')
         
         if isinstance(adjs, list):
-            for i, (edge_index, _, size) in enumerate(adjs):
+            for i, (edge_index, e_id, size) in enumerate(adjs):
                 nvtx_push(self.gpu, "layer" + str(i))
-                norm = self.get_norm(edge_index).to(device)
-                x = self.convs[i](x, edge_index, size=size[1], norm=norm)
+                x = self.convs[i](x, edge_index, size=size[1], norm=self.norm[e_id])
                 if i != self.layers - 1:
                     x = F.relu(x)
                     x = F.dropout(x, p=self.dropout, training=self.training)
@@ -60,8 +52,7 @@ class GCN(Module):
         else:
             for i in range(self.layers):
                 nvtx_push(self.gpu, "layer" + str(i))
-                norm = self.get_norm(adjs).to(device)
-                x = self.convs[i](x, adjs, norm=norm)
+                x = self.convs[i](x, adjs, norm=self.norm[e_id])
                 if i != self.layers - 1:
                     x = F.relu(x)
                     x = F.dropout(x, p=self.dropout, training=self.training)

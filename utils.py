@@ -5,6 +5,10 @@ import scipy.sparse as sp
 import torch
 import json
 import torch_geometric.transforms as T
+
+from torch_scatter import scatter_add
+from torch_geometric.utils import add_remaining_self_loops
+
 from datasets import DataProcess
 from citation_datasets import Planetoid
 from torch_geometric.datasets.amazon import Amazon
@@ -83,6 +87,23 @@ def get_split_by_file(file_path, nodes): # 通过读取roles.json文件来获取
     return train_mask, val_mask, test_mask
 
 
+def norm(edge_index, num_nodes, edge_weight=None, improved=False,
+            dtype=None):
+    if edge_weight is None:
+        edge_weight = torch.ones((edge_index.size(1), ), dtype=dtype,
+                                    device=edge_index.device)
+
+    fill_value = 1 if not improved else 2
+    edge_index, edge_weight = add_remaining_self_loops(
+        edge_index, edge_weight, fill_value, num_nodes) # ? todo 
+
+    row, col = edge_index
+    deg = scatter_add(edge_weight, row, dim=0, dim_size=num_nodes)
+    deg_inv_sqrt = deg.pow(-0.5)
+    deg_inv_sqrt[deg_inv_sqrt == float('inf')] = 0
+
+    return deg_inv_sqrt[row] * edge_weight * deg_inv_sqrt[col]
+    
 def cal_sparse(x, m, n):
     x_bool = np.where(x == 0, 1, 0)
     return x_bool.mean(), m / n

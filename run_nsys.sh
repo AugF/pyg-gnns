@@ -11,8 +11,8 @@ do
         do
             file_path="${dir_path}/${model}_${data}_${mode}"
             if [ -f "${qdrep_file}.qdrep" ]; then # 断点续传
-                        continue
-                    fi
+                continue
+            fi
             nsys profile -t cuda,osrt,nvtx -o "${dir_path}/${model}_${data}_${mode}" -w true python main_sampling.py --mode $mode --model $model --data $data --epochs 2
             nsys-exporter -s "${dir_path}/${model}_${data}_${mode}.qdrep" "${dir_path}/${model}_${data}_${mode}.sqlite"
         done

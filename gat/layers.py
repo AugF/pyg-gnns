@@ -85,10 +85,9 @@ class GATConv(MessagePassing):
             edge_index, _ = add_self_loops(edge_index,
                                            num_nodes=x.size(self.node_dim))
 
-        if torch.is_tensor(x):
-            nvtx_push(self.gpu, "vertex-cal")
-            x = torch.matmul(x, self.weight) # vertex cal
-            nvtx_pop(self.gpu)
+        nvtx_push(self.gpu, "vertex-cal")
+        x = torch.spmm(x, self.weight) # vertex cal
+        nvtx_pop(self.gpu)
             
         nvtx_push(self.gpu, "edge-cal")
         

@@ -76,7 +76,7 @@ class GatedGraphConv(MessagePassing):
             for i, (edge_index, _, size) in enumerate(adjs):
                 nvtx_push(self.gpu, "layer" + str(i))
                 nvtx_push(self.gpu, "vertex-cal_1")
-                m = torch.matmul(h, self.weight[i]) # vertex cal
+                m = torch.mm(h, self.weight[i]) # vertex cal
                 nvtx_pop(self.gpu)  
                 nvtx_push(self.gpu, "edge-cal")
                 m = self.propagate(edge_index, x=(m, m[:size[1]]), edge_weight=edge_weight) # edge cal
@@ -90,7 +90,7 @@ class GatedGraphConv(MessagePassing):
             for i in range(self.num_layers):
                 nvtx_push(self.gpu, "layer" + str(i))
                 nvtx_push(self.gpu, "vertex-cal_1")
-                m = torch.matmul(h, self.weight[i])
+                m = torch.mm(h, self.weight[i])
                 nvtx_pop(self.gpu)  
                 nvtx_push(self.gpu, "edge-cal")
                 m = self.propagate(adjs, x=m, edge_weight=edge_weight)
@@ -116,7 +116,7 @@ class GatedGraphConv(MessagePassing):
                 x = x_all[n_id].to(device)
                 
                 # GRU单元
-                m = torch.matmul(x, self.weight[i]) # vertex cal
+                m = torch.mm(x, self.weight[i]) # vertex cal
                 m = self.propagate(edge_index, x=(m, m[:size[1]]), edge_weight=None) # edge cal
                 x = self.rnn(m, x[:size[1]]) # vertex cal todo: 这里也有改变
                 
