@@ -3,6 +3,27 @@ title: 现有GNN系统优化手段调研
 author: Zhaokang Wang
 ---
 
+- [AliGraph](#aligraph)
+  - [数据模型](#%e6%95%b0%e6%8d%ae%e6%a8%a1%e5%9e%8b)
+  - [算法框架](#%e7%ae%97%e6%b3%95%e6%a1%86%e6%9e%b6)
+  - [系统框架](#%e7%b3%bb%e7%bb%9f%e6%a1%86%e6%9e%b6)
+    - [图存储](#%e5%9b%be%e5%ad%98%e5%82%a8)
+    - [图采样](#%e5%9b%be%e9%87%87%e6%a0%b7)
+    - [计算](#%e8%ae%a1%e7%ae%97)
+- [NeuGraph](#neugraph)
+  - [编程模型](#%e7%bc%96%e7%a8%8b%e6%a8%a1%e5%9e%8b)
+  - [系统实现](#%e7%b3%bb%e7%bb%9f%e5%ae%9e%e7%8e%b0)
+    - [Graph-Aware Dataflow Translation](#graph-aware-dataflow-translation)
+    - [Streaming Processing out of GPU core](#streaming-processing-out-of-gpu-core)
+    - [Parallel Multi-GPU Processing](#parallel-multi-gpu-processing)
+    - [Propagation Engine](#propagation-engine)
+    - [其他技巧](#%e5%85%b6%e4%bb%96%e6%8a%80%e5%b7%a7)
+  - [实验评估](#%e5%ae%9e%e9%aa%8c%e8%af%84%e4%bc%b0)
+- [DGL](#dgl)
+- [Architectural Implications of Graph Neural Networks](#architectural-implications-of-graph-neural-networks)
+- [Characterizing and Understanding GCNs on GPU [[Yan-2020]](#ref-Yan-2020)](#characterizing-and-understanding-gcns-on-gpu-yan-2020)
+- [参考文献](#%e5%8f%82%e8%80%83%e6%96%87%e7%8c%ae)
+
 # [AliGraph](#ref-aligraph)
 
 ## 数据模型
@@ -232,13 +253,35 @@ GNN相比传统DL的最大特点是引入了Sparse Matrix Operation。
 
 <a name="fig-aignn-tab3">![aignn-tab3](survey-of-gnn-systems.assets/AIGNN-Tab3.png)</a>
 
+# Characterizing and Understanding GCNs on GPU [[Yan-2020]](#ref-Yan-2020)
+
+本文分析了GCN类的算法在inference阶段的特性，同时与经典的图分析算法（PageRank）和基于MLP的经典神经网络做了特性对比分析。
+
+GCN顶点和边上的属性值是特征向量（维度至少为几十），而PageRank中顶点和边上的属性是标量。
+
+- 特征向量带来了更加良好的locality（一个顶点的数据被连续的访问）。
+- 特征向量带来了更高的顶点内的并行性。
+
+本文利用sgemm实现GCN中特征向量（稀疏）与权重矩阵的乘法。
+
+本文发现在GCN算法中的每一层$H=AXW$中，先计算$X'=XW$再计算$H=AX'$会带来更好的性能，因为$X$的纬度一般很高，而$W$的维度一般较低。
+
+> 但是这样做会带来$X$也要参与$W$的梯度计算的问题，反而可能会得不偿失。
+
+本文发现实际图中的顶点度数分布符合幂律分布的特性，因此缓存高度数的顶点，有可能可以提升硬件Cache的命中率。
+
+因为aggregation阶段需要并发地、原子地更新顶点的输出特征向量，因此向量化原子访问有可能可以提升aggregation阶段的效率。
+
 # 参考文献
 
-1. <a name="ref-aligraph">[AliGraph]</a>Zhu, Rong, Kun Zhao, Hongxia Yang, Wei Lin, Chang Zhou, Baole Ai, Yong Li, and Jingren Zhou. “AliGraph: A Comprehensive Graph Neural Network Platform.” Proceedings of the VLDB Endowment 12, no. 12 (August 1, 2019): 2094–2105. https://doi.org/10.14778/3352063.3352127.
-2. <a name="ref-NeuGraph">[NeuGraph]</a>L. Ma et al., “NeuGraph: Parallel Deep Neural Network Computation on Large Graphs,” in 2019 USENIX Annual Technical Conference (USENIX ATC 19), Renton, WA, Jul. 2019, pp. 443–458, [Online]. Available: https://www.usenix.org/conference/atc19/presentation/ma.
-3. <a name="ref-DGL">[DGL]</a>Wang, Minjie, Lingfan Yu, Da Zheng, Quan Gan, Yu Gai, Zihao Ye, Mufei Li, et al. “Deep Graph Library: Towards Efficient and Scalable Deep Learning on Graphs.” ArXiv:1909.01315 [Cs, Stat], September 3, 2019. http://arxiv.org/abs/1909.01315.
-4. <a name="ref-Xu-2018">[Xu-2018]</a>Xu, Keyulu, Weihua Hu, Jure Leskovec, and Stefanie Jegelka. “How Powerful Are Graph Neural Networks?” In 7th International Conference on Learning Representations, ICLR 2019, New Orleans, LA, USA, May 6-9, 2019, 2019. https://openreview.net/forum?name=ryGs6iA5Km.
-5. <a name="ref-Zhang-ICAL-2020">[Zhang-ICAL-2020]</a>Z. Zhang, J. Leng, L. Ma, Y. Miao, C. Li, and M. Guo. “Architectural Implications of Graph Neural Networks.” IEEE Computer Architecture Letters 19, no. 1 (June 1, 2020): 59–62. https://doi.org/10.1109/LCA.2020.2988991.
+1. <a name="ref-aligraph">[AliGraph]</a>ZHU R, ZHAO K, YANG H, 等. AliGraph: A Comprehensive Graph Neural Network Platform[J]. Proceedings of the VLDB Endowment, 2019, 12(12): 2094–2105. DOI:10.14778/3352063.3352127.
+2. <a name="ref-NeuGraph">[NeuGraph]</a>MA L, YANG Z, MIAO Y, 等. NeuGraph: Parallel Deep Neural Network Computation on Large Graphs[C/OL]//2019 USENIX Annual Technical Conference (USENIX ATC 19). Renton, WA: USENIX Association, 2019: 443–458. https://www.usenix.org/conference/atc19/presentation/ma.
+3. <a name="ref-DGL">[DGL]</a>WANG M, YU L, ZHENG D, 等. Deep Graph Library: Towards Efficient and Scalable Deep Learning on Graphs[J/OL]. arXiv:1909.01315 [cs, stat], 2019[2020–06–20]. http://arxiv.org/abs/1909.01315.
+
+4. <a name="ref-Xu-2018">[Xu-2018]</a>XU K, HU W, LESKOVEC J, 等. How Powerful are Graph Neural Networks?[C/OL]//7th International Conference on Learning Representations, ICLR 2019, New Orleans, LA, USA, May 6-9, 2019. . https://openreview.net/forum?id=ryGs6iA5Km.
+5. <a name="ref-Zhang-ICAL-2020">[Zhang-ICAL-2020]</a>Z. ZHANG, J. LENG, L. MA, 等. Architectural Implications of Graph Neural Networks[J]. IEEE Computer Architecture Letters, 2020, 19(1): 59–62. DOI:10.1109/LCA.2020.2988991.
+6. <a name="ref-Yan-2020">[Yan-2020]</a>M. YAN, Z. CHEN, L. DENG, 等. Characterizing and Understanding GCNs on GPU[J]. IEEE Computer Architecture Letters, 2020, 19(1): 22–25. DOI:10.1109/LCA.2020.2970395.
+
 
 
 
