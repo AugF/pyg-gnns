@@ -73,7 +73,8 @@ class GaAN(Module):
                 x = x_all[n_id].to(device)
                 x = self.convs[i](x, edge_index, size=size[1])
                 if i != self.layers - 1:
-                    x = F.relu(x)
+                    x = F.leaky_relu(x, self.negative_slop)
+                    x = F.dropout(x, p=self.dropout, training=self.training)
                 xs.append(x.cpu())
 
                 pbar.update(batch_size)

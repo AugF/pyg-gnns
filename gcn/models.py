@@ -81,6 +81,7 @@ class GCN(Module):
                 x = self.convs[i](x, edge_index, size=size[1])
                 if i != self.layers - 1:
                     x = F.relu(x)
+                    x = F.dropout(x, p=self.dropout, training=self.training)
                 xs.append(x.cpu())
 
                 pbar.update(batch_size)

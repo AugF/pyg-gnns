@@ -78,10 +78,11 @@ class GAT(Module):
             for batch_size, n_id, adj in subgraph_loader:
                 edge_index, _, size = adj.to(device)
                 x = x_all[n_id].to(device)
+                x = F.dropout(x, p=self.dropout, training=self.training)
                 # x_target = x[:size[1]]
                 x = self.convs[i]((x, x[:size[1]]), edge_index)
                 if i != self.layers - 1:
-                    x = F.relu(x)
+                    x = F.elu(x)
                 xs.append(x.cpu())
 
                 pbar.update(batch_size)
