@@ -61,7 +61,7 @@ class GCN(Module):
                 nvtx_pop(self.gpu)
                 log_memory(self.flag, device, 'layer' + str(i))
                 
-        return F.log_softmax(x, dim=-1)
+        return x
 
     def inference(self, x_all, subgraph_loader):
         device = torch.device('cuda' if self.gpu else 'cpu')

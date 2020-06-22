@@ -38,7 +38,7 @@ class GGNN(Module):
         x = torch.matmul(x, self.weight_out)
         nvtx_pop(self.gpu)
         log_memory(self.flag, device, "output-transform")
-        return F.log_softmax(x, dim=-1)
+        return x
 
     def inference(self, x_all, subgraph_loader):
         device = torch.device('cuda' if self.gpu else 'cpu')
