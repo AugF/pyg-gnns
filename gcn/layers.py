@@ -69,7 +69,7 @@ class GCNConv(MessagePassing):
     def forward(self, x, edge_index, edge_weight=None, size=None, norm=None):
         """"""
         nvtx_push(self.gpu, "vertex-cal")
-        x = torch.spmm(x, self.weight) # vertex cal
+        x = torch.matmul(x, self.weight) # vertex cal
         nvtx_pop(self.gpu)
         
         nvtx_push(self.gpu, "edge-cal")
