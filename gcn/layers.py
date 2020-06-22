@@ -77,14 +77,17 @@ class GCNConv(MessagePassing):
         if size is not None:
             x = (x, x[:size])
         
-        x = self.propagate(edge_index, x=x, norm=norm) # edge cal
+        out = self.propagate(edge_index, x=x, norm=norm) # edge cal
         nvtx_pop(self.gpu)
         
-        return x
+        if self.bias is not None:
+            out += self.bias
+            
+        return out
 
     def message(self, x_j, norm):
         return norm.view(-1, 1) * x_j if norm is not None else x_j
-
+    
     def update(self, aggr_out):
         if self.bias is not None:
             aggr_out = aggr_out + self.bias
