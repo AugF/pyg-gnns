@@ -29,13 +29,13 @@ class GGNN(Module):
     def forward(self, x, adjs):
         device = torch.device('cuda' if self.gpu else 'cpu')
         nvtx_push(self.gpu, "input-transform")
-        x = torch.mm(x, self.weight_in)
+        x = torch.matmul(x, self.weight_in)
         nvtx_pop(self.gpu)
         log_memory(self.flag, device, "input-transform")
 
         x = self.convs(x, adjs)
         nvtx_push(self.gpu, "output-transform")
-        x = torch.mm(x, self.weight_out)
+        x = torch.matmul(x, self.weight_out)
         nvtx_pop(self.gpu)
         log_memory(self.flag, device, "output-transform")
         return F.log_softmax(x, dim=-1)
@@ -45,10 +45,10 @@ class GGNN(Module):
         pbar = tqdm(total=x_all.size(0) * self.layers)
         pbar.set_description('Evaluating')
 
-        x_all = torch.mm(x_all.to(device), self.weight_in) # 尽最大可能第键槽内存
+        x_all = torch.matmul(x_all.to(device), self.weight_in) # 尽最大可能第键槽内存
         
         x_all = self.convs.inference(x_all.cpu(), subgraph_loader, pbar)
-        x_all = torch.mm(x_all.to(device), self.weight_out)
+        x_all = torch.matmul(x_all.to(device), self.weight_out)
         pbar.close()
 
         return x_all.cpu()
