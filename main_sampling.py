@@ -173,13 +173,13 @@ def train(epoch):
                 batch = batch.to(device)
                 if 'coauthor-physics' in dataset_info:
                     batch.x = batch.x.to_sparse()    
-                out = model(batch.x, batch.edge_index)
+                out = model(batch.x, batch.edge_index).log_softmax(out, dim=-1)
                 loss = F.nll_loss(out[batch.train_mask], batch.y[batch.train_mask])
                 batch_size = batch.train_mask.sum().item()
             elif args.mode == 'graphsage':
                 batch_size, n_id, adjs = batch
                 adjs = [adj.to(device) for adj in adjs] # 这里等于成熟
-                out = model(x[n_id], adjs)
+                out = model(x[n_id], adjs).log_softmax(dim=-1)
                 loss = F.nll_loss(out, y[n_id[:batch_size]])
             nvtx_pop(gpu)
             
