@@ -8,7 +8,7 @@ do
     do
         for mode in ${modes[@]}
         do
-            file_path="/data/wangzhaokang/wangyunpan/sampling_exp/${model}_${data}_${mode}.json"
+            file_path="/data/wangzhaokang/wangyunpan/sampling_exp1/${model}_${data}_${mode}.json"
             if [ -f ${file_path} ]; then # 断点续传
                 continue
             fi
