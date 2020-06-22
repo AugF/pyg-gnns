@@ -8,7 +8,7 @@ do
     do
         for mode in ${modes[@]}
         do
-            python main_sampling.py --mode $mode --model $model --data $data --epochs 50
+            python main_sampling.py --mode $mode --model $model --data $data --epochs 1
         done
     done
 done

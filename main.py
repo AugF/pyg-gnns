@@ -69,6 +69,9 @@ if dataset_info[0] in small_datasets and len(dataset_info) > 1:
         data.x = torch.from_numpy(np.load(file_path)).to(torch.float) # 因为这里是随机生成的，不考虑normal features
         num_features = data.x.size(1)
 
+if 'coauthor-physics' in dataset_info:
+    data.x = data.x.to_sparse()
+
 # 2. model
 if args.model == 'gcn':
     model = GCN(
