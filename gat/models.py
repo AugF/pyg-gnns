@@ -47,7 +47,7 @@ class GAT(Module):
             for i, (edge_index, _, size) in enumerate(adjs):
                 nvtx_push(self.gpu, "layer" + str(i))
                 x = F.dropout(x, p=self.dropout, training=self.training)
-                x = self.convs[i](x, edge_index, size=size[1])
+                x = self.convs[i]((x, x[:size[1]]), edge_index)
                 if i != self.layers - 1:
                     x = F.elu(x)
                 nvtx_pop(self.gpu)
@@ -79,7 +79,7 @@ class GAT(Module):
                 edge_index, _, size = adj.to(device)
                 x = x_all[n_id].to(device)
                 # x_target = x[:size[1]]
-                x = self.convs[i](x, edge_index, size=size[1])
+                x = self.convs[i]((x, x[:size[1]]), edge_index)
                 if i != self.layers - 1:
                     x = F.relu(x)
                 xs.append(x.cpu())
