@@ -11,7 +11,7 @@ from gaan.models import GaAN
 from ggnn.models import GGNN
 from gat.models import GAT
 from gcn.models import GCN
-from utils import get_dataset, get_split_by_file, nvtx_push, nvtx_pop, log_memory, small_datasets
+from utils import get_dataset, get_split_by_file, nvtx_push, nvtx_pop, log_memory, small_datasets, norm
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--dataset', type=str, default='cora', help="dataset: [cora, flickr, com-amazon, reddit, com-lj,"
@@ -59,12 +59,12 @@ data = dataset[0]
 
 # add train, val, test split
 if args.dataset in ['amazon-computers', 'amazon-photo', 'coauthor-physics']:
-    file_path = osp.join(osp.dirname(osp.realpath(__file__)), "data/" + args.dataset + "/raw/role.json")
+    file_path = osp.join('/data/wangzhaokang/wangyunpan/data', args.dataset + "/raw/role.json")
     data.train_mask, data.val_mask, data.test_mask = get_split_by_file(file_path, data.num_nodes)
 
 num_features = dataset.num_features
 if dataset_info[0] in small_datasets and len(dataset_info) > 1:
-    file_path = osp.join(osp.dirname(osp.realpath(__file__)), "data/feats_x/" + '_'.join(dataset_info) + '_feats.npy')
+    file_path = osp.join('/data/wangzhaokang/wangyunpan', "data/feats_x/" + '_'.join(dataset_info) + '_feats.npy')
     if osp.exists(file_path):
         data.x = torch.from_numpy(np.load(file_path)).to(torch.float) # 因为这里是随机生成的，不考虑normal features
         num_features = data.x.size(1)
@@ -74,10 +74,11 @@ if 'coauthor-physics' in dataset_info:
 
 # 2. model
 if args.model == 'gcn':
+    edge_weight = norm(data.edge_index, data.x.shape[0])
     model = GCN(
         layers=args.layers,
         n_features=num_features, n_classes=dataset.num_classes,
-        hidden_dims=args.hidden_dims, gpu=gpu, flag=flag
+        hidden_dims=args.hidden_dims, gpu=gpu, flag=flag, norm=edge_weight
     )
 elif args.model == 'gat':
     model = GAT(
