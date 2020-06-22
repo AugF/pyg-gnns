@@ -94,22 +94,25 @@ class GATConv(MessagePassing):
     def forward(self, x, edge_index, size=None, return_attention_weights=None):
         """"""
         H, C = self.heads, self.out_channels
-        nvtx_push(self.gpu, "vertex-cal")
         if isinstance(x, Tensor):
             assert x.dim() == 2, 'Static graphs not supported in `GATConv`.'
+            nvtx_push(self.gpu, "vertex-cal")
             x_l = x_r = self.lin_l(x).view(-1, H, C)
+            nvtx_pop(self.gpu)
+            nvtx_push(self.gpu, "edge-cal")
             alpha_l = alpha_r = (x_l * self.att_l).sum(dim=-1)
         else:
             x_l, x_r = x[0], x[1]
+            nvtx_push(self.gpu, "vertex-cal")
             assert x[0].dim() == 2, 'Static graphs not supported in `GATConv`.'
             x_l = self.lin_l(x_l).view(-1, H, C)
-            alpha_l = (x_l * self.att_l).sum(dim=-1)
-            if x_r is not None:
-                x_r = self.lin_r(x_r).view(-1, H, C)
-                alpha_r = (x_r * self.att_r).sum(dim=-1)
-        nvtx_pop(self.gpu)
+            x_r = self.lin_r(x_r).view(-1, H, C)
+            nvtx_pop(self.gpu)
             
-        nvtx_push(self.gpu, "edge-cal")
+            nvtx_push(self.gpu, "edge-cal")
+            alpha_l = (x_l * self.att_l).sum(dim=-1)
+            alpha_r = (x_r * self.att_r).sum(dim=-1)
+
         if self.add_self_loops:
             if isinstance(edge_index, Tensor):
                 num_nodes = x_l.size(0)
