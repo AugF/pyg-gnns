@@ -77,7 +77,7 @@ if dataset_info[0] in small_datasets and len(dataset_info) > 1:
     if osp.exists(file_path):
         data.x = torch.from_numpy(np.load(file_path)).to(torch.float) # 因为这里是随机生成的，不考虑normal features
         num_features = data.x.size(1)
-
+    
 # 2. set sampling
 
 # 2.1 test data
@@ -170,7 +170,9 @@ def train(epoch):
             begin_time = time.time()
             optimizer.zero_grad()            
             if args.mode == "cluster":
-                batch = batch.to(device)    
+                batch = batch.to(device)
+                if 'coauthor-physics' in dataset_info:
+                    batch.x = batch.x.to_sparse()    
                 out = model(batch.x, batch.edge_index)
                 loss = F.nll_loss(out[batch.train_mask], batch.y[batch.train_mask])
                 batch_size = batch.train_mask.sum().item()
