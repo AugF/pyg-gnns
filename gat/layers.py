@@ -1,6 +1,8 @@
 import torch
-from torch.nn import Parameter
+from torch import Tensor
 import torch.nn.functional as F
+from torch.nn import Parameter, Linear
+from torch_sparse import SparseTensor, set_diag
 from torch_geometric.utils import remove_self_loops, add_self_loops, softmax
 from message_passing import MessagePassing
 
@@ -49,7 +51,7 @@ class GATConv(MessagePassing):
             :class:`torch_geometric.nn.conv.MessagePassing`.
     """
     def __init__(self, in_channels, out_channels, heads=1, concat=True,
-                 negative_slope=0.2, dropout=0, bias=True, gpu=False):
+                 negative_slope=0.2, dropout=0, bias=True, add_self_loops=True, gpu=False):
         super(GATConv, self).__init__(aggr='add', gpu=gpu)
 
         self.in_channels = in_channels
@@ -58,11 +60,18 @@ class GATConv(MessagePassing):
         self.concat = concat
         self.negative_slope = negative_slope
         self.dropout = dropout
+        self.add_self_loops = add_self_loops
         self.gpu = gpu
 
-        self.weight = Parameter(torch.Tensor(in_channels,
-                                             heads * out_channels))
-        self.att = Parameter(torch.Tensor(1, heads, 2 * out_channels))
+        if isinstance(in_channels, int):
+            self.lin_l = Linear(in_channels, heads * out_channels, bias=False)
+            self.lin_r = self.lin_l
+        else:
+            self.lin_l = Linear(in_channels[0], heads * out_channels, False)
+            self.lin_r = Linear(in_channels[1], heads * out_channels, False)
+
+        self.att_l = Parameter(torch.Tensor(1, heads, out_channels))
+        self.att_r = Parameter(torch.Tensor(1, heads, out_channels))
 
         if bias and concat:
             self.bias = Parameter(torch.Tensor(heads * out_channels))
@@ -71,30 +80,51 @@ class GATConv(MessagePassing):
         else:
             self.register_parameter('bias', None)
 
+        self._alpha = None
+
         self.reset_parameters()
 
     def reset_parameters(self):
-        glorot(self.weight)
-        glorot(self.att)
+        glorot(self.lin_l.weight)
+        glorot(self.lin_r.weight)
+        glorot(self.att_l)
+        glorot(self.att_r)
         zeros(self.bias)
 
-    def forward(self, x, edge_index, size=None):
+    def forward(self, x, edge_index, size=None, return_attention_weights=None):
         """"""
-        if size is None and torch.is_tensor(x):
-            edge_index, _ = remove_self_loops(edge_index)
-            edge_index, _ = add_self_loops(edge_index,
-                                           num_nodes=x.size(self.node_dim))
-
+        H, C = self.heads, self.out_channels
         nvtx_push(self.gpu, "vertex-cal")
-        x = torch.spmm(x, self.weight) # vertex cal
+        if isinstance(x, Tensor):
+            assert x.dim() == 2, 'Static graphs not supported in `GATConv`.'
+            x_l = x_r = self.lin_l(x).view(-1, H, C)
+            alpha_l = alpha_r = (x_l * self.att_l).sum(dim=-1)
+        else:
+            x_l, x_r = x[0], x[1]
+            assert x[0].dim() == 2, 'Static graphs not supported in `GATConv`.'
+            x_l = self.lin_l(x_l).view(-1, H, C)
+            alpha_l = (x_l * self.att_l).sum(dim=-1)
+            if x_r is not None:
+                x_r = self.lin_r(x_r).view(-1, H, C)
+                alpha_r = (x_r * self.att_r).sum(dim=-1)
         nvtx_pop(self.gpu)
             
         nvtx_push(self.gpu, "edge-cal")
+        if self.add_self_loops:
+            if isinstance(edge_index, Tensor):
+                num_nodes = x_l.size(0)
+                num_nodes = size[1] if size is not None else num_nodes
+                num_nodes = x_r.size(0) if x_r is not None else num_nodes
+                edge_index, _ = remove_self_loops(edge_index)
+                edge_index, _ = add_self_loops(edge_index, num_nodes=num_nodes)
+            elif isinstance(edge_index, SparseTensor):
+                edge_index = set_diag(edge_index)
         
-        if size is not None:
-            x = (x, x[:size])
-        out = self.propagate(edge_index, x=x) # edge cal 修改了对应的接口
-        nvtx_pop(self.gpu)
+        alpha = self._alpha
+        self._alpha = None
+
+        out = self.propagate(edge_index, x=(x_l, x_r),
+                             alpha=(alpha_l, alpha_r), size=size)
 
         if self.concat:
             out = out.view(-1, self.heads * self.out_channels)
@@ -102,26 +132,25 @@ class GATConv(MessagePassing):
             out = out.mean(dim=1)
 
         if self.bias is not None:
-            out = out + self.bias
-
-        return out
-
-    def message(self, edge_index_i, x_i, x_j, size_i):
-        # Compute attention coefficients.
-        x_j = x_j.view(-1, self.heads, self.out_channels)
-        if x_i is None:
-            alpha = (x_j * self.att[:, :, self.out_channels:]).sum(dim=-1)
+            out += self.bias
+        nvtx_pop(self.gpu)
+        
+        if isinstance(return_attention_weights, bool):
+            assert alpha is not None
+            if isinstance(edge_index, Tensor):
+                return out, (edge_index, alpha)
+            elif isinstance(edge_index, SparseTensor):
+                return out, edge_index.set_value(alpha, layout='coo')
         else:
-            x_i = x_i.view(-1, self.heads, self.out_channels)
-            alpha = (torch.cat([x_i, x_j], dim=-1) * self.att).sum(dim=-1)
+            return out
 
+    def message(self, edge_index_i, x_i, x_j, alpha_j, alpha_i, size_i):
+        alpha = alpha_j if alpha_i is None else alpha_j + alpha_i # 这里参数跟pyg1.5最新不一样
         alpha = F.leaky_relu(alpha, self.negative_slope)
         alpha = softmax(alpha, edge_index_i, size_i)
-
-        # Sample attention coefficients stochastically.
+        self._alpha = alpha
         alpha = F.dropout(alpha, p=self.dropout, training=self.training)
-
-        return x_j * alpha.view(-1, self.heads, 1)
+        return x_j * alpha.unsqueeze(-1)
 
     def update(self, aggr_out):
         if self.concat is True:
