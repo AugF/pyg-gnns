@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-base_path=$(cd `dirname $0`; pwd)
 dir_config="${base_path}/dir_json"
 
 if [ ! -d ${dir_config} ]
@@ -20,6 +19,6 @@ do
         fi
         val="configuration=0, model=${model}, dataset=graph_${ns}k_25"
         echo ${val}
-        python "${base_path}/../main.py" --dataset "graph_${ns}k_25" --model ${model} --json_path "${dir_config}/config0_${model}_graph_${ns}k_25.json"
+        python ../main.py --dataset "graph_${ns}k_25" --model ${model} --json_path "${dir_config}/config0_${model}_graph_${ns}k_25.json"
     done
 done

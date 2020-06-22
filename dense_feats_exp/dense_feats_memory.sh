@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-base_path=$(cd `dirname $0`; pwd)
 dir_config="${base_path}/dir_json"
 
 if [ ! -d ${dir_config} ]
@@ -24,7 +23,7 @@ do
             fi
             val="configuration=0, model=${model}, dataset=${data}, dense_feat_dims=${fd}"
             echo ${val}
-            python -u "${base_path}/../main.py" --dataset "${data}_${fd}" --model ${model} --json_path "${dir_config}/config0_${model}_${data}_${fd}.json"
+            python -u ../main.py --dataset "${data}_${fd}" --model ${model} --json_path "${dir_config}/config0_${model}_${data}_${fd}.json"
         done
     done
 done

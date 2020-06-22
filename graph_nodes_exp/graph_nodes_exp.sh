@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-base_path=$(cd `dirname $0`; pwd)
 dir_config="${base_path}/dir_qdrep"
 dir_sqlite="${base_path}/dir_sqlite"
 
@@ -26,7 +25,7 @@ do
         fi
         val="configuration=0, model=${model}, dataset=graph_${ns}k_25"
         echo ${val}
-        nsys profile -t cuda,osrt,nvtx -o "${dir_config}/config0_${model}_graph_${ns}k_25" -w true python "${base_path}/../main.py" --dataset "graph_${ns}k_25" --model ${model}
+        nsys profile -t cuda,osrt,nvtx -o "${dir_config}/config0_${model}_graph_${ns}k_25" -w true python ../main.py --dataset "graph_${ns}k_25" --model ${model}
         nsys-exporter -s "${dir_config}/config0_${model}_graph_${ns}k_25.qdrep" "${dir_sqlite}/config0_${model}_graph_${ns}k_25.sqlite"
     done
 done
