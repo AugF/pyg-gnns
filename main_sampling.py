@@ -177,7 +177,6 @@ def train(epoch):
                 loss = F.nll_loss(out[batch.train_mask], batch.y[batch.train_mask])
                 batch_size = batch.train_mask.sum().item()
             elif args.mode == 'graphsage':
-                print("edge_index", data.edge_index[:, 7413], data.edge_index.shape)
                 batch_size, n_id, adjs = batch
                 adjs = [adj.to(device) for adj in adjs] # 这里等于成熟
                 out = model(x[n_id], adjs)
