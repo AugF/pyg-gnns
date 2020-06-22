@@ -100,7 +100,7 @@ class GaANConv(MessagePassing):
         nvtx_pop(self.gpu)
         
         nvtx_push(self.gpu, "edge-cal_gateMax")
-        ht = torch.mm(x, self.weight_max_polling)
+        ht = torch.matmul(x, self.weight_max_polling)
         if size is not None:
             gate_max = self.maxaggregate((ht, ht[:size]), edge_index) # edge_cal
         else:
@@ -120,19 +120,19 @@ class GaANConv(MessagePassing):
             x = x[:size]
         # gate = FC_theta_g(xi || max || mean)
         # ti = gate * multi-head
-        output = torch.mm(torch.cat([x, gate_max, gate_min], dim=-1), self.weight_gate).view(-1, self.heads, 1) # vertex_cal
+        output = torch.matmul(torch.cat([x, gate_max, gate_min], dim=-1), self.weight_gate).view(-1, self.heads, 1) # vertex_cal
         output = attentions * output
 
         # yi = FC_theta_o(xi || ti)
-        output = torch.mm(torch.cat([x, output.view(-1, self.heads * self.value_units)], dim=-1), self.weight_att) # vertex cal
+        output = torch.matmul(torch.cat([x, output.view(-1, self.heads * self.value_units)], dim=-1), self.weight_att) # vertex cal
         nvtx_pop(self.gpu)
         return output
 
     def message(self, edge_index_i, x_i, x_j, size_i):
         # Compute attention coefficients.
-        data = torch.mm(x_j, self.weight_data).view(-1, self.heads, self.value_units) # vertex cal
-        x_i = torch.mm(x_i, self.weight_neigh).view(-1, self.heads, self.mid_units)
-        x_j = torch.mm(x_j, self.weight_neigh).view(-1, self.heads, self.mid_units)
+        data = torch.matmul(x_j, self.weight_data).view(-1, self.heads, self.value_units) # vertex cal
+        x_i = torch.matmul(x_i, self.weight_neigh).view(-1, self.heads, self.mid_units)
+        x_j = torch.matmul(x_j, self.weight_neigh).view(-1, self.heads, self.mid_units)
 
         alpha = (torch.cat([x_i, x_j], dim=-1) * self.weight_edge).sum(dim=-1)
 
