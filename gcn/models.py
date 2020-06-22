@@ -4,6 +4,7 @@ import sys
 import torch.nn.functional as F
 from torch.nn import Module
 from gcn.layers import GCNConv
+from utils import norm
 from tqdm import tqdm
 
 
@@ -50,9 +51,10 @@ class GCN(Module):
                 nvtx_pop(self.gpu)
                 log_memory(self.flag, device, 'layer' + str(i))
         else:
+            edge_weight = norm(adjs, x.shape[0])
             for i in range(self.layers):
                 nvtx_push(self.gpu, "layer" + str(i))
-                x = self.convs[i](x, adjs, norm=self.norm[e_id])
+                x = self.convs[i](x, adjs)
                 if i != self.layers - 1:
                     x = F.relu(x)
                     x = F.dropout(x, p=self.dropout, training=self.training)
