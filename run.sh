@@ -1,15 +1,19 @@
-dir_path='/home/wangzhaokang/wangyunpan/gnns-project/pyg-gnns/'
+dir_path='/home/wangzhaokang/wangyunpan/gnns-project/pyg-gnns'
 
+# date
+# echo "begin sampling_exp"
+# cd "${dir_path}/sampling_exp"
+# bash run_json.sh >>run_json.log 2>&1
+# echo "run_json end ..."
+# date
+# bash run_nsys.sh >>run_nsys.log 2>&1
+# echo "run_nsys end ..."
+# date
+# bash run_time.sh >>run_time.log 2>&1
+# echo "run_time end ..."
 date
-echo "${dir_path}/sampling_exp"
-bash run_json.sh >>run_json.log 2>&1
-echo "run_json end ..."
-date
-bash run_nsys.sh >>run_nsys.log 2>&1
-echo "run_nsys end ..."
-date
-bash run_time.sh >>run_time.log 2>&1
-echo "run_time end ..."
+echo "begin run_test"
+python run_test.py >run_test.log 2>&1
 
 # 1. config exp
 date
