@@ -15,14 +15,15 @@ class GAT(Module):
     dropout, negative_slop set: https://github.com/Diego999/pyGAT/blob/master/train.py
     """
     def __init__(self, layers, n_features, n_classes, head_dims,
-                 heads, dropout=0.6, negative_slop=0.2, gpu=False, flag=False):
+                 heads, dropout=0.6, negative_slop=0.2, gpu=False, flag=False, sparse_flag=False):
         super(GAT, self).__init__()
         self.n_features, self.n_classes = n_features, n_classes
         self.layers, self.head_dims, self.heads = layers, head_dims, heads
         self.dropout, self.negative_slop = dropout, negative_slop
         self.gpu = gpu
         self.flag = flag
-
+        self.sparse_flag = sparse_flag
+        
         self.dropout = dropout
         self.conv_in = GATConv(in_channels=n_features, out_channels=head_dims, heads=heads, dropout=dropout)
 
@@ -46,7 +47,8 @@ class GAT(Module):
         if isinstance(adjs, list):
             for i, (edge_index, _, size) in enumerate(adjs):
                 nvtx_push(self.gpu, "layer" + str(i))
-                x = F.dropout(x, p=self.dropout, training=self.training)
+                if not self.sparse_flag:
+                    x = F.dropout(x, p=self.dropout, training=self.training)
                 x = self.convs[i]((x, x[:size[1]]), edge_index)
                 if i != self.layers - 1:
                     x = F.elu(x)
@@ -55,7 +57,8 @@ class GAT(Module):
         else:
             for i in range(self.layers):
                 nvtx_push(self.gpu, "layer" + str(i))
-                x = F.dropout(x, p=self.dropout, training=self.training)
+                if not self.sparse_flag:
+                    x = F.dropout(x, p=self.dropout, training=self.training)
                 x = self.convs[i](x, adjs)
                 if i != self.layers - 1:
                     x = F.elu(x)
