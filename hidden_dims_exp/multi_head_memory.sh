@@ -19,12 +19,18 @@ do
         do
             val="configuration=0, model=${model}, dataset=${data}, head_dims=${hd}, heads=4"
             echo ${val}
+            if [ -f "${dir_config}/config0_${model}_${data}_4_${hd}.json" ]; then # 断点续传
+                continue
+            fi
             python ../main.py --dataset ${data} --model ${model} --head_dims ${hd} --d_v ${hd} --d_a ${hd} --heads 4 --json_path "${dir_config}/config0_${model}_${data}_4_${hd}.json"
         done
         for h in ${heads[@]}
         do
             val="configuration=0, model=${model}, dataset=${data}, head_dims=32, heads=${h}"
             echo ${val}
+            if [ -f "${dir_config}/config0_${model}_${data}_${h}_32.json" ]; then # 断点续传
+                continue
+            fi
             python ../main.py --dataset ${data} --model ${model} --head_dims 32 --d_v 32 --d_a 32 --heads ${h} --json_path "${dir_config}/config0_${model}_${data}_${h}_32.json"
         done
     done

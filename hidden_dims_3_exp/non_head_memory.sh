@@ -6,8 +6,9 @@ then
     mkdir -p $dir_config
 fi
 
+
 datasets=(amazon-photo pubmed amazon-computers coauthor-physics flickr com-amazon)
-models=(gcn ggnn)
+models=(ggnn)
 hds=(2048)
 
 for data in ${datasets[@]}
@@ -18,6 +19,9 @@ do
         do
             val="configuration=0, model=${model}, dataset=${data}, hidden_dims=${hd}"
             echo ${val}
+            if [ -f "${dir_config}/config0_${model}_${data}_${hd}.json" ]; then # 断点续传
+                continue
+            fi
             python ../main.py --dataset ${data} --model ${model} --json_path "${dir_config}/config0_${model}_${data}_${hd}.json" --epochs 5 --hidden_dims ${hd} --layers 3
         done
     done

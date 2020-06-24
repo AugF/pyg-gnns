@@ -18,6 +18,9 @@ do
         do
             val="configuration=0, model=${model}, dataset=${data}, layers=${l}"
             echo ${val}
+            if [ -f "${dir_config}/config0_${model}_${data}_${l}.json" ]; then # 断点续传
+                continue
+            fi
             python ../main.py --dataset ${data} --model ${model} --layers $l --json_path "${dir_config}/config0_${model}_${data}_${l}.json"
         done
     done

@@ -24,6 +24,9 @@ do
         do
             val="configuration=0, model=${model}, dataset=${data}, layers=${l}"
             echo ${val}
+            if [ -f "${dir_config}/config0_${model}_${data}_${l}.qdrep" ]; then # 断点续传
+                continue
+            fi
             nsys profile -t cuda,osrt,nvtx -o "${dir_config}/config0_${model}_${data}_${l}" -w true python ../main.py --dataset ${data} --model ${model} --layers $l 
             nsys-exporter -s "${dir_config}/config0_${model}_${data}_${l}.qdrep" "${dir_sqlite}/config0_${model}_${data}_${l}.sqlite"
         done

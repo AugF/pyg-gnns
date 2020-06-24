@@ -15,6 +15,9 @@ do
     for model in ${models[@]}
     do
         val="configuration=${i}, model=${model}, dataset=${data}"
+        if [ -f "${dir_config}/config0_${model}_${data}.json" ]; then # 断点续传
+            continue
+        fi
         echo ${val}
         python ../main.py --dataset ${data} --model ${model} --json_path "${dir_config}/config0_${model}_${data}.json"
     done
