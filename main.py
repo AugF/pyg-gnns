@@ -27,6 +27,7 @@ parser.add_argument('--d_v', type=int, default=8, help="gaan model: vertex's dim
 parser.add_argument('--d_a', type=int, default=8, help="gaan model: each vertex's dim in edge attention") # d_a = head_dims
 parser.add_argument('--d_m', type=int, default=64, help="gaan model: gate: max aggregator's dim, default=64")
 
+parser.add_argument('--x_sparse', action='store_true', default=False, help="whether to use data.x sparse version")
 parser.add_argument('--seed', type=int, default=1, help="random seed")
 parser.add_argument('--cpu', action='store_true', default=False, help='use cpu, not use gpu')
 parser.add_argument('--device', type=str, default='cuda:0', help='[cpu, cuda:id]')
@@ -69,7 +70,7 @@ if dataset_info[0] in small_datasets and len(dataset_info) > 1:
         data.x = torch.from_numpy(np.load(file_path)).to(torch.float) # 因为这里是随机生成的，不考虑normal features
         num_features = data.x.size(1)
 
-if 'coauthor-physics' in dataset_info:
+if args.x_sparse:
     data.x = data.x.to_sparse()
 
 # 2. model
@@ -84,7 +85,7 @@ elif args.model == 'gat':
     model = GAT(
         layers=args.layers,
         n_features=num_features, n_classes=dataset.num_classes,
-        head_dims=args.head_dims, heads=args.heads, gpu=gpu, flag=flag
+        head_dims=args.head_dims, heads=args.heads, gpu=gpu, flag=flag, sparse_flag=args.x_sparse
     )
 elif args.model == 'ggnn':
     model = GGNN(
