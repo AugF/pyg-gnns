@@ -239,14 +239,15 @@ else:
                 nvtx_pop(gpu)
                 
                 sampling_time += loader_time
-                print(f"sampling time: {sampling_time}, other time: {other_time}")
+                all_time = sampling_time + other_time
+                print(f"sampling time: {sampling_time}, other time: {other_time}, all_time: {all_time}, loss: {loss}")
                 
-                nvtx_push(gpu, "eval")
-                train_acc, val_acc, test_acc = test()
-                print(f'Epoch: {epoch:02d}, Loss: {loss:.4f}, Train: {train_acc:.4f}, '
-                        f'Val: {val_acc:.4f}, test: {test_acc:.4f}')
-                # add 
-                nvtx_pop(gpu)
+                # nvtx_push(gpu, "eval")
+                # train_acc, val_acc, test_acc = test()
+                # print(f'Epoch: {epoch:02d}, Loss: {loss:.4f}, Train: {train_acc:.4f}, '
+                #         f'Val: {val_acc:.4f}, test: {test_acc:.4f}')
+                # # add 
+                # nvtx_pop(gpu)
                 nvtx_pop(gpu)
                 
     if flag:
