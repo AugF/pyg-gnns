@@ -2,13 +2,15 @@
 title: 系统视角下的图神经网络训练过程性能瓶颈分析
 author: 王肇康 王云攀
 bibliography: gnn-references.bib
-citation-style: elsevier-with-titles.xml
+citation-style: chinese-gb7714-2005-numeric.csl
+css: academy.css
 reference-section-title: 参考文献
 figPrefix: 图
 figureTitle: 图
 tblPrefix: 表
 tableTitle: 表
 secPrefix: 节
+subfigGrid: true
 ---
 
 # 1 绪论
@@ -19,9 +21,9 @@ secPrefix: 节
 
 ## 2.2 图神经网络的分类
 
-[@tbl:gnn_overview]中列出了我们调研到的典型的图神经网络算法。表中列出了各个GNN中点/边计算的表达式，表达式中的大写粗体字母表示GNN模型参数。表中的网络类型划分依据[@zhou2018_gnn_review]。因为本文主要关注GNN算法的计算特性，我们分析了各GNN算法的点、边计算的计算复杂度，并根据计算复杂度将GNN算法划分到四个象限中，如[@fig:GNN_complexity_quadrant]所示。
+[@tbl:gnn_overview]中列出了我们调研到的典型的图神经网络算法.表中列出了各个GNN中点/边计算的表达式,表达式中的大写粗体字母表示GNN模型参数.表中的网络类型划分依据[@zhou2018_gnn_review].因为本文主要关注GNN算法的计算特性,我们分析了各GNN算法的点、边计算的计算复杂度,并根据计算复杂度将GNN算法划分到四个象限中,如[@fig:GNN_complexity_quadrant]所示.
 
-|          名称          |   网络类型   | $\Sigma$         | $\phi$                                                                                                                                                                                                                                                                                                                                                                                                                                    |         边计算复杂度         | $\gamma$                                                                                                                                                                                                                                                                                                                                                           |                  点计算复杂度                   |
+|          名称          |   网络类型   | 边计算-$\Sigma$         | 边计算-$\phi$                                                                                                                                                                                                                                                                                                                                                                                                                                    |         边计算复杂度         | 点计算-$\gamma$                                                                                                                                                                                                                                                                                                                                                           |                  点计算复杂度                   |
 | :--------------------: | :----------: | :--------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :--------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :---------------------------------------------: |
 |  ChebNet (ICLR, 2016)  |   Spectral   | sum              | $\vec{m}_{ij, k}^l = T_k(\widetilde{L} )_{ij} \vec{h}_j^l$                                                                                                                                                                                                                                                                                                                                                                                |         $O(Kh_{in})$         | $\vec{h}_i^{l+1} = \sum_{k=0}^K \mathbf{W}^k \cdot \vec{s}_{i, k}^{l}$                                                                                                                                                                                                                                                                                             |               $O(h_{in}h_{out})$                |
 |  **GCN** (ICLR, 2017)  |   Spectral   | sum              | $\vec{m}_{ij}^l = e_{ij} \vec{h}_j^l$                                                                                                                                                                                                                                                                                                                                                                                                     |         $O(h_{in})$          | $\vec{h}_i^{l+1} = \mathbf{W} \cdot \vec{s}_i^{l}$                                                                                                                                                                                                                                                                                                                 |               $O(h_{in} h_{out})$               |
@@ -59,6 +61,8 @@ secPrefix: 节
 |         flickr [@zeng2020_graphsaint]         | 89,250  | 899,756 |   10.1   |       500        |    0.54    |   7    | 无向图 |
 |        com-amazon [@yang2012_defining]        | 334,863 | 925,872 |   2.8    |        32        |    0.0     |   10   | 无向图 |
 
+: 实验数据集概览 {#tbl:dataset_overview}
+
 ## 3.3 图神经网络算法选择与实现
 
 ## 3.4 数据处理方法
@@ -69,11 +73,11 @@ secPrefix: 节
 
 # 4 实验结果与分析
 
-## 4.1 实验1：超参数的影响分析
+## 4.1 实验1：超参数的影响
 
-本实验的目标是通过观察GNN的超参数（例如$h_{in}$、$h_{out}$、$K$等）对训练耗时、显存使用的影响，验证[@tbl:gnn_overview]中复杂度分析的准确性。
+本实验的目标是通过观察GNN的超参数(例如$h_{in}$、$h_{out}$、$K$等)对训练耗时、显存使用的影响, 验证[@tbl:gnn_overview]中复杂度分析的准确性.
 
-[@fig:exp_absolute_training_time]中比较了各GNN每个epoch的训练耗时，其排名为GaAN >> GAT > GGNN > GCN。其耗时排名与复杂度分析相符。因为图中边的数量一般远超点的数量，因此边计算复杂度更高的GAT算法比点计算复杂度高的算法GGNN更耗时。[@fig:exp_absolute_training_time]同时表明个别epoch的训练耗时异常地高，其主要是由profiling overhead和python解释器的GC停顿造成。该现象证实了去处异常epoch的必要性。
+[@fig:exp_absolute_training_time]中比较了各GNN每个epoch的训练耗时,其排名为GaAN >> GAT > GGNN > GCN. 其耗时排名与复杂度分析相符. 因为图中边的数量一般远超点的数量, 因此边计算复杂度更高的GAT算法比点计算复杂度高的算法GGNN更耗时. [@fig:exp_absolute_training_time] 同时表明个别epoch的训练耗时异常地高, 其主要是由profiling overhead和python解释器的GC停顿造成.该现象证实了去处异常epoch的必要性.
 
 <div id="fig:exp_absolute_training_time">
 
@@ -85,25 +89,57 @@ secPrefix: 节
 ![flickr](./figs/experiments/exp_absolute_training_time_comparison_flickr.png){width=25%}
 ![com-amazon](./figs/experiments/exp_absolute_training_time_comparison_com-amazon.png){width=25%}
 
-Training time comparison.
+训练耗时的影响
 </div>
 
-根据[@tbl:gnn_overview]中的复杂度分析，各GNN的点、边计算复杂度与各算法超参数（例如$h_{dim}$、$K$等）呈线性关系。
-为了验证该线性关系，我们测量了各GNN的训练时间随超参数的变化情况。GCN和GGNN的计算复杂度受隐向量维度$h_{dim}$影响。
-$h_{dim}$同时影响Layer1的输出隐向量维度和Layer2的输入隐向量维度（即$h_{dim}=h^1_{out}=h^2_{in})$。
-[@fig:exp_hyperparameter_on_vertex_edge_phase_time_gcn]和[@exp_hyperparameter_on_vertex_edge_phase_time_ggnn]展示了GCN和GGNN训练耗时受$h_{dim}$的影响情况，随着$h_{dim}$的增加，训练耗时呈线性增长。
-GAT采用了多头机制，其计算复杂度受输入隐向量维度$h_{in}$、每个头的隐向量维度$h_{head}$、头数$K$的影响。
-我们调整Layer1的$K$和$h_{head}$（即同时调整了Layer2的$h_{in}$），[@fig:exp_hyperparameter_on_vertex_edge_phase_time_gat]展示了GAT训练耗时受超参数的影响，随着超参数的增长，训练耗时呈线性增长。
-GaAN同样采用多头机制，其计算复杂度受$h_{in}$、$d_v$、$d_m$、$h_{out}$、$K$等超参数的影响。
-我们同时调整Layer1和Layer2的$K$等参数，[@fig:exp_hyperparameter_on_vertex_edge_phase_time_gat]展示了GaAN训练耗时受超参数的影响。
-实验验证了表[@tbl:gnn_overview]中给出的复杂度分析结果，各GNN算法的训练耗时随着超参数的增加呈线性增长。
+根据[@tbl:gnn_overview]中的复杂度分析, 各GNN的点、边计算复杂度与各算法超参数(例如$h_{dim}$、$K$等)呈线性关系.
+为了验证该线性关系, 我们测量了各GNN的训练时间随超参数的变化情况.
 
-[@fig:exp_hyperparameter_on_memory_usage]同时展示了各GNN对GPU显存的使用情况随算法超参数的变化情况，在统计GPU显存使用情况时不包含图数据集本身。
-随着超参数的增加，GNN的显存使用也线性增长。
+GCN和GGNN的计算复杂度受隐向量维度$h_{dim}$影响.
+$h_{dim}$同时影响Layer0的输出隐向量维度和Layer1的输入隐向量维度（即$h_{dim}=h^0_{out}=h^1_{in})$.
+[@fig:exp_hyperparameter_on_vertex_edge_phase_time_gcn]和[@fig:exp_hyperparameter_on_vertex_edge_phase_time_ggnn]展示了GCN和GGNN训练耗时受$h_{dim}$的影响情况.
+随着$h_{dim}$的增加,训练耗时呈线性增长.
 
-实验验证了[@tab:gnn_overview]中复杂度分析的有效性。
-GNN的训练耗时与显存使用均与超参数呈线性关系。
-这允许算法工程师使用更大的超参数来提升GNN的复杂度，而不用担心训练耗时和显存使用呈现爆炸性增长。
+
+GAT采用了多头机制,其计算复杂度受输入隐向量维度$h_{in}$, 每个头的隐向量维度$h_{head}$和头数$K$的影响.
+每一层的输出隐向量维度$h_{out}=K h_{head}$.
+因为在GAT结构中$h^1_{in}=h^0_{out}$, 调整$h_{head}$和$K$即相当于调整了Layer1的$h^1_{in}$.
+[@fig:exp_hyperparameter_on_vertex_edge_phase_time_gat]展示了GAT训练耗时受超参数$h_{head}$和$K$的影响.
+GAT训练耗时随$h_{head}$和$K$呈线性增长.
+
+GaAN同样采用多头机制,其计算复杂度受$h_{in}$、$d_v$、$d_a$和头数$K$的影响.
+[@fig:exp_hyperparameter_on_vertex_edge_phase_time_gat]展示了GaAN训练耗时受超参数的影响.
+实验验证了表[@tbl:gnn_overview]中给出的复杂度分析结果,各GNN算法的训练耗时随着超参数的增加呈线性增长.
+
+<div id="fig:exp_hyperparameter_on_vertex_edge_phase_time">
+
+![GCN](figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gcn.png){#fig:exp_hyperparameter_on_vertex_edge_phase_time_gcn width=40%}
+![GGNN](figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_ggnn.png){#fig:exp_hyperparameter_on_vertex_edge_phase_time_ggnn width=40%}
+
+![GAT](figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gat.png){#fig:exp_hyperparameter_on_vertex_edge_phase_time_gat width=40%}
+![GaAN](figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gaan.png){#fig:exp_hyperparameter_on_vertex_edge_phase_time_gaan width=40%}
+
+超参数对GNN中点/边计算耗时的影响
+</div>
+
+[@fig:exp_hyperparameter_on_memory_usage]同时展示了各GNN对GPU显存的使用情况随算法超参数的变化情况.
+随着超参数的增加,GNN的显存使用也线性增长.
+
+<div id="fig:exp_hyperparameter_on_memory_usage">
+
+
+![GCN](figs/experiments/exp_hyperparameter_on_memory_usage_gcn.png){width=40%}
+![GGNN](figs/experiments/exp_hyperparameter_on_memory_usage_ggnn.png){width=40%}
+
+![GAT](figs/experiments/exp_hyperparameter_on_memory_usage_gat.png){width=40%}
+![GaAN](figs/experiments/exp_hyperparameter_on_memory_usage_gaan.png){width=40%}
+
+超参数对训练阶段显存使用的影响(不含数据集本身)
+
+</div>
+
+实验验证了[@tbl:gnn_overview]中复杂度分析的有效性.  GNN的训练耗时与显存使用均与超参数呈线性关系.
+这允许算法工程师使用更大的超参数来提升GNN的复杂度,而不用担心训练耗时和显存使用呈现爆炸性增长.
 
 ## 4.2 训练耗时分解
 

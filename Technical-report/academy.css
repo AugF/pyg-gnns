@@ -1,0 +1,95 @@
+body {
+	font-family: 'Noto Serif', Times, 'Times New Roman', 'Noto Serif CJK SC', '思源宋体 CN', '宋体', SimSun, serif;
+	font-size: 12pt;
+	max-width: 100em;
+	padding-left: 10%;
+	padding-right: 10%;
+	padding-top: 4em;
+	padding-bottom: 4em;
+	line-height: 150%;
+}
+
+.title, h1,h2,h3,h4,h5,h6 {
+	font-family: 'Noto Sans', Arial, 'Noto Sans CJK SC', '思源黑体 CN', '黑体', sans-serif;
+	font-weight: normal;
+	line-height: 100%;
+}
+
+h1 {
+	font-size: 22pt;
+}
+
+h2 {
+	font-size: 20pt;
+}
+
+h3 {
+	font-size: 16pt;
+}
+
+.author {
+	font-style: italic;
+}
+
+figcaption, caption {
+	font-style: italic;
+	text-align: left;
+}
+
+figure {
+	margin-inline-start: 0px;
+	margin-inline-end: 0px;
+	margin-top: 1em;
+	margin-bottom: 1em;
+}
+
+img {
+	max-width: 100%;
+}
+
+dt { /* definition term */
+	font-weight: bold;
+}
+
+dd { /* definition content */
+	font-style: italic;
+}
+
+
+table {
+  border: 1px solid #000000;
+  text-align: left;
+  border-collapse: collapse;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  line-height: 100%;
+}
+table td, table th {
+  border: 1px solid #000000;
+  padding: 5px 4px;
+}
+table tbody td {
+  font-size: 10pt;
+}
+table thead {
+  background: #CFCFCF;
+  background: -moz-linear-gradient(top, #dbdbdb 0%, #d3d3d3 66%, #CFCFCF 100%);
+  background: -webkit-linear-gradient(top, #dbdbdb 0%, #d3d3d3 66%, #CFCFCF 100%);
+  background: linear-gradient(to bottom, #dbdbdb 0%, #d3d3d3 66%, #CFCFCF 100%);
+  border-bottom: 0px solid #000000;
+}
+table thead th {
+  font-size: 12pt;
+  font-weight: bold;
+  color: #000000;
+  text-align: left;
+}
+table tfoot {
+  font-size: 10pt;
+  font-weight: bold;
+  color: #000000;
+  border-top: 1px solid #000000;
+}
+table tfoot td {
+  font-size: 10pt;
+}
