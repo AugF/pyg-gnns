@@ -12,7 +12,7 @@ then
     mkdir -p $dir_sqlite
 fi
 
-datasets=(amazon-photo amazon-computers)
+datasets=(amazon-photo pubmed amazon-computers coauthor-physics flickr com-amazon)
 models=(gcn)
 hds=(1024)
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-dir_config="${base_path}/dir_json"
+dir_config="dir_json"
 
 if [ ! -d ${dir_config} ]
 then

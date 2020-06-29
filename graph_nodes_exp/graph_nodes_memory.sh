@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-dir_config="${base_path}/dir_json"
+dir_config="dir_json"
 
 if [ ! -d ${dir_config} ]
 then
@@ -13,7 +13,7 @@ for model in ${models[@]}
 do
     for ns in ${nodes[@]}
     do
-        json_path="${dir_config}/config0_${model}_graph_${ns}k_25.json"
+        json_path="${dir_config}/config0_${model}_graph`_${ns}k_25.json"
         if [ -f $json_path ]; then # 断点续传
             continue
         fi

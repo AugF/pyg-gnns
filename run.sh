@@ -1,19 +1,9 @@
 dir_path='/home/wangzhaokang/wangyunpan/gnns-project/pyg-gnns'
 
 # date
-# echo "begin sampling_exp"
 # cd "${dir_path}/sampling_exp"
-# bash run_json.sh >>run_json.log 2>&1
-# echo "run_json end ..."
-# date
-# bash run_nsys.sh >>run_nsys.log 2>&1
-# echo "run_nsys end ..."
-# date
-# bash run_time.sh >>run_time.log 2>&1
-# echo "run_time end ..."
-date
-echo "begin run_test"
-python run_test.py >run_test.log 2>&1
+# bash run_graph_memory.sh >>run_graph_memory.log 2>&1
+# echo "graph_memory_exp end"
 
 # 1. config exp
 date
@@ -42,20 +32,20 @@ bash non_head_memory.sh >>non_head_memory.log 2>&1
 echo "non memory end ..."
 
 # 3. hidden_dims_3_exp
-date
-echo "begin hidden_dims_3_exp"
-cd "${dir_path}/hidden_dims_3_exp"
-bash multi_head_exp.sh >>multi_head_exp.log 2>&1
-echo "multi exp end ..."
-date
-bash multi_head_memory.sh >>multi_head_memory.log 2>&1
-echo "multi memory end ..."
-date
-bash non_head_exp.sh >>non_head_exp.log 2>&1
-echo "non exp end ..."
-date
-bash non_head_memory.sh >>non_head_memory.log 2>&1
-echo "non memory end ..."
+# date
+# echo "begin hidden_dims_3_exp"
+# cd "${dir_path}/hidden_dims_3_exp"
+# bash multi_head_exp.sh >>multi_head_exp.log 2>&1
+# echo "multi exp end ..."
+# date
+# bash multi_head_memory.sh >>multi_head_memory.log 2>&1
+# echo "multi memory end ..."
+# date
+# bash non_head_exp.sh >>non_head_exp.log 2>&1
+# echo "non exp end ..."
+# date
+# bash non_head_memory.sh >>non_head_memory.log 2>&1
+# echo "non memory end ..."
 
 # 4. layer_exp
 date

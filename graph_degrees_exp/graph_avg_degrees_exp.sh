@@ -13,7 +13,7 @@ then
 fi
 
 models=(gcn ggnn gat gaan)
-degrees=(10 25 50 75 100)
+degrees=(3 6 10 15 20 25 30 50)
 
 for model in ${models[@]}
 do

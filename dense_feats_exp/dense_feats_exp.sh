@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-dir_config="${base_path}/dir_qdrep"
-dir_sqlite="${base_path}/dir_sqlite"
+dir_config="dir_qdrep"
+dir_sqlite="dir_sqlite"
 
 if [ ! -d ${dir_config} ]
 then

@@ -3,7 +3,7 @@ import snap # in linux, need py35, py36 or py37
 import json
 import os
 import scipy.sparse as sp
-from utils import small_datasets, small_nodes
+# from utils import small_datasets, small_nodes
 # https://snap.stanford.edu/snappy/doc/reference/GenRMat.html
 # directed graph
 
@@ -37,11 +37,9 @@ def input_sparse_feature_exp(datasets, nodes, seed=1):
             feats = np.where(feats <= 0.2, 0, 1)
             np.save("data/feats_x/" + name + "_" + str(d) + "_20_feats", feats)
 
-input_dense_feature_exp(small_datasets, small_nodes)
-input_sparse_feature_exp(small_datasets, small_nodes)
 
 # 2. graph scalablity
-def gen_graph(raw_dir, nodes, edges, features=32, classes=10, tr=0.50, va=0.25, seed=1):
+def gen_graph(raw_dir, nodes, edges, features=32, classes=10, tr=0.70, va=0.15, seed=1):
     np.random.seed(seed)
     print("get class_map.json...")
     # 1. class_map.json
@@ -121,3 +119,33 @@ def graph_scale_exp(seed=1):
         f = sp.csr_matrix(([1] * 2 * edges, (row, col)), shape=(nodes, nodes)) # directed -> undirected, edges*2
         np.savez(raw_dir + "/adj_full", data=f.data, indptr=f.indptr, indices=f.indices, shape=f.shape)
         gen_graph(raw_dir, nodes, edges)
+
+
+def gen_avg_graph(seed=1):
+    Rnd = snap.TRnd()
+    degrees = [3, 6, 10, 15, 20, 25, 30, 50]  # 25 omit
+    nodes = 50000
+    for d in degrees:
+        edges = nodes * d
+        graph = snap.GenRMat(nodes, edges, .6, .1, .15, Rnd)
+        raw_dir = "/data/wangzhaokang/wangyunpan/data/graph_50k_" + str(d) + "/raw"
+        print(raw_dir)
+        if not os.path.exists(raw_dir):
+            os.makedirs(raw_dir)
+
+        print("get adj_full.npz...")
+        # gen adj_full
+        row = []
+        col = []
+        for e in graph.Edges():
+            r, c = e.GetSrcNId(), e.GetDstNId()
+            row.append(r)
+            col.append(c)
+            row.append(c)
+            col.append(r)
+        f = sp.csr_matrix(([1] * 2 * edges, (row, col)), shape=(nodes, nodes)) # directed -> undirected, edges*2
+        np.savez(raw_dir + "/adj_full", data=f.data, indptr=f.indptr, indices=f.indices, shape=f.shape)
+        gen_graph(raw_dir, nodes, edges)
+
+
+gen_avg_graph()

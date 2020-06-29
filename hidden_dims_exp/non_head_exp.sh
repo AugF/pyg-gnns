@@ -12,9 +12,9 @@ then
     mkdir -p $dir_sqlite
 fi
 
-datasets=(amazon-photo amazon-computers)
-models=(gcn)
-hds=(1024)
+datasets=(amazon-photo pubmed amazon-computers coauthor-physics flickr com-amazon)
+models=(gcn ggnn)
+hds=(16 32 64 128 256 512 1024 2048)
 
 for data in ${datasets[@]}
 do
