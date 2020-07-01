@@ -30,6 +30,7 @@ class GGNN(Module):
         device = torch.device('cuda' if self.gpu else 'cpu')
         nvtx_push(self.gpu, "input-transform")
         x = torch.matmul(x, self.weight_in)
+        
         nvtx_pop(self.gpu)
         log_memory(self.flag, device, "input-transform")
 
