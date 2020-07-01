@@ -1,15 +1,9 @@
 #!/usr/bin/env bash
 dir_config="dir_qdrep"
-dir_sqlite="dir_sqlite"
 
 if [ ! -d ${dir_config} ]
 then
     mkdir -p $dir_config
-fi
-
-if [ ! -d $dir_sqlite ]
-then
-    mkdir -p $dir_sqlite
 fi
 
 datasets=(amazon-photo pubmed amazon-computers coauthor-physics flickr com-amazon)
@@ -28,8 +22,7 @@ do
             fi
             val="configuration=0, model=${model}, dataset=${data}, dense_feat_dims=${fd}"
             echo ${val}
-            nsys profile -t cuda,osrt,nvtx -o "${dir_config}/config0_${model}_${data}_${fd}" -w true python ../main.py --dataset "${data}_${fd}" --model ${model}
-            nsys-exporter -s "${dir_config}/config0_${model}_${data}_${fd}.qdrep" "${dir_sqlite}/config0_${model}_${data}_${fd}.sqlite"
+            nsys profile -t cuda,osrt,nvtx -f true --export=sqlite -o "${dir_config}/config0_${model}_${data}_${fd}" -w true python ../main.py --dataset "${data}_${fd}" --model ${model}
         done
     done
 done

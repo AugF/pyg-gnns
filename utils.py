@@ -128,7 +128,6 @@ def log_memory(flag, device, label):
         else:
             df[label].append([res[i] for i in memory_labels])
 
-
 if __name__ == '__main__':
     datasets = ['amazon-photo', 'pubmed', 'amazon-computers', 'coauthor-physics', 'flickr', 'com-amazon']
     for data in datasets:
