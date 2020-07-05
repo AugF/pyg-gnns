@@ -172,14 +172,20 @@ def train(epoch):
                 batch = batch.to(device)
                 # if 'coauthor-physics' in dataset_info:
                 #     batch.x = batch.x.to_sparse()    
-                out = model(batch.x, batch.edge_index).log_softmax(dim=-1)
-                loss = F.nll_loss(out[batch.train_mask], batch.y[batch.train_mask])
+                out = model(batch.x, batch.edge_index)
+                if args.dataset in ['yelp', 'amazon']:
+                    loss = torch.nn.BCEWithLogitsLoss(out[batch.train_mask], batch.y[batch.train_mask, :])
+                else:
+                    loss = F.nll_loss(out.log_softmax(dim=-1)[batch.train_mask], batch.y[batch.train_mask])
                 batch_size = batch.train_mask.sum().item()
             elif args.mode == 'graphsage':
                 batch_size, n_id, adjs = batch
                 adjs = [adj.to(device) for adj in adjs] # 这里等于成熟
-                out = model(x[n_id], adjs).log_softmax(dim=-1)
-                loss = F.nll_loss(out, y[n_id[:batch_size]])
+                out = model(x[n_id], adjs)
+                if args.dataset in ['yelp', 'amazon']:
+                    loss = torch.nn.BCEWithLogitsLoss(out, y[n_id[:batch_size], :])
+                else:
+                    loss = F.nll_loss(out.log_softmax(dim=-1), y[n_id[:batch_size]])
             nvtx_pop(gpu)
             
             log_memory(flag, device, 'forward_end')
@@ -224,9 +230,9 @@ if not gpu:
         sampling_time += loader_time
         print(f"sampling time: {sampling_time}, other time: {other_time}")
         # evaluation 评价阶段
-        train_acc, val_acc, test_acc = test()
-        print(f'Epoch: {epoch:02d}, Loss: {loss:.4f}, Train: {train_acc:.4f}, '
-                f'Val: {val_acc:.4f}, test: {test_acc:.4f}')
+        #train_acc, val_acc, test_acc = test()
+        #print(f'Epoch: {epoch:02d}, Loss: {loss:.4f}, Train: {train_acc:.4f}, '
+        #        f'Val: {val_acc:.4f}, test: {test_acc:.4f}')
 else:
     with torch.cuda.profiler.profile():
         train(-1)
