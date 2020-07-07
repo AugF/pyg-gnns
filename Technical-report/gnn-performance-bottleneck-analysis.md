@@ -61,7 +61,7 @@ NeuGraph[4]为图神经网络训练提出了SAGA-NN（Scatter-ApplyEdge-Gather-A
 |    GCN (ICLR, 2017)    |        Spectral Methods         | sum              | $\vec{m}_{ij}^l = e_{ij} \vec{h}_j^l$                                                                                                                                                                                                                                                                                                                                                                                                      |           $O(h_{in})$           | $\vec{h}_i^{l+1} = \mathbf{W} \cdot \vec{s}_i^{l}$                                                                                                                                                                                                                                                                                                                                                                                                                      |                $O(h_{in} * h_{out})$                 |
 |   AGCN (AAAI, 2018)    |        Spectral Methods         | sum              | $\vec{m}_{ij}^l = \tilde{e}_{ij}^l \vec{h}_j^l$                                                                                                                                                                                                                                                                                                                                                                                            |           $O(h_{in})$           | $\vec{h}_i^{l+1} = \mathbf{W} \cdot \vec{s}_i^{l}$                                                                                                                                                                                                                                                                                                                                                                                                                      |                $O(h_{in} * h_{out})$                 |
 | GraphSAGE(NIPS, 2017)  |          Non-spectral           | sum, mean, max   | $\vec{m}_{ij}^l =  \vec{h}_j^l$                                                                                                                                                                                                                                                                                                                                                                                                            |             $O(1)$              | $\vec{h}_i^{l+1} =   \delta(\mathbf{W} \cdot [\vec{s}_i^{l} \parallel \vec{h}_i^l])$                                                                                                                                                                                                                                                                                                                                                                                    |                $O(h_{in} * h_{out})$                 |
-| Neural FPs(NIPS, 2015) |      Non-spectral Methods       | sum              | $\vec{m}_{ij}^l = \vec{h}_j^l $                                                                                                                                                                                                                                                                                                                                                                                                            |           $O(h_{in})$           | $\vec{h}_i^{l+1} = \delta(\mathbf{W}^{\mathbf{N}_i} \cdot \vec{s}_i^{l}) $                                                                                                                                                                                                                                                                                                                                                                                              |                $O(h_{in} * h_{out})$                 |
+| Neural FPs(NIPS, 2015) |      Non-spectral Methods       | sum              | $\vec{m}_{ij}^l = \vec{h}_j^l$                                                                                                                                                                                                                                                                                                                                                                                                             |           $O(h_{in})$           | $\vec{h}_i^{l+1} = \delta(\mathbf{W}^{\mathbf{N}_i} \cdot \vec{s}_i^{l})$                                                                                                                                                                                                                                                                                                                                                                                               |                $O(h_{in} * h_{out})$                 |
 |    SSE(ICML, 2018)     | Recurrent Graph Neural Networks | sum              | $\vec{m}_{ij}^l = [\vec{h}_i^{l} \parallel \vec{h}_j^l]$                                                                                                                                                                                                                                                                                                                                                                                   |             $O(1)$              | $\vec{h}_i^{l+1} = (1 - \alpha) \cdot \vec{h}_i^l +\alpha   \cdot \delta(\mathbf{W}_1 \delta(\mathbf{W}_2), \vec{s}_i^l)$                                                                                                                                                                                                                                                                                                                                               |                $O(h_{in} * h_{out})$                 |
 |    GGNN(ICLR, 2015)    |   Gated Graph Neural Networks   | sum              | $m_{ij}^l = \mathbf{W} \vec{h}_j^l$                                                                                                                                                                                                                                                                                                                                                                                                        |      $O(h_{in} * h_{out})$      | $\vec{z}_i^l = \delta ( \mathbf{W}^z \vec{s}_i^l + \mathbf{b}^{sz} + \mathbf{U}^z \vec{h}_i^{l} + \mathbf{b}^{hz}) \\ \vec{r}_i^l = \delta ( \mathbf{W}^r \vec{s}_i^l+ \mathbf{b}^{sr} +\mathbf{U}^r \vec{h}_i^{l} + \mathbf{b}^{hr}) \\ \vec{h}_i^{l+1} = tanh ( \mathbf{W} \vec{s}_i^l + \mathbf{b}^s + \mathbf{U} ( \vec{r}_i^l \odot \vec{h}_i^{l} + \mathbf{b}^h))) \\ \vec{h}_i^{l+1} = (1 - \vec{z}_i^l) \odot \vec{h}_i^l +  \vec{z}_i^l \odot \vec{h}_i^{l+1}$ |         $O(max(h_{in}, h_{out}) * h_{out})$          | $O(h_{in}, h_{out})$ |
 |  Tree-LSTM(ACL, 2015)  |           Graph LSTM            | sum              | $\vec{m}_{ij}^l = \vec{h}_j^l$                                                                                                                                                                                                                                                                                                                                                                                                             |             $O(1)$              | $h_i^{l+1} = LSTM(\vec{s}_i^l, \vec{h}_i^{l})$                                                                                                                                                                                                                                                                                                                                                                                                                          |                $O(h_{in} * h_{out})$                 |
@@ -145,7 +145,9 @@ GAT训练耗时随$h_{head}$和$K$呈线性增长.
 
 GaAN同样采用多头机制,其计算复杂度受$h_{in}$、$d_v$、$d_a$和头数$K$的影响.
 [@fig:exp_hyperparameter_on_vertex_edge_phase_time_gat]展示了GaAN训练耗时受超参数的影响.
-实验验证了表[@tbl:gnn_overview]中给出的复杂度分析结果,各GNN算法的训练耗时随着超参数的增加呈线性增长.
+实验验证了[@tbl:gnn_overview]中给出的复杂度分析结果,各GNN算法的训练耗时随着超参数的增加呈线性增长.
+当隐向量维度$h_{in}$过低时, 涉及隐向量的计算占总计算时间比例很低, 导致其总训练耗时变化不明显.
+当隐向量维度足够大时, 总训练时间随$h_{in}$呈线性增长.
 
 <div id="fig:exp_hyperparameter_on_vertex_edge_phase_time">
 
@@ -175,29 +177,33 @@ GaAN同样采用多头机制,其计算复杂度受$h_{in}$、$d_v$、$d_a$和头
 </div>
 
 实验验证了[@tbl:gnn_overview]中复杂度分析的有效性.
-GNN的训练耗时与显存使用均与超参数呈线性关系.
+*GNN的训练耗时与显存使用均与超参数呈线性关系*.
 这允许算法工程师使用更大的超参数来提升GNN的复杂度,而不用担心训练耗时和显存使用呈现爆炸性增长.
 
 ## 4.2 实验2: 训练耗时分解
 
 本实验的目标是通过对训练耗时的分解, 发掘GNN训练中的计算性能瓶颈.
 
-对于点计算和边计算, [@fig:exp_vertex_edge_cal_proportion]展示了各算法的点/边计算耗时(含forward, backward和evaluation阶段)占总训练耗时的比例情况.
-对于边计算复杂度高的算法GAT和GaAN, 其边计算耗时占绝对主导.
-对于点/边计算复杂度都低的GCN算法, 在大多数数据集上边计算耗时也占主导.
-`cph`数据集因为输入特征向量维度非常高, 导致Layer0的点计算耗时.
-GGNN因为其点计算复杂度高, 使其点计算耗时占比相比其他算法明显提高, 但大多数数据集上依然低于边计算.
-在`pub`和`cam`数据集上, 因为两个数据集平均度数较低 (仅为4.5和2.8), 使边计算开销与点计算开销接近.
-可见点边计算耗时比例同时受数据集的平均度数的影响.
-我们固定图的顶点数为50k, 利用R-MAT生成器平均度数在10到100之间的随机图, 并在这些随机图上测量点/边计算耗时比例, 如图[@fig:exp_avg_degree_vertex_edge_cal_time]所示.
-实验表明边计算耗时在绝大部分情况下主导了整个计算耗时, 只有在点计算复杂度非常高且平均度数非常低的情况下点计算耗时才能赶超边计算耗时.
+对于点计算和边计算, [@fig:exp_vertex_edge_cal_proportion]展示了各算法不同GNN层点/边计算耗时占总训练耗时的比例情况(含forward, backward和evaluation阶段).
+GCN算法在大多数数据集上边计算耗时占据主导.
+只有`cph`数据集是特例, 因为该数据集输入特征向量维度非常高, 导致Layer0的点计算耗时额外的高.
+GGNN因为其点计算复杂度高, 使其点计算耗时占比明显高于其他算法, 但在大多数数据集上依然是边计算占据主要的计算耗时.
+只有在`pub`和`cam`数据集上,边计算开销和点计算开销接近,因为两个数据集平均度数较低 (仅为4.5和2.8).
+对于GAT和GaAN算法, 因为其边计算复杂度高, 其边计算耗时占绝对主导.
+综上, *边计算是GNN训练的主要耗时因素*, 尤其是在边计算较为复杂的情况下.
+
+实验也表明*数据集的平均度数影响点/边计算的耗时比例*.
+我们固定图的顶点数为50k, 利用R-MAT生成器生成平均度数在10到100之间的随机图.
+我们测量了各GNN中点/边计算的耗时比例随图平均度数的变化情况, 如[@fig:exp_avg_degree_vertex_edge_cal_time]所示.
+边计算的耗时随着平均度数的增加呈线性增长, *边计算耗时在绝大部分情况下主导了整个计算耗时*, 只有在点计算复杂度非常高且平均度数非常低的情况下点计算耗时才能赶超边计算耗时.
+因此, *GNN训练优化的重点应该是提升边计算的效率*.
 
 <div id="fig:exp_vertex_edge_cal_proportion">
-![GCN](./figs/experiments/exp_vertex_edge_cal_proportion_gcn.png)
-![GGNN](./figs/experiments/exp_vertex_edge_cal_proportion_ggnn.png)
+![GCN](./figs/experiments/exp_layer_time_proportion_gcn.png)
+![GGNN](./figs/experiments/exp_layer_time_proportion_ggnn.png)
 
-![GAT](figs/experiments/exp_vertex_edge_cal_proportion_gat.png)
-![GaAN](figs/experiments/exp_vertex_edge_cal_proportion_gaan.png)
+![GAT](figs/experiments/exp_layer_time_proportion_gat.png)
+![GaAN](figs/experiments/exp_layer_time_proportion_gaan.png)
 
 点/边计算耗时占比
 </div>
@@ -212,9 +218,10 @@ GGNN因为其点计算复杂度高, 使其点计算耗时占比相比其他算�
 平均顶点度数对点/边计算耗时比例的影响
 </div>
 
+边计算阶段可以进一步分解为collect, message, aggregate和update四个步骤, 如[@fig:steps_in_edge_calculation]所示.
 
+![边计算的步骤](figs/illustration/steps_in_edge_calculation.png){#fig:steps_in_edge_calculation}
 
-首先分析点边计算耗时比例的情况, 拟确定是否是边计算占主导? 是否与图的平均度数有关?
 
 ## 4.2 GPU显存使用
 
