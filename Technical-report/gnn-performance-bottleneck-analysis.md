@@ -66,24 +66,28 @@ NeuGraph[4]为图神经网络训练提出了SAGA-NN（Scatter-ApplyEdge-Gather-A
 
 ## 2.2 图神经网络的分类
 
-[@tbl:gnn_overview]中列出了我们调研到的典型的图神经网络算法.表中列出了各个GNN中点/边计算的表达式,表达式中的大写粗体字母表示GNN模型参数.表中的网络类型划分依据[@zhou2018_gnn_review].因为本文主要关注GNN算法的计算特性,我们分析了各GNN算法的点、边计算的计算复杂度,并根据计算复杂度将GNN算法划分到四个象限中,如[@fig:GNN_complexity_quadrant]所示.
+[@tbl:gnn_overview]中列出了我们调研到的典型的图神经网络算法.表中列出了各个GNN中点/边计算的表达式,表达式中的大写粗体字母表示GNN模型参数.表中的网络类型来源于文献[@zhou2018_gnn_review].因为本文主要关注GNN算法的计算特性,我们分析了各GNN算法的点、边计算的计算复杂度,并根据计算复杂度将GNN算法划分到四个象限中,如[@fig:GNN_complexity_quadrant]所示.
 
-|          名称          |            网络类型             | 边计算 $\Sigma$  | 边计算 $\phi$                                                                                                                                                                                                                                                                                                                                                                                                                              |          边计算复杂度           | 点计算 $\gamma$                                                                                                                                                                                                                                                                                                                                                                                                                                                         |                     点计算复杂度                     |
-| :--------------------: | :-----------------------------: | :--------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :-----------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :--------------------------------------------------: |
-|  ChebNet (ICLR, 2016)  |        Spectral Methods         | sum              | $\vec{m}_{ij, k}^l = T_k(\widetilde{L} )_{ij} \vec{h}_j^l$                                                                                                                                                                                                                                                                                                                                                                                 |         $O(K * h_{in})$         | $\vec{h}_i^{l+1} = \sum_{k=0}^K \mathbf{W}^k \cdot \vec{s}_{i, k}^{l} $                                                                                                                                                                                                                                                                                                                                                                                                 |                $O(h_{in} * h_{out})$                 |
-|    GCN (ICLR, 2017)    |        Spectral Methods         | sum              | $\vec{m}_{ij}^l = e_{ij} \vec{h}_j^l$                                                                                                                                                                                                                                                                                                                                                                                                      |           $O(h_{in})$           | $\vec{h}_i^{l+1} = \mathbf{W} \cdot \vec{s}_i^{l}$                                                                                                                                                                                                                                                                                                                                                                                                                      |                $O(h_{in} * h_{out})$                 |
-|   AGCN (AAAI, 2018)    |        Spectral Methods         | sum              | $\vec{m}_{ij}^l = \tilde{e}_{ij}^l \vec{h}_j^l$                                                                                                                                                                                                                                                                                                                                                                                            |           $O(h_{in})$           | $\vec{h}_i^{l+1} = \mathbf{W} \cdot \vec{s}_i^{l}$                                                                                                                                                                                                                                                                                                                                                                                                                      |                $O(h_{in} * h_{out})$                 |
-| GraphSAGE(NIPS, 2017)  |          Non-spectral           | sum, mean, max   | $\vec{m}_{ij}^l =  \vec{h}_j^l$                                                                                                                                                                                                                                                                                                                                                                                                            |             $O(1)$              | $\vec{h}_i^{l+1} =   \delta(\mathbf{W} \cdot [\vec{s}_i^{l} \parallel \vec{h}_i^l])$                                                                                                                                                                                                                                                                                                                                                                                    |                $O(h_{in} * h_{out})$                 |
-| Neural FPs(NIPS, 2015) |      Non-spectral Methods       | sum              | $\vec{m}_{ij}^l = \vec{h}_j^l$                                                                                                                                                                                                                                                                                                                                                                                                             |           $O(h_{in})$           | $\vec{h}_i^{l+1} = \delta(\mathbf{W}^{\mathbf{N}_i} \cdot \vec{s}_i^{l})$                                                                                                                                                                                                                                                                                                                                                                                               |                $O(h_{in} * h_{out})$                 |
-|    SSE(ICML, 2018)     | Recurrent Graph Neural Networks | sum              | $\vec{m}_{ij}^l = [\vec{h}_i^{l} \parallel \vec{h}_j^l]$                                                                                                                                                                                                                                                                                                                                                                                   |             $O(1)$              | $\vec{h}_i^{l+1} = (1 - \alpha) \cdot \vec{h}_i^l +\alpha   \cdot \delta(\mathbf{W}_1 \delta(\mathbf{W}_2), \vec{s}_i^l)$                                                                                                                                                                                                                                                                                                                                               |                $O(h_{in} * h_{out})$                 |
-|    GGNN(ICLR, 2015)    |   Gated Graph Neural Networks   | sum              | $m_{ij}^l = \mathbf{W} \vec{h}_j^l$                                                                                                                                                                                                                                                                                                                                                                                                        |      $O(h_{in} * h_{out})$      | $\vec{z}_i^l = \delta ( \mathbf{W}^z \vec{s}_i^l + \mathbf{b}^{sz} + \mathbf{U}^z \vec{h}_i^{l} + \mathbf{b}^{hz}) \\ \vec{r}_i^l = \delta ( \mathbf{W}^r \vec{s}_i^l+ \mathbf{b}^{sr} +\mathbf{U}^r \vec{h}_i^{l} + \mathbf{b}^{hr}) \\ \vec{h}_i^{l+1} = tanh ( \mathbf{W} \vec{s}_i^l + \mathbf{b}^s + \mathbf{U} ( \vec{r}_i^l \odot \vec{h}_i^{l} + \mathbf{b}^h))) \\ \vec{h}_i^{l+1} = (1 - \vec{z}_i^l) \odot \vec{h}_i^l +  \vec{z}_i^l \odot \vec{h}_i^{l+1}$ |         $O(max(h_{in}, h_{out}) * h_{out})$          | $O(h_{in}, h_{out})$ |
-|  Tree-LSTM(ACL, 2015)  |           Graph LSTM            | sum              | $\vec{m}_{ij}^l = \vec{h}_j^l$                                                                                                                                                                                                                                                                                                                                                                                                             |             $O(1)$              | $h_i^{l+1} = LSTM(\vec{s}_i^l, \vec{h}_i^{l})$                                                                                                                                                                                                                                                                                                                                                                                                                          |                $O(h_{in} * h_{out})$                 |
-|    GAT(ICLR, 2017)     |    Graph Attention Networks     | sum, mean        | $\alpha_{ij}^k = \frac {\exp(LeakyReLU(a^T [ \mathbf{W}^k \cdot \vec{h}_i^l \parallel \mathbf{W}^k \cdot \vec{h}_j^l] ))} {\sum_{k \in \mathcal{N}(i)}\exp(LeakyReLU(a^T [ \mathbf{W}^k \cdot \vec{h}_i^l \parallel \mathbf{W}^k \cdot \vec{h}_k^l] ))} \\  \vec{m}_{ij}^l = \parallel_{k=1}^K \delta(\alpha_{ij}^k \mathbf{W}^k \vec{h}_j^{l})$                                                                                           |    $O(K * h_{in} * h_{out})$    | $\vec{h}_i^{l+1} = \vec{s}_i^l$                                                                                                                                                                                                                                                                                                                                                                                                                                         |                        $O(1)$                        |
-|    GaAN(UAI, 2018)     |    Graph Attention Networks     | sum + max + mean | $\alpha_{ij}^k = \frac {\exp(\mathbf{W}^a \cdot [ \mathbf{W}^a \cdot \vec{h}_i^l \parallel \mathbf{W}^a \cdot \vec{h}_j^l] )} {\sum_{k \in \mathcal{N}(i)}\exp(a^T [ \mathbf{W}^k \cdot \vec{h}_i^l \parallel \mathbf{W}^k \cdot \vec{h}_k^l] )} \\  \vec{m}_{ij, 1}^l = \parallel_{k=1}^K \delta(\alpha_{ij}^k \mathbf{W}^k_v \vec{h}_j^{l}) \\ \vec{m}_{ij, 2}^l = \mathbf{W}_m \cdot \vec{h}_j^{l} \\ \vec{m}_{ij, 3}^l = \vec{h}_j^l $ | $O(max(d_a, d_m) * K * h_{in})$ | $\vec{g}_i = \mathbf{W}_g \cdot [\vec{h}_i^{l} \parallel s_{i, 2}^l \parallel s_{i, 3}^l]  \\ \vec{h}_i^{l+1} = \mathbf{W}_o [\vec{h}_i^l \parallel (\vec{g}_{i} \odot s_{i, 3}^l) ]$                                                                                                                                                                                                                                                                                   | $O(max(h_{in} + K * d_v, 2 * h_{in} + d_m) h_{out})$ |
 
-: 图神经网络概览 {#tbl:gnn_overview}
+**表: 图神经网络概览** [tbl:gnn_overview]
 
-![GNN的计算复杂度象限图](figs/illustration/GNN_complexity_quadrant.jpg){#fig:GNN_complexity_quadrant width=60%}
+|          名称          |            网络类型             | 边计算 $\Sigma$  | 边计算 $\phi$                                                                                                                                                                                                                                                                                                                                                                                                                             |          边计算复杂度           | 点计算 $\gamma$                                                                                                                                                                                                                                                                                                                                                                                                                                                         |                     点计算复杂度                     |
+| :--------------------: | :-----------------------------: | :--------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :-----------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :--------------------------------------------------: |
+|  ChebNet (ICLR, 2016)  |        Spectral Methods         | sum              | $\vec{m}_{ij, k}^l = T_k(\widetilde{L} )_{ij} \vec{h}_j^l$                                                                                                                                                                                                                                                                                                                                                                                |         $O(K * h_{in})$         | $\vec{h}_i^{l+1} = \sum_{k=0}^K \mathbf{W}^k \cdot \vec{s}_{i, k}^{l} $                                                                                                                                                                                                                                                                                                                                                                                                 |                $O(h_{in} * h_{out})$                 |
+|    GCN (ICLR, 2017)    |        Spectral Methods         | sum              | $\vec{m}_{ij}^l = e_{ij} \vec{h}_j^l$                                                                                                                                                                                                                                                                                                                                                                                                     |           $O(h_{in})$           | $\vec{h}_i^{l+1} = \mathbf{W} \cdot \vec{s}_i^{l}$                                                                                                                                                                                                                                                                                                                                                                                                                      |                $O(h_{in} * h_{out})$                 |
+|   AGCN (AAAI, 2018)    |        Spectral Methods         | sum              | $\vec{m}_{ij}^l = \tilde{e}_{ij}^l \vec{h}_j^l$                                                                                                                                                                                                                                                                                                                                                                                           |           $O(h_{in})$           | $\vec{h}_i^{l+1} = \mathbf{W} \cdot \vec{s}_i^{l}$                                                                                                                                                                                                                                                                                                                                                                                                                      |                $O(h_{in} * h_{out})$                 |
+| GraphSAGE(NIPS, 2017)  |          Non-spectral           | sum, mean, max   | $\vec{m}_{ij}^l =  \vec{h}_j^l$                                                                                                                                                                                                                                                                                                                                                                                                           |             $O(1)$              | $\vec{h}_i^{l+1} =   \delta(\mathbf{W} \cdot [\vec{s}_i^{l} \parallel \vec{h}_i^l])$                                                                                                                                                                                                                                                                                                                                                                                    |                $O(h_{in} * h_{out})$                 |
+| Neural FPs(NIPS, 2015) |      Non-spectral Methods       | sum              | $\vec{m}_{ij}^l = \vec{h}_j^l$                                                                                                                                                                                                                                                                                                                                                                                                            |           $O(h_{in})$           | $\vec{h}_i^{l+1} = \delta(\mathbf{W}^{\mathbf{N}_i} \cdot \vec{s}_i^{l})$                                                                                                                                                                                                                                                                                                                                                                                               |                $O(h_{in} * h_{out})$                 |
+|    SSE(ICML, 2018)     | Recurrent Graph Neural Networks | sum              | $\vec{m}_{ij}^l = [\vec{h}_i^{l} \parallel \vec{h}_j^l]$                                                                                                                                                                                                                                                                                                                                                                                  |             $O(1)$              | $\vec{h}_i^{l+1} = (1 - \alpha) \cdot \vec{h}_i^l +\alpha   \cdot \delta(\mathbf{W}_1 \delta(\mathbf{W}_2), \vec{s}_i^l)$                                                                                                                                                                                                                                                                                                                                               |                $O(h_{in} * h_{out})$                 |
+|    GGNN(ICLR, 2015)    |   Gated Graph Neural Networks   | sum              | $m_{ij}^l = \mathbf{W} \vec{h}_j^l$                                                                                                                                                                                                                                                                                                                                                                                                       |      $O(h_{in} * h_{out})$      | $\vec{z}_i^l = \delta ( \mathbf{W}^z \vec{s}_i^l + \mathbf{b}^{sz} + \mathbf{U}^z \vec{h}_i^{l} + \mathbf{b}^{hz}) \\ \vec{r}_i^l = \delta ( \mathbf{W}^r \vec{s}_i^l+ \mathbf{b}^{sr} +\mathbf{U}^r \vec{h}_i^{l} + \mathbf{b}^{hr}) \\ \vec{h}_i^{l+1} = tanh ( \mathbf{W} \vec{s}_i^l + \mathbf{b}^s + \mathbf{U} ( \vec{r}_i^l \odot \vec{h}_i^{l} + \mathbf{b}^h))) \\ \vec{h}_i^{l+1} = (1 - \vec{z}_i^l) \odot \vec{h}_i^l +  \vec{z}_i^l \odot \vec{h}_i^{l+1}$ |         $O(max(h_{in}, h_{out}) * h_{out})$          | $O(h_{in}, h_{out})$ |
+|  Tree-LSTM(ACL, 2015)  |           Graph LSTM            | sum              | $\vec{m}_{ij}^l = \vec{h}_j^l$                                                                                                                                                                                                                                                                                                                                                                                                            |             $O(1)$              | $h_i^{l+1} = LSTM(\vec{s}_i^l, \vec{h}_i^{l})$                                                                                                                                                                                                                                                                                                                                                                                                                          |                $O(h_{in} * h_{out})$                 |
+|    GAT(ICLR, 2017)     |    Graph Attention Networks     | sum, mean        | $\alpha_{ij}^k = \frac {\exp(LeakyReLU(a^T [ \mathbf{W}^k \cdot \vec{h}_i^l \parallel \mathbf{W}^k \cdot \vec{h}_j^l] ))} {\sum_{k \in \mathcal{N}(i)}\exp(LeakyReLU(a^T [ \mathbf{W}^k \cdot \vec{h}_i^l \parallel \mathbf{W}^k \cdot \vec{h}_k^l] ))} \\  \vec{m}_{ij}^l = \parallel_{k=1}^K \delta(\alpha_{ij}^k \mathbf{W}^k \vec{h}_j^{l})$                                                                                          |    $O(K * h_{in} * h_{out})$    | $\vec{h}_i^{l+1} = \vec{s}_i^l$                                                                                                                                                                                                                                                                                                                                                                                                                                         |                        $O(1)$                        |
+|    GaAN(UAI, 2018)     |    Graph Attention Networks     | sum + max + mean | $\alpha_{ij}^k = \frac {\exp(\mathbf{W}^a \cdot [ \mathbf{W}^a \cdot \vec{h}_i^l \parallel \mathbf{W}^a \cdot \vec{h}_j^l] )} {\sum_{k \in \mathcal{N}(i)}\exp(a^T [ \mathbf{W}^k \cdot \vec{h}_i^l \parallel \mathbf{W}^k \cdot \vec{h}_k^l] )} \\  \vec{m}_{ij, 1}^l = \parallel_{k=1}^K \delta(\alpha_{ij}^k \mathbf{W}^k_v \vec{h}_j^{l}) \\ \vec{m}_{ij, 2}^l = \mathbf{W}_m \cdot \vec{h}_j^{l} \\ \vec{m}_{ij, 3}^l = \vec{h}_j^l$ | $O(max(d_a, d_m) * K * h_{in})$ | $\vec{g}_i = \mathbf{W}_g \cdot [\vec{h}_i^{l} \parallel s_{i, 2}^l \parallel s_{i, 3}^l]  \\ \vec{h}_i^{l+1} = \mathbf{W}_o [\vec{h}_i^l \parallel (\vec{g}_{i} \odot s_{i, 3}^l) ]$                                                                                                                                                                                                                                                                                   | $O(max(h_{in} + K * d_v, 2 * h_{in} + d_m) h_{out})$ |
+
+
+![GNN的计算复杂度象限图](figs/illustration/GNN_complexity_quadrant.jpg)
+
+**图: GNN的计算复杂度象限图** [@fig:GNN_complexity_quadrant]
 
 ## 2.3 典型图神经网络
 
@@ -108,6 +112,9 @@ NeuGraph[4]为图神经网络训练提出了SAGA-NN（Scatter-ApplyEdge-Gather-A
 
 ## 3.2 实验数据集
 
+
+**表: 实验数据集概览** {#tbl:dataset_overview}
+
 |                       数据集                        |  点数   |  边数   | 平均度数 | 输入特征向量维度 | 特征稀疏度 | 类别数 | 图类型 |
 | :-------------------------------------------------: | :-----: | :-----: | :------: | :--------------: | :--------: | :----: | :----: |
 | pubmed (pub) [@yang2016_revisiting_semisupervised]  | 19,717  | 44,324  |   4.5    |       500        |    0.90    |   3    | 有向图 |
@@ -117,7 +124,6 @@ NeuGraph[4]为图神经网络训练提出了SAGA-NN（Scatter-ApplyEdge-Gather-A
 |         flickr (fli) [@zeng2020_graphsaint]         | 89,250  | 899,756 |   10.1   |       500        |    0.54    |   7    | 无向图 |
 |        com-amazon (cam) [@yang2012_defining]        | 334,863 | 925,872 |   2.8    |        32        |    0.0     |   10   | 无向图 |
 
-: 实验数据集概览 {#tbl:dataset_overview}
 
 实验中为了测量图的关键拓扑特征(例如平均度数)对性能的影响情况, 我们也利用R-MAT生成器[@rmat-generator]生成随机图.
 如果不额外说明, 随机图顶点的特征向量为随机生成的32维稠密向量, 将顶点随机分到10个类别中, 75%的顶点参与训练.
@@ -138,18 +144,32 @@ NeuGraph[4]为图神经网络训练提出了SAGA-NN（Scatter-ApplyEdge-Gather-A
 
 [@fig:exp_absolute_training_time]中比较了各GNN每个epoch的训练耗时,其排名为GaAN >> GAT > GGNN > GCN. 其耗时排名与复杂度分析相符. 因为图中边的数量一般远超点的数量, 因此边计算复杂度更高的GAT算法比点计算复杂度高的算法GGNN更耗时. [@fig:exp_absolute_training_time] 同时表明个别epoch的训练耗时异常地高, 其主要是由profiling overhead和python解释器的GC停顿造成.该现象证实了去处异常epoch的必要性.
 
-<div id="fig:exp_absolute_training_time">
 
-![pubmed](./figs/experiments/exp_absolute_training_time_comparison_pubmed.png){}
-![amazon-photo](./figs/experiments/exp_absolute_training_time_comparison_amazon-photo.png){}
-![amazon-computers](./figs/experiments/exp_absolute_training_time_comparison_amazon-computers.png){}
+![pubmed](./figs/experiments/exp_absolute_training_time_comparison_pubmed.png)
 
-![coauthor-physics](./figs/experiments/exp_absolute_training_time_comparison_coauthor-physics.png){}
-![flickr](./figs/experiments/exp_absolute_training_time_comparison_flickr.png){}
-![com-amazon](./figs/experiments/exp_absolute_training_time_comparison_com-amazon.png){}
+(a) pubmed
 
-训练耗时的影响
-</div>
+![amazon-photo](./figs/experiments/exp_absolute_training_time_comparison_amazon-photo.png)
+
+(b) amazon-photo
+
+![amazon-computers](./figs/experiments/exp_absolute_training_time_comparison_amazon-computers.png)
+
+(c) amazon-computers
+
+![coauthor-physics](./figs/experiments/exp_absolute_training_time_comparison_coauthor-physics.png)
+
+(d) coauthor-physics
+
+![flickr](./figs/experiments/exp_absolute_training_time_comparison_flickr.png)
+
+(e) flickr
+
+![com-amazon](./figs/experiments/exp_absolute_training_time_comparison_com-amazon.png)
+
+(f) com-amazon
+
+**图: 训练耗时的影响 [@fig:exp_absolute_training_time]**
 
 根据[@tbl:gnn_overview]中的复杂度分析, 各GNN的点、边计算复杂度与各算法超参数(例如$h_{dim}$、$K$等)呈线性关系.
 为了验证该线性关系, 我们测量了各GNN的训练时间随超参数的变化情况.
@@ -172,32 +192,47 @@ GaAN同样采用多头机制,其计算复杂度受$h_{in}$、$d_v$、$d_a$和头
 当隐向量维度$h_{in}$过低时, 涉及隐向量的计算占总计算时间比例很低, 导致其总训练耗时变化不明显.
 当隐向量维度足够大时, 总训练时间随$h_{in}$呈线性增长.
 
-<div id="fig:exp_hyperparameter_on_vertex_edge_phase_time">
 
-![GCN](figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gcn.png){#fig:exp_hyperparameter_on_vertex_edge_phase_time_gcn}
-![GGNN](figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_ggnn.png){#fig:exp_hyperparameter_on_vertex_edge_phase_time_ggnn}
+![GCN](figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gcn.png)
 
-![GAT](figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gat.png){#fig:exp_hyperparameter_on_vertex_edge_phase_time_gat}
-![GaAN](figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gaan.png){#fig:exp_hyperparameter_on_vertex_edge_phase_time_gaan}
+(a) GCN [#fig:exp_hyperparameter_on_vertex_edge_phase_time_gcn]
 
-超参数对GNN中点/边计算耗时的影响
-</div>
+![GGNN](figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_ggnn.png)
+
+(b) GGNN [#fig:exp_hyperparameter_on_vertex_edge_phase_time_ggnn]
+
+![GAT](figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gat.png)
+
+(c) GAT [#fig:exp_hyperparameter_on_vertex_edge_phase_time_gat]
+
+![GaAN](figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gaan.png)
+
+(d) GaAN [#fig:exp_hyperparameter_on_vertex_edge_phase_time_gaan]
+
+**图: 超参数对GNN中点/边计算耗时的影响** [#fig:exp_hyperparameter_on_vertex_edge_phase_time]
+
 
 [@fig:exp_hyperparameter_on_memory_usage]同时展示了各GNN对GPU显存的使用情况随算法超参数的变化情况.
 随着超参数的增加,GNN的显存使用也线性增长.
 
-<div id="fig:exp_hyperparameter_on_memory_usage">
 
+![GCN](figs/experiments/exp_hyperparameter_on_memory_usage_gcn.png)
 
-![GCN](figs/experiments/exp_hyperparameter_on_memory_usage_gcn.png){}
-![GGNN](figs/experiments/exp_hyperparameter_on_memory_usage_ggnn.png){}
+(a) GCN
 
-![GAT](figs/experiments/exp_hyperparameter_on_memory_usage_gat.png){}
-![GaAN](figs/experiments/exp_hyperparameter_on_memory_usage_gaan.png){}
+![GGNN](figs/experiments/exp_hyperparameter_on_memory_usage_ggnn.png)
 
-超参数对训练阶段显存使用的影响(不含数据集本身)
+(b) GGNN
 
-</div>
+![GAT](figs/experiments/exp_hyperparameter_on_memory_usage_gat.png)
+
+(c) GAT
+
+![GaAN](figs/experiments/exp_hyperparameter_on_memory_usage_gaan.png)
+
+(d) GaAN
+
+**图: 超参数对训练阶段显存使用的影响(不含数据集本身)** [#fig:exp_hyperparameter_on_memory_usage]
 
 实验验证了[@tbl:gnn_overview]中复杂度分析的有效性.
 *GNN的训练耗时与显存使用均与超参数呈线性关系*.
@@ -215,35 +250,54 @@ GGNN因为其点计算复杂度高, 使其点计算耗时占比明显高于其�
 对于GAT和GaAN算法, 因为其边计算复杂度高, 其边计算耗时占绝对主导.
 综上, *边计算是GNN训练的主要耗时因素*, 尤其是在边计算较为复杂的情况下.
 
+<div>
+
+![GCN](./figs/experiments/exp_layer_time_proportion_gcn.png)<br>(a) GCN
+
+![GGNN](./figs/experiments/exp_layer_time_proportion_ggnn.png)<br>(b) GGNN
+
+![GAT](figs/experiments/exp_layer_time_proportion_gat.png)<br>(c) GAT
+
+![GaAN](figs/experiments/exp_layer_time_proportion_gaan.png)<br>(d) GaAN
+
+**图: 点/边计算耗时占比** [#fig:exp_vertex_edge_cal_proportion]
+
+</div>
+
 实验也表明*数据集的平均度数影响点/边计算的耗时比例*.
 我们固定图的顶点数为50k, 利用R-MAT生成器生成平均度数在10到100之间的随机图.
 我们测量了各GNN中点/边计算的耗时比例随图平均度数的变化情况, 如[@fig:exp_avg_degree_vertex_edge_cal_time]所示.
 边计算的耗时随着平均度数的增加呈线性增长, *边计算耗时在绝大部分情况下主导了整个计算耗时*, 只有在点计算复杂度非常高且平均度数非常低的情况下点计算耗时才能赶超边计算耗时.
 因此, *GNN训练优化的重点应该是提升边计算的效率*.
 
-<div id="fig:exp_vertex_edge_cal_proportion">
-![GCN](./figs/experiments/exp_layer_time_proportion_gcn.png)
-![GGNN](./figs/experiments/exp_layer_time_proportion_ggnn.png)
 
-![GAT](figs/experiments/exp_layer_time_proportion_gat.png)
-![GaAN](figs/experiments/exp_layer_time_proportion_gaan.png)
+<div>
 
-点/边计算耗时占比
-</div>
+![GCN](figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_gcn.png)<br>(a) GCN
 
-<div id="fig:exp_avg_degree_vertex_edge_cal_time">
-![GCN](figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_gcn.png)
-![GGNN](figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_ggnn.png)
+![GGNN](figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_ggnn.png)<br>(b) GGNN
 
-![GAT](figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_gat.png)
-![GaAN](figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_gaan.png)
+![GAT](figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_gat.png)<br>(c) GAT
 
-平均顶点度数对点/边计算耗时比例的影响
+![GaAN](figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_gaan.png)<br>(d) GaAN
+
+**图: 平均顶点度数对点/边计算耗时比例的影响** [#fig:exp_avg_degree_vertex_edge_cal_time]
 </div>
 
 边计算阶段可以进一步分解为collect, message, aggregate和update四个步骤, 如[@fig:steps_in_edge_calculation]所示.
+假设当前正在进行第$l$层GNN的边计算过程.
+edge index是一个保存由图的边集的规模为M*2的矩阵, 其中M是图的边数, 该矩阵的两列分别保存每条边的源顶点和目标顶点.
+edge index在整个计算过程中保持不变.
+其中collect步骤用于准备边计算所需要的数据结构.
+该步骤将输入GNN层的顶点隐向量$h_i^l (1 \leq i \leq N)$根据edge index拷贝到各边的两层, 构成输入边计算函数$\phi$的两个输入参数矩阵.
+在步骤没有计算,只涉及数据访问.
+message步骤调用用户给出的函数$\phi$完成边计算过程, 并得到每条边的消息向量$m_{ij}^l ()$.
+aggregate步骤根据每条边的目标顶点, 将目标顶点相同的消息向量通过聚合算子$\Sigma$聚合在一起, 得到每个顶点聚合向量$a_i^l (1 \leq i \leq N)$.
+最后的update步骤是可选的, 其可以对聚合后的向量
 
-![边计算的步骤](figs/illustration/steps_in_edge_calculation.png){#fig:steps_in_edge_calculation}
+![fig:steps_in_edge_calculation](figs/illustration/steps_in_edge_calculation.png)
+
+**图: 边计算的步骤分解** [#fig:steps_in_edge_calculation]
 
 ## 4.2 GPU显存使用
 
@@ -258,3 +312,17 @@ GGNN因为其点计算复杂度高, 使其点计算耗时占比明显高于其�
 # 6 相关工作
 
 # 7 总结与展望
+
+# 参考文献
+
+1. ZHOU J, CUI G, ZHANG Z, 等. Graph Neural Networks: A Review of Methods and Applications[J]. 2018.[@zhou2018_gnn_review]
+
+2. YANG Z, COHEN W W, SALAKHUTDINOV R. Revisiting Semi-Supervised Learning with Graph Embeddings[C]//BALCAN M, WEINBERGER K Q. Proceedings of the 33nd International Conference on Machine Learning, ICML 2016, New York City, NY, USA, June 19-24, 2016. JMLR.org, 2016, 48: 40–48. [@yang2016_revisiting_semisupervised]
+
+3. SHCHUR O, MUMME M, BOJCHEVSKI A, 等. Pitfalls of Graph Neural Network Evaluation[J]. CoRR, 2018, abs/1811.05868. [@shchur2018_pitfall_of_gnn]
+
+4. ZENG H, ZHOU H, SRIVASTAVA A, 等. GraphSAINT: Graph Sampling Based Inductive Learning Method[C]//8th International Conference on Learning Representations, ICLR 2020, Addis Ababa, Ethiopia, April 26-30, 2020. OpenReview.net, 2020. [@zeng2020_graphsaint]
+
+5. YANG J, LESKOVEC J. Defining and Evaluating Network Communities Based on Ground-Truth[C]//ZAKI M J, SIEBES A, YU J X, 等. 12th IEEE International Conference on Data Mining, ICDM 2012, Brussels, Belgium, December 10-13, 2012. IEEE Computer Society, 2012: 745–754. [@yang2012_defining]
+
+6. CHAKRABARTI D, ZHAN Y, FALOUTSOS C. R-MAT: A Recursive Model for Graph Mining[C]//Proceedings of the 2004 SIAM International Conference on Data Mining.: 442–446. [@rmat-generator]
