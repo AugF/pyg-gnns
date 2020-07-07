@@ -186,16 +186,23 @@ GGNN因为其点计算复杂度高, 使其点计算耗时占比明显高于其�
 </div>
 
 边计算阶段可以进一步分解为collect, message, aggregate和update四个步骤, 如[@fig:steps_in_edge_calculation]所示.
-假设当前正在进行第L层GNN的边计算过程.
+假设当前正在进行第$l$层GNN的边计算过程.
 edge index是一个保存由图的边集的规模为M*2的矩阵, 其中M是图的边数, 该矩阵的两列分别保存每条边的源顶点和目标顶点.
 edge index在整个计算过程中保持不变.
 其中collect步骤用于准备边计算所需要的数据结构.
-该步骤将输入GNN层的顶点隐向量$h_i^L (1 \leq i \leq N)$根据edge index拷贝到各边的两层, 构成输入边计算函数$\phi$的两个输入参数矩阵.
+该步骤将输入GNN层的顶点隐向量$h_i^l (1 \leq i \leq N)$根据edge index拷贝到各边的两层, 构成输入边计算函数$\phi$的两个输入参数矩阵.
 在步骤没有计算,只涉及数据访问.
-message步骤调用用户给出的函数$\phi$完成边计算过程, 并得到每条边的消息向量$m_{ij}^L$.
-aggregate步骤根据每条边的目标顶点
+message步骤调用用户给出的函数$\phi$完成边计算过程, 并得到每条边的消息向量$m_{ij}^l ((i,j) \in E(G))$.
+该步骤主要涉及计算.
+aggregate步骤根据每条边的目标顶点, 将目标顶点相同的消息向量通过聚合算子$\Sigma$聚合在一起, 得到每个顶点聚合向量$a_i^l (1 \leq i \leq N)$.
+该步骤既涉及计算, 也涉及数据访问和数据同步(避免并发更新同一个顶点的聚合向量).
+最后的update步骤是可选的, 其可以对聚合向量做额外的变换, 例如进行bias修正(例如在GCN和GAT).
+该步骤主要涉及计算.
 
 ![边计算的步骤](figs/illustration/steps_in_edge_calculation.png){#fig:steps_in_edge_calculation}
+
+图X进一步分解了各GNN边计算阶段各步骤的耗时比例(含forward和backward阶段).
+对于GCN算法, 其消息向量$m_{ij}^l=h_{i}^l$,所以message步骤耗时为0.
 
 
 ## 4.2 GPU显存使用
