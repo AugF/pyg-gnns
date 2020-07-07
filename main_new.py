@@ -1,4 +1,5 @@
 import torch
+import torch.nn as nn
 import torch.nn.functional as F
 import numpy as np
 import argparse
@@ -58,7 +59,6 @@ if dataset_info[0] in small_datasets and len(dataset_info) > 1:
 dataset = get_dataset(args.dataset, normalize_features=True)
 data = dataset[0]
 
-print(data.x.size())
 # add train, val, test split
 if args.dataset in ['amazon-computers', 'amazon-photo', 'coauthor-physics']:
     file_path = osp.join('/data/wangzhaokang/wangyunpan/data', args.dataset + "/raw/role.json")
@@ -112,79 +112,9 @@ optimizer = torch.optim.Adam(model.parameters(),
                              lr=args.lr,
                              weight_decay=args.weight_decay)
 
-def train(epoch):
-    t = time.time()
 
-    # add forward start
-    log_memory(flag, device, 'forward_start')
-
-    nvtx_push(gpu, "forward")
-    model.train()
-    out = model(data.x, data.edge_index)
-    nvtx_push(gpu, "loss")
-    loss = F.nll_loss(F.log_softmax(out, dim=1)[data.train_mask], data.y[data.train_mask])
-    optimizer.zero_grad()
-    nvtx_pop(gpu)
-    nvtx_pop(gpu)
-    log_memory(flag, device, 'forward_end')
-
-    # add forward end
-    nvtx_push(gpu, "backward")
-    loss.backward()
-    optimizer.step()
-    nvtx_pop(gpu)
-
-    # add backward end
-    log_memory(flag, device, 'backward_end')
-
-    log = 'Epoch: {:03d}, train_loss: {:.8f}, train_time: {:.4f}s'
-    t = time.time() - t
-    print(log.format(epoch, loss.data.item(), t))
-    return 
-
-@torch.no_grad()
-def test():
-    model.eval()
-    out = model(data.x, data.edge_index)
-    log_memory(flag, device, 'other_start')    
-    nvtx_push(gpu, "other")
-    logits, accs = F.log_softmax(out, dim=1), []
-    for _, mask in data('train_mask', 'val_mask', 'test_mask'):
-        pred = logits[mask].max(1)[1]
-        acc = pred.eq(data.y[mask]).sum().item() / mask.sum().item()
-        accs.append(acc)
-    nvtx_pop(gpu)
-    return accs
-
-if not gpu:
-    for epoch in range(args.epochs + 1):
-        train(epoch)
-        log = 'Accuracy: Train: {:.4f}, Val: {:.4f}, Test: {:.4f}'
-        print(log.format(*test()))
-else:
-    with torch.cuda.profiler.profile():
-        train(-1)
-        log_memory(flag, device, 'eval_end')
-        with torch.autograd.profiler.emit_nvtx(record_shapes=not args.no_record_shapes):
-            for epoch in range(args.epochs):
-                nvtx_push(gpu, "epochs" + str(epoch))
-                nvtx_push(gpu, "train")
-                train(epoch)
-                nvtx_pop(gpu)
-                nvtx_push(gpu, "eval")
-                log = 'Accuracy: Train: {:.4f}, Val: {:.4f}, Test: {:.4f}'
-                print(log.format(*test()))
-                
-                # add 
-                log_memory(flag, device, 'eval_end')
-                
-                nvtx_pop(gpu)
-                nvtx_pop(gpu)
-                
-    if flag:
-        from utils import df
-        with open(args.json_path, "w") as f:
-            json.dump(df, f)
+for key in model.modules():
+    print(key)
 
 
 

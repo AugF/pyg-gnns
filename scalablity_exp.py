@@ -121,9 +121,40 @@ def graph_scale_exp(seed=1):
         gen_graph(raw_dir, nodes, edges)
 
 
+def gen_nodes_exp(seed=1):
+    Rnd = snap.TRnd()
+    # 2.1 degree=25, n=1k, 25k, 50k, 75k, 100k
+    ns = [1000, 25000, 50000, 75000, 100000, 250000, 500000, 750000, 1000000, 5000000, 10000000, 50000000, 100000000, 500000000, 1000000000, 5000000000]
+    names = ['1k', '25k', '50k', '75k', '100k', '250k', '500k', '750k', '1m', '5m', '10m', '50m', '100m', '500m', '1000m', '5000m']
+    degree_fix = 10
+    for i, nodes in enumerate(ns):
+        edges = nodes * degree_fix
+        print("nodes={}, edges={}".format(nodes, edges))
+        graph = snap.GenRMat(nodes, edges, .6, .1, .15, Rnd)
+        raw_dir = "/data/wangzhaokang/wangyunpan/data/graph_" + names[i] + "_10/raw"
+        print(raw_dir)
+        if not os.path.exists(raw_dir):
+            os.makedirs(raw_dir)
+        else:
+            continue
+        print("get adj_full.npz...")
+        # 1. gen adj_full
+        row = []
+        col = []
+        for e in graph.Edges():
+            r, c = e.GetSrcNId(), e.GetDstNId()
+            row.append(r)
+            col.append(c)
+            row.append(c)
+            col.append(r)
+        f = sp.csr_matrix(([1] * 2 * edges, (row, col)), shape=(nodes, nodes)) # directed -> undirected, edges*2
+        np.savez(raw_dir + "/adj_full", data=f.data, indptr=f.indptr, indices=f.indices, shape=f.shape)
+        gen_graph(raw_dir, nodes, edges)
+
+ 
 def gen_avg_graph(seed=1):
     Rnd = snap.TRnd()
-    degrees = [3, 6, 10, 15, 20, 25, 30, 50]  # 25 omit
+    degrees = [1, 2, 5, 10, 20, 30, 40, 50]  # 25 omit
     nodes = 50000
     for d in degrees:
         edges = nodes * d
@@ -132,7 +163,8 @@ def gen_avg_graph(seed=1):
         print(raw_dir)
         if not os.path.exists(raw_dir):
             os.makedirs(raw_dir)
-
+        else:
+            continue
         print("get adj_full.npz...")
         # gen adj_full
         row = []

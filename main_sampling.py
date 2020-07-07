@@ -174,7 +174,7 @@ def train(epoch):
                 #     batch.x = batch.x.to_sparse()    
                 out = model(batch.x, batch.edge_index)
                 if args.dataset in ['yelp', 'amazon']:
-                    loss = torch.nn.BCEWithLogitsLoss(out[batch.train_mask], batch.y[batch.train_mask, :])
+                    loss = torch.nn.BCEWithLogitsLoss()(out[batch.train_mask, :], batch.y[batch.train_mask, :])
                 else:
                     loss = F.nll_loss(out.log_softmax(dim=-1)[batch.train_mask], batch.y[batch.train_mask])
                 batch_size = batch.train_mask.sum().item()
@@ -183,7 +183,7 @@ def train(epoch):
                 adjs = [adj.to(device) for adj in adjs] # 这里等于成熟
                 out = model(x[n_id], adjs)
                 if args.dataset in ['yelp', 'amazon']:
-                    loss = torch.nn.BCEWithLogitsLoss(out, y[n_id[:batch_size], :])
+                    loss = torch.nn.BCEWithLogitsLoss()(out, y[n_id[:batch_size], :])
                 else:
                     loss = F.nll_loss(out.log_softmax(dim=-1), y[n_id[:batch_size]])
             nvtx_pop(gpu)

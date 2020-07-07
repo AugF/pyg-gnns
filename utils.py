@@ -121,12 +121,14 @@ def nvtx_pop(flag):
 
 def log_memory(flag, device, label):
     if flag:
-        res = torch.cuda.memory_stats()
+        res = torch.cuda.memory_stats(device)
         torch.cuda.reset_max_memory_allocated(device)
+        # print(res["allocated_bytes.all.current"])
         if label not in df.keys():
             df[label] = [[res[i] for i in memory_labels]]
         else:
             df[label].append([res[i] for i in memory_labels])
+
 
 if __name__ == '__main__':
     datasets = ['amazon-photo', 'pubmed', 'amazon-computers', 'coauthor-physics', 'flickr', 'com-amazon']
