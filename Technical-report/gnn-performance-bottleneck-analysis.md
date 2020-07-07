@@ -216,6 +216,7 @@ GGNN因为其点计算复杂度高, 使其点计算耗时占比明显高于其�
 
 
 <div>
+
 ![GCN](figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_gcn.png)<br>(a) GCN
 
 ![GGNN](figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_ggnn.png)<br>(b) GGNN
