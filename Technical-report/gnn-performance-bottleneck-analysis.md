@@ -288,12 +288,20 @@ GGNN因为其点计算复杂度高, 使其点计算耗时占比明显高于其�
 
 ![fig:steps_in_edge_calculation](figs/illustration/steps_in_edge_calculation.png)
 
-**图: 边计算的步骤分解. 图中$h, e, m, a$均为向量.** [#fig:steps_in_edge_calculation]
+**图: 边计算的步骤分解.** [#fig:steps_in_edge_calculation]
 
-我们对各GNN算法在不同数据集上的边计算过程进行了执行时间分解, 结果如图[fig:exp_edge_cal_decomposition](#fig:exp_edge_cal_decomposition)所示. 对于GCN, 因为其边计算中$\phi(\vec{h}_i^l, \vec{h}_j^l, \vec{e}_{ij})=\vec{h}_i^l$, 所以其message阶段的开销为0.
+我们对各GNN算法在不同数据集上的边计算过程进行了执行时间分解, 结果如图[fig:exp_edge_cal_decomposition](#fig:exp_edge_cal_decomposition)所示. 对于GCN, 因为其边计算函数$\phi$只是一个简单的数乘操作, 也不设计模型参数, 因此其在forward和backward阶段中均耗时较短, 导致其耗时占比接近与0.
 
 
 <div class="subfigure">
+
+![GCN](figs/experiments/exp_edge_calc_decomposition_gcn.png)<br>(a) GCN
+
+![GGNN](figs/experiments/exp_edge_calc_decomposition_ggnn.png)<br>(b) GGNN
+
+![GAT](figs/experiments/exp_edge_calc_decomposition_gat.png)<br>(c) GAT
+
+![GaAN](figs/experiments/exp_edge_calc_decomposition_gaan.png)<br>(d) GaAN
 
 <a name="fig:exp_edge_cal_decomposition"> **图: 边计算耗时分解 (包含Layer0和Layer1).** </a>
 
