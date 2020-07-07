@@ -17,7 +17,7 @@ subfigGrid: true
 
 近年来，图神经网络是人工智能领域内的研究热点，在多种任务多个领域下取得了卓越的成果. 这些成功与graph structure相比于grid data structure有更强大的表现能力，以及深度学习端到端强大的学习能力息息相关。随着图神经网络在多个领域取得好的结果，在系统领域也陆续提出了一系列并行或分布式的图神经网络计算系统。这些系统从大量图神经网络中抽象出图神经网络计算模型，并针对计算模型设计了高效的实现。并在实现中使用了大量的性能优化技巧。
 1. message-passing通用模型
-PyG[1], DGL[2]基于message-passing机制[3]的计算系统，$\hat{h}_i^{l+1}  = \gamma (\hat{h}_i^{ll}, \Sigma_{j \in \mathcal{N}(i)} \phi(\hat{h}_i^l, \hat{h}_j^l, \hat{e}_{j, i}^l))$, 将图卷积操作定义边计算操作message function、聚合操作reduction fucnction和点计算操作update function. 该论文对应的代码实现即pytorch-geometric, 基于PyTorch后端的图神经网络的计算框架。DGL也是基于message-passing的编程模型
+PyG[1], DGL[2]基于message-passing机制[3]的计算系统，$\boldsymbol{h}_i^{l+1}  = \gamma (\boldsymbol{h}_i^{ll}, \Sigma_{j \in \mathcal{N}(i)} \phi(\boldsymbol{h}_i^l, \boldsymbol{h}_j^l, \boldsymbol{e}_{j, i}^l))$, 将图卷积操作定义边计算操作message function、聚合操作reduction fucnction和点计算操作update function. 该论文对应的代码实现即pytorch-geometric, 基于PyTorch后端的图神经网络的计算框架。DGL也是基于message-passing的编程模型
 
 2. SAGA-NN通用模型
 NeuGraph[4]为图神经网络训练提出了SAGA-NN（Scatter-ApplyEdge-Gather-ApplyVertex with Neural Networks）编程模型。SAGA-NN模型将图神经网络中每一层的前向计算划分为4个阶段：Scatter、ApplyEdge、Gather和ApplyVertex。其中ApplyEdge和ApplyVertex阶段执行用户提供的基于神经网络的边特征向量和点特征向量的计算。Scatter和Gather是由NeuGraph系统隐式触发的阶段，这两个阶段为ApplyEdge和ApplyVertex阶段准备数据。在编程时，用户只需利用给定的算子实现ApplyEdge和ApplyVertex函数，并指定Gather方式，即可利用NeuGraph自动地完成GNN的训练。
@@ -53,7 +53,7 @@ Definition(Graph): A graph is representeed as $\mathcal{G}=(\mathcal{V}, \mathca
 
 Definition(Directed Graph): A directed graph is a graph with all edges directed from one node to another. A undirected graph is considerd as a special case of directed graphs where there is a pair of edges with inverse directions if two nodes are connected. A graph is undirected if and only if the adjacency matrix is symmetric.
 
-Definition(Graph Neural Networks): $\boldsymbol{H}^l$ is the output of GNN Layer $l$, and $\boldsymbol{H}^0$ is the input of graph, is equal to $\boldsymbol{X}$. Let $\hat{h}_i^0$ is representing the feature vector of a node $v_i$, $\hat{h}_i^l$ is representing the output vector of a node $v_i$ in GNN Layer $l$. 
+Definition(Graph Neural Networks): $\boldsymbol{H}^l$ is the output of GNN Layer $l$, and $\boldsymbol{H}^0$ is the input of graph, is equal to $\boldsymbol{X}$. Let $\boldsymbol{h}_i^0$ is representing the feature vector of a node $v_i$, $\boldsymbol{h}_i^l$ is representing the output vector of a node $v_i$ in GNN Layer $l$. 
 
 ![GNN通用网络结构](figs/illustration/GNN_common_architecture.png){#fig:GNN_common_architecture width=60%}
 
