@@ -222,7 +222,6 @@ GGNN因为其点计算复杂度高, 使其点计算耗时占比明显高于其�
 
 ![边计算的步骤](figs/illustration/steps_in_edge_calculation.png){#fig:steps_in_edge_calculation}
 
-
 ## 4.2 GPU显存使用
 
 ## 4.3 算法超参数影响
