@@ -49,6 +49,19 @@ NeuGraph[4]为图神经网络训练提出了SAGA-NN（Scatter-ApplyEdge-Gather-A
 
 ## 2.1 图神经网络的通用结构
 
+1. graph neural network的通用网络结构
+
+[#fig:GNN_common_architecture]
+
+总体说，
+
+![GNN通用网络结构](figs/illustration/GNN_common_architecture.png){#fig:GNN_common_architecture width=60%}
+
+
+[#fig:GNN_Unit]
+
+
+![GNN单元](figs/illustration/GNN_Unit.png){#fig:GNN_Unit width=60%}
 
 
 ## 2.2 图神经网络的分类
@@ -74,7 +87,17 @@ NeuGraph[4]为图神经网络训练提出了SAGA-NN（Scatter-ApplyEdge-Gather-A
 
 ## 2.3 典型图神经网络
 
+1. GCN
+
+2. GGNN
+
+3. GAT
+
+4. GaAN
+
 ## 2.4 采样技术
+
+根据对采样技术的调研，我们
 
 ## 2.5 图神经网络训练中的梯度更新
 
