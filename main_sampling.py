@@ -138,7 +138,7 @@ elif args.model == 'gaan':
         d_a=args.d_a, d_m=args.d_m, gpu=gpu, flag=flag
     )
 
-device = torch.device(f'cuda: {args.gpu}' if gpu else 'cpu')
+device = torch.device(f'cuda: {args.gpu}' if gpu else 'cpu') # todo: model's device
 model = model.to(device)
 optimizer = torch.optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
 
