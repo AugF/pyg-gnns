@@ -323,8 +323,8 @@ GaAN同样采用多头机制,其计算复杂度受$d_{in}$、$d_v$、$d_a$和头
 
 **性能瓶颈总结**:  
 
-- GNN训练性能瓶颈受数据集的平均度数影响. 因为绝大部分现实世界中的图的平均度数在10度以上[@network-repository], GNN训练中的性能瓶颈将集中在边计算部分.
-- 根据边计算函数$\phi$的计算复杂度不同, GNN的在边计算中的性能瓶颈不同:
+- *GNN训练性能瓶颈受数据集的平均度数影响*. 因为绝大部分现实世界中的图的平均度数在10度以上[@network-repository], GNN训练中的性能瓶颈将集中在边计算部分.
+- *根据边计算函数$\phi$的计算复杂度不同, GNN的在边计算中的性能瓶颈不同*:
   - 如果$\phi$的计算复杂度较高, 性能瓶颈集中在实现$\phi$所用的基本算子. 优化相应基本算子的实现将能提升这类GNN的训练性能. 以GAT为例, GAT中最耗时的算子input_put_impl用于$\phi$中softmax计算($\alpha^k_{ij}$)的backward阶段, 该算子只涉及数据移动. 优化的softmax在GPU上的实现能够显著降低GAT的训练耗时.
   - 如果$\phi$的计算复杂度较低, 其边计算中的collect和aggregate步骤是计算性能瓶颈. collect步骤只涉及大量的数据移动. 而aggregate步骤计算较为简单(例如求和/平均/最大值等), 但因为涉及数据同步和不规整计算, 其耗时依然显著. 优化这两个步骤在GPU上的实现将能提升这类GNN的训练性能.
 
@@ -332,14 +332,28 @@ GaAN同样采用多头机制,其计算复杂度受$d_{in}$、$d_v$、$d_a$和头
 
 目前PyG在利用GPU训练GNN的过程中所有数据(含数据集和中间计算结果)均保存在GPU的内存中. 相比系统的主存, GPU上内存容量非常有限. *GPU内存容量是限制能够训练的数据集规模的决定因素*.
 
-图[@fig:exp_memory_usage_stage_cam](#fig:exp_memory_usage_stage_cam)展示了各个GNN在cam数据集上训练时各个阶段的最大内存使用的情况, 其他的数据集上情况类似. 在训练过程中, 内存使用在forward阶段逐渐升高, 因为在forward阶段会对于关键的中间计算结果进行缓存, 这些中间计算结果将用于backward阶段的梯度计算, 可以避免从头再计算.
+图[@fig:exp_memory_usage_stage_amp](#fig:exp_memory_usage_stage_amp)展示了各个GNN在cam数据集上训练时各个阶段的峰值内存使用的情况, 其他的数据集上情况类似. *GNN训练中的内存使用在forward阶段和backward阶段达到峰值*, 因为在forward阶段会生成大量临时计算结果, 并对其中关键的中间计算结果进行缓存, 缓存的中间结果将用于backward阶段的梯度计算. 图[@fig:ggnn_vertex_func_computation_graph](#fig:ggnn_vertex_func_computation_graph)展示了GGNN的点计算函数$\gamma$的计算图, 可见GGNN点计算中会涉及大量的算子并产生大量的中间计算结果, 关键计算结果还会被缓存, 加剧了内存使用. 在loss阶段的峰值内存使用中大部分来自缓存的中间计算结果. 随着backward阶段的结束, 中间计算结果的内存被释放. 在evaluation阶段, 因为不需要缓存用于梯度计算的中间结果, 峰值内存使用大幅下降.
 
-<img src="figs/experiments/exp_memory_usage_stage_cam.png" style="zoom:72%;" />
+<img src="figs/experiments/exp_memory_usage_stage_amp.png" style="zoom:72%;" />
 
-<a name="fig:exp_memory_usage_stage_cam">**图: 各阶段中最大内存使用. 数据集:com-amazon.**</a>
+<a name="fig:exp_memory_usage_stage_amp">**图: 各阶段中最大内存使用. Data Load指数据载入后的内存使用. 数据集:amp.**</a>
 
+<img src="figs/illustration/ggnn_vertex_func_computation_graph.png" style="zoom:50%;"/>
 
-GNN对内存使用在forward我们测量了GNN经过warm up epoch之后的内存使用和训练过程中峰值 
+<a name="fig:ggnn_vertex_func_computation_graph">**图: GGNN中点计算函数$\gamma$的计算图.Cached Operator的输出结果将被缓存, 用于backward过程中的梯度计算.**</a>
+
+值得注意的是*GNN训练过程中的峰值内存远超过数据集本身的内存使用*. 我们训练过程中最高峰值内存使用相比于Data Load之后的内存使用的比例定义为内存膨胀比例. 图[@fig:exp_memory_expansion_ratio](#fig:exp_memory_expansion_ratio)中比较了各GNN在不同数据集上的内存膨胀比例. 横向比较各算法可得 GCN < GGNN < GAT < GaAN. 即使是GCN, 其膨胀比例也在3左右. GAT和GaAN的平均膨胀比例甚至分别到达20和60. *非常高的膨胀比例严重限制了GNN的数据扩展性, 使得GPU无法处理大规模图数据集*, 尤其限制了边计算复杂度高的GNN.
+
+<div class="subfigure">
+<img src="figs/experiments/exp_memory_expansion_ratio_gcn.png" style="zoom:60%;" />
+<img src="figs/experiments/exp_memory_expansion_ratio_ggnn.png" style="zoom:60%;" />
+<img src="figs/experiments/exp_memory_expansion_ratio_gat.png" style="zoom:60%;" />
+<img src="figs/experiments/exp_memory_expansion_ratio_gaan.png" style="zoom:60%;" />
+<a name="fig:exp_memory_expansion_ratio">**图: 各GNN在不同数据集上的内存膨胀比例.**</a>
+
+</div>
+
+图[@fig:exp_memory_expansion_ratio](#fig:exp_memory_expansion_ratio)同时表明同一个GNN在同样的超参数下膨胀比例随数据集的不同而变化. 因为cph数据集的输入特征维度远高于GNN层中隐向量的维度, 图的输入特征向量矩阵的规模远高于缓存的中间计算结果的矩阵规模, 因此其膨胀比例特别低. 相反, 因为cam数据集 cph数据集的膨胀比例特别低是因为该数据集的输入特征维度非常高, 而中间缓存的关键矩阵的维度
 
 ## 4.4 实验4: 采样技术对训练性能的影响分析
 
