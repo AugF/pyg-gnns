@@ -296,20 +296,36 @@ GaAN同样采用多头机制,其计算复杂度受$d_{in}$、$d_v$、$d_a$和头
 
 </div>
 
-**热点算子分析**: 点/边计算的各种函数$\phi, \Sigma,\gamma$由一系列基本算子构成, 基本算子被映射到GPU上的具体基本算子(例如矩阵乘法mm, 按元素数乘elementwise_kernel和张量按index选择index_select). 图[@fig:top_basic_ops]展示了各GNN中耗时比例最高的5个算子, 图例中算子顺序由平均耗时占比确定. 各算法的高耗时算子分析如下:
+**热点算子分析**: 点/边计算的各种函数$\phi, \Sigma,\gamma$由一系列基本算子构成, 基本算子被映射到GPU上的具体基本算子(例如矩阵乘法mm, 按元素数乘elementwise_kernel和张量按index选择index_select). 图[@fig:exp_top_basic_ops](#fig:exp_top_basic_ops)展示了各GNN中耗时比例最高的5个算子, 图例中算子顺序由平均耗时占比确定.
 
-- GCN中矩阵乘法算子mm主要用于点计算中$\gamma$,  该算子在cph数据集上尤其耗时, 因为cph输入的顶点特征向量维度非常高, 使得Layer0的点计算中矩阵乘法的计算量很高. mul是用于边计算函数$\phi$中的数乘.  scatter_add_和gather均用于实现边计算中的聚合步骤$\Sigma$, 其中前者用于forward计算后者用于backward计算. index_select算子用于边计算中的collect步骤. 对于GCN算法来说, 用于实现边计算的算子占据了主要的耗时, 各算子之间耗时比较平均, 没有特别突出的性能瓶颈.
-- GGNN中最耗时的也是矩阵乘法mm算子, 主要用于点计算$\gamma$中对于输入输出向量的线性变换和GRU中的计算. scatter_add_, index_select和gather算子也用于边计算. 而thnn_fused_gru_cell用于GRU的backward计算中. GGNN因为点计算复杂度的提升, mm算子的耗时时间明显提高.
-- GAT中最耗时的5个算子均与边计算相关. inpux_put_impl_, mul和mm用于实现边计算函数$\phi$. index_select和index算子用于边计算中的collect阶段.
-- GaAN中最耗时的矩阵乘法算子mm同时用于边计算和点计算, 其中边计算占主导. mul和cat用于实现边计算中的$\phi$函数.
+<div class="subfigure">
 
-从共性来说, *GNN计算的主要耗时还是在矩阵乘法mm, 按元素数乘mul等算子*, 因此非常适合用GPU进行计算.  边计算中的aggregate步骤虽然计算较为简单, 但因为涉及数据同步和非规整计算(不同顶点的度数差距很大), 其计算仍然耗时. 边计算中的collect步骤虽然没有任何的计算, 但是在所有的GNN中其计算耗时依然占据10%左右. aggregate步骤和collect步骤是GNN训练的计算性能瓶颈之一, 优化相应的算子将能提升所有GNN的训练效率.
+![GCN](figs/experiments/exp_top_basic_ops_gcn.png)<br>(a) GCN
+
+![GGNN](figs/experiments/exp_top_basic_ops_ggnn.png)<br>(b) GGNN
+
+![GAT](figs/experiments/exp_top_basic_ops_gat.png)<br>(c) GAT
+
+![GaAN](figs/experiments/exp_top_basic_ops_gaan.png)<br>(c) GaAN
+
+<a name="fig:exp_top_basic_ops">**图: 算子耗时比例分解 (含forward, backward和evaluation阶段)**</a>
+
+</div>
+
+各算法的高耗时算子分析如下:
+
+- GCN中矩阵乘法算子mm主要用于点计算中$\gamma$,  该算子在cph数据集上尤其耗时, 因为cph输入的顶点特征向量维度非常高, 使得Layer0的点计算中矩阵乘法的计算量很高. mul是边计算函数$\phi$中的数乘操作.  scatter_add和gather均用于实现边计算中的聚合步骤$\Sigma$, 其中前者用于forward阶段后者用于backward阶段. index_select算子用于边计算中的collect步骤. 对于GCN算法来说, 边计算相关算子占据了主要的耗时, 各算子之间耗时比较平均, 没有特别突出的性能瓶颈.
+- GGNN中最耗时的也是矩阵乘法mm算子, 主要用于点计算函数$\gamma$. scatter_add, index_select和gather算子用于边计算. 而thnn_fused_gru_cell用于GRU的backward计算中. GGNN因为点计算复杂度的提升, mm算子的耗时时间明显提高.
+- GAT中最耗时的5个算子均与边计算相关. inpux_put_impl, mul和mm用于实现边计算函数$\phi$. index_select和index算子用于边计算中的collect阶段.
+- GaAN中最耗时的矩阵乘法算子mm同时用于边计算和点计算, 其中边计算占主导. mul和cat用于边计算中的$\phi$函数.
+
+从共性来说, *GNN计算的主要耗时还是在矩阵乘法mm, 按元素数乘mul等算子*, 因此非常适合用GPU进行计算.  边计算中的aggregate步骤虽然计算较为简单, 但因为涉及数据同步和非规整计算(不同顶点的度数差距很大), 其相关算子scatter_add和gather的依然占据了一定的耗时. 边计算中的collect步骤虽然没有任何的计算, 但是其相关算子index_select依然占据了10%左右的耗时. *aggregate步骤和collect步骤是所有GNN训练的计算性能瓶颈之一*, 优化相应的算子将能提升所有GNN的训练效率.
 
 **性能瓶颈总结**:  
 
 - GNN训练性能瓶颈受数据集的平均度数影响. 因为绝大部分现实世界中的图的平均度数在10度以上[@network-repository], GNN训练中的性能瓶颈将集中在边计算部分.
 - 根据边计算函数$\phi$的计算复杂度不同, GNN的在边计算中的性能瓶颈不同:
-  - 如果$\phi$的计算复杂度较高, 性能瓶颈集中在实现$\phi$所用的基本算子. 优化相应基本算子的实现将能提升这类GNN的训练性能.
+  - 如果$\phi$的计算复杂度较高, 性能瓶颈集中在实现$\phi$所用的基本算子. 优化相应基本算子的实现将能提升这类GNN的训练性能. 以GAT为例, GAT中最耗时的算子input_put_impl用于$\phi$中softmax计算($\alpha^k_{ij}$)的backward阶段, 该算子只涉及数据移动. 优化的softmax在GPU上的实现能够显著降低GAT的训练耗时.
   - 如果$\phi$的计算复杂度较低, 其边计算中的collect和aggregate步骤是计算性能瓶颈. collect步骤只涉及大量的数据移动. 而aggregate步骤计算较为简单(例如求和/平均/最大值等), 但因为涉及数据同步和不规整计算, 其耗时依然显著. 优化这两个步骤在GPU上的实现将能提升这类GNN的训练性能.
 
 ## 4.3 实验3: GPU内存使用分析
