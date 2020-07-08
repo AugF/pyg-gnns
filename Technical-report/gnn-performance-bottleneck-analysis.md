@@ -214,6 +214,7 @@ GaAN同样采用多头机制,其计算复杂度受$d_{in}$、$d_v$、$d_a$和头
 **图: 超参数对GNN中点/边计算耗时的影响** [#fig:exp_hyperparameter_on_vertex_edge_phase_time]
 
 
+
 [@fig:exp_hyperparameter_on_memory_usage]同时展示了各GNN对GPU显存的使用情况随算法超参数的变化情况.
 随着超参数的增加,GNN的显存使用也线性增长.
 
@@ -342,16 +343,12 @@ GaAN同样采用多头机制,其计算复杂度受$d_{in}$、$d_v$、$d_a$和头
 
 <a name="fig:ggnn_vertex_func_computation_graph">**图: GGNN中点计算函数$\gamma$的计算图.Cached Operator的输出结果将被缓存, 用于backward过程中的梯度计算.**</a>
 
-值得注意的是*GNN训练过程中的峰值内存远超过数据集本身的内存使用*. 我们训练过程中最高峰值内存使用相比于Data Load之后的内存使用的比例定义为内存膨胀比例. 图[@fig:exp_memory_expansion_ratio](#fig:exp_memory_expansion_ratio)中比较了各GNN在不同数据集上的内存膨胀比例. 横向比较各算法可得 GCN < GGNN < GAT < GaAN. 即使是GCN, 其膨胀比例也在3左右. GAT和GaAN的平均膨胀比例甚至分别到达20和60. *非常高的膨胀比例严重限制了GNN的数据扩展性, 使得GPU无法处理大规模图数据集*, 尤其限制了边计算复杂度高的GNN.
+值得注意的是*GNN训练过程中的峰值内存远超过数据集本身的内存使用*. 我们训练过程中最高峰值内存使用相比于Data Load之后的内存使用的比例定义为内存膨胀比例. 图[@fig:exp_memory_expansion_ratio](#fig:exp_memory_expansion_ratio)中比较了各GNN在不同数据集上的内存膨胀比例. GCN的膨胀比例最低, 在5-14倍之间, 而GaAN的膨胀比例最高, 可达101倍. *非常高的膨胀比例严重限制了GNN的数据扩展性, 使得GPU无法处理大规模图数据集*, 尤其限制了边计算复杂度高的GNN.
 
-<div class="subfigure">
-<img src="figs/experiments/exp_memory_expansion_ratio_gcn.png" style="zoom:60%;" />
-<img src="figs/experiments/exp_memory_expansion_ratio_ggnn.png" style="zoom:60%;" />
-<img src="figs/experiments/exp_memory_expansion_ratio_gat.png" style="zoom:60%;" />
-<img src="figs/experiments/exp_memory_expansion_ratio_gaan.png" style="zoom:60%;" />
+![fig:exp_memory_expansion_ratio](figs/experiments/exp_memory_expansion_ratio.png)
+
 <a name="fig:exp_memory_expansion_ratio">**图: 各GNN在不同数据集上的内存膨胀比例.**</a>
 
-</div>
 
 图[@fig:exp_memory_expansion_ratio](#fig:exp_memory_expansion_ratio)同时表明同一个GNN在同样的超参数下膨胀比例随数据集的不同而变化. 因为cph数据集的输入特征维度远高于GNN层中隐向量的维度, 图的输入特征向量矩阵的规模远高于缓存的中间计算结果的矩阵规模, 因此其膨胀比例特别低. 相反, 因为cam数据集 cph数据集的膨胀比例特别低是因为该数据集的输入特征维度非常高, 而中间缓存的关键矩阵的维度
 
