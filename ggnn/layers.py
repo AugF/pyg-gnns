@@ -1,3 +1,7 @@
+"""
+reference:
+https://github.com/rusty1s/pytorch_geometric/blob/1.5.0/torch_geometric/nn/conv/gated_graph_conv.py
+"""
 import torch
 from torch import Tensor
 from torch.nn import Parameter as Param
