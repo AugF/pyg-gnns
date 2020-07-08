@@ -1,8 +1,10 @@
+"""
+inference:
+https://github.com/rusty1s/pytorch_geometric/blob/1.5.0/torch_geometric/nn/conv/gat_conv.py
+"""
 import torch
-from torch import Tensor
 import torch.nn.functional as F
 from torch.nn import Parameter, Linear
-from torch_sparse import SparseTensor, set_diag
 from torch_geometric.utils import remove_self_loops, add_self_loops, softmax
 from message_passing import MessagePassing
 
