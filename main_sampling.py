@@ -2,7 +2,6 @@ import torch
 import torch.nn.functional as F
 from torch.nn import ModuleList
 from torch_geometric.data import ClusterData, ClusterLoader, NeighborSampler
-from torch_geometric.nn import SAGEConv
 
 import sys
 import time
