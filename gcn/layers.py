@@ -111,6 +111,7 @@ class GCNConv(MessagePassing):
                 if self.normalize:
                     edge_index, norm = self.gcn_norm(edge_index, x.size(
                         self.node_dim), edge_weight, self.improved, x.dtype)
+                    print("normalize: ", x.size(self.node_dim), edge_weight, self.improved, x.dtype, "norm.shape", norm.shape)
                 else:
                     norm = edge_weight
                 self.cached_result = edge_index, norm

@@ -11,7 +11,7 @@ from gaan.models import GaAN
 from ggnn.models import GGNN
 from gat.models import GAT
 from gcn.models import GCN
-from utils import get_dataset, get_split_by_file, nvtx_push, nvtx_pop, log_memory, small_datasets, norm
+from utils import get_dataset, get_split_by_file, nvtx_push, nvtx_pop, log_memory, small_datasets
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--dataset', type=str, default='cora', help="dataset: [cora, flickr, com-amazon, reddit, com-lj,"
@@ -58,7 +58,6 @@ if dataset_info[0] in small_datasets and len(dataset_info) > 1:
 dataset = get_dataset(args.dataset, normalize_features=True)
 data = dataset[0]
 
-print(data.x.size())
 # add train, val, test split
 if args.dataset in ['amazon-computers', 'amazon-photo', 'coauthor-physics']:
     file_path = osp.join('/data/wangzhaokang/wangyunpan/data', args.dataset + "/raw/role.json")

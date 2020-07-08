@@ -4,7 +4,7 @@ import sys
 import torch.nn.functional as F
 from torch.nn import Module
 from gcn.layers import GCNConv
-from utils import norm
+from utils import gcn_cluster_norm
 from tqdm import tqdm
 
 
@@ -15,7 +15,7 @@ class GCN(Module):
     GCN layer
     dropout set: https://github.com/tkipf/pygcn/blob/master/pygcn/train.py
     """
-    def __init__(self, layers, n_features, n_classes, hidden_dims, norm, dropout=0.5, gpu=False, flag=False): # add adj
+    def __init__(self, layers, n_features, n_classes, hidden_dims, norm=None, dropout=0.5, gpu=False, flag=False, cluster_flag=False): # add adj
         super(GCN, self).__init__()
         self.n_features, self.n_classes = n_features, n_classes
         self.layers, self.hidden_dims = layers, hidden_dims
@@ -30,7 +30,9 @@ class GCN(Module):
                 for layer in range(layers)
             ]
         )
-        self.norm = norm.to('cuda')
+        if norm is not None:
+            self.norm = norm.to('cuda')
+        self.cluster_flag = cluster_flag
     
     def forward(self, x, adjs):
         """
@@ -51,9 +53,13 @@ class GCN(Module):
                 nvtx_pop(self.gpu)
                 log_memory(self.flag, device, 'layer' + str(i))
         else:
+            if  self.cluster_flag:
+                norm = gcn_cluster_norm(adjs, x.size(0), None, False, x.dtype)
+            else:
+                norm = None
             for i in range(self.layers):
                 nvtx_push(self.gpu, "layer" + str(i))
-                x = self.convs[i](x, adjs)
+                x = self.convs[i](x, adjs, norm=norm)
                 if i != self.layers - 1:
                     x = F.relu(x)
                     x = F.dropout(x, p=self.dropout, training=self.training)
@@ -74,10 +80,10 @@ class GCN(Module):
         for i in range(self.layers):
             xs = []
             for batch_size, n_id, adj in subgraph_loader:
-                edge_index, _, size = adj.to(device)
+                edge_index, e_id, size = adj.to(device)
                 x = x_all[n_id].to(device)
                 # x_target = x[:size[1]]
-                x = self.convs[i](x, edge_index, size=size[1])
+                x = self.convs[i](x, edge_index, size=size[1], norm=self.norm[e_id])
                 if i != self.layers - 1:
                     x = F.relu(x)
                     x = F.dropout(x, p=self.dropout, training=self.training)

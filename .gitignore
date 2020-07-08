@@ -1,7 +1,6 @@
 exp/*
 *log
 *exp/*
-!*exp/*.sh
 .idea/*
 data/*
 analysis/*

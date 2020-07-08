@@ -17,7 +17,7 @@ from ggnn.models import GGNN
 from gat.models import GAT
 from gcn.models import GCN
 
-from utils import get_dataset, norm, normalize, get_split_by_file, nvtx_push, nvtx_pop, log_memory, small_datasets
+from utils import get_dataset, gcn_norm, normalize, get_split_by_file, nvtx_push, nvtx_pop, log_memory, small_datasets
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--dataset', type=str, default='cora', help="dataset: [cora, flickr, com-amazon, reddit, com-lj,"
@@ -109,11 +109,14 @@ loader_time = time.time() - loader_time
 # 3. set model
 if args.model == 'gcn':
     # 预先计算edge_weight出来
-    norm = norm(data.edge_index, data.x.shape[0])
+    if args.mode == 'graphsage':
+        norm = gcn_norm(data.edge_index, data.x.shape[0])
+    else:
+        norm = None
     model = GCN(
         layers=args.layers,
         n_features=num_features, n_classes=dataset.num_classes,
-        hidden_dims=args.hidden_dims, gpu=gpu, flag=flag, norm=norm
+        hidden_dims=args.hidden_dims, gpu=gpu, flag=flag, norm=norm, cluster_flag=args.mode == 'cluster'
     )
 elif args.model == 'gat':
     model = GAT(
