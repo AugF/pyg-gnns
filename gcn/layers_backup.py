@@ -2,8 +2,6 @@ import torch
 import sys
 from torch.nn import Parameter
 
-from torch_scatter import scatter_add
-from torch_geometric.utils import add_remaining_self_loops
 
 from message_passing import MessagePassing
 from inits import glorot, zeros
@@ -65,26 +63,7 @@ class GCNConv(MessagePassing):
     def reset_parameters(self):
         glorot(self.weight)
         zeros(self.bias)
-        self.cached_result = None
-        self.cached_num_edges = None
-   
-    @staticmethod
-    def gcn_norm(edge_index, num_nodes, edge_weight=None, improved=False,
-             dtype=None):
-        if edge_weight is None:
-            edge_weight = torch.ones((edge_index.size(1), ), dtype=dtype,
-                                     device=edge_index.device)
 
-        fill_value = 1 if not improved else 2
-        edge_index, edge_weight = add_remaining_self_loops(
-            edge_index, edge_weight, fill_value, num_nodes)
-
-        row, col = edge_index
-        deg = scatter_add(edge_weight, row, dim=0, dim_size=num_nodes)
-        deg_inv_sqrt = deg.pow(-0.5)
-        deg_inv_sqrt[deg_inv_sqrt == float('inf')] = 0
-
-        return edge_index, deg_inv_sqrt[row] * edge_weight * deg_inv_sqrt[col]
 
     def forward(self, x, edge_index, edge_weight=None, size=None, norm=None):
         """"""
@@ -97,31 +76,13 @@ class GCNConv(MessagePassing):
         if size is not None:
             x = (x, x[:size])
         
-        if self.cached and self.cached_result is not None:
-            if edge_index.size(1) != self.cached_num_edges:
-                raise RuntimeError(
-                    'Cached {} number of edges, but found {}. Please '
-                    'disable the caching behavior of this layer by removing '
-                    'the `cached=True` argument in its constructor.'.format(
-                        self.cached_num_edges, edge_index.size(1)))
-
-        if norm is None:
-            if not self.cached or self.cached_result is None:
-                self.cached_num_edges = edge_index.size(1)
-                if self.normalize:
-                    edge_index, norm = self.gcn_norm(edge_index, x.size(
-                        self.node_dim), edge_weight, self.improved, x.dtype)
-                else:
-                    norm = edge_weight
-                self.cached_result = edge_index, norm
-            edge_index, norm = self.cached_result
-
         out = self.propagate(edge_index, x=x, norm=norm) # edge cal
         nvtx_pop(self.gpu)
         
         return out
 
     def message(self, x_j, norm):
+        print("yes", x_j.shape)
         return norm.view(-1, 1) * x_j if norm is not None else x_j
     
     def update(self, aggr_out):

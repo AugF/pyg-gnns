@@ -51,7 +51,6 @@ class GCN(Module):
                 nvtx_pop(self.gpu)
                 log_memory(self.flag, device, 'layer' + str(i))
         else:
-            edge_weight = norm(adjs, x.shape[0])
             for i in range(self.layers):
                 nvtx_push(self.gpu, "layer" + str(i))
                 x = self.convs[i](x, adjs)
