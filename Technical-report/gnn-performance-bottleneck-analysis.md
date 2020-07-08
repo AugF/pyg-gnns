@@ -41,27 +41,35 @@ NeuGraph[4]为图神经网络训练提出了SAGA-NN（Scatter-ApplyEdge-Gather-A
 
 1. graph neural network的通用网络结构
 
-[#fig:GNN_common_architecture]
-
 Definition(Graph): A graph is representeed as $\mathcal{G}=(\mathcal{V}, \mathcal{E})$, where V is the set of vertices or nodes (we will use nodes throughtout this article), and $E$ is the set of edges. Let $n = |\mathcal{V}|$ and $m = \mathcal{E}$. Let $v_i \in \mathcal{V}$ to denote a node and $\boldsymbol{e}_{i, j} = (v_i, v_j) \in \mathcal{E}$ to denote an edge pointing from $v_j$ to $v_i$. The neighborhood of a node $v$ is defined as $\mathcal{N}(v) = \{u \in \mathcal{V} | (v, u) \in \mathcal{E}\}$. The adjacency matrix $\boldsymbol{A}$ is a $n \times n$ matrix with $A_{ij}=1$ if $e_{j, i} \in \mathcal{E}$ and $A_{ij}=0$ if $e_{j, i} \notin \mathcal{E}$.A graph may have node features $\boldsymbol{X}$, where $\boldsymbol{X} \in \boldsymbol{R}^{n \times f}$, $f$ is the number of feature dims. 
 
 Definition(Directed Graph): A directed graph is a graph with all edges directed from one node to another. A undirected graph is considerd as a special case of directed graphs where there is a pair of edges with inverse directions if two nodes are connected. A graph is undirected if and only if the adjacency matrix is symmetric.
 
-Definition(Graph Neural Networks): $\boldsymbol{H}^l$ is the output of GNN Layer $l$, and $\boldsymbol{H}^0$ is the input of graph, is equal to $\boldsymbol{X}$. Let $\boldsymbol{h}_i^0$ is representing the feature vector of a node $v_i$, $\boldsymbol{h}_i^l$ is representing the output vector of a node $v_i$ in GNN Layer $l$. 
+Graph Neural Networks: 一个图神经网络模型通常包括三部分：input layer, 若干GNN layer和output layer. [#fig:GNN_common_architecture] 
+The input layer， 节点的表示初始化为node features $X$, 因为是input layer可以看作是GNN的第0层，所以这里$\boldsymbol{A}$等同于$\boldsymbol{H}^0$, $\boldsymbol{h}_i^0$ is representing the feature vector of a node $v_i$.
+The output layer can focus on different graph analytics tasks with one of the following mechanisms: Node Level, Outputs relate to node regression and node classification tasks; Edge Level, Outputs relate to the edge classification and link prediction tasks; Graph Leval: Outputs relate to the graph classifications.
+Input Layer和GNN Layer, GNN Layer之间，以及GNN Layer和Output Layer之间的连接方式是由graph stucture$\boldsymbol{A}$决定的。GNN Layer $l$中的每个节点的变化操作可以是一个GNN Unit单元。[#fig:GNN_Unit]
+GNN Unit: let $\boldsymbol{h}_i^{l+1}$ denote the feature vector at layer $l$ associated with node $v_i$, generalizing the convolutional operator to irregulatr domins is typically expressed as a **message passing** scheme[@gilmer_messgae_passing]
+$$\boldsymbol{h}_i^{l+1}  = \gamma (\boldsymbol{h}_i^l, \Sigma_{j \in \mathcal{N}(i)} \phi(\boldsymbol{h}_i^l, \boldsymbol{h}_j^l, \boldsymbol{e}_{j, i}^l))$$
+
+where $\Sigma$ denotes a differntiable, permutation invariant function, e.g., sum, mean or max, and $\gamma$ and $\phi$ denote differentiable functions such as MLPs.
+
+显然地，这里我们可以把GNN Unit划分为三个基础组件:
+1. 边操作函数$\gamma$, 这里的计算量与图中的边紧密相关, $\boldsymbol{m}_{j, i}^l = \phi(\boldsymbol{h}_i^l, \boldsymbol{h}_j^l, \boldsymbol{e}_{j, i}^l)$
+2. 聚合函数$\Sigma$, 这里的计算量与图中的边紧密相关，$\boldsymbol{s}_i =  \Sigma_{j^l \in \mathcal{N}(i)} \boldsymbol{m}_{j, i}^l $
+3. 点操作函数$\gamma$, 这里的计算量与图中的点紧密相关, $\boldsymbol{h}_i^{l+1}  = \gamma(\boldsymbol{s}_i)$
+
+> 在后面的实验中，将1和2视为了边计算，3视为了点计算
 
 ![GNN通用网络结构](figs/illustration/GNN_common_architecture.png){#fig:GNN_common_architecture width=60%}
 
-
-[#fig:GNN_Unit]
-
-
 ![GNN单元](figs/illustration/GNN_Unit.png){#fig:GNN_Unit width=60%}
-
 
 ## 2.2 图神经网络的分类
 
 [@tbl:gnn_overview]中列出了我们调研到的典型的图神经网络算法.表中列出了各个GNN中点/边计算的表达式,表达式中的大写粗体字母表示GNN模型参数.表中的网络类型来源于文献[@zhou2018_gnn_review].因为本文主要关注GNN算法的计算特性,我们分析了各GNN算法的点、边计算的计算复杂度,并根据计算复杂度将GNN算法划分到四个象限中,如[@fig:GNN_complexity_quadrant]所示.
 
+其中, $d_{in}, d_{out}, k, d_a, d_v, d_m$为超参数
 
 **表: 图神经网络概览** [tbl:gnn_overview]
 
