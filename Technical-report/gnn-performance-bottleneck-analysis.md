@@ -332,11 +332,15 @@ GaAN同样采用多头机制,其计算复杂度受$d_{in}$、$d_v$、$d_a$和头
 
 目前PyG在利用GPU训练GNN的过程中所有数据(含数据集和中间计算结果)均保存在GPU的内存中. 相比系统的主存, GPU上内存容量非常有限. *GPU内存容量是限制能够训练的数据集规模的决定因素*.
 
-图[@fig:exp_memory_usage_stage_cam](#fig:exp_memory_usage_stage_cam)展示了各个GNN在cam数据集上训练时各个阶段的最大内存使用的情况, 其他的数据集上情况类似. 在训练过程中, 内存使用在forward阶段逐渐升高, 因为在forward阶段会对于关键的中间计算结果进行缓存, 这些中间计算结果将用于backward阶段的梯度计算, 可以避免从头再计算.
+图[@fig:exp_memory_usage_stage_cam](#fig:exp_memory_usage_stage_cam)展示了各个GNN在cam数据集上训练时各个阶段的最大内存使用的情况, 其他的数据集上情况类似. 在训练过程中, 内存使用在forward阶段会达到峰值, 因为在forward阶段会生成大量临时计算结果, 并对其中关键的中间计算结果进行缓存, 缓存的中间计算结果将用于backward阶段的梯度计算. 图[@fig:ggnn_vertex_func_computation_graph](#fig:ggnn_vertex_func_computation_graph)展示了GGNN的点计算函数$\gamma$的计算图, 在GGNN的计算中会产生大量的中间计算结果, 其中模型参数的梯度计算中会复用到的中间计算结果会缓存在内存中.
 
 <img src="figs/experiments/exp_memory_usage_stage_cam.png" style="zoom:72%;" />
 
 <a name="fig:exp_memory_usage_stage_cam">**图: 各阶段中最大内存使用. 数据集:com-amazon.**</a>
+
+<img src="figs/illustration/ggnn_vertex_func_computation_graph.png" style="zoom:72%;"/>
+
+<a name="fig:ggnn_vertex_func_computation_graph">**图:GGNN中点计算函数$\gamma$的计算图**</a>
 
 
 GNN对内存使用在forward我们测量了GNN经过warm up epoch之后的内存使用和训练过程中峰值 
