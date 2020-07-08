@@ -1,3 +1,7 @@
+"""
+inference:
+https://github.com/rusty1s/pytorch_geometric/blob/1.5.0/torch_geometric/nn/conv/gcn_conv.py
+"""
 import torch
 import sys
 from torch.nn import Parameter
