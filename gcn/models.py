@@ -82,7 +82,6 @@ class GCN(Module):
             for batch_size, n_id, adj in subgraph_loader:
                 edge_index, e_id, size = adj.to(device)
                 x = x_all[n_id].to(device)
-                # x_target = x[:size[1]]
                 x = self.convs[i](x, edge_index, size=size[1], norm=self.norm[e_id])
                 if i != self.layers - 1:
                     x = F.relu(x)
