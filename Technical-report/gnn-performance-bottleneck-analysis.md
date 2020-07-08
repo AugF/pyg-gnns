@@ -308,7 +308,7 @@ GaAN同样采用多头机制,其计算复杂度受$d_{in}$、$d_v$、$d_a$和头
 
 ![GaAN](figs/experiments/exp_top_basic_ops_gaan.png)<br>(c) GaAN
 
-<a name="fig:exp_top_basic_ops">**图: 算子耗时比例分解 (含forward, backward和evaluation阶段)**</a>
+<a name="fig:exp_top_basic_ops">**图: 基本算子的耗时比例 (含forward, backward和evaluation阶段)**</a>
 
 </div>
 
@@ -330,7 +330,16 @@ GaAN同样采用多头机制,其计算复杂度受$d_{in}$、$d_v$、$d_a$和头
 
 ## 4.3 实验3: GPU内存使用分析
 
+目前PyG在利用GPU训练GNN的过程中所有数据(含数据集和中间计算结果)均保存在GPU的内存中. 相比系统的主存, GPU上内存容量非常有限. *GPU内存容量是限制能够训练的数据集规模的决定因素*.
 
+图[@fig:exp_memory_usage_stage_cam](#fig:exp_memory_usage_stage_cam)展示了各个GNN在cam数据集上训练时各个阶段的最大内存使用的情况, 其他的数据集上情况类似. 在训练过程中, 内存使用在forward阶段逐渐升高, 因为在forward阶段会对于关键的中间计算结果进行缓存, 这些中间计算结果将用于backward阶段的梯度计算, 可以避免从头再计算.
+
+<img src="figs/experiments/exp_memory_usage_stage_cam.png" style="zoom:72%;" />
+
+<a name="fig:exp_memory_usage_stage_cam">**图: 各阶段中最大内存使用. 数据集:com-amazon.**</a>
+
+
+GNN对内存使用在forward我们测量了GNN经过warm up epoch之后的内存使用和训练过程中峰值 
 
 ## 4.4 实验4: 采样技术对训练性能的影响分析
 
