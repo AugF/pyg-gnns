@@ -76,11 +76,10 @@ if args.x_sparse:
 
 # 2. model
 if args.model == 'gcn':
-    edge_weight = norm(data.edge_index, data.x.shape[0])
     model = GCN(
         layers=args.layers,
         n_features=num_features, n_classes=dataset.num_classes,
-        hidden_dims=args.hidden_dims, gpu=gpu, flag=flag, norm=edge_weight
+        hidden_dims=args.hidden_dims, gpu=gpu, flag=flag
     )
 elif args.model == 'gat':
     model = GAT(
