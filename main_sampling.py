@@ -78,9 +78,6 @@ if dataset_info[0] in small_datasets and len(dataset_info) > 1:
     
 # 2. set sampling
 
-# 2.1 test data
-subgraph_loader = NeighborSampler(data.edge_index, sizes=[-1], batch_size=args.batch_size,
-                                  shuffle=False, num_workers=args.num_workers)
 
 # 2.2 train_data
 loader_time = time.time()    
@@ -142,35 +139,35 @@ device = torch.device(f'cuda: {args.gpu}' if gpu else 'cpu') # todo: model's dev
 model = model.to(device)
 optimizer = torch.optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
 
-
 def train(epoch):
     model.train()
     
     total_nodes = int(data.train_mask.sum())
-    pbar = tqdm(total=total_nodes)
-    pbar.set_description(f'Epoch {epoch:02d}')
 
     total_loss = 0
     
-    sampling_time = other_time = 0
+    sampling_time = to_time = train_time = 0.0
 
+    all_nodes, all_edges = 0, 0
     train_iter = iter(train_loader)
     cnt = 0
     while True:
         try:
-            iter_time = time.time()
+            t0 = time.time()
             batch = next(train_iter)
-            sampling_time += time.time() - iter_time
-
+            t1 = time.time()
+            sampling_time += t1 - t0
             nvtx_push(gpu, "batch" + str(cnt))
             log_memory(flag, device, 'forward_start')
             nvtx_push(gpu, "forward")
-            begin_time = time.time()
-            optimizer.zero_grad()            
+            
             if args.mode == "cluster":
                 batch = batch.to(device)
-                # if 'coauthor-physics' in dataset_info:
-                #     batch.x = batch.x.to_sparse()    
+                t2 = time.time()
+                to_time += t2 - t1
+                optimizer.zero_grad()
+                nodes, edges = batch.x.shape[0], batch.edge_index.shape[1]
+                print(f"nodes: {nodes}, edges: {edges}")
                 out = model(batch.x, batch.edge_index)
                 if args.dataset in ['yelp', 'amazon']:
                     loss = torch.nn.BCEWithLogitsLoss()(out[batch.train_mask, :], batch.y[batch.train_mask, :])
@@ -180,11 +177,21 @@ def train(epoch):
             elif args.mode == 'graphsage':
                 batch_size, n_id, adjs = batch
                 adjs = [adj.to(device) for adj in adjs] # 这里等于成熟
+                nodes, edges = adjs[0][2][0], adjs[0][0].shape[1]
+                print(f"nodes: {nodes}, edges: {edges}")
+                x = data.x[n_id].to(device)
+                if args.dataset in ['yelp', 'amazon']:
+                    y = data.y[n_id[:batch_size], :].to(device)
+                else:
+                    y = data.y[n_id[:batch_size]].to(device)
+                t2 = time.time()
+                to_time += t2 - t1
+                optimizer.zero_grad()            
                 out = model(data.x[n_id].to(device), adjs)
                 if args.dataset in ['yelp', 'amazon']:
-                    loss = torch.nn.BCEWithLogitsLoss()(out, data.y[n_id[:batch_size].to(device), :])
+                    loss = torch.nn.BCEWithLogitsLoss()(out, y)
                 else:
-                    loss = F.nll_loss(out.log_softmax(dim=-1), data.y[n_id[:batch_size].to(device)])
+                    loss = F.nll_loss(out.log_softmax(dim=-1), y)
             nvtx_pop(gpu)
             
             log_memory(flag, device, 'forward_end')
@@ -193,20 +200,23 @@ def train(epoch):
             optimizer.step()
             nvtx_pop(gpu)
             
+            train_time += time.time() - t2
             log_memory(flag, device, 'backward_end')
             total_loss += loss.item() * batch_size            
-            pbar.update(batch_size)
-            other_time += time.time() - begin_time
             nvtx_pop(gpu)
+            all_nodes += nodes
+            all_edges += edges
             cnt += 1      
         except StopIteration:
             break
-    
-    pbar.close()
+
+    #print("batchs", cnt, args.batch_size * cnt)
+    #print("sampling", all_nodes, all_edges)
+    #print("real", data.x.shape[0], data.edge_index.shape[1])
     loss = total_loss / total_nodes
-    return loss, sampling_time, other_time
+    return loss, sampling_time, to_time, train_time, cnt
 
-
+# not consider
 @torch.no_grad()
 def test():  # Inference should be performed on the full graph.
     model.eval()
@@ -237,23 +247,36 @@ else:
         train(-1)
         log_memory(flag, device, 'warmup end')
         with torch.autograd.profiler.emit_nvtx(record_shapes=not args.no_record_shapes):
+            avg_epoch_sampling_time = 0
+            avg_epoch_to_time = 0
+            avg_epoch_train_time = 0
+            count = 0
             for epoch in range(args.epochs):
+                if count >= 50: # 取50轮batch进行分析
+                    sys.exit(0)
                 nvtx_push(gpu, "epochs" + str(epoch))
                 nvtx_push(gpu, "train")
-                loss, sampling_time, other_time = train(epoch)
+                loss, sampling_time, to_time, train_time, cnt = train(epoch)
                 nvtx_pop(gpu)
                 
-                sampling_time += loader_time
-                all_time = sampling_time + other_time
-                print(f"sampling time: {sampling_time}, other time: {other_time}, all_time: {all_time}, loss: {loss}")
+                count += cnt
+                print(f"loss: {loss}")
                 
-                # nvtx_push(gpu, "eval")
-                # train_acc, val_acc, test_acc = test()
-                # print(f'Epoch: {epoch:02d}, Loss: {loss:.4f}, Train: {train_acc:.4f}, '
+                #nvtx_push(gpu, "eval")
+                #train_acc, val_acc, test_acc = test()
+                #print(f'Epoch: {epoch:02d}, Loss: {loss:.4f}, Train: {train_acc:.4f}, '
                 #         f'Val: {val_acc:.4f}, test: {test_acc:.4f}')
                 # # add 
-                # nvtx_pop(gpu)
+                #nvtx_pop(gpu)
                 nvtx_pop(gpu)
+                avg_epoch_sampling_time += sampling_time
+                avg_epoch_to_time += to_time
+                avg_epoch_train_time += train_time
+
+            avg_epoch_sampling_time /= args.epochs
+            avg_epoch_to_time /= args.epochs
+            avg_epoch_train_time /= args.epochs
+            print(f"loader_time:{loader_time}, avg_epoch_train_time: {avg_epoch_train_time}, avg_epochs_sampling_time:{avg_epoch_sampling_time}, avg_epoch_to_time: {avg_epoch_to_time}")
                 
     if flag:
         from utils import df
