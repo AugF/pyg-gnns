@@ -7,18 +7,18 @@ then
 fi
 
 models=(gcn ggnn gat gaan)
-degrees=(10 25 50 75 100)
+degrees=(2 5 10 15 20 30 40 50 70)
 
 for model in ${models[@]}
 do
     for ds in ${degrees[@]}
     do
-        json_path="${dir_config}/config0_${model}_graph_50k_${ds}.json"
+        json_path="${dir_config}/config0_${model}_graph_10k_${ds}.json"
         if [ -f $json_path ]; then # 断点续传
             continue
         fi
-        val="configuration=0, model=${model}, dataset=graph_50k_${ds}"
+        val="configuration=0, model=${model}, dataset=graph_10k_${ds}"
         echo ${val}
-        python ../main.py --dataset "graph_50k_${ds}" --model ${model} --json_path "${dir_config}/config0_${model}_graph_50k_${ds}.json"
+        python ../main.py --dataset "graph_10k_${ds}" --model ${model} --json_path "${dir_config}/config0_${model}_graph_10k_${ds}.json"
     done
 done
