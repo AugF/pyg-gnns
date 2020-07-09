@@ -330,13 +330,13 @@ GaAN同样采用多头机制,其计算复杂度受$d_{in}$、$d_v$、$d_a$和头
 
 ## 4.3 实验3: GPU内存使用分析
 
-目前PyG在利用GPU训练GNN的过程中所有数据(含数据集和中间计算结果)均保存在GPU的内存中. 相比系统的主存, GPU上内存容量非常有限. *GPU内存容量是限制能够训练的数据集规模的决定因素*.
+目前PyG在利用GPU训练GNN的过程中所有数据(含数据集和中间计算结果)均保存在GPU的内存中. 相比系统的主存, GPU上内存容量非常有限. *GPU内存容量是限制能够训练的数据集规模的决定因素*. GaAN在训练`cph`数据集的过程中,因为内存溢出导致无法完成训练.
 
 图[@fig:exp_memory_usage_stage_amp](#fig:exp_memory_usage_stage_amp)展示了各个GNN在cam数据集上训练时各个阶段的峰值内存使用的情况, 其他的数据集上情况类似. *GNN训练中的内存使用在forward阶段和backward阶段达到峰值*, 因为在forward阶段会生成大量临时计算结果, 并对其中关键的中间计算结果进行缓存, 缓存的中间结果将用于backward阶段的梯度计算. 图[@fig:ggnn_vertex_func_computation_graph](#fig:ggnn_vertex_func_computation_graph)展示了GGNN的点计算函数$\gamma$的计算图, 可见GGNN点计算中会涉及大量的算子并产生大量的中间计算结果, 关键计算结果还会被缓存, 加剧了内存使用. 在loss阶段的峰值内存使用中大部分来自缓存的中间计算结果. 随着backward阶段的结束, 中间计算结果的内存被释放. 在evaluation阶段, 因为不需要缓存用于梯度计算的中间结果, 峰值内存使用大幅下降.
 
 <img src="figs/experiments/exp_memory_usage_stage_amp.png" style="zoom:72%;" />
 
-<a name="fig:exp_memory_usage_stage_amp">**图: 各阶段中最大内存使用. Data Load指数据载入后的内存使用. 数据集:amp.**</a>
+<a name="fig:exp_memory_usage_stage_amp">**图: 各阶段中最大内存使用. Data Load指数据载入后的内存使用. 数据集:amp.其他数据集情况类似.**</a> 
 
 <img src="figs/illustration/ggnn_vertex_func_computation_graph.png" style="zoom:50%;"/>
 
@@ -348,19 +348,45 @@ GaAN同样采用多头机制,其计算复杂度受$d_{in}$、$d_v$、$d_a$和头
 
 <a name="fig:exp_memory_expansion_ratio">**图: 各GNN在不同数据集上的内存膨胀比例.**</a>
 
-图[@fig:exp_memory_expansion_ratio](#fig:exp_memory_expansion_ratio)同时表明同一个GNN在同样的超参数下膨胀比例随数据集的不同而变化. 因为cph数据集的输入特征维度远高于GNN层中隐向量的维度, 导致图的输入特征向量矩阵的规模远高于缓存的中间计算结果的矩阵规模, 因此其膨胀比例特别低, 而cam数据集正相反. 为了测量输入特征向量维度对内存膨胀比例的影响, 我们为不同数据图随机生成了特定维度的特征向量, 图[@fig:exp_memory_expension_ratio_input_feature_dimension](#fig:exp_memory_expension_ratio_input_feature_dimension)展示了不同输入特征向量维度下的膨胀比例变化情况. *在同样的GNN结构和超参数设置下, 使用更高维的输入特征向量能够降低内存膨胀比例*. 
+图[@fig:exp_memory_expansion_ratio](#fig:exp_memory_expansion_ratio)同时表明同一个GNN在同样的超参数下膨胀比例随数据集的不同而变化. 因为cph数据集的输入特征维度远高于GNN层中隐向量的维度, 导致图的输入特征向量矩阵的规模远高于缓存的中间计算结果的矩阵规模, 因此其膨胀比例特别低, 而cam数据集正相反. 为了测量输入特征向量维度对内存膨胀比例的影响, 我们为不同数据集随机生成了特定维度的特征向量, 图[@fig:exp_memory_expension_ratio_input_feature_dimension](#fig:exp_memory_expension_ratio_input_feature_dimension)展示了不同输入特征向量维度下的膨胀比例变化情况. *在同样的GNN结构和超参数设置下, 使用更高维的输入特征向量能够降低内存膨胀比例*. 
 
 ![膨胀比例随输入特征向量维度的变化情况](figs/experiments/exp_memory_expansion_ratio_input_feature_dimension_com-amazon.png)
 
-<a name="#fig:exp_memory_expansion_ratio">**图: 内存膨胀比例随输入特征向量维度的变化情况**</a>
+<a name="#fig:exp_memory_expansion_ratio">**图: 内存膨胀比例随输入特征向量维度的变化情况. **</a>
 
-不同的GNN因其点/边计算复杂度的不同, 生成的中间结果的规模对图的点/边数量的敏感度不同, 导致内存膨胀比例受图的平均度数的影响.
+不同的GNN因其点/边计算复杂度的不同, 生成的中间结果的规模对图的点/边数量的敏感度不同, 导致内存膨胀比例受图的平均度数的影响. 我们测量了GPU峰值内存使用和膨胀比例受图规模的影响.
 
-内存膨胀比例受图的顶点数的影响. 固定图的平均度数, 随机生成不同顶点数的图.
+在固定图中顶点数的情况下, 我们利用R-MAT生成器生成平均度数(边数)不同的随机图, 图[@fig:exp_memory_expansion_ratio_input_graph_number_of_edges](#fig:exp_memory_expansion_ratio_input_graph_number_of_edges)展示了训练中的内存使用随平均度数的变化情况. *随着平均度数的增加, 峰值内存使用呈线性增长,  边计算产生的中间结果逐渐占据主导, 各GNN的内存膨胀比例逐渐稳定*, 膨胀比例受边计算的复杂度影响. 除GGNN之外, 其余GNN的内存膨胀比例均随度数的增加而增加. GGNN因为点计算复杂度高, 当平均度数较低时, 其内存膨胀比例主要受点计算中间结果的影响; 当平均度数增高时, 其内存膨胀比例逐渐受边计算复杂度决定, 因为GGNN具有最低的边计算复杂度, 所以其稳定后的膨胀比例最低. 
 
+我们在固定图中边数的情况下, 利用R-MAT生成器生成顶点数不同的随机图, 图[@fig:exp_memory_expansion_ratio_input_graph_number_of_vertices_fixed_edge](#fig:exp_memory_expansion_ratio_input_graph_number_of_vertices_fixed_edge)中展示了训练中内存使用随顶点数的变化情况. 除GGNN之外, 各个GNN对顶点数量的变化不敏感, 随着顶点数量的大幅增长, 顶点输入特征向量矩阵规模变大, 但峰值内存使用只有轻微的增长, 使得内存膨胀比例出现一定程度的下降. 只有GGNN因为点计算复杂度高, 点计算过程中产生了大量的中间计算结果, 使其内存膨胀因子有小幅增长. 实验数据表明*边计算产生的中间结果是内存使用的主导因素, 各GNN的峰值内存使用均随边数的增长呈线性增加*.
 
+<div class="subfigure">
 
-内存膨胀比例受图的平均度数的影响.
+![Peak Memory Usage](figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_edges_peak_memory.png)<br>(a)
+
+![Memory Expansion Ratio](figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_edges_expansion_ratio.png)<br>(b)
+
+<a name="fig:exp_memory_expansion_ratio_input_graph_number_of_edges">**图: 内存使用随图平均度数的变化情况 (R-MAT随机图, 顶点数固定为10k, 输入特征向量维度为32).**</a>
+
+</div>
+
+<div class="subfigure">
+
+![Peak Memory Usage](figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_vertices_fixed_edge_peak_memory.png)<br>(a)
+
+![Memory Expansion Ratio](figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_vertices_fixed_edge_expansion_ratio.png)<br>(b)
+
+<a name="fig:exp_memory_expansion_ratio_input_graph_number_of_vertices_fixed_edge">**图: 内存使用随图顶点数的变化情况 (R-MAT随机图, 边数固定为500k, 输入特征向量维度为32).**</a>
+
+</div>
+
+**制约数据扩展性的瓶颈总结**:
+
+- *GPU内存容量是限制训练的数据集规模扩展性的决定性因素*.
+- *GPU内存使用主要来自计算过程中产生的中间计算结果, 尤其是边计算的中间计算结果*. 因为部分中间计算结果会被缓存以参与backward计算, 因此高GPU内存使用贯穿forward和backward阶段.
+- *GNN在训练过程中的峰值内存使用可以达到输入数据规模的数十倍甚至数百倍*. GPU有限的内存容量严重限制了能够训练的输入数据规模.
+- 在固定顶点数的情况下, *GNN的峰值内存使用随图边数的增长呈线性增加*, *内存膨胀比例会逐渐稳定到由边计算复杂度决定的固定值*.
+- 在网络结构和各项超参数固定的情况下, *采用更高维的输入特征向量可以降低GPU内存使用膨胀比例*.
 
 ## 4.4 实验4: 采样技术对训练性能的影响分析
 
