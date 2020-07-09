@@ -126,7 +126,6 @@ where $\Sigma$ denotes a differntiable, permutation invariant function, e.g., su
 |         flickr (fli) [@zeng2020_graphsaint]         | 89,250  | 899,756 |   10.1   |       500        |    0.54    |   7    | 无向图 |
 |        com-amazon (cam) [@yang2012_defining]        | 334,863 | 925,872 |   2.8    |        32        |    0.0     |   10   | 无向图 |
 
-
 实验中为了测量图的关键拓扑特征(例如平均度数)对性能的影响情况, 我们也利用R-MAT生成器[@rmat-generator]生成随机图.
 如果不额外说明, 随机图顶点的特征向量为随机生成的32维稠密向量, 将顶点随机分到10个类别中, 75%的顶点参与训练.
 
@@ -349,10 +348,25 @@ GaAN同样采用多头机制,其计算复杂度受$d_{in}$、$d_v$、$d_a$和头
 
 <a name="fig:exp_memory_expansion_ratio">**图: 各GNN在不同数据集上的内存膨胀比例.**</a>
 
+图[@fig:exp_memory_expansion_ratio](#fig:exp_memory_expansion_ratio)同时表明同一个GNN在同样的超参数下膨胀比例随数据集的不同而变化. 因为cph数据集的输入特征维度远高于GNN层中隐向量的维度, 导致图的输入特征向量矩阵的规模远高于缓存的中间计算结果的矩阵规模, 因此其膨胀比例特别低, 而cam数据集正相反. 为了测量输入特征向量维度对内存膨胀比例的影响, 我们为不同数据图随机生成了特定维度的特征向量, 图[@fig:exp_memory_expension_ratio_input_feature_dimension](#fig:exp_memory_expension_ratio_input_feature_dimension)展示了不同输入特征向量维度下的膨胀比例变化情况. *在同样的GNN结构和超参数设置下, 使用更高维的输入特征向量能够降低内存膨胀比例*. 
 
-图[@fig:exp_memory_expansion_ratio](#fig:exp_memory_expansion_ratio)同时表明同一个GNN在同样的超参数下膨胀比例随数据集的不同而变化. 因为cph数据集的输入特征维度远高于GNN层中隐向量的维度, 图的输入特征向量矩阵的规模远高于缓存的中间计算结果的矩阵规模, 因此其膨胀比例特别低. 相反, 因为cam数据集 cph数据集的膨胀比例特别低是因为该数据集的输入特征维度非常高, 而中间缓存的关键矩阵的维度
+![膨胀比例随输入特征向量维度的变化情况](figs/experiments/exp_memory_expansion_ratio_input_feature_dimension_com-amazon.png)
+
+<a name="#fig:exp_memory_expansion_ratio">**图: 内存膨胀比例随输入特征向量维度的变化情况**</a>
+
+不同的GNN因其点/边计算复杂度的不同, 生成的中间结果的规模对图的点/边数量的敏感度不同, 导致内存膨胀比例受图的平均度数的影响.
+
+内存膨胀比例受图的顶点数的影响. 固定图的平均度数, 随机生成不同顶点数的图.
+
+
+
+内存膨胀比例受图的平均度数的影响.
 
 ## 4.4 实验4: 采样技术对训练性能的影响分析
+
+在没有采样技术之前, GNN的训练都是full batch的, 即训练集中所有的顶点和边同时参与训练并计算梯度. full batch训练能保证收敛, 但是每次训练开销较大, 导致收敛速度慢. 受随机梯度下降中mini batch训练方式的启发, 一系列的GNN采样技术被提出. 理论上, 采样技术允许在训练时每个batch只使用少部分顶点和边, 相当于降低了训练用的图的规模, 大幅降低了每个batch的训练时间, 使在固定时间内可以进行多轮梯度下降, 从而加速收敛. 本节实验主要分析采样技术对训练性能的影响. 在目前PyG的实现中,  GNN的模型参数驻留在GPU上, 在每个epoch, 采样过程在CPU中进行, 采样出的子图发送到GPU上进行GNN训练, .
+
+图[@fig:exp_sampling_time_decomposition](#fig:exp_sampling_time_decomposition)展示了采用采样技术后, 采样阶段.
 
 # 5 系统设计建议
 
