@@ -142,9 +142,6 @@ device = torch.device(f'cuda: {args.gpu}' if gpu else 'cpu') # todo: model's dev
 model = model.to(device)
 optimizer = torch.optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
 
-x = data.x.to(device)
-y = data.y.to(device)
-
 
 def train(epoch):
     model.train()
@@ -183,11 +180,11 @@ def train(epoch):
             elif args.mode == 'graphsage':
                 batch_size, n_id, adjs = batch
                 adjs = [adj.to(device) for adj in adjs] # 这里等于成熟
-                out = model(x[n_id], adjs)
+                out = model(data.x[n_id].to(device), adjs)
                 if args.dataset in ['yelp', 'amazon']:
-                    loss = torch.nn.BCEWithLogitsLoss()(out, y[n_id[:batch_size], :])
+                    loss = torch.nn.BCEWithLogitsLoss()(out, data.y[n_id[:batch_size].to(device), :])
                 else:
-                    loss = F.nll_loss(out.log_softmax(dim=-1), y[n_id[:batch_size]])
+                    loss = F.nll_loss(out.log_softmax(dim=-1), data.y[n_id[:batch_size].to(device)])
             nvtx_pop(gpu)
             
             log_memory(flag, device, 'forward_end')
