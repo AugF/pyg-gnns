@@ -64,10 +64,10 @@ Input Layer + 若干 GNN Layers + Prediction Layer
 
 如图[#fig:GNN_common_architecture]，这里以node classification为说明，展示了两层GNN Layer下通用图神经网络的网络结构图: 
 1. 图中节点特征$\boldsymbol{X}$作为Input Layer的输出隐向量。
-2. 网络结构中每个Layer之间节点的连接关系由图的拓扑结构$\boldsymbol{A}$决定，比如GNN Layer1中节点$v_3$的输出隐向量是通过汇聚($\Sigma$)已经经过某种变换($\phi$)的来自GNN Layer1的$v_2$, $v_4$, $v_5$的表示，再经过更新$\gamma$得到的，而$v_2$, $v_4$, $v_5$这些点的指定是由Training Graph中的$e_{2, 3}, e_{4, 3}, e_{5, 3}$决定的。
-3. 图中每个节点可以看作是图神经网络结构中的基本单元。这个基本单元又可以看作是一个小型的网络结构，它反应的就是图神经网络中每一层信息的更新。
+2. 网络结构中每个Layer之间节点的连接关系由图的拓扑结构$\boldsymbol{A}$决定，以GNN Layer1中节点$v_3$的输出隐向量为例，它是通过汇聚($\Sigma$)已经经过某种变换($\phi$)的来自GNN Layer1的$v_2$, $v_4$, $v_5$的表示，再经过更新$\gamma$得到的，而$v_2$, $v_4$, $v_5$这些点的指定是由Training Graph中的$e_{2, 3}, e_{4, 3}, e_{5, 3}$决定的。
+3. 图中每个节点可以看作是图神经网络结构中的基本单元。这个基本单元又可以看作是一个小型的网络结构，它是图神经网络中每一层信息的更新。
 
-按照论文[@gilmer_messgae_passing]的说法，我们这里用message-passing机制来表示GNN Unit的内容[#fig:GNN_Unit]，GNN Layer $l+1$ 节点 $v_i$的可以表示为:
+本文采用message-passing机制[@gilmer_messgae_passing]来表示GNN Unit的更新[#fig:GNN_Unit]即GNN Layer $l+1$ 节点 $v_i$的输出隐向量可以表示为:
 $$\boldsymbol{h}_i^{l+1}  = \gamma (\boldsymbol{h}_i^l, \Sigma_{j \in \mathcal{N}(i)} \phi(\boldsymbol{h}_i^l, \boldsymbol{h}_j^l, \boldsymbol{e}_{j, i}^l))$$
 where $\Sigma$ denotes a differntiable, permutation invariant function, e.g., sum, mean or max, and $\gamma$ and $\phi$ denote differentiable functions such as MLPs.
 细致地，这里我们可以把GNN Unit划分为三个基础组件:
