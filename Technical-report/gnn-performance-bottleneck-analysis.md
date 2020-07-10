@@ -37,6 +37,16 @@ NeuGraph[4]为图神经网络训练提出了SAGA-NN（Scatter-ApplyEdge-Gather-A
 
 # 2 图神经网络
 
+符号定义
+- 标量: 小写字母
+- 向量: 加粗小写字母
+- 矩阵: 加粗大写字母
+- 集合: mathcal字体
+- $\delta$, $LeakyReLU$: 激活函数(可微函数)
+- $\mathbf{W}x$: 默认为矩阵乘法, 即mm
+- $\odot$: 元素乘法
+- $[||,||]$
+
 ## 2.1 图神经网络的通用结构
 
 1. graph neural network的通用网络结构
@@ -56,7 +66,7 @@ where $\Sigma$ denotes a differntiable, permutation invariant function, e.g., su
 
 显然地，这里我们可以把GNN Unit划分为三个基础组件:
 1. 边操作函数$\gamma$, 这里的计算量与图中的边紧密相关, $\boldsymbol{m}_{j, i}^l = \phi(\boldsymbol{h}_i^l, \boldsymbol{h}_j^l, \boldsymbol{e}_{j, i}^l)$
-2. 聚合函数$\Sigma$, 这里的计算量与图中的边紧密相关，$\boldsymbol{s}_i =  \Sigma_{j^l \in \mathcal{N}(i)} \boldsymbol{m}_{j, i}^l $
+2. 聚合函数$\Sigma$, 这里的计算量与图中的边紧密相关，$\boldsymbol{s}_i =  \Sigma_{j \in \mathcal{N}(i)} \boldsymbol{m}_{j, i}^l $
 3. 点操作函数$\gamma$, 这里的计算量与图中的点紧密相关, $\boldsymbol{h}_i^{l+1}  = \gamma(\boldsymbol{s}_i)$
 
 > 在后面的实验中，将1和2视为了边计算，3视为了点计算
@@ -94,6 +104,9 @@ where $\Sigma$ denotes a differntiable, permutation invariant function, e.g., su
 ## 2.3 典型图神经网络
 
 1. GCN
+提出了Spectral Graph Convolutions的一阶近似方法，将复杂度降到了与图边数的线性的数量级，并且能够学习局部图形结构和节点特征，沟通了Spectral-based方法和Spatial-based方法。
+The propagation rule of GCN at layer l is defined as follows:
+$$\boldsymbol{h}^{l} = \delta (\boldsymbol{W}^{l-1} sum_{j \in \mathcal{N}(i)} (e_{j, i}\boldsymbol{h}_j))$$
 
 2. GGNN
 
@@ -107,6 +120,7 @@ where $\Sigma$ denotes a differntiable, permutation invariant function, e.g., su
 
 ## 2.5 图神经网络训练中的梯度更新
 
+这里怎么说明?
 
 # 3 实验设计
 
