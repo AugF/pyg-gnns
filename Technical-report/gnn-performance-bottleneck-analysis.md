@@ -77,6 +77,7 @@ where $\Sigma$ denotes a differntiable, permutation invariant function, e.g., su
 > 在后面的实验中，将1和2视为了边计算，3视为了点计算
 
 ![GNN单元](figs/illustration/GNN_Unit.png){#fig:GNN_Unit width=60%}
+
 ## 2.2 图神经网络的分类
 
 动机：在分析每层的
