@@ -101,7 +101,10 @@ where $\Sigma$ denotes a differntiable, permutation invariant function, e.g., su
 |  Tree-LSTM(ACL, 2015) [@zhang2018_tree_lstm] |           Graph LSTM            | sum              | $\boldsymbol{m}_{j, i}^l = \boldsymbol{h}_j^l$               |             $O(1)$              | $h_i^{l+1} = LSTM(\boldsymbol{s}_i^l, \boldsymbol{h}_i^{l})$ |                $O(d_{in} * d_{out})$                 |
 |  **GAT**(ICLR, 2017)[@huang2018_gat]   |    Graph Attention Networks     | sum, mean        | $\alpha_{j, i}^k = \frac {\exp(LeakyReLU(\boldsymbol{a}^T [ \boldsymbol{W}^k  \boldsymbol{h}_j^l \parallel \boldsymbol{W}^k  \boldsymbol{h}_j^l] ))} {\sum_{k \in \mathcal{N}(i)}\exp(LeakyReLU(\boldsymbol{a}^T [ \boldsymbol{W}^k  \boldsymbol{h}_j^l \parallel \boldsymbol{W}^k  \boldsymbol{h}_k^l] ))} \\  \boldsymbol{m}_{j, i}^l = \parallel_{k=1}^K \delta(\alpha_{j, i}^k \boldsymbol{W}^k \boldsymbol{h}_j^{l})$ |    $O(K * d_{in} * d_{out})$    | $\boldsymbol{h}_i^{l+1} = \boldsymbol{s}_i^l$                |                        $O(1)$                        |
 |  **GaAN**(UAI, 2018)[@zhang2018_gaan]   |    Graph Attention Networks     | sum + max + mean | $\alpha_{j, i}^k = \frac {\exp(\boldsymbol{a}^T [ \boldsymbol{W}^k_a \boldsymbol{h}_j^l \parallel \boldsymbol{W}^k_a \boldsymbol{h}_i^l] )} {\sum_{k \in \mathcal{N}(j)}\exp(\boldsymbol{a}^T [ \boldsymbol{W}^k_a \boldsymbol{h}_j^l \parallel \boldsymbol{W}^k_{a}  \boldsymbol{h}_k^l] )} \\  \boldsymbol{m}_{j, i, 1}^l = \parallel_{k=1}^K \delta(\alpha_{j, i}^k \boldsymbol{W}^k_v \boldsymbol{h}_j^{l}) \\ \boldsymbol{m}_{j, i, 2}^l = \boldsymbol{W}_m \boldsymbol{h}_j^{l} \\ \boldsymbol{m}_{j, i, 3}^l = \boldsymbol{h}_j^l$ | $O(max(d_a, d_m) * K * d_{in})$ | $\boldsymbol{g}_i = \boldsymbol{W}_g  [\boldsymbol{h}_i^{l} \parallel \boldsymbol{s}_{i, 2}^l \parallel \boldsymbol{s}_{i, 3}^l]  \\ \boldsymbol{h}_i^{l+1} = \boldsymbol{W}_o [\boldsymbol{h}_i^l \parallel (\boldsymbol{g}_{i} \odot \boldsymbol{s}_{i, 3}^l) ]$ | $O(max(d_{in} + K * d_v, 2 * d_{in} + d_m) d_{out})$ |
+> todo: 为权重$\boldsymbol{W}$增加上标$l$
 
+计算复杂度中的算法：GMM, Tree-LSTM-Nary, Tree-LSTM-Child, HGNN, single parameter
+> todo: 检查文件以及重新绘制
 
 ![GNN的计算复杂度象限图](figs/illustration/GNN_complexity_quadrant.jpg)
 
@@ -114,10 +117,18 @@ where $\Sigma$ denotes a differntiable, permutation invariant function, e.g., su
 The propagation rule of GCN at layer l+1 is defined as follows:
 $$\boldsymbol{h}_i^{l + 1} = \delta (\boldsymbol{W} sum_{j \in \mathcal{N}(i)} (e_{j, i}\boldsymbol{h}_j^{l}))$$
 
+参数：
+
+权重：
+
 ### 2. GGNN
 在图神经网络的前期工作GNN上，首次提出采用了a gated recurrent unit(GRU)作为循环函数，将循环次数减少到了固定步骤数，不再需要约束参数以保证收敛
 GNN Layer $l$ node $v_i$的更新公式为:
 $$\boldsymbol{s}_i^{l} = sum_{j \in \mathcal{N}(i)} (\boldsymbol{h}_j^{l}) \\ \boldsymbol{z}_i^l = \delta ( \boldsymbol{W}^z \boldsymbol{s}_i^l + \boldsymbol{b}^{sz} + \boldsymbol{U}^z \boldsymbol{h}_i^{l} + \boldsymbol{b}^{hz}) \\ \boldsymbol{r}_i^l = \delta ( \boldsymbol{W}^r \boldsymbol{s}_i^l+ \boldsymbol{b}^{sr} +\boldsymbol{U}^r \boldsymbol{h}_i^{l} + \boldsymbol{b}^{hr}) \\ \boldsymbol{h}_i^{l+1} = tanh ( \boldsymbol{W} \boldsymbol{s}_i^l + \boldsymbol{b}^s + \boldsymbol{U} ( \boldsymbol{r}_i^l \odot \boldsymbol{h}_i^{l} + \boldsymbol{b}^h))) \\ \boldsymbol{h}_i^{l+1} = (1 - \boldsymbol{z}_i^l) \odot \boldsymbol{h}_i^l +  \boldsymbol{z}_i^l \odot \boldsymbol{h}_i^{l+1}$$
+
+参数：
+
+权重：
 
 
 ### 3. GAT
@@ -143,23 +154,30 @@ GNN Layer $l$ node $v_i$的更新公式为:
 $$ \boldsymbol{h}_i^{l+1} = \boldsymbol{W}_o [\boldsymbol{h}_i^l \parallel (\boldsymbol{g}_{i} \odot sum_{j \in \mathcal{N}(i)}  (\parallel_{k=1}^K \delta(\alpha_{j, i}^k \boldsymbol{W}^k_v \boldsymbol{h}_j^{l}) ) ] \\ \boldsymbol{g}_i = \boldsymbol{W}_g  [\boldsymbol{h}_i^{l} \parallel max_{j \in \mathcal{N}(i)} (\boldsymbol{W}_m \boldsymbol{h}_j^{l})  \parallel mean_{j \in \mathcal{N(i)}} \boldsymbol{h}_j^l] 
 \\ \alpha_{j, i}^k = \frac {\exp(\boldsymbol{a}^T [ \boldsymbol{W}^k_a \boldsymbol{h}_j^l \parallel \boldsymbol{W}^k_a \boldsymbol{h}_i^l] )} {\sum_{k \in \mathcal{N}(j)}\exp(\boldsymbol{a}^T [ \boldsymbol{W}^k_a \boldsymbol{h}_j^l \parallel \boldsymbol{W}^k_{a}  \boldsymbol{h}_k^l] )}$$
 
+参数：
+
 权重:
 $\bold{W}_o \in \mathbb{R}^{d_{out} \times (d_{in} + k d_v)}, \boldsymbol{a} \in \mathbb{R}^{2 * d_a}$
 
 ## 2.4 采样技术
 
-根据对采样技术的调研，我们
+在实际训练中，当遇到特别大的图时，使用整张图参与训练，内存就成为最大的限制，这是低效而且不可行的。所以，采样技术也纳入为了模型的一部分。
+
+在本次实验中，考虑采样技术作为一个训练的可插拔的部件
 
 ## 2.5 图神经网络训练中的梯度更新
 
-这里怎么说明?
+这里结合scatter, gather算子说明。
+> todo, 还需要check
 
 # 3 实验设计
 
 ## 3.1 实验环境
 
-## 3.2 实验数据集
+NVIDIA Tesla T4 15079MiB X 1
+Python 3.7.7, PyTorch 1.5.0, Pytorch Geometric 1.5.0
 
+## 3.2 实验数据集
 
 **表: 实验数据集概览** {#tbl:dataset_overview}
 
@@ -175,21 +193,91 @@ $\bold{W}_o \in \mathbb{R}^{d_{out} \times (d_{in} + k d_v)}, \boldsymbol{a} \in
 实验中为了测量图的关键拓扑特征(例如平均度数)对性能的影响情况, 我们也利用R-MAT生成器[@rmat-generator]生成随机图.
 如果不额外说明, 随机图顶点的特征向量为随机生成的32维稠密向量, 将顶点随机分到10个类别中, 75%的顶点参与训练.
 
+注:
+> 1. 有向图: 平均度数 = 2 * 边数 / 点数 (实际过程中，有向图PyG会预处理为无向图)
+> 2. 无向图: 平均度数 = 边数 / 点数
+> 3. 单个节点特征稀疏度=1 - 非零数/特征维度， 特征稀疏度为所有节点特征稀疏度的平均值
+
 ## 3.3 图神经网络算法选择与实现
 
-GCN
+### 3.3.1 学习任务
 
-GAT
+常见的Learning Task可分为[@wu2020_gnn_survey]:
+- Node Level: node regression and node classification
+- Edge Level: edge classification and link prediction
+- Graph Level: graph classification
 
-GGNN
+我们选择了node classificaton，因为其在实际应用中使用广泛、公开数据集充足。
 
-GaAN
+单标签数据集: `F.nll_loss` (F表示pytorch的functions)
+
+### 3.3.2 学习类型
+
+学习类型可以分为两种：
+1. transductive learning: 在训练、验证和测试三个阶段均使用一张图
+2. inductive learning: 在训练阶段，只能看到部分图，在验证和测试阶段，针对原图中没有的顶点进行预测
+
+在实验1,2,3分析中，我们采用transductive learning, 对整个epoch分析 
+在实验4中，我们采用inductive learning, 对train阶段分析
+
+> 为什么用两种setting? 为什么分析阶段不同？
+> 初衷：在transductive learning中，train, eval往往为一个epoch的两个过程, 所以纳入eval分析; 在inductive learning中, eval阶段采用的技巧不一样所以不纳入选择
+
+### 3.3.3 算法实现
+
+我们根据算法的点边计算复杂度选择了GCN, GGNN, GAT, GaAN四个代表性算法
+
+**算法实现细节**
+1. 网络结构:
+> Input Layer + 2 * GNN Lyaer + Prediction Layer 
+> 实际上, GCN, GAT, GaAN论文中的网络结构即为2, 为了保持统一， GGNN也设置为2
+2. Layer的实现
+> - 对于GCN, GAT, GaAN算法采用PyG自带的, GaAN基于PyG框架下手动实现（已保证正确性)
+> - 对于GCN, GAT算法，PyG实现中，将点计算$\gamma$放在了$\phi$和$\Sigma$之前
+> - 对于GGNN算法，由于该算法GNN Layer更新公式要求$d_{in}=d_{out}, f <= d_{in}$, 所以，在输入前和输出后做了MLP转换。
+
+
+**超参数设计**[#config_exp]
+1. weight_decay=0.005, lr=0.01, Adam优化器
+2. hidden_dims=64, Heads = 8, GAT算法: $d_{head}=8$; GaAN算法: $d_a = d_v = 8$, $d_m = 64$.
+
+### 3.3.4 采样实现
+
+这里使用了PyG集成的采样方法的工具包
+1. `NeighborSampler()` [@hamilton2017_graphsage]
+> GraphSAGE: Neighborhood Sampling, 每层的图的规模不一样
+> 参数: batch_size=512;  经验数据 
+
+2. `ClusterData(), ClusterLoader()` [@chiang2019_cluster_gcn]
+> ClusterGCN: Edge Sampling, 每层的图结构固定
+> 参数: total_partitions=1500,  batch_partitions=20
 
 ## 3.4 数据处理方法
+
+对于3.2中{#tbl:dataset_overview}中的数据集:
+1. 所有数据集处理同原论文
+> 注：有向图统一预处理为了无向图
+2. 使用了`torch_geometric.transforms.NormalizeFeatures`预处理了特征
+> 注: row-normalizes node features to sum-up to one.
 
 ## 3.5 实验方案概览
 
 - 实验 1：第2.2节中的计算复杂度分析是否与实际表现相符合？
+  - epochs耗时稳定性分析: 去除异常epochs的必要性
+  - 各算法点边计算耗时随参数的变化：
+- 实验 2: 训练耗时分解
+  - 点边计算耗时比例
+  - 点边计算耗时占比随度数的变化
+  - 边计算耗时分解
+  - 热点算子分析
+- 实验 3：GPU内存使用分析
+  - 随Input Feature Dimension的变化
+  - 随顶点数的变化
+  - 随阶数的变化
+- 实验 4：采样技术
+  - 随batch_size的变化
+  - 耗时占比的变化
+  - 峰值内存的变化
 
 # 4 实验结果与分析
 
@@ -457,6 +545,7 @@ GaAN同样采用多头机制,其计算复杂度受$d_{in}$、$d_v$、$d_a$和头
 
 # 6 相关工作
 
+> todo: ? 相关工作，应该指的是experiment analysis的工作
 # 7 总结与展望
 
 # 参考文献
@@ -483,3 +572,4 @@ GaAN同样采用多头机制,其计算复杂度受$d_{in}$、$d_v$、$d_a$和头
 20. Hamilton, W. L., Ying, R., & Leskovec, J. (2017). Inductive Representation Learning on Large Graphs. NIPS, 2017-Decem(Nips), 1025–1035. Retrieved from http://arxiv.org/abs/1706.02216 [@hamilton2017_graphsage]
 21. D. K. Duvenaud, D. Maclaurin, J. Aguileraiparraguirre, R. Gomezbombarelli, T. D. Hirzel, A. Aspuruguzik, and R. P. Adams, “Convolutional networks on graphs for learning molec- ular fingerprints,” NIPS 2015, pp. 2224–2232, 2015 [@duvenaud2015_neural_fps]
 22. Y. Zhang, Q. Liu, and L. Song, “Sentence-state lstm for text representation,” ACL 2018, vol. 1, pp. 317–327, 2018.[@zhang2018_tree_lstm]
+23. Chiang, W. L., Li, Y., Liu, X., Bengio, S., Si, S., & Hsieh, C. J. (2019). Cluster-GCN: An efficient algorithm for training deep and large graph convolutional networks. SIGKDD, 257–266. https://doi.org/10.1145/3292500.3330925 [@chiang2019_cluster_gcn]
