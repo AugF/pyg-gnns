@@ -13,6 +13,8 @@ secPrefix: 节
 subfigGrid: true
 ---
 
+[[toc]]
+
 # 1 绪论
 
 近年来，图神经网络是人工智能领域内的研究热点，在多种任务多个领域下取得了卓越的成果. 这些成功与graph structure相比于grid data structure有更强大的表现能力，以及深度学习端到端强大的学习能力息息相关。随着图神经网络在多个领域取得好的结果，在系统领域也陆续提出了一系列并行或分布式的图神经网络计算系统。这些系统从大量图神经网络中抽象出图神经网络计算模型，并针对计算模型设计了高效的实现。并在实现中使用了大量的性能优化技巧。
@@ -272,8 +274,7 @@ GaAN同样采用多头机制,其计算复杂度受$d_{in}$、$d_v$、$d_a$和头
 
 </div>
 
-实验也表明*数据集的平均度数影响点/边计算的耗时比例*. 我们固定图的顶点数为50k, 利用R-MAT生成器生成平均度数在10到100之间的随机图. 我们测量了各GNN中点/边计算的耗时比例随图平均度数的变化情况, 如[@fig:exp_avg_degree_vertex_edge_cal_time]所示. 边计算的耗时随着平均度数的增加呈线性增长, *边计算耗时在绝大部分情况下主导了整个计算耗时*, 只有在点计算复杂度非常高且平均度数非常低的情况下点计算耗时才能赶超边计算耗时. 因此, *GNN训练优化的重点应该是提升边计算的效率*.
-
+实验也表明 *数据集的平均度数影响点/边计算的耗时比例*. 我们固定图的顶点数为50k, 利用R-MAT生成器生成平均度数在10到100之间的随机图. 我们测量了各GNN中点/边计算的耗时比例随图平均度数的变化情况, 如[@fig:exp_avg_degree_vertex_edge_cal_time]所示. 边计算的耗时随着平均度数的增加呈线性增长, *边计算耗时在绝大部分情况下主导了整个计算耗时*, 只有在点计算复杂度非常高且平均度数非常低的情况下点计算耗时才能赶超边计算耗时. 因此, *GNN训练优化的重点应该是提升边计算的效率*.
 
 <div>
 
@@ -320,26 +321,26 @@ GaAN同样采用多头机制,其计算复杂度受$d_{in}$、$d_v$、$d_a$和头
 
 ![GAT](figs/experiments/exp_top_basic_ops_gat.png)<br>(c) GAT
 
-![GaAN](figs/experiments/exp_top_basic_ops_gaan.png)<br>(c) GaAN
+![GaAN](figs/experiments/exp_top_basic_ops_gaan.png)<br>(d) GaAN
 
-<a name="fig:exp_top_basic_ops">**图: 基本算子的耗时比例 (含forward, backward和evaluation阶段)**</a>
+<a name="fig:exp_top_basic_ops"> **图: 基本算子的耗时比例 (含forward, backward和evaluation阶段)** </a>
 
 </div>
 
 各算法的高耗时算子分析如下:
 
-- GCN中矩阵乘法算子mm主要用于点计算中$\gamma$,  该算子在cph数据集上尤其耗时, 因为cph输入的顶点特征向量维度非常高, 使得Layer0的点计算中矩阵乘法的计算量很高. mul是边计算函数$\phi$中的数乘操作.  scatter_add和gather均用于实现边计算中的聚合步骤$\Sigma$, 其中前者用于forward阶段后者用于backward阶段. index_select算子用于边计算中的collect步骤. 对于GCN算法来说, 边计算相关算子占据了主要的耗时, 各算子之间耗时比较平均, 没有特别突出的性能瓶颈.
+- GCN中矩阵乘法算子mm主要用于点计算中$\gamma$,  该算子在cph数据集上尤其耗时, 因为cph输入的顶点特征向量维度非常高, 使得Layer0的点计算中矩阵乘法的计算量很高. mul是边计算函数$\phi$中的数乘操作. scatter_add和gather均用于实现边计算中的聚合步骤$\Sigma$, 其中前者用于forward阶段后者用于backward阶段. index_select算子用于边计算中的collect步骤. 对于GCN算法来说, 边计算相关算子占据了主要的耗时, 各算子之间耗时比较平均, 没有特别突出的性能瓶颈.
 - GGNN中最耗时的也是矩阵乘法mm算子, 主要用于点计算函数$\gamma$. scatter_add, index_select和gather算子用于边计算. 而thnn_fused_gru_cell用于GRU的backward计算中. GGNN因为点计算复杂度的提升, mm算子的耗时时间明显提高.
-- GAT中最耗时的4个算子均与边计算相关. mul, _index_put_impl和sum用于实现边计算函数$\phi$. index_select算子用于边计算中的collect阶段. mm算子用于点计算函数$\gamma$
+- GAT中最耗时的4个算子均与边计算相关. mul,_index_put_impl和sum用于实现边计算函数$\phi$. index_select算子用于边计算中的collect阶段. mm算子用于点计算函数$\gamma$.
 - GaAN中最耗时的矩阵乘法算子mm同时用于边计算和点计算, 其中边计算占主导. mul和cat用于边计算中的$\phi$函数.
 
-从共性来说, *GNN计算的主要耗时还是在矩阵乘法mm, 按元素数乘mul等算子*, 因此非常适合用GPU进行计算.  边计算中的aggregate步骤虽然计算较为简单, 但因为涉及数据同步和非规整计算(不同顶点的度数差距很大), 其相关算子scatter_add和gather的依然占据了一定的耗时. 边计算中的collect步骤虽然没有任何的计算, 但是其相关算子index_select依然占据了10%左右的耗时. *aggregate步骤和collect步骤是所有GNN训练的计算性能瓶颈之一*, 优化相应的算子将能提升所有GNN的训练效率.
+从共性来说, **GNN计算的主要耗时还是在矩阵乘法mm, 按元素数乘mul等算子**, 因此非常适合用GPU进行计算.  边计算中的aggregate步骤虽然计算较为简单, 但因为涉及数据同步和非规整计算(不同顶点的度数差距很大), 其相关算子scatter_add和gather的依然占据了一定的耗时. 边计算中的collect步骤虽然没有任何的计算, 但是其相关算子index_select依然占据了10%左右的耗时. **aggregate步骤和collect步骤是所有GNN训练的计算性能瓶颈之一**, 优化相应的算子将能提升所有GNN的训练效率.
 
-**性能瓶颈总结**:  
+性能瓶颈总结:
 
-- *GNN训练性能瓶颈受数据集的平均度数影响*. 因为绝大部分现实世界中的图的平均度数在10度以上[@network-repository], GNN训练中的性能瓶颈将集中在边计算部分.
-- *根据边计算函数$\phi$的计算复杂度不同, GNN的在边计算中的性能瓶颈不同*:
-  - 如果$\phi$的计算复杂度较高, 性能瓶颈集中在实现$\phi$所用的基本算子. 优化相应基本算子的实现将能提升这类GNN的训练性能. 以GAT为例, GAT中最耗时的算子_index_put_impl主要用于$\phi$中softmax计算($\alpha^k_{ij}$)的backward阶段, 该算子只涉及数据移动. 优化的softmax在GPU上的实现能够显著降低GAT的训练耗时.
+- **GNN训练性能瓶颈受数据集的平均度数影响**. 因为绝大部分现实世界中的图的平均度数在10度以上[@network-repository], GNN训练中的性能瓶颈将集中在边计算部分.
+- **根据边计算函数$\phi$的计算复杂度不同, GNN的在边计算中的性能瓶颈不同**:
+  - 如果$\phi$的计算复杂度较高, 性能瓶颈集中在实现$\phi$所用的基本算子. 优化相应基本算子的实现将能提升这类GNN的训练性能. 以GAT为例, GAT中最耗时的算子_index_put_impl主要用于$\phi$中softmax计算(\alpha^k_{ij})的backward阶段, 该算子只涉及数据移动. 优化的softmax在GPU上的实现能够显著降低GAT的训练耗时.
   - 如果$\phi$的计算复杂度较低, 其边计算中的collect和aggregate步骤是计算性能瓶颈. collect步骤只涉及大量的数据移动. 而aggregate步骤计算较为简单(例如求和/平均/最大值等), 但因为涉及数据同步和不规整计算, 其耗时依然显著. 优化这两个步骤在GPU上的实现将能提升这类GNN的训练性能.
 
 ## 4.3 实验3: GPU内存使用分析
@@ -366,7 +367,7 @@ GaAN同样采用多头机制,其计算复杂度受$d_{in}$、$d_v$、$d_a$和头
 
 ![膨胀比例随输入特征向量维度的变化情况](figs/experiments/exp_memory_expansion_ratio_input_feature_dimension_com-amazon.png)
 
-<a name="#fig:exp_memory_expansion_ratio">**图: 内存膨胀比例随输入特征向量维度的变化情况. **</a>
+<a name="#fig:exp_memory_expansion_ratio"> **图: 内存膨胀比例随输入特征向量维度的变化情况.** </a>
 
 不同的GNN因其点/边计算复杂度的不同, 生成的中间结果的规模对图的点/边数量的敏感度不同, 导致内存膨胀比例受图的平均度数的影响. 我们测量了GPU峰值内存使用和膨胀比例受图规模的影响.
 
@@ -380,7 +381,7 @@ GaAN同样采用多头机制,其计算复杂度受$d_{in}$、$d_v$、$d_a$和头
 
 ![Memory Expansion Ratio](figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_edges_expansion_ratio.png)<br>(b)
 
-<a name="fig:exp_memory_expansion_ratio_input_graph_number_of_edges">**图: 内存使用随图平均度数的变化情况 (R-MAT随机图, 顶点数固定为10k, 输入特征向量维度为32).**</a>
+<a name="fig:exp_memory_expansion_ratio_input_graph_number_of_edges"> **图: 内存使用随图平均度数的变化情况 (R-MAT随机图, 顶点数固定为10k, 输入特征向量维度为32).** </a>
 
 </div>
 
@@ -390,11 +391,11 @@ GaAN同样采用多头机制,其计算复杂度受$d_{in}$、$d_v$、$d_a$和头
 
 ![Memory Expansion Ratio](figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_vertices_fixed_edge_expansion_ratio.png)<br>(b)
 
-<a name="fig:exp_memory_expansion_ratio_input_graph_number_of_vertices_fixed_edge">**图: 内存使用随图顶点数的变化情况 (R-MAT随机图, 边数固定为500k, 输入特征向量维度为32).**</a>
+<a name="fig:exp_memory_expansion_ratio_input_graph_number_of_vertices_fixed_edge"> **图: 内存使用随图顶点数的变化情况 (R-MAT随机图, 边数固定为500k, 输入特征向量维度为32).** </a>
 
 </div>
 
-**制约数据扩展性的瓶颈总结**:
+**制约数据扩展性的瓶颈**:
 
 - *GPU内存容量是限制训练的数据集规模扩展性的决定性因素*.
 - *GPU内存使用主要来自计算过程中产生的中间计算结果, 尤其是边计算的中间计算结果*. 因为部分中间计算结果会被缓存以参与backward计算, 因此高GPU内存使用贯穿forward和backward阶段.
@@ -404,9 +405,15 @@ GaAN同样采用多头机制,其计算复杂度受$d_{in}$、$d_v$、$d_a$和头
 
 ## 4.4 实验4: 采样技术对训练性能的影响分析
 
-在没有采样技术之前, GNN的训练都是full batch的, 即训练集中所有的顶点和边同时参与训练并计算梯度. full batch训练能保证收敛, 但是每次训练开销较大, 导致收敛速度慢. 受随机梯度下降中mini batch训练方式的启发, 一系列的GNN采样技术被提出. 理论上, 采样技术允许在训练时每个batch只使用少部分顶点和边, 相当于降低了训练用的图的规模, 大幅降低了每个batch的训练时间, 使在固定时间内可以进行多轮梯度下降, 从而加速收敛. 本节实验主要分析采样技术对训练性能的影响. 在目前PyG的实现中,  GNN的模型参数驻留在GPU上, 在每个epoch, 采样过程在CPU中进行, 采样出的子图发送到GPU上进行GNN训练, .
+在没有采样技术之前, GNN的训练都是full batch的, 即训练集中所有的顶点和边同时参与训练并计算梯度. full batch训练能保证收敛, 但是每次训练开销较大, 导致收敛速度慢. 受随机梯度下降中mini batch训练方式的启发, 一系列的GNN采样技术被提出. 理论上, 采样技术允许在训练时每个batch只使用少部分顶点和边, 相当于降低了训练用的图的规模, 大幅降低了每个batch的训练时间, 使在固定时间内可以进行多轮梯度下降, 从而加速收敛. 本节实验主要分析采样技术对训练性能的影响. 
 
-图[@fig:exp_sampling_time_decomposition](#fig:exp_sampling_time_decomposition)展示了采用采样技术后, 采样阶段.
+在目前PyG的实现中,  GNN的模型参数始终驻留在GPU上, 数据集驻留在主存中. 在处理每个epoch时, 由CPU在主存中对图数据集进行采样, 生成若干mini-batch, 每个mini-batch都是数据集的一个小规模子图. 在训练每个mini-batch时, PyG将该mini-batch对应的子图数据拷贝到GPU的内存中, 基于该子图进行训练并根据梯度更新模型参数. 采用采样技术后, 即可以使用基于SGD的模型参数更新方法, 对模型参数的evaluation隔若干epoch进行一次, evaluation可以在CPU进行也可以在GPU进行. 故本节实验中的统计数据均不包含evaluation阶段.
+
+图[@fig:exp_sampling_epoch_train_time](#fig:exp_sampling_epoch_train_time)展示了每个epoch的训练时间随batch size的变化情况.
+
+图[@fig:exp_sampling_time_decomposition](#fig:exp_sampling_time_decomposition)展示了采用采样技术后每个epoch训练过程中采样过程耗时 (sampling), mini-batch数据传输耗时 (data transferring)和mini-batch训练(training)阶段的耗时占比.
+
+图[@fig:exp_sampling_memory_usage](#fig:exp_sampling_memory_usage)展示了采用采样技术后训练过程中峰值内存使用情况.
 
 # 5 系统设计建议
 
