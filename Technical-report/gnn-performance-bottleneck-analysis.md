@@ -13,6 +13,8 @@ secPrefix: 节
 subfigGrid: true
 ---
 
+[[toc]]
+
 # 1 绪论
 
 近年来，图神经网络是人工智能领域内的研究热点，在多种任务多个领域下取得了卓越的成果. 这些成功与graph structure相比于grid data structure有更强大的表现能力，以及深度学习端到端强大的学习能力息息相关。随着图神经网络在多个领域取得好的结果，在系统领域也陆续提出了一系列并行或分布式的图神经网络计算系统。这些系统从大量图神经网络中抽象出图神经网络计算模型，并针对计算模型设计了高效的实现。并在实现中使用了大量的性能优化技巧。
@@ -306,9 +308,9 @@ GaAN同样采用多头机制,其计算复杂度受$d_{in}$、$d_v$、$d_a$和头
 
 ![GAT](figs/experiments/exp_top_basic_ops_gat.png)<br>(c) GAT
 
-![GaAN](figs/experiments/exp_top_basic_ops_gaan.png)<br>(c) GaAN
+![GaAN](figs/experiments/exp_top_basic_ops_gaan.png)<br>(d) GaAN
 
-<a name="fig:exp_top_basic_ops">**图: 基本算子的耗时比例 (含forward, backward和evaluation阶段)**</a>
+<a name="fig:exp_top_basic_ops"> **图: 基本算子的耗时比例 (含forward, backward和evaluation阶段)** </a>
 
 </div>
 
@@ -352,7 +354,7 @@ GaAN同样采用多头机制,其计算复杂度受$d_{in}$、$d_v$、$d_a$和头
 
 ![膨胀比例随输入特征向量维度的变化情况](figs/experiments/exp_memory_expansion_ratio_input_feature_dimension_com-amazon.png)
 
-<a name="#fig:exp_memory_expansion_ratio">**图: 内存膨胀比例随输入特征向量维度的变化情况. **</a>
+<a name="#fig:exp_memory_expansion_ratio"> **图: 内存膨胀比例随输入特征向量维度的变化情况.** </a>
 
 不同的GNN因其点/边计算复杂度的不同, 生成的中间结果的规模对图的点/边数量的敏感度不同, 导致内存膨胀比例受图的平均度数的影响. 我们测量了GPU峰值内存使用和膨胀比例受图规模的影响.
 
@@ -380,7 +382,7 @@ GaAN同样采用多头机制,其计算复杂度受$d_{in}$、$d_v$、$d_a$和头
 
 </div>
 
-**制约数据扩展性的瓶颈总结**:
+**制约数据扩展性的瓶颈**:
 
 - *GPU内存容量是限制训练的数据集规模扩展性的决定性因素*.
 - *GPU内存使用主要来自计算过程中产生的中间计算结果, 尤其是边计算的中间计算结果*. 因为部分中间计算结果会被缓存以参与backward计算, 因此高GPU内存使用贯穿forward和backward阶段.
@@ -390,9 +392,15 @@ GaAN同样采用多头机制,其计算复杂度受$d_{in}$、$d_v$、$d_a$和头
 
 ## 4.4 实验4: 采样技术对训练性能的影响分析
 
-在没有采样技术之前, GNN的训练都是full batch的, 即训练集中所有的顶点和边同时参与训练并计算梯度. full batch训练能保证收敛, 但是每次训练开销较大, 导致收敛速度慢. 受随机梯度下降中mini batch训练方式的启发, 一系列的GNN采样技术被提出. 理论上, 采样技术允许在训练时每个batch只使用少部分顶点和边, 相当于降低了训练用的图的规模, 大幅降低了每个batch的训练时间, 使在固定时间内可以进行多轮梯度下降, 从而加速收敛. 本节实验主要分析采样技术对训练性能的影响. 在目前PyG的实现中,  GNN的模型参数驻留在GPU上, 在每个epoch, 采样过程在CPU中进行, 采样出的子图发送到GPU上进行GNN训练, .
+在没有采样技术之前, GNN的训练都是full batch的, 即训练集中所有的顶点和边同时参与训练并计算梯度. full batch训练能保证收敛, 但是每次训练开销较大, 导致收敛速度慢. 受随机梯度下降中mini batch训练方式的启发, 一系列的GNN采样技术被提出. 理论上, 采样技术允许在训练时每个batch只使用少部分顶点和边, 相当于降低了训练用的图的规模, 大幅降低了每个batch的训练时间, 使在固定时间内可以进行多轮梯度下降, 从而加速收敛. 本节实验主要分析采样技术对训练性能的影响. 
 
-图[@fig:exp_sampling_time_decomposition](#fig:exp_sampling_time_decomposition)展示了采用采样技术后, 采样阶段.
+在目前PyG的实现中,  GNN的模型参数始终驻留在GPU上, 数据集驻留在主存中. 在处理每个epoch时, 由CPU在主存中对图数据集进行采样, 生成若干mini-batch, 每个mini-batch都是数据集的一个小规模子图. 在训练每个mini-batch时, PyG将该mini-batch对应的子图数据拷贝到GPU的内存中, 基于该子图进行训练并根据梯度更新模型参数. 采用采样技术后, 即可以使用基于SGD的模型参数更新方法, 对模型参数的evaluation隔若干epoch进行一次, evaluation可以在CPU进行也可以在GPU进行. 故本节实验中的统计数据均不包含evaluation阶段.
+
+图[@fig:exp_sampling_epoch_train_time](#fig:exp_sampling_epoch_train_time)展示了每个epoch的训练时间随batch size的变化情况.
+
+图[@fig:exp_sampling_time_decomposition](#fig:exp_sampling_time_decomposition)展示了采用采样技术后每个epoch训练过程中采样过程耗时 (sampling), mini-batch数据传输耗时 (data transferring)和mini-batch训练(training)阶段的耗时占比.
+
+图[@fig:exp_sampling_memory_usage](#fig:exp_sampling_memory_usage)展示了采用采样技术后训练过程中峰值内存使用情况.
 
 # 5 系统设计建议
 
