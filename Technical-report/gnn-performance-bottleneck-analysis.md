@@ -47,56 +47,58 @@ NeuGraph[4]为图神经网络训练提出了SAGA-NN（Scatter-ApplyEdge-Gather-A
 - $\delta$, $LeakyReLU$: 激活函数(可微函数)
 - $\mathbf{W}x$: 默认为矩阵乘法, 即mm
 - $\odot$: 元素乘法
-- $[||,||]$
+- $[\parallel, \parallel]$, $\parallel_{k=1}^K$, 表示向量拼接
+
+图定义：
+A graph is representeed as $\mathcal{G}=(\mathcal{V}, \mathcal{E})$, where V is the set of vertices or nodes (we will use nodes throughtout this article), and $E$ is the set of edges. Let $n = |\mathcal{V}|$ and $m = \mathcal{E}$. Let $v_i \in \mathcal{V}$ to denote a node and $\boldsymbol{e}_{i, j} = (v_i, v_j) \in \mathcal{E}$ to denote an edge pointing from $v_j$ to $v_i$. The neighborhood of a node $v$ is defined as $\mathcal{N}(v) = \{u \in \mathcal{V} | (v, u) \in \mathcal{E}\}$. The adjacency matrix $\boldsymbol{A}$ is a $n \times n$ matrix with $A_{ij}=1$ if $e_{j, i} \in \mathcal{E}$ and $A_{ij}=0$ if $e_{j, i} \notin \mathcal{E}$.A graph may have node features $\boldsymbol{X}$, where $\boldsymbol{X} \in \boldsymbol{R}^{n \times f}$, $f$ is the number of feature dims. 
 
 ## 2.1 图神经网络的通用结构
 
-1. graph neural network的通用网络结构
+### 2.1.1 graph neural network的通用网络结构
 
-Definition(Graph): A graph is representeed as $\mathcal{G}=(\mathcal{V}, \mathcal{E})$, where V is the set of vertices or nodes (we will use nodes throughtout this article), and $E$ is the set of edges. Let $n = |\mathcal{V}|$ and $m = \mathcal{E}$. Let $v_i \in \mathcal{V}$ to denote a node and $\boldsymbol{e}_{i, j} = (v_i, v_j) \in \mathcal{E}$ to denote an edge pointing from $v_j$ to $v_i$. The neighborhood of a node $v$ is defined as $\mathcal{N}(v) = \{u \in \mathcal{V} | (v, u) \in \mathcal{E}\}$. The adjacency matrix $\boldsymbol{A}$ is a $n \times n$ matrix with $A_{ij}=1$ if $e_{j, i} \in \mathcal{E}$ and $A_{ij}=0$ if $e_{j, i} \notin \mathcal{E}$.A graph may have node features $\boldsymbol{X}$, where $\boldsymbol{X} \in \boldsymbol{R}^{n \times f}$, $f$ is the number of feature dims. 
-
-Definition(Directed Graph): A directed graph is a graph with all edges directed from one node to another. A undirected graph is considerd as a special case of directed graphs where there is a pair of edges with inverse directions if two nodes are connected. A graph is undirected if and only if the adjacency matrix is symmetric.
-
-Graph Neural Networks: 一个图神经网络模型通常包括三部分：input layer, 若干GNN layer和output layer. [#fig:GNN_common_architecture] 
-The input layer， 节点的表示初始化为node features $X$, 因为是input layer可以看作是GNN的第0层，所以这里$\boldsymbol{A}$等同于$\boldsymbol{H}^0$, $\boldsymbol{h}_i^0$ is representing the feature vector of a node $v_i$.
-The output layer can focus on different graph analytics tasks with one of the following mechanisms: Node Level, Outputs relate to node regression and node classification tasks; Edge Level, Outputs relate to the edge classification and link prediction tasks; Graph Leval: Outputs relate to the graph classifications.
-Input Layer和GNN Layer, GNN Layer之间，以及GNN Layer和Output Layer之间的连接方式是由graph stucture$\boldsymbol{A}$决定的。GNN Layer $l$中的每个节点的变化操作可以是一个GNN Unit单元。[#fig:GNN_Unit]
-GNN Unit: let $\boldsymbol{h}_i^{l+1}$ denote the feature vector at layer $l$ associated with node $v_i$, generalizing the convolutional operator to irregulatr domins is typically expressed as a **message passing** scheme[@gilmer_messgae_passing]
-$$\boldsymbol{h}_i^{l+1}  = \gamma (\boldsymbol{h}_i^l, \Sigma_{j \in \mathcal{N}(i)} \phi(\boldsymbol{h}_i^l, \boldsymbol{h}_j^l, \boldsymbol{e}_{j, i}^l))$$
-
-where $\Sigma$ denotes a differntiable, permutation invariant function, e.g., sum, mean or max, and $\gamma$ and $\phi$ denote differentiable functions such as MLPs.
-
-显然地，这里我们可以把GNN Unit划分为三个基础组件:
-1. 边操作函数$\gamma$, 这里的计算量与图中的边紧密相关, $\boldsymbol{m}_{j, i}^l = \phi(\boldsymbol{h}_i^l, \boldsymbol{h}_j^l, \boldsymbol{e}_{j, i}^l)$
-2. 聚合函数$\Sigma$, 这里的计算量与图中的边紧密相关，$\boldsymbol{s}_i =  \Sigma_{j \in \mathcal{N}(i)} \boldsymbol{m}_{j, i}^l $
-3. 点操作函数$\gamma$, 这里的计算量与图中的点紧密相关, $\boldsymbol{h}_i^{l+1}  = \gamma(\boldsymbol{s}_i)$
-
-> 在后面的实验中，将1和2视为了边计算，3视为了点计算
+从[@wu2020_gnn_survey], [@zhou2018_gnn_survey], [@zhang2018_gnn_survey]，我们总结出GNN通用网络结构往往可以表示为以下形式：
+Input Layer + 若干 GNN Layers + Prediction Layer
+其中，Input Layer是GNN的输入层，GNN Layer是GNN的信息更新层，Prediction Layer为输出层，与实际GNN处理的任务场景有关，常见的有node classification, link prediction, graph classification等等。
 
 ![GNN通用网络结构](figs/illustration/GNN_common_architecture.png){#fig:GNN_common_architecture width=60%}
 
-![GNN单元](figs/illustration/GNN_Unit.png){#fig:GNN_Unit width=60%}
+如图[#fig:GNN_common_architecture]，这里以node classification为说明，展示了两层GNN Layer下通用图神经网络的网络结构图: 
+1. 图中节点特征$\boldsymbol{X}$作为Input Layer的输出隐向量。
+2. 网络结构中每个Layer之间节点的连接关系由图的拓扑结构$\boldsymbol{A}$决定，比如GNN Layer1中节点$v_3$的输出隐向量是通过汇聚($\Sigma$)已经经过某种变换($\phi$)的来自GNN Layer1的$v_2$, $v_4$, $v_5$的表示，再经过更新$\gamma$得到的，而$v_2$, $v_4$, $v_5$这些点的指定是由Training Graph中的$e_{2, 3}, e_{4, 3}, e_{5, 3}$决定的。
+3. 图中每个节点可以看作是图神经网络结构中的基本单元。这个基本单元又可以看作是一个小型的网络结构，它反应的就是图神经网络中每一层信息的更新。
 
+按照论文[@gilmer_messgae_passing]的说法，我们这里用message-passing机制来表示GNN Unit的内容[#fig:GNN_Unit]，GNN Layer $l+1$ 节点 $v_i$的可以表示为:
+$$\boldsymbol{h}_i^{l+1}  = \gamma (\boldsymbol{h}_i^l, \Sigma_{j \in \mathcal{N}(i)} \phi(\boldsymbol{h}_i^l, \boldsymbol{h}_j^l, \boldsymbol{e}_{j, i}^l))$$
+where $\Sigma$ denotes a differntiable, permutation invariant function, e.g., sum, mean or max, and $\gamma$ and $\phi$ denote differentiable functions such as MLPs.
+细致地，这里我们可以把GNN Unit划分为三个基础组件:
+- 边操作函数$\gamma$, 这里的计算量与图中的边紧密相关, $\boldsymbol{m}_{j, i}^l = \phi(\boldsymbol{h}_i^l, \boldsymbol{h}_j^l, \boldsymbol{e}_{j, i}^l)$
+- 聚合函数$\Sigma$, 这里的计算量与图中的边紧密相关，$\boldsymbol{s}_i^l =  \Sigma_{j \in \mathcal{N}(i)} \boldsymbol{m}_{j, i}^l $
+- 点操作函数$\gamma$, 这里的计算量与图中的点紧密相关, $\boldsymbol{h}_i^{l+1}  = \gamma(\boldsymbol{s}_i^l)$
+> 在后面的实验中，将1和2视为了边计算，3视为了点计算
+
+![GNN单元](figs/illustration/GNN_Unit.png){#fig:GNN_Unit width=60%}
 ## 2.2 图神经网络的分类
+
+动机：在分析每层的
 
 [@tbl:gnn_overview]中列出了我们调研到的典型的图神经网络算法.表中列出了各个GNN中点/边计算的表达式,表达式中的大写粗体字母表示GNN模型参数.表中的网络类型来源于文献[@zhou2018_gnn_review].因为本文主要关注GNN算法的计算特性,我们分析了各GNN算法的点、边计算的计算复杂度,并根据计算复杂度将GNN算法划分到四个象限中,如[@fig:GNN_complexity_quadrant]所示.
 
-其中, $d_{in}, d_{out}, k, d_a, d_v, d_m$为超参数
+其中, $d_{in}, d_{out}, k, d_a, d_v, d_m, K$为算法的超参数
 
 **表: 图神经网络概览** [tbl:gnn_overview]
 
 |          名称          |            网络类型             | 边计算 $\Sigma$  | 边计算 $\phi$                                                |          边计算复杂度           | 点计算 $\gamma$                                              |                     点计算复杂度                     |
 | :--------------------: | :-----------------------------: | :--------------- | :----------------------------------------------------------- | :-----------------------------: | :----------------------------------------------------------- | :--------------------------------------------------: |
-|  ChebNet (ICLR, 2016)  |        Spectral Methods         | sum              | $\boldsymbol{m}_{j, i, , k}^l = T_k(\widetilde{L} )_{ij} \boldsymbol{h}_j^l$ |         $O(K * d_{in})$         | $\boldsymbol{h}_i^{l+1} = \sum_{k=0}^K \boldsymbol{W}^k \cdot \boldsymbol{s}_{i, k}^{l} $ |                $O(d_{in} * d_{out})$                 |
-|  **GCN** (ICLR, 2017)  |        Spectral Methods         | sum              | $\boldsymbol{m}_{j, i}^l = e_{j, i} \boldsymbol{h}_j^l$      |           $O(d_{in})$           | $\boldsymbol{h}_i^{l+1} = \boldsymbol{W} \cdot \boldsymbol{s}_i^{l}$ |                $O(d_{in} * d_{out})$                 |
-|   AGCN (AAAI, 2018)    |        Spectral Methods         | sum              | $\boldsymbol{m}_{j, i}^l = \tilde{e}_{j, i}^l \boldsymbol{h}_j^l$ |           $O(d_{in})$           | $\boldsymbol{h}_i^{l+1} = \boldsymbol{W} \cdot \boldsymbol{s}_i^{l}$ |                $O(d_{in} * d_{out})$                 |
-| GraphSAGE(NIPS, 2017)  |          Non-spectral           | sum, mean, max   | $\boldsymbol{m}_{j, i}^l =  \boldsymbol{h}_j^l$              |             $O(1)$              | $\boldsymbol{h}_i^{l+1} =   \delta(\boldsymbol{W} \cdot [\boldsymbol{s}_i^{l} \parallel \boldsymbol{h}_i^l])$ |                $O(d_{in} * d_{out})$                 |
-| Neural FPs(NIPS, 2015) |      Non-spectral Methods       | sum              | $\boldsymbol{m}_{j, i}^l = \boldsymbol{h}_j^l$               |           $O(d_{in})$           | $\boldsymbol{h}_i^{l+1} = \delta(\boldsymbol{W}^{\boldsymbol{N}_i} \cdot \boldsymbol{s}_i^{l})$ |                $O(d_{in} * d_{out})$                 |
-|    SSE(ICML, 2018)     | Recurrent Graph Neural Networks | sum              | $\boldsymbol{m}_{j, i}^l = [\boldsymbol{h}_i^{l} \parallel \boldsymbol{h}_j^l]$ |             $O(1)$              | $\boldsymbol{h}_i^{l+1} = (1 - \alpha) \cdot \boldsymbol{h}_i^l +\alpha   \cdot \delta(\boldsymbol{W}_1 \delta(\boldsymbol{W}_2), \boldsymbol{s}_i^l)$ |                $O(d_{in} * d_{out})$                 |
-|  **GGNN**(ICLR, 2015)  |   Gated Graph Neural Networks   | sum              | $\boldsymbol{m}_{j, i}^l = \boldsymbol{W} \boldsymbol{h}_j^l$ |      $O(d_{in} * d_{out})$      | $\boldsymbol{z}_i^l = \delta ( \boldsymbol{W}^z \boldsymbol{s}_i^l + \boldsymbol{b}^{sz} + \boldsymbol{U}^z \boldsymbol{h}_i^{l} + \boldsymbol{b}^{hz}) \\ \boldsymbol{r}_i^l = \delta ( \boldsymbol{W}^r \boldsymbol{s}_i^l+ \boldsymbol{b}^{sr} +\boldsymbol{U}^r \boldsymbol{h}_i^{l} + \boldsymbol{b}^{hr}) \\ \boldsymbol{h}_i^{l+1} = tanh ( \boldsymbol{W} \boldsymbol{s}_i^l + \boldsymbol{b}^s + \boldsymbol{U} ( \boldsymbol{r}_i^l \odot \boldsymbol{h}_i^{l} + \boldsymbol{b}^h))) \\ \boldsymbol{h}_i^{l+1} = (1 - \boldsymbol{z}_i^l) \odot \boldsymbol{h}_i^l +  \boldsymbol{z}_i^l \odot \boldsymbol{h}_i^{l+1}$ |         $O(max(d_{in}, d_{out}) * d_{out})$          |
+|  ChebNet (ICLR, 2016)  |        Spectral Methods         | sum              | $\boldsymbol{m}_{j, i, , k}^l = T_k(\widetilde{L} )_{j, i} \boldsymbol{h}_j^l$ |         $O(K * d_{in})$         | $\boldsymbol{h}_i^{l+1} = \sum_{k=0}^K \boldsymbol{W}^k  \boldsymbol{s}_{i, k}^{l} $ |                $O(d_{in} * d_{out})$                 |
+|  **GCN** (ICLR, 2017)[@kipf2017_gcn]  |        Spectral Aprroaches         | sum              | $\boldsymbol{m}_{j, i}^l = e_{j, i} \boldsymbol{h}_j^l$      |           $O(d_{in})$           | $\boldsymbol{h}_i^{l+1} = \boldsymbol{W}  \boldsymbol{s}_i^{l}$ |                $O(d_{in} * d_{out})$                 |
+|   AGCN (AAAI, 2018)    |       Spectral Aprroaches        | sum              | $\boldsymbol{m}_{j, i}^l = \tilde{e}_{j, i}^l \boldsymbol{h}_j^l$ |           $O(d_{in})$           | $\boldsymbol{h}_i^{l+1} = \boldsymbol{W}  \boldsymbol{s}_i^{l}$ |                $O(d_{in} * d_{out})$                 |
+| GraphSAGE(NIPS, 2017)  |          Non-spectral Aprroaches           | sum, mean, max   | $\boldsymbol{m}_{j, i}^l =  \boldsymbol{h}_j^l$              |             $O(1)$              | $\boldsymbol{h}_i^{l+1} =   \delta(\boldsymbol{W}  [\boldsymbol{s}_i^{l} \parallel \boldsymbol{h}_i^l])$ |                $O(d_{in} * d_{out})$                 |
+| Neural FPs(NIPS, 2015) |      Non-spectral Aprroaches        | sum              | $\boldsymbol{m}_{j, i}^l = \boldsymbol{h}_j^l$               |           $O(d_{in})$           | $\boldsymbol{h}_i^{l+1} = \delta(\boldsymbol{W}^{\boldsymbol{N}_i}  \boldsymbol{s}_i^{l})$ |                $O(d_{in} * d_{out})$                 |
+|    SSE(ICML, 2018)     | Recurrent Graph Neural Networks | sum              | $\boldsymbol{m}_{j, i}^l = [\boldsymbol{h}_i^{l} \parallel \boldsymbol{h}_j^l]$ |             $O(1)$              | $\boldsymbol{h}_i^{l+1} = (1 - \alpha)  \boldsymbol{h}_i^l +\alpha    \delta(\boldsymbol{W}_1 \delta(\boldsymbol{W}_2), \boldsymbol{s}_i^l)$ |                $O(d_{in} * d_{out})$                 |
+|  **GGNN**(ICLR, 2015)[@li2015_ggnn]  |   Gated Graph Neural Networks   | sum              | $\boldsymbol{m}_{j, i}^l = \boldsymbol{W} \boldsymbol{h}_j^l$ |      $O(d_{in} * d_{out})$      | $\boldsymbol{z}_i^l = \delta ( \boldsymbol{W}^z \boldsymbol{s}_i^l + \boldsymbol{b}^{sz} + \boldsymbol{U}^z \boldsymbol{h}_i^{l} + \boldsymbol{b}^{hz}) \\ \boldsymbol{r}_i^l = \delta ( \boldsymbol{W}^r \boldsymbol{s}_i^l+ \boldsymbol{b}^{sr} +\boldsymbol{U}^r \boldsymbol{h}_i^{l} + \boldsymbol{b}^{hr}) \\ \boldsymbol{h}_i^{l+1} = tanh ( \boldsymbol{W} \boldsymbol{s}_i^l + \boldsymbol{b}^s + \boldsymbol{U} ( \boldsymbol{r}_i^l \odot \boldsymbol{h}_i^{l} + \boldsymbol{b}^h))) \\ \boldsymbol{h}_i^{l+1} = (1 - \boldsymbol{z}_i^l) \odot \boldsymbol{h}_i^l +  \boldsymbol{z}_i^l \odot \boldsymbol{h}_i^{l+1}$ |         $O(max(d_{in}, d_{out}) * d_{out})$          |
 |  Tree-LSTM(ACL, 2015)  |           Graph LSTM            | sum              | $\boldsymbol{m}_{j, i}^l = \boldsymbol{h}_j^l$               |             $O(1)$              | $h_i^{l+1} = LSTM(\boldsymbol{s}_i^l, \boldsymbol{h}_i^{l})$ |                $O(d_{in} * d_{out})$                 |
-|  **GAT**(ICLR, 2017)   |    Graph Attention Networks     | sum, mean        | $\alpha_{ij}^k = \frac {\exp(LeakyReLU(a^T [ \boldsymbol{W}^k \cdot \boldsymbol{h}_i^l \parallel \boldsymbol{W}^k \cdot \boldsymbol{h}_j^l] ))} {\sum_{k \in \mathcal{N}(i)}\exp(LeakyReLU(a^T [ \boldsymbol{W}^k \cdot \boldsymbol{h}_i^l \parallel \boldsymbol{W}^k \cdot \boldsymbol{h}_k^l] ))} \\  \boldsymbol{m}_{j, i}^l = \parallel_{k=1}^K \delta(\alpha_{ij}^k \boldsymbol{W}^k \boldsymbol{h}_j^{l})$ |    $O(K * d_{in} * d_{out})$    | $\boldsymbol{h}_i^{l+1} = \boldsymbol{s}_i^l$                |                        $O(1)$                        |
-|  **GaAN**(UAI, 2018)   |    Graph Attention Networks     | sum + max + mean | $\alpha_{ij}^k = \frac {\exp(\boldsymbol{W}^a \cdot [ \boldsymbol{W}^a \cdot \boldsymbol{h}_i^l \parallel \boldsymbol{W}^a \cdot \boldsymbol{h}_j^l] )} {\sum_{k \in \mathcal{N}(i)}\exp(a^T [ \boldsymbol{W}^k \cdot \boldsymbol{h}_i^l \parallel \boldsymbol{W}^k \cdot \boldsymbol{h}_k^l] )} \\  \boldsymbol{m}_{j, i, 1}^l = \parallel_{k=1}^K \delta(\alpha_{ij}^k \boldsymbol{W}^k_v \boldsymbol{h}_j^{l}) \\ \boldsymbol{m}_{j, i, 2}^l = \boldsymbol{W}_m \cdot \boldsymbol{h}_j^{l} \\ \boldsymbol{m}_{j, i, 3}^l = \boldsymbol{h}_j^l$ | $O(max(d_a, d_m) * K * d_{in})$ | $\boldsymbol{g}_i = \boldsymbol{W}_g \cdot [\boldsymbol{h}_i^{l} \parallel \boldsymbol{s}_{i, 2}^l \parallel \boldsymbol{s}_{i, 3}^l]  \\ \boldsymbol{h}_i^{l+1} = \boldsymbol{W}_o [\boldsymbol{h}_i^l \parallel (\boldsymbol{g}_{i} \odot \boldsymbol{s}_{i, 3}^l) ]$ | $O(max(d_{in} + K * d_v, 2 * d_{in} + d_m) d_{out})$ |
+|  **GAT**(ICLR, 2017)[@huang2018_gat]   |    Graph Attention Networks     | sum, mean        | $\alpha_{j, i}^k = \frac {\exp(LeakyReLU(\boldsymbol{a}^T [ \boldsymbol{W}^k  \boldsymbol{h}_j^l \parallel \boldsymbol{W}^k  \boldsymbol{h}_j^l] ))} {\sum_{k \in \mathcal{N}(i)}\exp(LeakyReLU(\boldsymbol{a}^T [ \boldsymbol{W}^k  \boldsymbol{h}_j^l \parallel \boldsymbol{W}^k  \boldsymbol{h}_k^l] ))} \\  \boldsymbol{m}_{j, i}^l = \parallel_{k=1}^K \delta(\alpha_{j, i}^k \boldsymbol{W}^k \boldsymbol{h}_j^{l})$ |    $O(K * d_{in} * d_{out})$    | $\boldsymbol{h}_i^{l+1} = \boldsymbol{s}_i^l$                |                        $O(1)$                        |
+|  **GaAN**(UAI, 2018)[@zhang2018_gaan]   |    Graph Attention Networks     | sum + max + mean | $\alpha_{j, i}^k = \frac {\exp(\boldsymbol{a}^T [ \boldsymbol{W}^k_a \boldsymbol{h}_j^l \parallel \boldsymbol{W}^k_a \boldsymbol{h}_i^l] )} {\sum_{k \in \mathcal{N}(j)}\exp(\boldsymbol{a}^T [ \boldsymbol{W}^k_a \boldsymbol{h}_j^l \parallel \boldsymbol{W}^k_{a}  \boldsymbol{h}_k^l] )} \\  \boldsymbol{m}_{j, i, 1}^l = \parallel_{k=1}^K \delta(\alpha_{j, i}^k \boldsymbol{W}^k_v \boldsymbol{h}_j^{l}) \\ \boldsymbol{m}_{j, i, 2}^l = \boldsymbol{W}_m \boldsymbol{h}_j^{l} \\ \boldsymbol{m}_{j, i, 3}^l = \boldsymbol{h}_j^l$ | $O(max(d_a, d_m) * K * d_{in})$ | $\boldsymbol{g}_i = \boldsymbol{W}_g  [\boldsymbol{h}_i^{l} \parallel \boldsymbol{s}_{i, 2}^l \parallel \boldsymbol{s}_{i, 3}^l]  \\ \boldsymbol{h}_i^{l+1} = \boldsymbol{W}_o [\boldsymbol{h}_i^l \parallel (\boldsymbol{g}_{i} \odot \boldsymbol{s}_{i, 3}^l) ]$ | $O(max(d_{in} + K * d_v, 2 * d_{in} + d_m) d_{out})$ |
 
 
 ![GNN的计算复杂度象限图](figs/illustration/GNN_complexity_quadrant.jpg)
@@ -105,16 +107,42 @@ where $\Sigma$ denotes a differntiable, permutation invariant function, e.g., su
 
 ## 2.3 典型图神经网络
 
-1. GCN
+### 1. GCN
 提出了Spectral Graph Convolutions的一阶近似方法，将复杂度降到了与图边数的线性的数量级，并且能够学习局部图形结构和节点特征，沟通了Spectral-based方法和Spatial-based方法。
-The propagation rule of GCN at layer l is defined as follows:
-$$\boldsymbol{h}^{l} = \delta (\boldsymbol{W}^{l-1} sum_{j \in \mathcal{N}(i)} (e_{j, i}\boldsymbol{h}_j))$$
+The propagation rule of GCN at layer l+1 is defined as follows:
+$$\boldsymbol{h}_i^{l + 1} = \delta (\boldsymbol{W} sum_{j \in \mathcal{N}(i)} (e_{j, i}\boldsymbol{h}_j^{l}))$$
 
-2. GGNN
+### 2. GGNN
+在图神经网络的前期工作GNN上，首次提出采用了a gated recurrent unit(GRU)作为循环函数，将循环次数减少到了固定步骤数，不再需要约束参数以保证收敛
+GNN Layer $l$ node $v_i$的更新公式为:
+$$\boldsymbol{s}_i^{l} = sum_{j \in \mathcal{N}(i)} (\boldsymbol{h}_j^{l}) \\ \boldsymbol{z}_i^l = \delta ( \boldsymbol{W}^z \boldsymbol{s}_i^l + \boldsymbol{b}^{sz} + \boldsymbol{U}^z \boldsymbol{h}_i^{l} + \boldsymbol{b}^{hz}) \\ \boldsymbol{r}_i^l = \delta ( \boldsymbol{W}^r \boldsymbol{s}_i^l+ \boldsymbol{b}^{sr} +\boldsymbol{U}^r \boldsymbol{h}_i^{l} + \boldsymbol{b}^{hr}) \\ \boldsymbol{h}_i^{l+1} = tanh ( \boldsymbol{W} \boldsymbol{s}_i^l + \boldsymbol{b}^s + \boldsymbol{U} ( \boldsymbol{r}_i^l \odot \boldsymbol{h}_i^{l} + \boldsymbol{b}^h))) \\ \boldsymbol{h}_i^{l+1} = (1 - \boldsymbol{z}_i^l) \odot \boldsymbol{h}_i^l +  \boldsymbol{z}_i^l \odot \boldsymbol{h}_i^{l+1}$$
 
-3. GAT
 
-4. GaAN
+### 3. GAT
+采用了Attention机制来了解两个连接节点的相对权重，并且使用了multi-head机制来增加模型的表现能力
+GNN Layer $l$ node $v_i$的更新公式为:
+$$\boldsymbol{h}_i^{l + 1} = \parallel_{k=1}^K \delta(sum_{j \in \mathcal{N}(i)} \alpha_{j, i}^k \boldsymbol{W}^k \boldsymbol{h}_j^{l}) \\
+or \quad \boldsymbol{h}_i^{l + 1} = \delta(\frac{1}{K} sum_{j \in \mathcal{N}(i)} \alpha_{j, i}^k \boldsymbol{W}^k \boldsymbol{h}_j^{l}) \\
+\alpha_{j, i}^k = \frac {\exp(LeakyReLU(a^T [ \boldsymbol{W}^k \boldsymbol{h}_j^l \parallel \boldsymbol{W}^k \boldsymbol{h}_j^l] ))} {\sum_{k \in \mathcal{N}(i)}\exp(LeakyReLU(a^T [ \boldsymbol{W}^k \boldsymbol{h}_j^l \parallel \boldsymbol{W}^k \boldsymbol{h}_k^l] ))}$$
+
+参数：
+$d_{in}$是layer l的输入维度
+$d_{out}$是layer l的输出维度
+$K$是多头机制的heads数
+
+权重:
+$\bold{W} \in \mathbb{R}^{d_{out} \times d_{in}}, \boldsymbol{a} \in \mathbb{R}^{2 * d_{out}}$
+
+
+### 4. GaAN
+在传统的mulit-head机制上，引入了a convolutional subnetwork来控制每个Attention head的重要性
+GNN Layer $l$ node $v_i$的更新公式为:
+
+$$ \boldsymbol{h}_i^{l+1} = \boldsymbol{W}_o [\boldsymbol{h}_i^l \parallel (\boldsymbol{g}_{i} \odot sum_{j \in \mathcal{N}(i)}  (\parallel_{k=1}^K \delta(\alpha_{j, i}^k \boldsymbol{W}^k_v \boldsymbol{h}_j^{l}) ) ] \\ \boldsymbol{g}_i = \boldsymbol{W}_g  [\boldsymbol{h}_i^{l} \parallel max_{j \in \mathcal{N}(i)} (\boldsymbol{W}_m \boldsymbol{h}_j^{l})  \parallel mean_{j \in \mathcal{N(i)}} \boldsymbol{h}_j^l] 
+\\ \alpha_{j, i}^k = \frac {\exp(\boldsymbol{a}^T [ \boldsymbol{W}^k_a \boldsymbol{h}_j^l \parallel \boldsymbol{W}^k_a \boldsymbol{h}_i^l] )} {\sum_{k \in \mathcal{N}(j)}\exp(\boldsymbol{a}^T [ \boldsymbol{W}^k_a \boldsymbol{h}_j^l \parallel \boldsymbol{W}^k_{a}  \boldsymbol{h}_k^l] )}$$
+
+权重:
+$\bold{W}_o \in \mathbb{R}^{d_{out} \times (d_{in} + k d_v)}, \boldsymbol{a} \in \mathbb{R}^{2 * d_a}$
 
 ## 2.4 采样技术
 
@@ -146,6 +174,14 @@ $$\boldsymbol{h}^{l} = \delta (\boldsymbol{W}^{l-1} sum_{j \in \mathcal{N}(i)} (
 如果不额外说明, 随机图顶点的特征向量为随机生成的32维稠密向量, 将顶点随机分到10个类别中, 75%的顶点参与训练.
 
 ## 3.3 图神经网络算法选择与实现
+
+GCN
+
+GAT
+
+GGNN
+
+GaAN
 
 ## 3.4 数据处理方法
 
@@ -433,4 +469,10 @@ GaAN同样采用多头机制,其计算复杂度受$d_{in}$、$d_v$、$d_a$和头
 8. https://github.com/dmlc/dgl [@dgl_website]
 9. Gilmer, J., Schoenholz, S. S., Riley, P. F., Vinyals, O., & Dahl, G. E. (n.d.). Neural Message Passing for Quantum Chemistry. [@gilmer_messgae_passing]
 10. Rossi R A , Ahmed N K . The Network Data Repository with Interactive Graph Analytics and Visualization[C]// Proceedings of the Twenty-Ninth AAAI Conference on Artificial Intelligence. AAAI Press, 2015. http://networkrepository.com/networks.php [@network-repository]
-
+11. Zhang, J., Shi, X., Xie, J., Ma, H., King, I., & Yeung, D. Y. (2018). GaAN: Gated attention networks for learning on large and spatiotemporal graphs. 34th Conference on Uncertainty in Artificial Intelligence 2018, UAI 2018, 1, 339–349. [@zhang2018_gaan]
+12. Kipf, T. N., & Welling, M. (2017). Semi-Supervised Classification with Graph Convolutional Networks. ICLR. Retrieved from https://openreview.net/group?id=ICLR.cc/2017/conference [@kipf2017_gcn]
+13. Li, Y., Tarlow, D., Brockschmidt, M., & Zemel, R. (2015). Gated Graph Sequence Neural Networks. ICLR, (1), 1–20. Retrieved from http://arxiv.org/abs/1511.05493 [@li2015_ggnn]
+14. Huang, J., Shen, H., Hou, L., & Cheng, X. (2018). Graph Attention Networks. DBLP, 11731 LNCS(2005), 566–577. https://doi.org/10.1007/978-3-030-30493-5_53 [@huang2018_gat]
+15. Wu, Z., Pan, S., Chen, F., Long, G., Zhang, C., & Yu, P. S. (2020). A Comprehensive Survey on Graph Neural Networks. IEEE Transactions on Neural Networks and Learning Systems, 1–21. https://doi.org/10.1109/tnnls.2020.2978386 [@wu2020_gnn_survey]
+16. Zhou, J., Cui, G., Zhang, Z., Yang, C., Liu, Z., Wang, L., … Sun, M. (2018). Graph Neural Networks: A Review of Methods and Applications. 1–22. Retrieved from http://arxiv.org/abs/1812.08434 [@zhou2018_gnn_survey]
+17. Zhang, Z., Cui, P., & Zhu, W. (2018). Deep Learning on Graphs: A Survey. 14(8), 1–24. Retrieved from http://arxiv.org/abs/1812.04202 [@zhang2018_gnn_survey]
