@@ -487,13 +487,13 @@ GaAN同样采用多头机制,其计算复杂度受$d_{in}$、$d_v$、$d_a$和头
 
 ![fig:exp_memory_expansion_ratio](figs/experiments/exp_memory_expansion_ratio.png)
 
-<a name="fig:exp_memory_expansion_ratio">**图: 各GNN在不同数据集上的内存膨胀比例.**</a>
+<a name="fig:exp_memory_expansion_ratio" > **图: 各GNN在不同数据集上的内存膨胀比例.** </a>
 
 图[@fig:exp_memory_expansion_ratio](#fig:exp_memory_expansion_ratio)同时表明同一个GNN在同样的超参数下膨胀比例随数据集的不同而变化. 因为cph数据集的输入特征维度远高于GNN层中隐向量的维度, 导致图的输入特征向量矩阵的规模远高于缓存的中间计算结果的矩阵规模, 因此其膨胀比例特别低, 而cam数据集正相反. 为了测量输入特征向量维度对内存膨胀比例的影响, 我们为不同数据集随机生成了特定维度的特征向量, 图[@fig:exp_memory_expension_ratio_input_feature_dimension](#fig:exp_memory_expension_ratio_input_feature_dimension)展示了不同输入特征向量维度下的膨胀比例变化情况. *在同样的GNN结构和超参数设置下, 使用更高维的输入特征向量能够降低内存膨胀比例*. 
 
 ![膨胀比例随输入特征向量维度的变化情况](figs/experiments/exp_memory_expansion_ratio_input_feature_dimension_com-amazon.png)
 
-<a name="#fig:exp_memory_expansion_ratio"> **图: 内存膨胀比例随输入特征向量维度的变化情况.** </a>
+<a name="#fig:exp_memory_expansion_ratio"> **图: 内存膨胀比例随输入特征向量维度的变化情况. 数据集:cam, 其他数据集情况类似.** </a>
 
 不同的GNN因其点/边计算复杂度的不同, 生成的中间结果的规模对图的点/边数量的敏感度不同, 导致内存膨胀比例受图的平均度数的影响. 我们测量了GPU峰值内存使用和膨胀比例受图规模的影响.
 
