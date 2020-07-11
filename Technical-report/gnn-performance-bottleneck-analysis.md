@@ -514,13 +514,13 @@ GaAN同样采用多头机制,其计算复杂度受$d_{in}$、$d_v$、$d_a$和头
 
 ![fig:exp_memory_expansion_ratio](figs/experiments/exp_memory_expansion_ratio.png)
 
-<a name="fig:exp_memory_expansion_ratio">**图: 各GNN在不同数据集上的内存膨胀比例.**</a>
+<a name="fig:exp_memory_expansion_ratio" > **图: 各GNN在不同数据集上的内存膨胀比例.** </a>
 
 图[@fig:exp_memory_expansion_ratio](#fig:exp_memory_expansion_ratio)同时表明同一个GNN在同样的超参数下膨胀比例随数据集的不同而变化. 因为cph数据集的输入特征维度远高于GNN层中隐向量的维度, 导致图的输入特征向量矩阵的规模远高于缓存的中间计算结果的矩阵规模, 因此其膨胀比例特别低, 而cam数据集正相反. 为了测量输入特征向量维度对内存膨胀比例的影响, 我们为不同数据集随机生成了特定维度的特征向量, 图[@fig:exp_memory_expension_ratio_input_feature_dimension](#fig:exp_memory_expension_ratio_input_feature_dimension)展示了不同输入特征向量维度下的膨胀比例变化情况. *在同样的GNN结构和超参数设置下, 使用更高维的输入特征向量能够降低内存膨胀比例*. 
 
 ![膨胀比例随输入特征向量维度的变化情况](figs/experiments/exp_memory_expansion_ratio_input_feature_dimension_com-amazon.png)
 
-<a name="#fig:exp_memory_expansion_ratio"> **图: 内存膨胀比例随输入特征向量维度的变化情况.** </a>
+<a name="#fig:exp_memory_expansion_ratio"> **图: 内存膨胀比例随输入特征向量维度的变化情况. 数据集:cam, 其他数据集情况类似.** </a>
 
 不同的GNN因其点/边计算复杂度的不同, 生成的中间结果的规模对图的点/边数量的敏感度不同, 导致内存膨胀比例受图的平均度数的影响. 我们测量了GPU峰值内存使用和膨胀比例受图规模的影响.
 
@@ -558,13 +558,37 @@ GaAN同样采用多头机制,其计算复杂度受$d_{in}$、$d_v$、$d_a$和头
 
 ## 4.4 实验4: 采样技术对训练性能的影响分析
 
-在没有采样技术之前, GNN的训练都是full batch的, 即训练集中所有的顶点和边同时参与训练并计算梯度. full batch训练能保证收敛, 但是每次训练开销较大, 导致收敛速度慢. 受随机梯度下降中mini batch训练方式的启发, 一系列的GNN采样技术被提出. 理论上, 采样技术允许在训练时每个batch只使用少部分顶点和边, 相当于降低了训练用的图的规模, 大幅降低了每个batch的训练时间, 使在固定时间内可以进行多轮梯度下降, 从而加速收敛. 本节实验主要分析采样技术对训练性能的影响. 
+在没有采样技术之前, GNN的训练都是full batch的, 即训练集中所有的顶点和边同时参与训练并计算梯度. full batch训练能保证收敛, 但是每次训练开销较大, 导致收敛速度慢. 受随机梯度下降中基于mini batch训练方式的启发, 一系列的GNN采样技术被提出. 采样技术将全图的训练(即epoch)分解为若干batch, 每个batch只使用图的部分顶点和边参与训练并进行梯度更新,  大幅降低了每个batch的训练时间, 使得固定的时间内可以进行多轮梯度下降, 从而加速收敛. 本节实验主要分析采样技术对训练性能的影响. 
 
-在目前PyG的实现中,  GNN的模型参数始终驻留在GPU上, 数据集驻留在主存中. 在处理每个epoch时, 由CPU在主存中对图数据集进行采样, 生成若干mini-batch, 每个mini-batch都是数据集的一个小规模子图. 在训练每个mini-batch时, PyG将该mini-batch对应的子图数据拷贝到GPU的内存中, 基于该子图进行训练并根据梯度更新模型参数. 采用采样技术后, 即可以使用基于SGD的模型参数更新方法, 对模型参数的evaluation隔若干epoch进行一次, evaluation可以在CPU进行也可以在GPU进行. 故本节实验中的统计数据均不包含evaluation阶段.
+在目前PyG的实现中,  GNN的模型参数始终驻留在GPU上, 数据集驻留在主存中. 在处理每个epoch时, 由CPU在主存中对图数据集进行采样, 生成若干batch, 每个batch都是数据集的一个小规模子图. 在训练每个batch时, PyG将该batch对应的子图数据拷贝到GPU的内存中, 基于该子图进行训练并根据梯度更新模型参数. 基于采样技术和SGD优化技术之后, 对模型参数的evaluation隔若干epoch进行一次, evaluation可以在CPU进行也可以在GPU进行. 故本节实验中的统计数据均不包含evaluation阶段. 本节选用neighbor sampler和cluster sampler两个典型的图采样技术进行分析.
 
-图[@fig:exp_sampling_epoch_train_time](#fig:exp_sampling_epoch_train_time)展示了每个epoch的训练时间随batch size的变化情况.
+图[@fig:exp_sampling_minibatch_graph_info]展示了两个采样技术中采样出的子图的规模随batch size的变化情况. 对于neighbor sampler, batch size等于最后一层GNN中采样的顶点数. 对于cluster sampler, batch size等于partition的数量. 对于neighbor sampler, 其采样子图的顶点数先快速增长后稳定.
 
-图[@fig:exp_sampling_time_decomposition](#fig:exp_sampling_time_decomposition)展示了采用采样技术后每个epoch训练过程中采样过程耗时 (sampling), mini-batch数据传输耗时 (data transferring)和mini-batch训练(training)阶段的耗时占比.
+![Neighbor sampler](figs/experiments/exp_sampling_minibatch_graph_info_graphsage_gcn.png)
+
+(a) Neighbor sampler
+
+![Cluster sampler](figs/experiments/exp_sampling_minibatch_graph_info_cluster_gcn.png)
+
+(b) Cluster sampler
+
+**图[@fig:exp_sampling_minibatch_graph_info]: 采样子图规模随batch size的变化情况. 每个batch size下采样50次, error bar表示标准差.**
+
+
+
+图[@fig:exp_sampling_epoch_train_time](#fig:exp_sampling_epoch_train_time)展示了每个batch的训练时间随batch size的变化情况.
+
+图[@fig:exp_sampling_time_decomposition](#fig:exp_sampling_time_decomposition)展示了采用采样技术后每个epoch训练过程中采样过程耗时 (sampling), mini-batch数据传输耗时 (data transferring)和mini-batch训练(training)阶段的耗时占比. 目前**两个sampling技术的额外开销比较大**, 在GCN和GGNN中额外开销耗时占比超过50%, 在计算复杂度最高的GaAN上也有占比将近30%.
+
+![GraphSAGE](figs/experiments/exp_sampling_time_decomposition_graphsage.png)
+
+(a) Neighbor sampler
+
+![ClusterGCN](figs/experiments/exp_sampling_time_decomposition_cluster.png)
+
+(b) Cluster sampler
+
+**图[fig:exp_sampling_time_decomposition]: 采用Sampling技术后每个epoch训练过程各阶段耗时分解. 对于每个GNN, 我们在所有的真实数据集上进行了50轮epoch的训练, 并计算出每个epoch耗时占比的平均值. error bar标出了不同数据集上耗时占比的最大值和最小值.**
 
 图[@fig:exp_sampling_memory_usage](#fig:exp_sampling_memory_usage)展示了采用采样技术后训练过程中峰值内存使用情况.
 
