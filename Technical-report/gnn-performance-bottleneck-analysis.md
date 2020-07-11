@@ -97,10 +97,10 @@ where $\Sigma$ denotes a differntiable, permutation invariant function, e.g., su
 | GraphSAGE(NIPS, 2017)[@hamilton2017_graphsage]  |          Non-spectral Aprroaches           | sum, mean, max   | $\boldsymbol{m}_{j, i}^l =  \boldsymbol{h}_j^l$              |             $O(1)$              | $\boldsymbol{h}_i^{l+1} =   \delta(\boldsymbol{W}  [\boldsymbol{s}_i^{l} \parallel \boldsymbol{h}_i^l])$ |                $O(d_{in} * d_{out})$                 |
 | Neural FPs(NIPS, 2015)[@duvenaud2015_neural_fps] |      Non-spectral Aprroaches        | sum              | $\boldsymbol{m}_{j, i}^l = \boldsymbol{h}_j^l$               |           $O(d_{in})$           | $\boldsymbol{h}_i^{l+1} = \delta(\boldsymbol{W}^{\boldsymbol{N}_i}  \boldsymbol{s}_i^{l})$ |                $O(d_{in} * d_{out})$                 |
 |    SSE(ICML, 2018)     | Recurrent Graph Neural Networks | sum              | $\boldsymbol{m}_{j, i}^l = [\boldsymbol{h}_i^{l} \parallel \boldsymbol{h}_j^l]$ |             $O(1)$              | $\boldsymbol{h}_i^{l+1} = (1 - \alpha)  \boldsymbol{h}_i^l +\alpha    \delta(\boldsymbol{W}_1 \delta(\boldsymbol{W}_2), \boldsymbol{s}_i^l)$ |                $O(d_{in} * d_{out})$                 |
-|  **GGNN**(ICLR, 2015)[@li2015_ggnn]  |   Gated Graph Neural Networks   | sum              | $\boldsymbol{m}_{j, i}^l = \boldsymbol{W} \boldsymbol{h}_j^l$ |      $O(d_{in} * d_{out})$      | $\boldsymbol{z}_i^l = \delta ( \boldsymbol{W}^z \boldsymbol{s}_i^l + \boldsymbol{b}^{sz} + \boldsymbol{U}^z \boldsymbol{h}_i^{l} + \boldsymbol{b}^{hz}) \\ \boldsymbol{r}_i^l = \delta ( \boldsymbol{W}^r \boldsymbol{s}_i^l+ \boldsymbol{b}^{sr} +\boldsymbol{U}^r \boldsymbol{h}_i^{l} + \boldsymbol{b}^{hr}) \\ \boldsymbol{h}_i^{l+1} = tanh ( \boldsymbol{W} \boldsymbol{s}_i^l + \boldsymbol{b}^s + \boldsymbol{U} ( \boldsymbol{r}_i^l \odot \boldsymbol{h}_i^{l} + \boldsymbol{b}^h))) \\ \boldsymbol{h}_i^{l+1} = (1 - \boldsymbol{z}_i^l) \odot \boldsymbol{h}_i^l +  \boldsymbol{z}_i^l \odot \boldsymbol{h}_i^{l+1}$ |         $O(max(d_{in}, d_{out}) * d_{out})$          |
+|  **GGNN**(ICLR, 2015)[@li2015_ggnn]  |   Gated Graph Neural Networks   | sum              | $\boldsymbol{m}_{j, i} = \boldsymbol{W}^l \boldsymbol{h}_j^l$ |      $O(d_{in} * d_{out})$      | $\boldsymbol{z}_i^l = \delta ( \boldsymbol{W}^z \boldsymbol{s}_i^l + \boldsymbol{b}^{sz} + \boldsymbol{U}^z \boldsymbol{h}_i^{l} + \boldsymbol{b}^{hz}) \\ \boldsymbol{r}_i^l = \delta ( \boldsymbol{W}^r \boldsymbol{s}_i^l+ \boldsymbol{b}^{sr} +\boldsymbol{U}^r \boldsymbol{h}_i^{l} + \boldsymbol{b}^{hr}) \\ \boldsymbol{h}_i^{l+1} = tanh ( \boldsymbol{W} \boldsymbol{s}_i^l + \boldsymbol{b}^s + \boldsymbol{U} ( \boldsymbol{r}_i^l \odot \boldsymbol{h}_i^{l} + \boldsymbol{b}^h))) \\ \boldsymbol{h}_i^{l+1} = (1 - \boldsymbol{z}_i^l) \odot \boldsymbol{h}_i^l +  \boldsymbol{z}_i^l \odot \boldsymbol{h}_i^{l+1}$ |         $O(max(d_{in}, d_{out}) * d_{out})$          |
 |  Tree-LSTM(ACL, 2015) [@zhang2018_tree_lstm] |           Graph LSTM            | sum              | $\boldsymbol{m}_{j, i}^l = \boldsymbol{h}_j^l$               |             $O(1)$              | $h_i^{l+1} = LSTM(\boldsymbol{s}_i^l, \boldsymbol{h}_i^{l})$ |                $O(d_{in} * d_{out})$                 |
 |  **GAT**(ICLR, 2017)[@huang2018_gat]   |    Graph Attention Networks     | sum, mean        | $\alpha_{j, i}^k = \frac {\exp(LeakyReLU(\boldsymbol{a}^T [ \boldsymbol{W}^k  \boldsymbol{h}_j^l \parallel \boldsymbol{W}^k  \boldsymbol{h}_j^l] ))} {\sum_{k \in \mathcal{N}(i)}\exp(LeakyReLU(\boldsymbol{a}^T [ \boldsymbol{W}^k  \boldsymbol{h}_j^l \parallel \boldsymbol{W}^k  \boldsymbol{h}_k^l] ))} \\  \boldsymbol{m}_{j, i}^l = \parallel_{k=1}^K \delta(\alpha_{j, i}^k \boldsymbol{W}^k \boldsymbol{h}_j^{l})$ |    $O(K * d_{in} * d_{out})$    | $\boldsymbol{h}_i^{l+1} = \boldsymbol{s}_i^l$                |                        $O(1)$                        |
-|  **GaAN**(UAI, 2018)[@zhang2018_gaan]   |    Graph Attention Networks     | sum + max + mean | $\alpha_{j, i}^k = \frac {\exp(\boldsymbol{a}^T [ \boldsymbol{W}^k_a \boldsymbol{h}_j^l \parallel \boldsymbol{W}^k_a \boldsymbol{h}_i^l] )} {\sum_{k \in \mathcal{N}(j)}\exp(\boldsymbol{a}^T [ \boldsymbol{W}^k_a \boldsymbol{h}_j^l \parallel \boldsymbol{W}^k_{a}  \boldsymbol{h}_k^l] )} \\  \boldsymbol{m}_{j, i, 1}^l = \parallel_{k=1}^K \delta(\alpha_{j, i}^k \boldsymbol{W}^k_v \boldsymbol{h}_j^{l}) \\ \boldsymbol{m}_{j, i, 2}^l = \boldsymbol{W}_m \boldsymbol{h}_j^{l} \\ \boldsymbol{m}_{j, i, 3}^l = \boldsymbol{h}_j^l$ | $O(max(d_a, d_m) * K * d_{in})$ | $\boldsymbol{g}_i = \boldsymbol{W}_g  [\boldsymbol{h}_i^{l} \parallel \boldsymbol{s}_{i, 2}^l \parallel \boldsymbol{s}_{i, 3}^l]  \\ \boldsymbol{h}_i^{l+1} = \boldsymbol{W}_o [\boldsymbol{h}_i^l \parallel (\boldsymbol{g}_{i} \odot \boldsymbol{s}_{i, 3}^l) ]$ | $O(max(d_{in} + K * d_v, 2 * d_{in} + d_m) d_{out})$ |
+|  **GaAN**(UAI, 2018)[@zhang2018_gaan]   |    Graph Attention Networks     | sum + max + mean | $\alpha_{j, i}^k = \frac {\exp(\boldsymbol{a}^T [ \boldsymbol{W}^{l, k}_a \boldsymbol{h}_j^l \parallel \boldsymbol{W}^k_a \boldsymbol{h}_i^l] )} {\sum_{k \in \mathcal{N}(j)}\exp(\boldsymbol{a}^T [ \boldsymbol{W}^k_a \boldsymbol{h}_j^l \parallel \boldsymbol{W}^k_{a}  \boldsymbol{h}_k^l] )} \\  \boldsymbol{m}_{j, i, 1}^l = \parallel_{k=1}^K \delta(\alpha_{j, i}^k \boldsymbol{W}^k_v \boldsymbol{h}_j^{l}) \\ \boldsymbol{m}_{j, i, 2}^l = \boldsymbol{W}_m \boldsymbol{h}_j^{l} \\ \boldsymbol{m}_{j, i, 3}^l = \boldsymbol{h}_j^l$ | $O(max(d_a, d_m) * K * d_{in})$ | $\boldsymbol{g}_i = \boldsymbol{W}_g  [\boldsymbol{h}_i^{l} \parallel \boldsymbol{s}_{i, 2}^l \parallel \boldsymbol{s}_{i, 3}^l]  \\ \boldsymbol{h}_i^{l+1} = \boldsymbol{W}_o [\boldsymbol{h}_i^l \parallel (\boldsymbol{g}_{i} \odot \boldsymbol{s}_{i, 3}^l) ]$ | $O(max(d_{in} + K * d_v, 2 * d_{in} + d_m) d_{out})$ |
 > todo: 为权重$\boldsymbol{W}$增加上标$l$
 
 计算复杂度中的算法：GMM, Tree-LSTM-Nary, Tree-LSTM-Child, HGNN, single parameter
@@ -115,11 +115,14 @@ where $\Sigma$ denotes a differntiable, permutation invariant function, e.g., su
 ### 1. GCN
 提出了Spectral Graph Convolutions的一阶近似方法，将复杂度降到了与图边数的线性的数量级，并且能够学习局部图形结构和节点特征，沟通了Spectral-based方法和Spatial-based方法。
 The propagation rule of GCN at layer l+1 is defined as follows:
-$$\boldsymbol{h}_i^{l + 1} = \delta (\boldsymbol{W} sum_{j \in \mathcal{N}(i)} (e_{j, i}\boldsymbol{h}_j^{l}))$$
+$$\boldsymbol{h}_i^{l + 1} = \delta (\boldsymbol{W}^l sum_{j \in \mathcal{N}(i)} (e_{j, i}\boldsymbol{h}_j^{l}))$$
 
 参数：
+$d_{in}$是layer $l$的输入维度
+$d_{out}$是layer $l$的输出维度
 
 权重：
+$W$
 
 ### 2. GGNN
 在图神经网络的前期工作GNN上，首次提出采用了a gated recurrent unit(GRU)作为循环函数，将循环次数减少到了固定步骤数，不再需要约束参数以保证收敛
@@ -127,9 +130,11 @@ GNN Layer $l$ node $v_i$的更新公式为:
 $$\boldsymbol{s}_i^{l} = sum_{j \in \mathcal{N}(i)} (\boldsymbol{h}_j^{l}) \\ \boldsymbol{z}_i^l = \delta ( \boldsymbol{W}^z \boldsymbol{s}_i^l + \boldsymbol{b}^{sz} + \boldsymbol{U}^z \boldsymbol{h}_i^{l} + \boldsymbol{b}^{hz}) \\ \boldsymbol{r}_i^l = \delta ( \boldsymbol{W}^r \boldsymbol{s}_i^l+ \boldsymbol{b}^{sr} +\boldsymbol{U}^r \boldsymbol{h}_i^{l} + \boldsymbol{b}^{hr}) \\ \boldsymbol{h}_i^{l+1} = tanh ( \boldsymbol{W} \boldsymbol{s}_i^l + \boldsymbol{b}^s + \boldsymbol{U} ( \boldsymbol{r}_i^l \odot \boldsymbol{h}_i^{l} + \boldsymbol{b}^h))) \\ \boldsymbol{h}_i^{l+1} = (1 - \boldsymbol{z}_i^l) \odot \boldsymbol{h}_i^l +  \boldsymbol{z}_i^l \odot \boldsymbol{h}_i^{l+1}$$
 
 参数：
+$d_{in}$是layer $l$的输入维度
+$d_{out}$是layer $l$的输出维度
 
 权重：
-
+$$
 
 ### 3. GAT
 采用了Attention机制来了解两个连接节点的相对权重，并且使用了multi-head机制来增加模型的表现能力
@@ -139,8 +144,8 @@ or \quad \boldsymbol{h}_i^{l + 1} = \delta(\frac{1}{K} sum_{j \in \mathcal{N}(i)
 \alpha_{j, i}^k = \frac {\exp(LeakyReLU(a^T [ \boldsymbol{W}^k \boldsymbol{h}_j^l \parallel \boldsymbol{W}^k \boldsymbol{h}_j^l] ))} {\sum_{k \in \mathcal{N}(i)}\exp(LeakyReLU(a^T [ \boldsymbol{W}^k \boldsymbol{h}_j^l \parallel \boldsymbol{W}^k \boldsymbol{h}_k^l] ))}$$
 
 参数：
-$d_{in}$是layer l的输入维度
-$d_{out}$是layer l的输出维度
+$d_{in}$是layer $l$的输入维度
+$d_{out}$是layer $l$的输出维度
 $K$是多头机制的heads数
 
 权重:
@@ -155,6 +160,9 @@ $$ \boldsymbol{h}_i^{l+1} = \boldsymbol{W}_o [\boldsymbol{h}_i^l \parallel (\bol
 \\ \alpha_{j, i}^k = \frac {\exp(\boldsymbol{a}^T [ \boldsymbol{W}^k_a \boldsymbol{h}_j^l \parallel \boldsymbol{W}^k_a \boldsymbol{h}_i^l] )} {\sum_{k \in \mathcal{N}(j)}\exp(\boldsymbol{a}^T [ \boldsymbol{W}^k_a \boldsymbol{h}_j^l \parallel \boldsymbol{W}^k_{a}  \boldsymbol{h}_k^l] )}$$
 
 参数：
+$d_{in}$是layer $l$的输入维度
+$d_{out}$是layer $l$的输出维度
+$k$是多头机制的heads数
 
 权重:
 $\bold{W}_o \in \mathbb{R}^{d_{out} \times (d_{in} + k d_v)}, \boldsymbol{a} \in \mathbb{R}^{2 * d_a}$
@@ -167,8 +175,6 @@ $\bold{W}_o \in \mathbb{R}^{d_{out} \times (d_{in} + k d_v)}, \boldsymbol{a} \in
 
 ## 2.5 图神经网络训练中的梯度更新
 
-这里结合scatter, gather算子说明。
-> todo, 还需要check
 
 # 3 实验设计
 
@@ -198,7 +204,7 @@ Python 3.7.7, PyTorch 1.5.0, Pytorch Geometric 1.5.0
 > 2. 无向图: 平均度数 = 边数 / 点数
 > 3. 单个节点特征稀疏度=1 - 非零数/特征维度， 特征稀疏度为所有节点特征稀疏度的平均值
 
-## 3.3 图神经网络算法选择与实现
+## 3.3 图神经网络算法选择与实现(参数说明)
 
 ### 3.3.1 学习任务
 
@@ -231,6 +237,7 @@ Python 3.7.7, PyTorch 1.5.0, Pytorch Geometric 1.5.0
 1. 网络结构:
 > Input Layer + 2 * GNN Lyaer + Prediction Layer 
 > 实际上, GCN, GAT, GaAN论文中的网络结构即为2, 为了保持统一， GGNN也设置为2
+
 2. Layer的实现
 > - 对于GCN, GAT, GaAN算法采用PyG自带的, GaAN基于PyG框架下手动实现（已保证正确性)
 > - 对于GCN, GAT算法，PyG实现中，将点计算$\gamma$放在了$\phi$和$\Sigma$之前
@@ -244,13 +251,31 @@ Python 3.7.7, PyTorch 1.5.0, Pytorch Geometric 1.5.0
 ### 3.3.4 采样实现
 
 这里使用了PyG集成的采样方法的工具包
-1. `NeighborSampler()` [@hamilton2017_graphsage]
-> GraphSAGE: Neighborhood Sampling, 每层的图的规模不一样
-> 参数: batch_size=512;  经验数据 
+[torch_geometric.data](https://pytorch-geometric.readthedocs.io/en/latest/modules/data.html) 中的Loader进行集成采样算法
 
-2. `ClusterData(), ClusterLoader()` [@chiang2019_cluster_gcn]
-> ClusterGCN: Edge Sampling, 每层的图结构固定
-> 参数: total_partitions=1500,  batch_partitions=20
+**1. `NeighborSampler()` [@hamilton2017_graphsage]**
+
+GraphSAGE: Neighborhood Sampling, 每层的图的规模不一样
+参数: 
+- S1=25(GNN Layer1), S2=10(GNN Layer0)
+- batch_size=512, 来源：论文中使用的batch_size数目
+
+其他特殊处理：
+- 对于GCN算法，预处理出整个Training Graph的边的权重，然后对于每层sampling出的结果，取权重的index;  
+- PyG的Message Passing机制支持指定源点和终点的列表, 即对于GraphSAGE算法，Layer0采样节点列表为$\mathcal{X}_0$, Layer1采样节点列表为$\mathcal{X}_1$, $|\mathcal{X}_0| > |\mathcal{X}_1|$, $\mathcal{X}_0, \mathcal{X}_1$可以进行指定
+
+**2. `ClusterData(), ClusterLoader()` [@chiang2019_cluster_gcn]**
+ClusterGCN: Edge Sampling, 每层的图结构固定
+参数: total_partitions=1500,  batch_partitions=20, 来源：论文中使用的数据
+
+特别说明：
+对于GCN算法，对于ClusterGCN采用出的子图，使用PyG的GCNConv提供的`gcn_norm`生成了边的权重
+
+**3. 训练方式**
+每个epoch定义为所有的图数据利用一次, 即遍历一遍train_loader的数据
+每个epoch的batch数
+1. GraphSAGE:  = floor(#Training_nodes / batch_size) = len(Neighborhoo)
+2. ClusterGCN = floor(total_partitions / batch_partitions)
 
 ## 3.4 数据处理方法
 
@@ -276,6 +301,8 @@ Python 3.7.7, PyTorch 1.5.0, Pytorch Geometric 1.5.0
   - 随阶数的变化
 - 实验 4：采样技术
   - 随batch_size的变化
+    - graph_info
+      > 度数图：散点图
   - 耗时占比的变化
   - 峰值内存的变化
 
@@ -545,7 +572,8 @@ GaAN同样采用多头机制,其计算复杂度受$d_{in}$、$d_v$、$d_a$和头
 
 # 6 相关工作
 
-> todo: ? 相关工作，应该指的是experiment analysis的工作
+
+
 # 7 总结与展望
 
 # 参考文献
