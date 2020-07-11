@@ -101,6 +101,8 @@ elif args.mode == 'graphsage':
                                num_workers=args.num_workers) # inductive learning
 loader_time = time.time() - loader_time
 
+#t1 = data.edge_index.numpy()
+#np.save("amp_graph.npy", t1)
 
 # 3. set model
 if args.model == 'gcn':
@@ -145,10 +147,9 @@ def train(epoch):
     total_nodes = int(data.train_mask.sum())
 
     total_loss = 0
-    
-    sampling_time = to_time = train_time = 0.0
 
-    all_nodes, all_edges = 0, 0
+    sampling_time, to_time, train_time = 0.0, 0.0, 0.0
+
     train_iter = iter(train_loader)
     cnt = 0
     while True:
@@ -166,8 +167,8 @@ def train(epoch):
                 t2 = time.time()
                 to_time += t2 - t1
                 optimizer.zero_grad()
-                nodes, edges = batch.x.shape[0], batch.edge_index.shape[1]
-                print(f"nodes: {nodes}, edges: {edges}")
+                #nodes, edges = batch.x.shape[0], batch.edge_index.shape[1]
+                #print(f"nodes: {nodes}, edges: {edges}")
                 out = model(batch.x, batch.edge_index)
                 if args.dataset in ['yelp', 'amazon']:
                     loss = torch.nn.BCEWithLogitsLoss()(out[batch.train_mask, :], batch.y[batch.train_mask, :])
@@ -177,8 +178,8 @@ def train(epoch):
             elif args.mode == 'graphsage':
                 batch_size, n_id, adjs = batch
                 adjs = [adj.to(device) for adj in adjs] # 这里等于成熟
-                nodes, edges = adjs[0][2][0], adjs[0][0].shape[1]
-                print(f"nodes: {nodes}, edges: {edges}")
+                #print(f"nodes: {nodes}, edges: {edges}")
+                #print(adjs[0][2], adjs[1][2])
                 x = data.x[n_id].to(device)
                 if args.dataset in ['yelp', 'amazon']:
                     y = data.y[n_id[:batch_size], :].to(device)
@@ -198,14 +199,13 @@ def train(epoch):
             nvtx_push(gpu, "backward")
             loss.backward()
             optimizer.step()
+            train_times += time.time() - t2
             nvtx_pop(gpu)
             
-            train_time += time.time() - t2
             log_memory(flag, device, 'backward_end')
             total_loss += loss.item() * batch_size            
             nvtx_pop(gpu)
-            all_nodes += nodes
-            all_edges += edges
+            
             cnt += 1      
         except StopIteration:
             break
@@ -253,14 +253,16 @@ else:
             count = 0
             for epoch in range(args.epochs):
                 if count >= 50: # 取50轮batch进行分析
-                    sys.exit(0)
+                   break
                 nvtx_push(gpu, "epochs" + str(epoch))
                 nvtx_push(gpu, "train")
                 loss, sampling_time, to_time, train_time, cnt = train(epoch)
+                #loss, batch_times, cnt = train(epoch)
+                count += cnt
+                
                 nvtx_pop(gpu)
                 
-                count += cnt
-                print(f"loss: {loss}")
+                print(f"loss: {loss}" )
                 
                 #nvtx_push(gpu, "eval")
                 #train_acc, val_acc, test_acc = test()
@@ -269,15 +271,16 @@ else:
                 # # add 
                 #nvtx_pop(gpu)
                 nvtx_pop(gpu)
-                avg_epoch_sampling_time += sampling_time
-                avg_epoch_to_time += to_time
-                avg_epoch_train_time += train_time
+                avg_batch_sampling_time += sampling_time
+                avg_batch_to_time += to_time
+                avg_batch_train_time += train_time
 
-            avg_epoch_sampling_time /= args.epochs
-            avg_epoch_to_time /= args.epochs
-            avg_epoch_train_time /= args.epochs
-            print(f"loader_time:{loader_time}, avg_epoch_train_time: {avg_epoch_train_time}, avg_epochs_sampling_time:{avg_epoch_sampling_time}, avg_epoch_to_time: {avg_epoch_to_time}")
-                
+            avg_batch_sampling_time /= count
+            avg_batch_to_time /= count
+            avg_batch_train_time /= count
+            
+            print(f"loader_time:{loader_time}, avg_batch_train_time: {avg_batch_train_time}, avg_epochs_sampling_time:{avg_batch_sampling_time}, avg_batch_to_time: {avg_batch_to_time}")
+            #print(f"loader_time:{loader_time}, avg_epoch_train_time: {avg_epoch_train_time}, avg_epochs_sampling_time:{avg_epoch_sampling_time}, avg_epoch_to_time: {avg_epoch_to_time}")
     if flag:
         from utils import df
         with open(args.json_path, "w") as f:

@@ -82,16 +82,17 @@ def graph_scale_exp(seed=1):
             os.makedirs(raw_dir)
 
         print("get adj_full.npz...")
-        # 1. gen adj_full
-        row = []
-        col = []
+        edges_list = []
         for e in graph.Edges():
             r, c = e.GetSrcNId(), e.GetDstNId()
-            row.append(r)
-            col.append(c)
-            row.append(c)
-            col.append(r)
-        f = sp.csr_matrix(([1] * 2 * edges, (row, col)), shape=(nodes, nodes)) # directed -> undirected, edges*2
+            edges_list.append((r, c))
+            edges_list.append((c, r))
+        
+        edges_list = set(edges_list)
+        row = [i[0] for i in edges_list]
+        col = [i[1] for i in edges_list]
+        print(edges, len(row))
+        f = sp.csr_matrix(([1] * len(row), (row, col)), shape=(nodes, nodes)) # directed -> undirected, edges*2
         np.savez(raw_dir + "/adj_full", data=f.data, indptr=f.indptr, indices=f.indices, shape=f.shape)
         gen_graph(raw_dir, nodes, edges)
 
@@ -108,29 +109,29 @@ def graph_scale_exp(seed=1):
 
         print("get adj_full.npz...")
         # gen adj_full
-        row = []
-        col = []
+        edges_list = []
         for e in graph.Edges():
             r, c = e.GetSrcNId(), e.GetDstNId()
-            row.append(r)
-            col.append(c)
-            row.append(c)
-            col.append(r)
-        f = sp.csr_matrix(([1] * 2 * edges, (row, col)), shape=(nodes, nodes)) # directed -> undirected, edges*2
+            edges_list.append((r, c))
+            edges_list.append((c, r))
+        
+        edges_list = set(edges_list)
+        row = [i[0] for i in edges_list]
+        col = [i[1] for i in edges_list]
+        print(edges, len(row))
+        f = sp.csr_matrix(([1] * len(row), (row, col)), shape=(nodes, nodes)) # directed -> undirected, edges*2
         np.savez(raw_dir + "/adj_full", data=f.data, indptr=f.indptr, indices=f.indices, shape=f.shape)
         gen_graph(raw_dir, nodes, edges)
 
-def gen_nodes_exp(seed=1):
+def gen_real_degrees_exp(seed=1):
     Rnd = snap.TRnd()
-    # 2.1 degree=25, n=1k, 25k, 50k, 75k, 100k
-    ns = [1000, 5000, 10000, 20000, 30000, 40000, 50000]
-    names = ['1k', '5k', '10k', '20k', '30k', '40k', '50k']
-    degree_fix = 20
-    for i, nodes in enumerate(ns):
-        edges = nodes * degree_fix
+    degrees=[3, 6, 10, 15, 20, 25, 30, 50]
+    nodes = 50000
+    for ds in degrees:
+        edges = nodes * ds
         print("nodes={}, edges={}".format(nodes, edges))
         graph = snap.GenRMat(nodes, edges, .6, .1, .15, Rnd)
-        raw_dir = "/data/wangzhaokang/wangyunpan/data/graph_" + names[i] + "_20/raw"
+        raw_dir = "/data/wangzhaokang/wangyunpan/data/graph_50k_" + str(ds) + "/raw"
         print(raw_dir)
         if not os.path.exists(raw_dir):
             os.makedirs(raw_dir)
@@ -138,20 +139,22 @@ def gen_nodes_exp(seed=1):
             continue
         print("get adj_full.npz...")
         # 1. gen adj_full
-        row = []
-        col = []
+        edges_list = []
         for e in graph.Edges():
             r, c = e.GetSrcNId(), e.GetDstNId()
-            row.append(r)
-            col.append(c)
-            row.append(c)
-            col.append(r)
-        f = sp.csr_matrix(([1] * 2 * edges, (row, col)), shape=(nodes, nodes)) # directed -> undirected, edges*2
+            edges_list.append((r, c))
+            edges_list.append((c, r))
+        
+        edges_list = set(edges_list)
+        row = [i[0] for i in edges_list]
+        col = [i[1] for i in edges_list]
+        print(edges, len(row))
+        f = sp.csr_matrix(([1] * len(row), (row, col)), shape=(nodes, nodes)) # directed -> undirected
         np.savez(raw_dir + "/adj_full", data=f.data, indptr=f.indptr, indices=f.indices, shape=f.shape)
         gen_graph(raw_dir, nodes, edges)
 
 
-def gen_edges_exp(seed=1):
+def gen_real_edges_memory(seed=1):
     Rnd = snap.TRnd()
     # 2.1 degree=25, n=1k, 25k, 50k, 75k, 100k
     ns = [1000, 5000, 10000, 20000, 30000, 40000, 50000]
@@ -168,22 +171,24 @@ def gen_edges_exp(seed=1):
             continue
         print("get adj_full.npz...")
         # 1. gen adj_full
-        row = []
-        col = []
+        edges_list = []
         for e in graph.Edges():
             r, c = e.GetSrcNId(), e.GetDstNId()
-            row.append(r)
-            col.append(c)
-            row.append(c)
-            col.append(r)
-        f = sp.csr_matrix(([1] * 2 * edges, (row, col)), shape=(nodes, nodes)) # directed -> undirected, edges*2
+            edges_list.append((r, c))
+            edges_list.append((c, r))
+        
+        edges_list = set(edges_list)
+        row = [i[0] for i in edges_list]
+        col = [i[1] for i in edges_list]
+        print(edges, len(row))
+        f = sp.csr_matrix(([1] * len(row), (row, col)), shape=(nodes, nodes)) # directed -> undirected
         np.savez(raw_dir + "/adj_full", data=f.data, indptr=f.indptr, indices=f.indices, shape=f.shape)
         gen_graph(raw_dir, nodes, edges)
 
  
-def gen_avg_graph(seed=1):
+def gen_real_degrees_memory(seed=1):
     Rnd = snap.TRnd()
-    degrees = [15]  # 25 omit
+    degrees = [2, 5, 10, 15, 25, 20, 30, 40, 50, 70]  # 25 omit
     nodes = 10000
     for d in degrees:
         edges = nodes * d
@@ -196,17 +201,20 @@ def gen_avg_graph(seed=1):
             continue
         print("get adj_full.npz...")
         # gen adj_full
-        row = []
-        col = []
+        edges_list = []
         for e in graph.Edges():
             r, c = e.GetSrcNId(), e.GetDstNId()
-            row.append(r)
-            col.append(c)
-            row.append(c)
-            col.append(r)
-        f = sp.csr_matrix(([1] * 2 * edges, (row, col)), shape=(nodes, nodes)) # directed -> undirected, edges*2
+            edges_list.append((r, c))
+            edges_list.append((c, r))
+        
+        edges_list = set(edges_list)
+        row = [i[0] for i in edges_list]
+        col = [i[1] for i in edges_list]
+        print(edges, len(row))
+        f = sp.csr_matrix(([1] * len(row), (row, col)), shape=(nodes, nodes)) # directed -> undirected
         np.savez(raw_dir + "/adj_full", data=f.data, indptr=f.indptr, indices=f.indices, shape=f.shape)
         gen_graph(raw_dir, nodes, edges)
 
-#gen_nodes_exp()
-gen_edges_exp()
+#gen_real_degrees_exp()
+#gen_real_edges_memory()
+gen_real_degrees_memory()
