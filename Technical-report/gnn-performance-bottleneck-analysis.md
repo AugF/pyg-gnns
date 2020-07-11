@@ -45,7 +45,7 @@ NeuGraph[4]为图神经网络训练提出了SAGA-NN（Scatter-ApplyEdge-Gather-A
 - 矩阵: 加粗大写字母
 - 集合: mathcal字体
 - $\delta$, $LeakyReLU$: 激活函数(可微函数)
-- $\mathbf{W}x$: 默认为矩阵乘法, 即mm
+- $\mathbf{W}^lx$: 默认为矩阵乘法, 即mm
 - $\odot$: 元素乘法
 - $[\parallel, \parallel]$, $\parallel_{k=1}^K$, 表示向量拼接
 
@@ -91,17 +91,17 @@ where $\Sigma$ denotes a differntiable, permutation invariant function, e.g., su
 
 |          名称          |            网络类型             | 边计算 $\Sigma$  | 边计算 $\phi$                                                |          边计算复杂度           | 点计算 $\gamma$                                              |                     点计算复杂度                     |
 | :--------------------: | :-----------------------------: | :--------------- | :----------------------------------------------------------- | :-----------------------------: | :----------------------------------------------------------- | :--------------------------------------------------: |
-|  ChebNet (ICLR, 2016) [@defferrad2016_chebnet]  |        Spectral Methods         | sum              | $\boldsymbol{m}_{j, i, , k}^l = T_k(\widetilde{L} )_{j, i} \boldsymbol{h}_j^l$ |         $O(K * d_{in})$         | $\boldsymbol{h}_i^{l+1} = \sum_{k=0}^K \boldsymbol{W}^k  \boldsymbol{s}_{i, k}^{l} $ |                $O(d_{in} * d_{out})$                 |
-|  **GCN** (ICLR, 2017)[@kipf2017_gcn]  |        Spectral Aprroaches         | sum              | $\boldsymbol{m}_{j, i}^l = e_{j, i} \boldsymbol{h}_j^l$      |           $O(d_{in})$           | $\boldsymbol{h}_i^{l+1} = \boldsymbol{W}  \boldsymbol{s}_i^{l}$ |                $O(d_{in} * d_{out})$                 |
-|   AGCN (AAAI, 2018)[@li2018_agcn]    |       Spectral Aprroaches        | sum              | $\boldsymbol{m}_{j, i}^l = \tilde{e}_{j, i}^l \boldsymbol{h}_j^l$ |           $O(d_{in})$           | $\boldsymbol{h}_i^{l+1} = \boldsymbol{W}  \boldsymbol{s}_i^{l}$ |                $O(d_{in} * d_{out})$                 |
-| GraphSAGE(NIPS, 2017)[@hamilton2017_graphsage]  |          Non-spectral Aprroaches           | sum, mean, max   | $\boldsymbol{m}_{j, i}^l =  \boldsymbol{h}_j^l$              |             $O(1)$              | $\boldsymbol{h}_i^{l+1} =   \delta(\boldsymbol{W}  [\boldsymbol{s}_i^{l} \parallel \boldsymbol{h}_i^l])$ |                $O(d_{in} * d_{out})$                 |
+|  ChebNet (ICLR, 2016) [@defferrad2016_chebnet]  |        Spectral Methods         | sum              | $\boldsymbol{m}_{j, i, , k}^l = T_k(\widetilde{L} )_{j, i} \boldsymbol{h}_j^l$ |         $O(K * d_{in})$         | $\boldsymbol{h}_i^{l+1} = \sum_{k=0}^K \boldsymbol{W}^{l,k}  \boldsymbol{s}_{i, k}^{l} $ |                $O(d_{in} * d_{out})$                 |
+|  **GCN** (ICLR, 2017)[@kipf2017_gcn]  |        Spectral Aprroaches         | sum              | $\boldsymbol{m}_{j, i}^l = e_{j, i} \boldsymbol{h}_j^l$      |           $O(d_{in})$           | $\boldsymbol{h}_i^{l+1} = \boldsymbol{W}^l  \boldsymbol{s}_i^{l}$ |                $O(d_{in} * d_{out})$                 |
+|   AGCN (AAAI, 2018)[@li2018_agcn]    |       Spectral Aprroaches        | sum              | $\boldsymbol{m}_{j, i}^l = \tilde{e}_{j, i}^l \boldsymbol{h}_j^l$ |           $O(d_{in})$           | $\boldsymbol{h}_i^{l+1} = \boldsymbol{W}^l  \boldsymbol{s}_i^{l}$ |                $O(d_{in} * d_{out})$                 |
+| GraphSAGE(NIPS, 2017)[@hamilton2017_graphsage]  |          Non-spectral Aprroaches           | sum, mean, max   | $\boldsymbol{m}_{j, i}^l =  \boldsymbol{h}_j^l$              |             $O(1)$              | $\boldsymbol{h}_i^{l+1} =   \delta(\boldsymbol{W}^l  [\boldsymbol{s}_i^{l} \parallel \boldsymbol{h}_i^l])$ |                $O(d_{in} * d_{out})$                 |
 | Neural FPs(NIPS, 2015)[@duvenaud2015_neural_fps] |      Non-spectral Aprroaches        | sum              | $\boldsymbol{m}_{j, i}^l = \boldsymbol{h}_j^l$               |           $O(d_{in})$           | $\boldsymbol{h}_i^{l+1} = \delta(\boldsymbol{W}^{\boldsymbol{N}_i}  \boldsymbol{s}_i^{l})$ |                $O(d_{in} * d_{out})$                 |
-|    SSE(ICML, 2018)     | Recurrent Graph Neural Networks | sum              | $\boldsymbol{m}_{j, i}^l = [\boldsymbol{h}_i^{l} \parallel \boldsymbol{h}_j^l]$ |             $O(1)$              | $\boldsymbol{h}_i^{l+1} = (1 - \alpha)  \boldsymbol{h}_i^l +\alpha    \delta(\boldsymbol{W}_1 \delta(\boldsymbol{W}_2), \boldsymbol{s}_i^l)$ |                $O(d_{in} * d_{out})$                 |
-|  **GGNN**(ICLR, 2015)[@li2015_ggnn]  |   Gated Graph Neural Networks   | sum              | $\boldsymbol{m}_{j, i} = \boldsymbol{W}^l \boldsymbol{h}_j^l$ |      $O(d_{in} * d_{out})$      | $\boldsymbol{z}_i^l = \delta ( \boldsymbol{W}^z \boldsymbol{s}_i^l + \boldsymbol{b}^{sz} + \boldsymbol{U}^z \boldsymbol{h}_i^{l} + \boldsymbol{b}^{hz}) \\ \boldsymbol{r}_i^l = \delta ( \boldsymbol{W}^r \boldsymbol{s}_i^l+ \boldsymbol{b}^{sr} +\boldsymbol{U}^r \boldsymbol{h}_i^{l} + \boldsymbol{b}^{hr}) \\ \boldsymbol{h}_i^{l+1} = tanh ( \boldsymbol{W} \boldsymbol{s}_i^l + \boldsymbol{b}^s + \boldsymbol{U} ( \boldsymbol{r}_i^l \odot \boldsymbol{h}_i^{l} + \boldsymbol{b}^h))) \\ \boldsymbol{h}_i^{l+1} = (1 - \boldsymbol{z}_i^l) \odot \boldsymbol{h}_i^l +  \boldsymbol{z}_i^l \odot \boldsymbol{h}_i^{l+1}$ |         $O(max(d_{in}, d_{out}) * d_{out})$          |
+|    SSE(ICML, 2018)     | Recurrent Graph Neural Networks | sum              | $\boldsymbol{m}_{j, i}^l = [\boldsymbol{h}_i^{l} \parallel \boldsymbol{h}_j^l]$ |             $O(1)$              | $\boldsymbol{h}_i^{l+1} = (1 - \alpha)  \boldsymbol{h}_i^l +\alpha    \delta(\boldsymbol{W}^l_1 \delta(\boldsymbol{W}^l_2), \boldsymbol{s}_i^l)$ |                $O(d_{in} * d_{out})$                 |
+|  **GGNN**(ICLR, 2015)[@li2015_ggnn]  |   Gated Graph Neural Networks   | sum              | $\boldsymbol{m}_{j, i} = \boldsymbol{W}^l \boldsymbol{h}_j^l$ |      $O(d_{in} * d_{out})$      | $\boldsymbol{z}_i^l = \delta ( \boldsymbol{W}^z \boldsymbol{s}_i^l + \boldsymbol{b}^{sz} + \boldsymbol{U}^z \boldsymbol{h}_i^{l} + \boldsymbol{b}^{hz}) \\ \boldsymbol{r}_i^l = \delta ( \boldsymbol{W}^r \boldsymbol{s}_i^l+ \boldsymbol{b}^{sr} +\boldsymbol{U}^r \boldsymbol{h}_i^{l} + \boldsymbol{b}^{hr}) \\ \boldsymbol{h}_i^{l+1} = tanh ( \boldsymbol{W}^l \boldsymbol{s}_i^l + \boldsymbol{b}^s + \boldsymbol{U} ( \boldsymbol{r}_i^l \odot \boldsymbol{h}_i^{l} + \boldsymbol{b}^h))) \\ \boldsymbol{h}_i^{l+1} = (1 - \boldsymbol{z}_i^l) \odot \boldsymbol{h}_i^l +  \boldsymbol{z}_i^l \odot \boldsymbol{h}_i^{l+1}$ |         $O(max(d_{in}, d_{out}) * d_{out})$          |
 |  Tree-LSTM(ACL, 2015) [@zhang2018_tree_lstm] |           Graph LSTM            | sum              | $\boldsymbol{m}_{j, i}^l = \boldsymbol{h}_j^l$               |             $O(1)$              | $h_i^{l+1} = LSTM(\boldsymbol{s}_i^l, \boldsymbol{h}_i^{l})$ |                $O(d_{in} * d_{out})$                 |
-|  **GAT**(ICLR, 2017)[@huang2018_gat]   |    Graph Attention Networks     | sum, mean        | $\alpha_{j, i}^k = \frac {\exp(LeakyReLU(\boldsymbol{a}^T [ \boldsymbol{W}^k  \boldsymbol{h}_j^l \parallel \boldsymbol{W}^k  \boldsymbol{h}_j^l] ))} {\sum_{k \in \mathcal{N}(i)}\exp(LeakyReLU(\boldsymbol{a}^T [ \boldsymbol{W}^k  \boldsymbol{h}_j^l \parallel \boldsymbol{W}^k  \boldsymbol{h}_k^l] ))} \\  \boldsymbol{m}_{j, i}^l = \parallel_{k=1}^K \delta(\alpha_{j, i}^k \boldsymbol{W}^k \boldsymbol{h}_j^{l})$ |    $O(K * d_{in} * d_{out})$    | $\boldsymbol{h}_i^{l+1} = \boldsymbol{s}_i^l$                |                        $O(1)$                        |
-|  **GaAN**(UAI, 2018)[@zhang2018_gaan]   |    Graph Attention Networks     | sum + max + mean | $\alpha_{j, i}^k = \frac {\exp(\boldsymbol{a}^T [ \boldsymbol{W}^{l, k}_a \boldsymbol{h}_j^l \parallel \boldsymbol{W}^k_a \boldsymbol{h}_i^l] )} {\sum_{k \in \mathcal{N}(j)}\exp(\boldsymbol{a}^T [ \boldsymbol{W}^k_a \boldsymbol{h}_j^l \parallel \boldsymbol{W}^k_{a}  \boldsymbol{h}_k^l] )} \\  \boldsymbol{m}_{j, i, 1}^l = \parallel_{k=1}^K \delta(\alpha_{j, i}^k \boldsymbol{W}^k_v \boldsymbol{h}_j^{l}) \\ \boldsymbol{m}_{j, i, 2}^l = \boldsymbol{W}_m \boldsymbol{h}_j^{l} \\ \boldsymbol{m}_{j, i, 3}^l = \boldsymbol{h}_j^l$ | $O(max(d_a, d_m) * K * d_{in})$ | $\boldsymbol{g}_i = \boldsymbol{W}_g  [\boldsymbol{h}_i^{l} \parallel \boldsymbol{s}_{i, 2}^l \parallel \boldsymbol{s}_{i, 3}^l]  \\ \boldsymbol{h}_i^{l+1} = \boldsymbol{W}_o [\boldsymbol{h}_i^l \parallel (\boldsymbol{g}_{i} \odot \boldsymbol{s}_{i, 3}^l) ]$ | $O(max(d_{in} + K * d_v, 2 * d_{in} + d_m) d_{out})$ |
-> todo: 为权重$\boldsymbol{W}$增加上标$l$
+|  **GAT**(ICLR, 2017)[@huang2018_gat]   |    Graph Attention Networks     | sum, mean        | $\alpha_{j, i}^k = \frac {\exp(LeakyReLU(\boldsymbol{a}^T [ \boldsymbol{W}^{l,k}  \boldsymbol{h}_j^l \parallel \boldsymbol{W}^{l,k}  \boldsymbol{h}_j^l] ))} {\sum_{k \in \mathcal{N}(i)}\exp(LeakyReLU(\boldsymbol{a}^T [ \boldsymbol{W}^{l,k}  \boldsymbol{h}_j^l \parallel \boldsymbol{W}^{l,k}  \boldsymbol{h}_k^l] ))} \\  \boldsymbol{m}_{j, i}^l = \parallel_{k=1}^K \delta(\alpha_{j, i}^k \boldsymbol{W}^{l,k} \boldsymbol{h}_j^{l})$ |    $O(K * d_{in} * d_{out})$    | $\boldsymbol{h}_i^{l+1} = \boldsymbol{s}_i^l$                |                        $O(1)$                        |
+|  **GaAN**(UAI, 2018)[@zhang2018_gaan]   |    Graph Attention Networks     | sum + max + mean | $\alpha_{j, i}^k = \frac {\exp(\boldsymbol{a}^T [ \boldsymbol{W}^{l, k}_a \boldsymbol{h}_j^l \parallel \boldsymbol{W}^{l,k}_a \boldsymbol{h}_i^l] )} {\sum_{k \in \mathcal{N}(j)}\exp(\boldsymbol{a}^T [ \boldsymbol{W}^{l,k}_a \boldsymbol{h}_j^l \parallel \boldsymbol{W}^{l,k}_{a}  \boldsymbol{h}_k^l] )} \\  \boldsymbol{m}_{j, i, 1}^l = \parallel_{k=1}^K \delta(\alpha_{j, i}^k \boldsymbol{W}^{l,k}_v \boldsymbol{h}_j^{l}) \\ \boldsymbol{m}_{j, i, 2}^l = \boldsymbol{W}^l_m \boldsymbol{h}_j^{l} \\ \boldsymbol{m}_{j, i, 3}^l = \boldsymbol{h}_j^l$ | $O(max(d_a, d_m) * K * d_{in})$ | $\boldsymbol{g}_i = \boldsymbol{W}^l_g  [\boldsymbol{h}_i^{l} \parallel \boldsymbol{s}_{i, 2}^l \parallel \boldsymbol{s}_{i, 3}^l]  \\ \boldsymbol{h}_i^{l+1} = \boldsymbol{W}^l_o [\boldsymbol{h}_i^l \parallel (\boldsymbol{g}_{i} \odot \boldsymbol{s}_{i, 3}^l) ]$ | $O(max(d_{in} + K * d_v, 2 * d_{in} + d_m) d_{out})$ |
+
 
 计算复杂度中的算法：GMM, Tree-LSTM-Nary, Tree-LSTM-Child, HGNN, single parameter
 > todo: 检查文件以及重新绘制
@@ -127,21 +127,24 @@ $W$
 ### 2. GGNN
 在图神经网络的前期工作GNN上，首次提出采用了a gated recurrent unit(GRU)作为循环函数，将循环次数减少到了固定步骤数，不再需要约束参数以保证收敛
 GNN Layer $l$ node $v_i$的更新公式为:
-$$\boldsymbol{s}_i^{l} = sum_{j \in \mathcal{N}(i)} (\boldsymbol{h}_j^{l}) \\ \boldsymbol{z}_i^l = \delta ( \boldsymbol{W}^z \boldsymbol{s}_i^l + \boldsymbol{b}^{sz} + \boldsymbol{U}^z \boldsymbol{h}_i^{l} + \boldsymbol{b}^{hz}) \\ \boldsymbol{r}_i^l = \delta ( \boldsymbol{W}^r \boldsymbol{s}_i^l+ \boldsymbol{b}^{sr} +\boldsymbol{U}^r \boldsymbol{h}_i^{l} + \boldsymbol{b}^{hr}) \\ \boldsymbol{h}_i^{l+1} = tanh ( \boldsymbol{W} \boldsymbol{s}_i^l + \boldsymbol{b}^s + \boldsymbol{U} ( \boldsymbol{r}_i^l \odot \boldsymbol{h}_i^{l} + \boldsymbol{b}^h))) \\ \boldsymbol{h}_i^{l+1} = (1 - \boldsymbol{z}_i^l) \odot \boldsymbol{h}_i^l +  \boldsymbol{z}_i^l \odot \boldsymbol{h}_i^{l+1}$$
+$$\boldsymbol{s}_i^{l} = sum_{j \in \mathcal{N}(i)} (\boldsymbol{h}_j^{l}) \\ \boldsymbol{z}_i^l = \delta ( \boldsymbol{W}^z \boldsymbol{s}_i^l + \boldsymbol{b}^{sz} + \boldsymbol{U}^z \boldsymbol{h}_i^{l} + \boldsymbol{b}^{hz}) \\ \boldsymbol{r}_i^l = \delta ( \boldsymbol{W}^r \boldsymbol{s}_i^l+ \boldsymbol{b}^{sr} +\boldsymbol{U}^r \boldsymbol{h}_i^{l} + \boldsymbol{b}^{hr}) \\ \boldsymbol{h}_i^{l+1} = tanh ( \boldsymbol{W}^l \boldsymbol{s}_i^l + \boldsymbol{b}^s + \boldsymbol{U} ( \boldsymbol{r}_i^l \odot \boldsymbol{h}_i^{l} + \boldsymbol{b}^h))) \\ \boldsymbol{h}_i^{l+1} = (1 - \boldsymbol{z}_i^l) \odot \boldsymbol{h}_i^l +  \boldsymbol{z}_i^l \odot \boldsymbol{h}_i^{l+1}$$
 
 参数：
 $d_{in}$是layer $l$的输入维度
 $d_{out}$是layer $l$的输出维度
 
 权重：
-$$
+$\boldsymbol{W}^z, \boldsymbol{W}^r, \boldsymbol{W}^l \in $
+
+注意：
+> GGNN是所有层共享同一参数，其他模型GCN,GAT,GaAN的参数每层都是不一样的
 
 ### 3. GAT
 采用了Attention机制来了解两个连接节点的相对权重，并且使用了multi-head机制来增加模型的表现能力
 GNN Layer $l$ node $v_i$的更新公式为:
-$$\boldsymbol{h}_i^{l + 1} = \parallel_{k=1}^K \delta(sum_{j \in \mathcal{N}(i)} \alpha_{j, i}^k \boldsymbol{W}^k \boldsymbol{h}_j^{l}) \\
-or \quad \boldsymbol{h}_i^{l + 1} = \delta(\frac{1}{K} sum_{j \in \mathcal{N}(i)} \alpha_{j, i}^k \boldsymbol{W}^k \boldsymbol{h}_j^{l}) \\
-\alpha_{j, i}^k = \frac {\exp(LeakyReLU(a^T [ \boldsymbol{W}^k \boldsymbol{h}_j^l \parallel \boldsymbol{W}^k \boldsymbol{h}_j^l] ))} {\sum_{k \in \mathcal{N}(i)}\exp(LeakyReLU(a^T [ \boldsymbol{W}^k \boldsymbol{h}_j^l \parallel \boldsymbol{W}^k \boldsymbol{h}_k^l] ))}$$
+$$\boldsymbol{h}_i^{l + 1} = \parallel_{k=1}^K \delta(sum_{j \in \mathcal{N}(i)} \alpha_{j, i}^k \boldsymbol{W}^{l,k} \boldsymbol{h}_j^{l}) \\
+or \quad \boldsymbol{h}_i^{l + 1} = \delta(\frac{1}{K} sum_{j \in \mathcal{N}(i)} \alpha_{j, i}^k \boldsymbol{W}^{l,k} \boldsymbol{h}_j^{l}) \\
+\alpha_{j, i}^k = \frac {\exp(LeakyReLU(a^T [ \boldsymbol{W}^{l,k} \boldsymbol{h}_j^l \parallel \boldsymbol{W}^{l,k} \boldsymbol{h}_j^l] ))} {\sum_{k \in \mathcal{N}(i)}\exp(LeakyReLU(a^T [ \boldsymbol{W}^{l,k} \boldsymbol{h}_j^l \parallel \boldsymbol{W}^{l,k} \boldsymbol{h}_k^l] ))}$$
 
 参数：
 $d_{in}$是layer $l$的输入维度
@@ -149,15 +152,15 @@ $d_{out}$是layer $l$的输出维度
 $K$是多头机制的heads数
 
 权重:
-$\bold{W} \in \mathbb{R}^{d_{out} \times d_{in}}, \boldsymbol{a} \in \mathbb{R}^{2 * d_{out}}$
+$\bold{W}^l \in \mathbb{R}^{d_{out} \times d_{in}}, \boldsymbol{a} \in \mathbb{R}^{2 * d_{out}}$
 
 
 ### 4. GaAN
 在传统的mulit-head机制上，引入了a convolutional subnetwork来控制每个Attention head的重要性
 GNN Layer $l$ node $v_i$的更新公式为:
 
-$$ \boldsymbol{h}_i^{l+1} = \boldsymbol{W}_o [\boldsymbol{h}_i^l \parallel (\boldsymbol{g}_{i} \odot sum_{j \in \mathcal{N}(i)}  (\parallel_{k=1}^K \delta(\alpha_{j, i}^k \boldsymbol{W}^k_v \boldsymbol{h}_j^{l}) ) ] \\ \boldsymbol{g}_i = \boldsymbol{W}_g  [\boldsymbol{h}_i^{l} \parallel max_{j \in \mathcal{N}(i)} (\boldsymbol{W}_m \boldsymbol{h}_j^{l})  \parallel mean_{j \in \mathcal{N(i)}} \boldsymbol{h}_j^l] 
-\\ \alpha_{j, i}^k = \frac {\exp(\boldsymbol{a}^T [ \boldsymbol{W}^k_a \boldsymbol{h}_j^l \parallel \boldsymbol{W}^k_a \boldsymbol{h}_i^l] )} {\sum_{k \in \mathcal{N}(j)}\exp(\boldsymbol{a}^T [ \boldsymbol{W}^k_a \boldsymbol{h}_j^l \parallel \boldsymbol{W}^k_{a}  \boldsymbol{h}_k^l] )}$$
+$$ \boldsymbol{h}_i^{l+1} = \boldsymbol{W}^l_o [\boldsymbol{h}_i^l \parallel (\boldsymbol{g}_{i} \odot sum_{j \in \mathcal{N}(i)}  (\parallel_{k=1}^K \delta(\alpha_{j, i}^k \boldsymbol{W}^{l,k}_v \boldsymbol{h}_j^{l}) ) ] \\ \boldsymbol{g}_i = \boldsymbol{W}^l_g  [\boldsymbol{h}_i^{l} \parallel max_{j \in \mathcal{N}(i)} (\boldsymbol{W}^l_m \boldsymbol{h}_j^{l})  \parallel mean_{j \in \mathcal{N(i)}} \boldsymbol{h}_j^l] 
+\\ \alpha_{j, i}^k = \frac {\exp(\boldsymbol{a}^T [ \boldsymbol{W}^{l,k}_a \boldsymbol{h}_j^l \parallel \boldsymbol{W}^{l,k}_a \boldsymbol{h}_i^l] )} {\sum_{k \in \mathcal{N}(j)}\exp(\boldsymbol{a}^T [ \boldsymbol{W}^{l,k}_a \boldsymbol{h}_j^l \parallel \boldsymbol{W}^{l,k}_{a}  \boldsymbol{h}_k^l] )}$$
 
 参数：
 $d_{in}$是layer $l$的输入维度
@@ -165,7 +168,7 @@ $d_{out}$是layer $l$的输出维度
 $k$是多头机制的heads数
 
 权重:
-$\bold{W}_o \in \mathbb{R}^{d_{out} \times (d_{in} + k d_v)}, \boldsymbol{a} \in \mathbb{R}^{2 * d_a}$
+$\bold{W}^l_o \in \mathbb{R}^{d_{out} \times (d_{in} + k d_v)}, \boldsymbol{a} \in \mathbb{R}^{2 * d_a}$
 
 ## 2.4 采样技术
 
@@ -181,6 +184,7 @@ $\bold{W}_o \in \mathbb{R}^{d_{out} \times (d_{in} + k d_v)}, \boldsymbol{a} \in
 ## 3.1 实验环境
 
 NVIDIA Tesla T4 15079MiB X 1
+Linux gpu1 3.10.0-957.el7.x86_64 #1 SMP Thu Nov 8 23:39:32 UTC 2018 x86_64 x86_64 x86_64 GNU/Linux
 Python 3.7.7, PyTorch 1.5.0, Pytorch Geometric 1.5.0
 
 ## 3.2 实验数据集
@@ -448,7 +452,7 @@ GaAN同样采用多头机制,其计算复杂度受$d_{in}$、$d_v$、$d_a$和头
 
 **图: 边计算的步骤分解.** [#fig:steps_in_edge_calculation]
 
-我们对各GNN算法在不同数据集上的边计算过程进行了执行时间分解, 结果如图[fig:exp_edge_cal_decomposition](#fig:exp_edge_cal_decomposition)所示. collect步骤虽然只进行了数据准备, 但其在所有的GNN中均占据了不少的执行时间. 对于message步骤, 在边计算复杂度高的GNN (GAT和GaAN)中其,占据了绝对主导; 在GCN中虽然其边计算只有简单的数乘操作, 但其耗时依然有20%以上; 在GGNN中, 因为其边计算函数$\boldsymbol{m}_{j,i}^l=\boldsymbol{W}\boldsymbol{h}_{j}^l$只与源顶点有关, 所以在PyG的实现中将$\boldsymbol{W}\boldsymbol{h}_j^l$的计算移动到边计算开始之前预先进行 (因为这部分计算只与顶点相关, 因此我们将该计算计入点计算阶段), 计算出的结果被缓存下来, 在进行message步骤时直接读取, 因而GGNN的message步骤耗时为0. 对于aggregate步骤, 在边计算复杂度低的GNN (GCN和GGNN)中其占据了至少35%的耗时, 而在边计算复杂度高的GNN (GAT和GaAN), 其耗时与collect步骤接近, 均远低于message步骤. 实验表明*对于边计算复杂度高的算法, 其message步骤是其性能的瓶颈, 应重点优化*; 而**对于边计算复杂度低的算法, 优化collect和aggregate步骤能显著降低训练耗时*.
+我们对各GNN算法在不同数据集上的边计算过程进行了执行时间分解, 结果如图[fig:exp_edge_cal_decomposition](#fig:exp_edge_cal_decomposition)所示. collect步骤虽然只进行了数据准备, 但其在所有的GNN中均占据了不少的执行时间. 对于message步骤, 在边计算复杂度高的GNN (GAT和GaAN)中其,占据了绝对主导; 在GCN中虽然其边计算只有简单的数乘操作, 但其耗时依然有20%以上; 在GGNN中, 因为其边计算函数$\boldsymbol{m}_{j,i}^l=\boldsymbol{W}^l^l\boldsymbol{h}_{j}^l$只与源顶点有关, 所以在PyG的实现中将$\boldsymbol{W}^l^l\boldsymbol{h}_j^l$的计算移动到边计算开始之前预先进行 (因为这部分计算只与顶点相关, 因此我们将该计算计入点计算阶段), 计算出的结果被缓存下来, 在进行message步骤时直接读取, 因而GGNN的message步骤耗时为0. 对于aggregate步骤, 在边计算复杂度低的GNN (GCN和GGNN)中其占据了至少35%的耗时, 而在边计算复杂度高的GNN (GAT和GaAN), 其耗时与collect步骤接近, 均远低于message步骤. 实验表明*对于边计算复杂度高的算法, 其message步骤是其性能的瓶颈, 应重点优化*; 而**对于边计算复杂度低的算法, 优化collect和aggregate步骤能显著降低训练耗时*.
 
 <div class="subfigure">
 
