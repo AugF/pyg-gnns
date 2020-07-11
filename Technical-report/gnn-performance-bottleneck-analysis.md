@@ -314,20 +314,20 @@ Python 3.7.7, PyTorch 1.5.0, Pytorch Geometric 1.5.0
 
 **图: 训练耗时的影响 [@fig:exp_absolute_training_time].**
 
-根据[@tbl:gnn_overview]中的复杂度分析, 各GNN的点、边计算复杂度与各算法超参数(例如$h_{dim}$、$K$等)呈线性关系.
+根据[@tbl:gnn_overview]中的复杂度分析, 各GNN的点、边计算复杂度与各算法超参数(例如$d_{dim}$、$K$等)呈线性关系.
 为了验证该线性关系, 我们测量了各GNN的训练时间随超参数的变化情况.
 
-GCN和GGNN的计算复杂度受隐向量维度$h_{dim}$影响.
-$h_{dim}$同时影响Layer0的输出隐向量维度和Layer1的输入隐向量维度（即$h_{dim}=h^0_{out}=h^1_{in})$.
-[@fig:exp_hyperparameter_on_vertex_edge_phase_time_gcn]和[@fig:exp_hyperparameter_on_vertex_edge_phase_time_ggnn]展示了GCN和GGNN训练耗时受$h_{dim}$的影响情况.
-随着$h_{dim}$的增加,训练耗时呈线性增长.
+GCN和GGNN的计算复杂度受隐向量维度$d_{dim}$影响.
+$d_{dim}$同时影响Layer0的输出隐向量维度和Layer1的输入隐向量维度（即$d_{dim}=d^0_{out}=d^1_{in})$.
+[@fig:exp_hyperparameter_on_vertex_edge_phase_time_gcn]和[@fig:exp_hyperparameter_on_vertex_edge_phase_time_ggnn]展示了GCN和GGNN训练耗时受$d_{dim}$的影响情况.
+随着$d_{dim}$的增加,训练耗时呈线性增长.
 
 
 GAT采用了多头机制,其计算复杂度受输入隐向量维度$d_{in}$, 每个头的隐向量维度$h_{head}$和头数$K$的影响.
-每一层的输出隐向量维度$d_{out}=K h_{head}$.
-因为在GAT结构中$h^1_{in}=h^0_{out}$, 调整$h_{head}$和$K$即相当于调整了Layer1的$h^1_{in}$.
-[@fig:exp_hyperparameter_on_vertex_edge_phase_time_gat]展示了GAT训练耗时受超参数$h_{head}$和$K$的影响.
-GAT训练耗时随$h_{head}$和$K$呈线性增长.
+每一层的输出隐向量维度$d_{out}=K d_{head}$.
+因为在GAT结构中$d^1_{in}=d^0_{out}$, 调整$d_{head}$和$K$即相当于调整了Layer1的$d^1_{in}$.
+[@fig:exp_hyperparameter_on_vertex_edge_phase_time_gat]展示了GAT训练耗时受超参数$d_{head}$和$K$的影响.
+GAT训练耗时随$d_{head}$和$K$呈线性增长.
 
 GaAN同样采用多头机制,其计算复杂度受$d_{in}$、$d_v$、$d_a$和头数$K$的影响.
 [@fig:exp_hyperparameter_on_vertex_edge_phase_time_gat]展示了GaAN训练耗时受超参数的影响.
@@ -415,7 +415,7 @@ GaAN同样采用多头机制,其计算复杂度受$d_{in}$、$d_v$、$d_a$和头
 **图: 平均顶点度数对点/边计算耗时比例的影响.** [#fig:exp_avg_degree_vertex_edge_cal_time]
 </div>
 
-**边计算耗时分解分析**: 边计算阶段可以进一步分解为collect, message, aggregate和update四个步骤, 如图[@fig:steps_in_edge_calculation]所示. 图中展示的是第$l$层GNN的边计算过程. edge index是一个保存由图的边集的规模为M*2的矩阵, 其中M是图的边数, 该矩阵的两列分别保存每条边的源顶点和目标顶点. edge index在整个计算过程中保持不变. 其中collect步骤用于准备边计算所需要的数据结构. 该步骤将输入GNN层的顶点隐向量$h_i^l (1 \leq i \leq N)$根据edge index拷贝到各边的两层, 构成输入边计算函数$\phi$的输入参数张量(包含$h_i^l$,$h_j^l$和$e_{ij}$). 此步骤没有计算,只涉及数据访问. message步骤调用用户给出的函数$\phi$完成边计算过程, 并得到每条边的消息向量$m_{ij}^l (e_{ij} \in E(G))$. aggregate步骤根据每条边的目标顶点, 将目标顶点相同的消息向量通过聚合算子$\Sigma$聚合在一起, 得到每个顶点聚合向量$a_i^l (1 \leq i \leq N)$. 最后的update步骤是可选的, 其可以对聚合后的向量进行额外的修正处理(例如在GCN增加bias).经过update处理后的聚合向量$a_i^l$将被输入到点计算函数$\gamma$中作为输入参数.
+**边计算耗时分解分析**: 边计算阶段可以进一步分解为collect, message, aggregate和update四个步骤, 如图[@fig:steps_in_edge_calculation]所示. 图中展示的是第$l$层GNN的边计算过程. edge index是一个保存由图的边集的规模为M*2的矩阵, 其中M是图的边数, 该矩阵的两列分别保存每条边的源顶点和目标顶点. edge index在整个计算过程中保持不变. 其中collect步骤用于准备边计算所需要的数据结构. 该步骤将输入GNN层的顶点隐向量$\boldsymbol{h}_i^l (1 \leq i \leq N)$根据edge index拷贝到各边的两层, 构成输入边计算函数$\phi$的输入参数张量(包含$\boldsymbol{h}_i^l$,$\boldsymbol{h}_j^l$和$\boldsymbol{e}_{j, i}^l$). 此步骤没有计算,只涉及数据访问. message步骤调用用户给出的函数$\phi$完成边计算过程, 并得到每条边的消息向量$\boldsymbol{m}_{j, i}^l (\boldsymbol{e}_{j, i}^l \in E(G))$. aggregate步骤根据每条边的目标顶点, 将目标顶点相同的消息向量通过聚合算子$\Sigma$聚合在一起, 得到每个顶点聚合向量$\boldsymbol{a}_i^l (1 \leq i \leq N)$. 最后的update步骤是可选的, 其可以对聚合后的向量进行额外的修正处理(例如在GCN增加bias).经过update处理后的聚合向量$a_i^l$将被输入到点计算函数$\gamma$中作为输入参数.
 
 ![fig:steps_in_edge_calculation](figs/illustration/steps_in_edge_calculation.png)
 
