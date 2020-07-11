@@ -1,0 +1,45 @@
+%! TEX root = ms.tex
+%! TEX program = pdflatex
+\documentclass[review]{elsarticle}
+\usepackage{lineno,hyperref}
+\usepackage{amsmath, amsthm}
+\modulolinenumbers[5]
+\bibliographystyle{elsarticle-num}
+
+
+\begin{document}
+
+\begin{frontmatter}
+
+\title{Analyzing Performance Bottleneck in Graph Neural Network Training: An Experimental View}
+\author{Zhaokang Wang, Yunpan Wang, Chunfeng Yuan, Yihua Huang\corref{correspondingauthor}}
+\cortext[correspondingauthor]{Corresponding author}
+\ead{\{wangzhaokang, wangyp\}@smail.nju.edu.cn, \{cfyuan, yhuang\}@nju.edu.cn}
+\address{State Key Laboratory for Novel Software Technology, Department of Computer Science and Technology, Nanjing University, Nanjing 210023, China}
+
+\begin{abstract}
+    This is the abstract.
+\end{abstract}
+
+\begin{keyword}
+    Keyword 1
+\end{keyword}
+
+\end{frontmatter}
+
+\linenumbers
+
+\input{sec1-introduction.tex}
+\input{sec2-review-of-graph-neural-network.tex}
+\input{sec3-experiment-design.tex}
+\input{sec4-experiments.tex}
+\input{sec5-insights.tex}
+\input{sec6-related-work.tex}
+\input{sec7-conclusion.tex}
+
+
+\section*{Acknowledgment}
+
+\bibliography{gnnref.bib}
+
+\end{document}

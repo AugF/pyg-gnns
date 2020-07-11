@@ -1,0 +1,22 @@
+\begin{thebibliography}{1}
+\expandafter\ifx\csname url\endcsname\relax
+  \def\url#1{\texttt{#1}}\fi
+\expandafter\ifx\csname urlprefix\endcsname\relax\def\urlprefix{URL }\fi
+\expandafter\ifx\csname href\endcsname\relax
+  \def\href#1#2{#2} \def\path#1{#1}\fi
+
+\bibitem{zhou2018_gnn_review}
+J.~Zhou, G.~Cui, Z.~Zhang, C.~Yang, Z.~Liu, L.~Wang, C.~Li, M.~Sun,
+  \href{https://arxiv.org/abs/1812.08434}{Graph neural networks: A review of
+  methods and applications} (2018).
+\newblock \href {http://arxiv.org/abs/1812.08434} {\path{arXiv:1812.08434}}.
+\newline\urlprefix\url{https://arxiv.org/abs/1812.08434}
+
+\bibitem{comprehensive-survey-wu-2020}
+Z.~{Wu}, S.~{Pan}, F.~{Chen}, G.~{Long}, C.~{Zhang}, P.~S. {Yu}, A
+  comprehensive survey on graph neural networks, IEEE Transactions on Neural
+  Networks and Learning Systems (Early Access).
+\newblock \href {http://dx.doi.org/10.1109/TNNLS.2020.2978386}
+  {\path{doi:10.1109/TNNLS.2020.2978386}}.
+
+\end{thebibliography}
