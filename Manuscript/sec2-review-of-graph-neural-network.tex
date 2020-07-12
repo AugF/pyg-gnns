@@ -13,8 +13,8 @@ As illustracted in \figurename~\ref{fig:general_structure_of_gnn}, a typical GNN
 
 \begin{figure}
 	\centering
-	\includegraphics[width=0.95\columnwidth]{figs/illustration/GNN_common_architecture.png}
-	\caption{Structure of a typical graph neural network. (a) Demo GNN; (b) GNN unit; (c) Demo graph. The target application is the node classification. The demo GNN has two GNN layers.}
+	\includegraphics[width=1.1\columnwidth]{figs/illustration/GNN_common_architecture.png}
+	\caption{Structure of a typical graph neural network. (a) Demo GNN, (b) Demo graph. The target application is the node classification. The demo GNN has two GNN layers.}
 	\label{fig:general_structure_of_gnn}
 \end{figure}
 
@@ -24,23 +24,27 @@ The input layer of a GNN receives feature vectors from all vertices and passes t
 
 A GNN layer consists of $n$ GNN units, where $n$ is the number of vertices in $\mathcal{G}$.
 Each GNN unit correspond to a vertex in $\mathcal{G}$.
-In the first GNN layer (Layer 0), the GNN unit of the vertex $v_i$ collects input feature vectors of the vertices $\boldsymbol{x}_j$ that are adjacent to $v_i$ in $\mathcal{G}$ (i.e., $j \in \mathcal{N}(v_i)$) from the input layer.
-In other words, the connection between the input layer and the first GNN layer is determined by the topology of $\mathcal{G}$.
-In the traditional neural networks, the neural units of neighboring layers are fully connected.
-In GNNs, two GNN units are connected only if they have an edge between them in $\mathcal{G}$, which is usually \emph{sparse}.
+In the first GNN layer (Layer 0), the GNN unit of the vertex $v_i$ collects input feature vectors of itself and the vertices $\boldsymbol{x}_j$ that are adjacent to $v_i$ in $\mathcal{G}$ (i.e., $j \in \mathcal{N}(v_i)$) from the input layer.
 After aggregating input feature vectors and applying non-linear transformation, the GNN unit outputs a hidden feature vector $\boldsymbol{h}^1_i$ for $v_i$.
+Take the demo DNN in \figurename~\ref{fig:general_structure_of_gnn}(a) as the example.
+Since $\mathcal{N}(v_3) = \{v_1, v_2, v_4, v_5, v_6\}$, the GNN unit of $v_1$ at layer 0 collects the feature vectors \{$\boldsymbol{x}_1$, $\boldsymbol{x}_2$, $\boldsymbol{x}_3$, $\boldsymbol{x}_4$, $\boldsymbol{x}_5$, $\boldsymbol{x}_6$\} from the input layer and outputs $\boldsymbol{h}^1_1$.
+We elaborate on the details of GNN units later.
 
-In the next GNN layer (Layer 1), the GNN unit of $v_i$ collects the hidden feature vectors $\boldsymbol{h}^1_j$ of $v_i$'s neighbors (i.e., $j \in \mathcal{N}(v_i)$) from the \emph{previous} GNN layer.
-The connection between neighboring GNN layers are also determined by $\mathcal{E}$ of $\mathcal{G}$.
+The connection between the input layer and the first GNN layer is determined by the topology of $\mathcal{G}$.
+In the traditional neural networks, the neural units of neighboring layers are fully connected.
+In GNNs, two GNN units are connected only if they have an edge between them in $\mathcal{G}$.
+Real-world graphs are usually very \emph{sparse}, i.e. $|\mathcal{E}| \ll |\mathcal{V}|^2$. 
+
+
+In the next GNN layer (Layer 1), the GNN unit of $v_i$ collects the hidden feature vectors of itself $\boldsymbol{h}^1_i$ and its neighbors ($\boldsymbol{h}^1_j$ with $j \in \mathcal{N}(v_i)$) from the \emph{previous} GNN layer.
 Based on the collected hidden vectors, the GNN unit in Layer 1 outputs a new hidden feature vector $\boldsymbol{h}^2_i$ for $v_i$.
-A GNN allows to stack more GNN layers to support deeper graph analysis.
+Though there are only two GNN layers in \figurename~\ref{fig:general_structure_of_gnn}, a GNN allows to stack more GNN layers to support deeper graph analysis.
 %In \figurename~\ref{fig:general_structure_of_gnn}, we shows a GNN with two layers.
 
 Assume there are $L$ GNN layers.
 The last GNN layer (Layer $L-1$) outputs a hidden feature vector $\boldsymbol{h}^{L}_i$ for every vertex $v_i$.
 As an embedding vector, $\boldsymbol{h}^L_i$ encodoes the knowledge learned from the input layer and all the previous GNN layers.
-Finally, $\boldsymbol{h}^L_i$ is affected by $v_i$ and all the vertices in the $L$-hop neighborhood of $v_i$.
-Analyzing with deeper GNNs means analyzing each vertices with a wider scope.
+Since $\boldsymbol{h}^L_i$ is affected by $v_i$ and the vertices in the $L$-hop neighborhood of $v_i$, analyzing a graph with a \emph{deeper} GNN means analyzing each vertex with a \emph{wider} scope.
 
 The hidden feature vectors $\boldsymbol{h}^L_i$ of the last GNN layer are fed to the prediction layer to generate the output of the whole GNN.
 The prediction layer is a standard nerual network.
@@ -60,3 +64,22 @@ In a fully parameterized way, the GNN automatically extracts an embedding vector
 The parameters are tuned according to the specific prediction task, leading to high prediction accuracy.
 
 \subsection{GNN Unit and Message-passing Model}
+
+GNN units are building blocks of a GNN.
+A GNN layer consists of $|\mathcal{V}|$ units.
+Each vertex has a corresponding GNN unit.
+A GNN unit is a small neural network with the structure shown in \figurename~\ref{fig:general_structure_of_gnn}.
+The GNN unit of $v_i$ at layer $l$ receives hidden feature vectors $\boldsymbol{h}^l_j$ from the GNN units of itself and its neighbors ($j \in \{i\} \cup \mathcal{N}(v_i)$) at the previous GNN layer \footnote{For the GNN layer 0, GNN units receive input feature vectors, i.e., $\boldsymbol{h}^0_i=\boldsymbol{x}_i$}.
+The GNN unit aggregates the received hidden feature vectors, applies non-linear transformations, and outputs a new hidden feature vector $\boldsymbol{h}_i^{l+1}$.
+
+\begin{figure}
+	\centering
+	\includegraphics[width=0.6\columnwidth]{figs/illustration/GNN_Unit.png}
+	\caption{The GNN Unit of $v_3$ at the GNN layer $l$ with the graph $\mathcal{G}$ in \figurename~\ref{fig:general_structure_of_gnn}(b).}
+	\label{fig:GNN_unit}
+\end{figure}
+
+We follow the message-passing model \cite{gilmer_messgae_passing} to formally define a GNN unit.
+The message-passing model is widely used in the cutting-edge GNN training systems like PyTorch Geometric (PyG) \cite{PyG} and Deep Graph Library (DGL) \cite{DGL}.
+\figurename~\ref{fig:GNN_unit} shows the structure of a GNN unit.
+
