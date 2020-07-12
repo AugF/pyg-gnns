@@ -304,10 +304,32 @@ ClusterGCN: Edge Sampling, 每层的图结构固定
 - 实验 4：采样技术
   - 随batch_size的变化
     - graph_info
-      
       > 度数图：散点图
   - 耗时占比的变化
   - 峰值内存的变化
+
+
+**GPU内存分析中Peak Memory, Expansion Ratio如何获取？**
+1. 代码执行流程：
+  - 非采样算法背景下: 
+   准备data和model到GPU上 -> 执行多轮epoch(每轮epoch包括train, eval两个阶段)
+  - 采样算法背景下：
+  准备DataLoader(GPU)和model(GPU), Data -> 执行多伦epoch(每轮epoch执行多个batch, batch数量由DataLoader决定) 
+
+2. GPU内存测量
+- 非采样算法背景下
+  - 使用torch.cuda.memory_stats(), 主要关注了allocated_bytes.all.current, allocated_bytes.all.peak两个指标
+  - 在代码执行过程中，取了dataload, warmup, forward_start, layer0, layer1, forward_end, backward_end, eval_end多个阶段进行记录GPU内存信息
+  > peak memory = 各个stages的peak memory的最大值
+  > expansion ratio = peak memory / dataload的allocated_bytes_all_current值
+- 采样算法的背景下
+  - 使用torch.cuda.memory_stats(), 主要关注了allocated_bytes.all.current, allocated_bytes.all.peak两个指标
+  - 在代码执行过程中，标记了model load, warmup, batch_start, layer0, laye1, dataload, forward_end, backward_end多个阶段
+  > peak memory = 各个stages的peak memory的最大值
+  > expansion ratio = peak memory / dataload的allocated_bytes_all_current值
+
+> 统计每个stages的allocated_bytes.all.peak, 已使用torch.cuda.reset_max_memory_allocated(device)释放内存
+
 
 # 4 实验结果与分析
 
