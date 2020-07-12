@@ -329,7 +329,30 @@ ClusterGCN: Edge Sampling, 每层的图结构固定
   > expansion ratio = peak memory / dataload的allocated_bytes_all_current值
 
 > 统计每个stages的allocated_bytes.all.peak, 已使用torch.cuda.reset_max_memory_allocated(device)释放内存
+> 对于分析的对象，去除1轮epochs或batch作为warmup; 取后面所有epoch或batch的平均值作为标准，然后再取所有stages的最大值作为peak memory
 
+
+**GPU显存内存膨胀爆栈情况原因剖析**
+- Pytorch本身内存管理
+关于tensor的管理通过Python对象管理一样，不可能再被后面的计算用到
+
+-  深度学习中GPU显存的利用
+    - 数据，模型本身
+    - 模型中的参数
+    - forward过程中的中间变量
+      - 一般来说，每一个有参数层的输入和输出会保存为中间变量
+    - backward过程中的中间变量
+    - 优化器和动量，每个参数对应的梯度需要保存
+    - 框架本身的内存
+
+- Pytorch提供的机制
+  - 算子的inplace参数，计算得到的新值会直接覆盖原来的值
+  - checkpoint机制，牺牲计算速度减少显存使用
+
+> 参考来源：
+> 1. https://www.zhihu.com/question/314312876
+> 2. https://oldpan.me/archives/how-to-calculate-gpu-memory
+> 3. https://oldpan.me/archives/how-to-use-memory-pytorch
 
 # 4 实验结果与分析
 
