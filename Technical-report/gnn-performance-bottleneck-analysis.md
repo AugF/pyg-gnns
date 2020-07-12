@@ -208,7 +208,7 @@ Python 3.7.7, PyTorch 1.5.0, Pytorch Geometric 1.5.0
 > 2. 无向图: 平均度数 = 边数 / 点数
 > 3. 单个节点特征稀疏度=1 - 非零数/特征维度， 特征稀疏度为所有节点特征稀疏度的平均值
 
-## 3.3 图神经网络算法选择与实现
+## 3. 3.3 图神经网络算法选择与实现
 
 ### 3.1. 3.3.1 学习任务
 
@@ -306,6 +306,7 @@ ClusterGCN: Edge Sampling, 每层的图结构固定
 - 实验 4：采样技术
   - 随batch_size的变化
     - graph_info
+      
       > 度数图：散点图
   - 耗时占比的变化
   - 峰值内存的变化
@@ -562,11 +563,13 @@ GaAN同样采用多头机制,其计算复杂度受$d_{in}$、$d_v$、$d_a$和头
 
 ## 4. 4.4 实验4: 采样技术对训练性能的影响分析
 
-在没有采样技术之前, GNN的训练都是full batch的, 即训练集中所有的顶点和边同时参与训练并计算梯度. full batch训练能保证收敛, 但是每次训练开销较大, 导致收敛速度慢. 受随机梯度下降中基于mini batch训练方式的启发, 一系列的GNN采样技术被提出. 采样技术将全图的训练(即epoch)分解为若干batch, 每个batch只使用图的部分顶点和边参与训练并进行梯度更新,  大幅降低了每个batch的训练时间, 使得固定的时间内可以进行多轮梯度下降, 从而加速收敛. 本节实验主要分析采样技术对训练性能的影响. 
+在没有采样技术之前, GNN的训练都是full batch的, 即训练集中所有的顶点和边同时参与训练并计算梯度. full batch训练能保证收敛, 但是每次训练开销较大, 导致收敛速度慢. 受随机梯度下降中基于mini batch训练方式的启发, 一系列的GNN采样技术被提出. 采样技术将全图的训练(即epoch)分解为若干batch, 每个batch只使用图的部分顶点和边参与训练并进行梯度更新,  大幅降低了每个batch的训练时间, 使得固定的时间内可以进行多轮梯度下降, 从而加速收敛. 本节实验主要分析采样技术对训练性能的影响.
 
 在目前PyG的实现中,  GNN的模型参数始终驻留在GPU上, 数据集驻留在主存中. 在处理每个epoch时, 由CPU在主存中对图数据集进行采样, 生成若干batch, 每个batch都是数据集的一个小规模子图. 在训练每个batch时, PyG将该batch对应的子图数据拷贝到GPU的内存中, 基于该子图进行训练并根据梯度更新模型参数. 基于采样技术和SGD优化技术之后, 对模型参数的evaluation隔若干epoch进行一次, evaluation可以在CPU进行也可以在GPU进行. 故本节实验中的统计数据均不包含evaluation阶段. 本节选用neighbor sampler和cluster sampler两个典型的图采样技术进行分析.
 
-图[@fig:exp_sampling_minibatch_graph_info]展示了两个采样技术中采样出的子图的规模随batch size的变化情况. 对于neighbor sampler, batch size等于最后一层GNN中采样的顶点数. 对于cluster sampler, batch size等于partition的数量. 对于neighbor sampler, 其采样子图的顶点数先快速增长后稳定.
+图[@fig:exp_sampling_minibatch_graph_info]展示了两个采样技术中采样出的子图的规模随batch size的变化情况. 对于neighbor sampler, batch size等于最后一层GNN中采样的顶点数. 对于cluster sampler, batch size等于partition的数量. *neighbor sampler对于batch size的增长非常敏感*. 随着batch size的增大, 其采样子图的顶点数/边数和平均度数均快速增长后趋于稳定. *cluster sampler对于batch size的增长较不敏感*, 其顶点数/边数/平均度数均随batch size的增长呈线性增长. 
+
+值得注意的是*采样出的子图的平均度数远低于全图的平均度数*. 以neighbor sampler在batch size为4096时为例, `amp`数据集的平均度数为31.1, 但是采样出的子图的平均度数只有8.3, 远低于全图平均度数; cluster sampler采样出的子图的平均度数更低. 其原因是实际图数据集中的顶点度数分布服从幂率分布, 少量顶点的度数非常高, 从而提升了平均度数. 而在采样的过程中, 因为采样方法会对顶点的邻域规模做限制, 从而降低了顶点度数上限, 使平均度数下降明显.
 
 ![Neighbor sampler](figs/experiments/exp_sampling_minibatch_graph_info_graphsage_gcn.png)
 
