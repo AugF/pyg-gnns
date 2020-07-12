@@ -176,8 +176,6 @@ $\bold{W}^l_o \in \mathbb{R}^{d_{out} \times (d_{in} + k d_v)}, \boldsymbol{a} \
 
 在本次实验中，考虑采样技术作为一个训练的可插拔的部件
 
-## 5. 2.5 图神经网络训练中的梯度更新
-
 
 # 3 实验设计
 
@@ -453,7 +451,7 @@ GaAN同样采用多头机制,其计算复杂度受$d_{in}$、$d_v$、$d_a$和头
 
 **图: 边计算的步骤分解.** [#fig:steps_in_edge_calculation]
 
-我们对各GNN算法在不同数据集上的边计算过程进行了执行时间分解, 结果如图[fig:exp_edge_cal_decomposition](#fig:exp_edge_cal_decomposition)所示. collect步骤虽然只进行了数据准备, 但其在所有的GNN中均占据了不少的执行时间. 对于message步骤, 在边计算复杂度高的GNN (GAT和GaAN)中其,占据了绝对主导; 在GCN中虽然其边计算只有简单的数乘操作, 但其耗时依然有20%以上; 在GGNN中, 因为其边计算函数$\boldsymbol{m}_{j,i}^l=\boldsymbol{W}^l^l\boldsymbol{h}_{j}^l$只与源顶点有关, 所以在PyG的实现中将$\boldsymbol{W}^l^l\boldsymbol{h}_j^l$的计算移动到边计算开始之前预先进行 (因为这部分计算只与顶点相关, 因此我们将该计算计入点计算阶段), 计算出的结果被缓存下来, 在进行message步骤时直接读取, 因而GGNN的message步骤耗时为0. 对于aggregate步骤, 在边计算复杂度低的GNN (GCN和GGNN)中其占据了至少35%的耗时, 而在边计算复杂度高的GNN (GAT和GaAN), 其耗时与collect步骤接近, 均远低于message步骤. 实验表明*对于边计算复杂度高的算法, 其message步骤是其性能的瓶颈, 应重点优化*; 而**对于边计算复杂度低的算法, 优化collect和aggregate步骤能显著降低训练耗时*.
+我们对各GNN算法在不同数据集上的边计算过程进行了执行时间分解, 结果如图[fig:exp_edge_cal_decomposition](#fig:exp_edge_cal_decomposition)所示.各GNN的边计算耗时分解比较稳定, 与数据集关联性不强. collect步骤虽然只进行了数据准备, 但其在所有的GNN中均占据了不少的执行时间. 对于message步骤, 在边计算复杂度高的GNN (GAT和GaAN)中其,占据了绝对主导; 在GCN中虽然其边计算只有简单的数乘操作, 但其耗时依然有20%以上; 在GGNN中, 因为其边计算函数$\boldsymbol{m}_{j,i}^l=\boldsymbol{W}^l\boldsymbol{h}_{j}^l$只与源顶点有关, 所以在PyG的实现中将$\boldsymbol{W}^l\boldsymbol{h}_j^l$的计算移动到边计算开始之前预先进行 (因为这部分计算只与顶点相关, 因此我们将该计算计入点计算阶段), 计算出的结果被缓存下来, 在进行message步骤时直接读取, 因而GGNN的message步骤耗时为0. 对于aggregate步骤, 在边计算复杂度低的GNN (GCN和GGNN)中其占据了至少35%的耗时, 而在边计算复杂度高的GNN (GAT和GaAN), 其耗时与collect步骤接近, 均远低于message步骤. 实验表明*对于边计算复杂度高的算法, 其message步骤是其性能的瓶颈, 应重点优化*; 而**对于边计算复杂度低的算法, 优化collect和aggregate步骤能显著降低训练耗时*.
 
 <div class="subfigure">
 
@@ -569,7 +567,9 @@ GaAN同样采用多头机制,其计算复杂度受$d_{in}$、$d_v$、$d_a$和头
 
 图[@fig:exp_sampling_minibatch_graph_info]展示了两个采样技术中采样出的子图的规模随batch size的变化情况. 对于neighbor sampler, batch size等于最后一层GNN中采样的顶点数. 对于cluster sampler, batch size等于partition的数量. *neighbor sampler对于batch size的增长非常敏感*. 随着batch size的增大, 其采样子图的顶点数/边数和平均度数均快速增长后趋于稳定. *cluster sampler对于batch size的增长较不敏感*, 其顶点数/边数/平均度数均随batch size的增长呈线性增长. 
 
-值得注意的是*采样出的子图的平均度数远低于全图的平均度数*. 以neighbor sampler在batch size为4096时为例, `amp`数据集的平均度数为31.1, 但是采样出的子图的平均度数只有8.3, 远低于全图平均度数; cluster sampler采样出的子图的平均度数更低. 其原因是实际图数据集中的顶点度数分布服从幂率分布, 少量顶点的度数非常高, 从而提升了平均度数. 而在采样的过程中, 因为采样方法会对顶点的邻域规模做限制, 从而降低了顶点度数上限, 使平均度数下降明显.
+值得注意的是*采样出的子图的平均度数远低于全图的平均度数*. 以neighbor sampler在batch size为4096时为例, `amp`数据集的平均度数为31.1, 但是采样出的子图的平均度数只有8.3, 远低于全图平均度数; cluster sampler采样出的子图的平均度数更低. 图[@exp_sampling_minibatch_degrees_distribution]展示了采样出的子图的度数分布与原图的对比. 两个采样技术采样出来的度数分布整体低于原图. 其原因是实际图数据集中的顶点度数分布服从幂率分布, 少量顶点的度数非常高, 从而提升了平均度数. 而在采样的过程中, 因为采样方法会对顶点的邻域规模做限制, 从而降低了顶点度数上限, 使平均度数下降明显.
+
+训练用子图的平均度数下降对GNN训练的性能瓶颈有两方面影响. 一方面, 训练用的子图的平均度数降低, 将使得点计算耗时占比提升.  结合4.2节的实验结果, 平均度数的下降主要影响GGNN, 使其点计算成为GGNN的突出性能瓶颈.  另一方面, 将使除GGNN之外的GNN的内存膨胀因子降低. 结合4.3节的实验结果, 平均度数的下降(尤其是降低到10度以下), 将使内存膨胀因子大幅降低, 而GGNN的内存膨胀因子则会提高.
 
 ![Neighbor sampler](figs/experiments/exp_sampling_minibatch_graph_info_graphsage_gcn.png)
 
@@ -581,9 +581,21 @@ GaAN同样采用多头机制,其计算复杂度受$d_{in}$、$d_v$、$d_a$和头
 
 **图[@fig:exp_sampling_minibatch_graph_info]: 采样子图规模随batch size的变化情况. 每个batch size下采样50次, error bar表示标准差.**
 
+![exp_sampling_minibatch_degrees_distribution_amazon-photo](figs/experiments/exp_sampling_minibatch_degrees_distribution_amazon-photo.png)
 
+**图[@exp_sampling_minibatch_degrees_distribution]: 采样子图与原始图的顶点度数分布对比. 数据集:amp. Batch size = 512 (neighbor sampler) / 20 (cluster sampler).**
 
-图[@fig:exp_sampling_epoch_train_time](#fig:exp_sampling_epoch_train_time)展示了每个batch的训练时间随batch size的变化情况.
+假设实验中batch size取512(neighbor sampler)和20(cluster sampler), 根据图[@fig:exp_sampling_minibatch_graph_info], 每个batch训练用的子图规模远小于全图. 理论上,  每个batch的训练时间将远小于全图的训练时间, 但图[@fig:exp_sampling_batch_train_time]中展示的每个batch的训练耗时情况却与理论预测不符. 对于neighbor sampler, 采用sampling技术后其每个batch的训练耗时反而比全图训练时要高; 对于cluster sampler, 其每个batch的训练耗时与全局基本持平. sampling技术只在GaAN上大幅降低了训练耗时, 因为GaAN的边计算复杂度更高, 对边数的下降更为敏感.
+
+![Neighbor sampler @ amazon-photo](figs/experiments/exp_sampling_batch_train_time_graphsage_amazon-photo.png)
+
+(a) Neighbor sampler
+
+![Cluster sampler@amazon-photo](figs/experiments/exp_sampling_batch_train_time_cluster_amazon-photo.png) 
+
+(b) Cluster sampler
+
+**图[@fig:exp_sampling_batch_train_time]: 每个batch的训练耗时随batch size的变化情况. FULL表示全图参与训练. 数据集:amp.**
 
 图[@fig:exp_sampling_time_decomposition](#fig:exp_sampling_time_decomposition)展示了采用采样技术后每个epoch训练过程中采样过程耗时 (sampling), mini-batch数据传输耗时 (data transferring)和mini-batch训练(training)阶段的耗时占比. 目前**两个sampling技术的额外开销比较大**, 在GCN和GGNN中额外开销耗时占比超过50%, 在计算复杂度最高的GaAN上也有占比将近30%.
 

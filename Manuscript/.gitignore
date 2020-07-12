@@ -3,4 +3,7 @@
 *.log
 *.fb*
 *.spl
+*.out
+*.gz
+ms.pdf
 
