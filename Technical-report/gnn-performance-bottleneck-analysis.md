@@ -52,7 +52,7 @@ NeuGraph[4]为图神经网络训练提出了SAGA-NN（Scatter-ApplyEdge-Gather-A
 图定义：
 A graph is representeed as $\mathcal{G}=(\mathcal{V}, \mathcal{E})$, where V is the set of vertices or nodes (we will use nodes throughtout this article), and $E$ is the set of edges. Let $n = |\mathcal{V}|$ and $m = \mathcal{E}$. Let $v_i \in \mathcal{V}$ to denote a node and $\boldsymbol{e}_{i, j} = (v_i, v_j) \in \mathcal{E}$ to denote an edge pointing from $v_j$ to $v_i$. The neighborhood of a node $v$ is defined as $\mathcal{N}(v) = \{u \in \mathcal{V} | (v, u) \in \mathcal{E}\}$. The adjacency matrix $\boldsymbol{A}$ is a $n \times n$ matrix with $A_{ij}=1$ if $e_{j, i} \in \mathcal{E}$ and $A_{ij}=0$ if $e_{j, i} \notin \mathcal{E}$.A graph may have node features $\boldsymbol{X}$, where $\boldsymbol{X} \in \boldsymbol{R}^{n \times f}$, $f$ is the number of feature dims. 
 
-## 2.1 图神经网络的通用结构
+## 1. 2.1 图神经网络的通用结构
 
 从[@wu2020_gnn_survey], 我们总结出GNN通用网络结构往往可以表示为以下形式：
 Input Layer + 若干 GNN Layers + Prediction Layer
@@ -79,7 +79,7 @@ where $\Sigma$ denotes a differntiable, permutation invariant function, e.g., su
 
 ![GNN单元](figs/illustration/GNN_Unit.png){#fig:GNN_Unit width=60%}
 
-## 2.2 图神经网络的分类
+## 2. 2.2 图神经网络的分类
 
 根据2.1的分析，GNN的通用网络结构的基本单元实际上为GNN Unit。对于某个算法来做实际的计算量，直接与$\phi$, $Sigma$, $gamma$这三个参数的计算量相关，近似地，计算量可以认为是$m * (O(\phi) + O(\Sigma)) + n * O(\gamma)$, 所以我们通过从边计算量、点计算量两个维度来划分现有的GNN算法。
 
@@ -110,9 +110,9 @@ where $\Sigma$ denotes a differntiable, permutation invariant function, e.g., su
 
 **图: GNN的计算复杂度象限图** [@fig:GNN_complexity_quadrant]
 
-## 2.3 典型图神经网络
+## 3. 2.3 典型图神经网络
 
-### 1. GCN
+### 3.1. GCN
 提出了Spectral Graph Convolutions的一阶近似方法，将复杂度降到了与图边数的线性的数量级，并且能够学习局部图形结构和节点特征，沟通了Spectral-based方法和Spatial-based方法。
 The propagation rule of GCN at layer l+1 is defined as follows:
 $$\boldsymbol{h}_i^{l + 1} = \delta (\boldsymbol{W} sum_{j \in \mathcal{N}(i)} (e_{j, i}\boldsymbol{h}_j^{l}))$$
@@ -121,7 +121,7 @@ $$\boldsymbol{h}_i^{l + 1} = \delta (\boldsymbol{W} sum_{j \in \mathcal{N}(i)} (
 
 权重：
 
-### 2. GGNN
+### 3.2. GGNN
 在图神经网络的前期工作GNN上，首次提出采用了a gated recurrent unit(GRU)作为循环函数，将循环次数减少到了固定步骤数，不再需要约束参数以保证收敛
 GNN Layer $l$ node $v_i$的更新公式为:
 $$\boldsymbol{s}_i^{l} = sum_{j \in \mathcal{N}(i)} (\boldsymbol{h}_j^{l}) \\ \boldsymbol{z}_i^l = \delta ( \boldsymbol{W}^z \boldsymbol{s}_i^l + \boldsymbol{b}^{sz} + \boldsymbol{U}^z \boldsymbol{h}_i^{l} + \boldsymbol{b}^{hz}) \\ \boldsymbol{r}_i^l = \delta ( \boldsymbol{W}^r \boldsymbol{s}_i^l+ \boldsymbol{b}^{sr} +\boldsymbol{U}^r \boldsymbol{h}_i^{l} + \boldsymbol{b}^{hr}) \\ \boldsymbol{h}_i^{l+1} = tanh ( \boldsymbol{W} \boldsymbol{s}_i^l + \boldsymbol{b}^s + \boldsymbol{U} ( \boldsymbol{r}_i^l \odot \boldsymbol{h}_i^{l} + \boldsymbol{b}^h))) \\ \boldsymbol{h}_i^{l+1} = (1 - \boldsymbol{z}_i^l) \odot \boldsymbol{h}_i^l +  \boldsymbol{z}_i^l \odot \boldsymbol{h}_i^{l+1}$$
@@ -131,7 +131,7 @@ $$\boldsymbol{s}_i^{l} = sum_{j \in \mathcal{N}(i)} (\boldsymbol{h}_j^{l}) \\ \b
 权重：
 
 
-### 3. GAT
+### 3.3. GAT
 采用了Attention机制来了解两个连接节点的相对权重，并且使用了multi-head机制来增加模型的表现能力
 GNN Layer $l$ node $v_i$的更新公式为:
 $$\boldsymbol{h}_i^{l + 1} = \parallel_{k=1}^K \delta(sum_{j \in \mathcal{N}(i)} \alpha_{j, i}^k \boldsymbol{W}^k \boldsymbol{h}_j^{l}) \\
@@ -147,7 +147,7 @@ $K$是多头机制的heads数
 $\bold{W} \in \mathbb{R}^{d_{out} \times d_{in}}, \boldsymbol{a} \in \mathbb{R}^{2 * d_{out}}$
 
 
-### 4. GaAN
+### 3.4. GaAN
 在传统的mulit-head机制上，引入了a convolutional subnetwork来控制每个Attention head的重要性
 GNN Layer $l$ node $v_i$的更新公式为:
 
@@ -159,25 +159,25 @@ $$ \boldsymbol{h}_i^{l+1} = \boldsymbol{W}_o [\boldsymbol{h}_i^l \parallel (\bol
 权重:
 $\bold{W}_o \in \mathbb{R}^{d_{out} \times (d_{in} + k d_v)}, \boldsymbol{a} \in \mathbb{R}^{2 * d_a}$
 
-## 2.4 采样技术
+## 4. 2.4 采样技术
 
 在实际训练中，当遇到特别大的图时，使用整张图参与训练，内存就成为最大的限制，这是低效而且不可行的。所以，采样技术也纳入为了模型的一部分。
 
 在本次实验中，考虑采样技术作为一个训练的可插拔的部件
 
-## 2.5 图神经网络训练中的梯度更新
+## 5. 2.5 图神经网络训练中的梯度更新
 
 这里结合scatter, gather算子说明。
 > todo, 还需要check
 
 # 3 实验设计
 
-## 3.1 实验环境
+## 1. 3.1 实验环境
 
 NVIDIA Tesla T4 15079MiB X 1
 Python 3.7.7, PyTorch 1.5.0, Pytorch Geometric 1.5.0
 
-## 3.2 实验数据集
+## 2. 3.2 实验数据集
 
 **表: 实验数据集概览** {#tbl:dataset_overview}
 
@@ -198,9 +198,9 @@ Python 3.7.7, PyTorch 1.5.0, Pytorch Geometric 1.5.0
 > 2. 无向图: 平均度数 = 边数 / 点数
 > 3. 单个节点特征稀疏度=1 - 非零数/特征维度， 特征稀疏度为所有节点特征稀疏度的平均值
 
-## 3.3 图神经网络算法选择与实现
+## 3. 3.3 图神经网络算法选择与实现
 
-### 3.3.1 学习任务
+### 3.1. 3.3.1 学习任务
 
 常见的Learning Task可分为[@wu2020_gnn_survey]:
 - Node Level: node regression and node classification
@@ -211,7 +211,7 @@ Python 3.7.7, PyTorch 1.5.0, Pytorch Geometric 1.5.0
 
 单标签数据集: `F.nll_loss` (F表示pytorch的functions)
 
-### 3.3.2 学习类型
+### 3.2. 3.3.2 学习类型
 
 学习类型可以分为两种：
 1. transductive learning: 在训练、验证和测试三个阶段均使用一张图
@@ -223,7 +223,7 @@ Python 3.7.7, PyTorch 1.5.0, Pytorch Geometric 1.5.0
 > 为什么用两种setting? 为什么分析阶段不同？
 > 初衷：在transductive learning中，train, eval往往为一个epoch的两个过程, 所以纳入eval分析; 在inductive learning中, eval阶段采用的技巧不一样所以不纳入选择
 
-### 3.3.3 算法实现
+### 3.3. 3.3.3 算法实现
 
 我们根据算法的点边计算复杂度选择了GCN, GGNN, GAT, GaAN四个代表性算法
 
@@ -241,7 +241,7 @@ Python 3.7.7, PyTorch 1.5.0, Pytorch Geometric 1.5.0
 1. weight_decay=0.005, lr=0.01, Adam优化器
 2. hidden_dims=64, Heads = 8, GAT算法: $d_{head}=8$; GaAN算法: $d_a = d_v = 8$, $d_m = 64$.
 
-### 3.3.4 采样实现
+### 3.4. 3.3.4 采样实现
 
 这里使用了PyG集成的采样方法的工具包
 1. `NeighborSampler()` [@hamilton2017_graphsage]
@@ -252,7 +252,7 @@ Python 3.7.7, PyTorch 1.5.0, Pytorch Geometric 1.5.0
 > ClusterGCN: Edge Sampling, 每层的图结构固定
 > 参数: total_partitions=1500,  batch_partitions=20
 
-## 3.4 数据处理方法
+## 4. 3.4 数据处理方法
 
 对于3.2中{#tbl:dataset_overview}中的数据集:
 1. 所有数据集处理同原论文
@@ -260,7 +260,7 @@ Python 3.7.7, PyTorch 1.5.0, Pytorch Geometric 1.5.0
 2. 使用了`torch_geometric.transforms.NormalizeFeatures`预处理了特征
 > 注: row-normalizes node features to sum-up to one.
 
-## 3.5 实验方案概览
+## 5. 3.5 实验方案概览
 
 - 实验 1：第2.2节中的计算复杂度分析是否与实际表现相符合？
   - epochs耗时稳定性分析: 去除异常epochs的必要性
@@ -281,7 +281,7 @@ Python 3.7.7, PyTorch 1.5.0, Pytorch Geometric 1.5.0
 
 # 4 实验结果与分析
 
-## 4.1 实验1：超参数对训练耗时的影响分析
+## 1. 4.1 实验1：超参数对训练耗时的影响分析
 
 本实验的目标是通过观察GNN的超参数(例如$d_{in}$、$d_{out}$、$K$等)对训练耗时、显存使用的影响, 验证[@tbl:gnn_overview]中复杂度分析的准确性.
 
@@ -380,7 +380,7 @@ GaAN同样采用多头机制,其计算复杂度受$d_{in}$、$d_v$、$d_a$和头
 
 实验验证了[@tbl:gnn_overview]中复杂度分析的有效性. *GNN的训练耗时与显存使用均与超参数呈线性关系*. 这允许算法工程师使用更大的超参数来提升GNN的复杂度,而不用担心训练耗时和显存使用呈现爆炸性增长.
 
-## 4.2 实验2: 训练耗时分解
+## 2. 4.2 实验2: 训练耗时分解
 
 本实验的目标是通过对训练耗时的分解, 发掘GNN训练中的计算性能瓶颈.
 
@@ -469,7 +469,7 @@ GaAN同样采用多头机制,其计算复杂度受$d_{in}$、$d_v$、$d_a$和头
   - 如果$\phi$的计算复杂度较高, 性能瓶颈集中在实现$\phi$所用的基本算子. 优化相应基本算子的实现将能提升这类GNN的训练性能. 以GAT为例, GAT中最耗时的算子_index_put_impl主要用于$\phi$中softmax计算(\alpha^k_{ij})的backward阶段, 该算子只涉及数据移动. 优化的softmax在GPU上的实现能够显著降低GAT的训练耗时.
   - 如果$\phi$的计算复杂度较低, 其边计算中的collect和aggregate步骤是计算性能瓶颈. collect步骤只涉及大量的数据移动. 而aggregate步骤计算较为简单(例如求和/平均/最大值等), 但因为涉及数据同步和不规整计算, 其耗时依然显著. 优化这两个步骤在GPU上的实现将能提升这类GNN的训练性能.
 
-## 4.3 实验3: GPU内存使用分析
+## 3. 4.3 实验3: GPU内存使用分析
 
 目前PyG在利用GPU训练GNN的过程中所有数据(含数据集和中间计算结果)均保存在GPU的内存中. 相比系统的主存, GPU上内存容量非常有限. *GPU内存容量是限制能够训练的数据集规模的决定因素*. GaAN在训练`cph`数据集的过程中,因为内存溢出导致无法完成训练.
 
@@ -529,7 +529,7 @@ GaAN同样采用多头机制,其计算复杂度受$d_{in}$、$d_v$、$d_a$和头
 - 在固定顶点数的情况下, *GNN的峰值内存使用随图边数的增长呈线性增加*, *内存膨胀比例会逐渐稳定到由边计算复杂度决定的固定值*.
 - 在网络结构和各项超参数固定的情况下, *采用更高维的输入特征向量可以降低GPU内存使用膨胀比例*.
 
-## 4.4 实验4: 采样技术对训练性能的影响分析
+## 4. 4.4 实验4: 采样技术对训练性能的影响分析
 
 在没有采样技术之前, GNN的训练都是full batch的, 即训练集中所有的顶点和边同时参与训练并计算梯度. full batch训练能保证收敛, 但是每次训练开销较大, 导致收敛速度慢. 受随机梯度下降中基于mini batch训练方式的启发, 一系列的GNN采样技术被提出. 采样技术将全图的训练(即epoch)分解为若干batch, 每个batch只使用图的部分顶点和边参与训练并进行梯度更新,  大幅降低了每个batch的训练时间, 使得固定的时间内可以进行多轮梯度下降, 从而加速收敛. 本节实验主要分析采样技术对训练性能的影响. 
 
