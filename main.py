@@ -110,6 +110,8 @@ optimizer = torch.optim.Adam(model.parameters(),
                              lr=args.lr,
                              weight_decay=args.weight_decay)
 
+log_memory(flag, device, 'data load')
+
 def train(epoch):
     t = time.time()
 

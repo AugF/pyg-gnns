@@ -139,7 +139,7 @@ def train(epoch):
     log = 'Epoch: {:03d}, train_loss: {:.8f}, train_time: {:.4f}s'
     t = time.time() - t
     print(log.format(epoch, loss.data.item(), t))
-    return 
+    return train_time
 
 @torch.no_grad()
 def test():
@@ -167,18 +167,16 @@ else:
         with torch.autograd.profiler.emit_nvtx(record_shapes=not args.no_record_shapes):
             train_time = 0
             for epoch in range(args.epochs):
-                t0 = time.time()
                 nvtx_push(gpu, "epochs" + str(epoch))
                 nvtx_push(gpu, "train")
-                train(epoch)
+                train_time += train(epoch)
                 nvtx_pop(gpu)
-                train_time += time.time() - t0
                 #nvtx_push(gpu, "eval")
                 #log = 'Accuracy: Train: {:.4f}, Val: {:.4f}, Test: {:.4f}'
                 #print(log.format(*test()))
                 
                 # add 
-                #log_memory(flag, device, 'eval_end')
+                log_memory(flag, device, 'eval_end')
                 
                 #nvtx_pop(gpu)
                 nvtx_pop(gpu)

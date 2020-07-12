@@ -140,6 +140,7 @@ elif args.model == 'gaan':
 device = torch.device(f'cuda: {args.gpu}' if gpu else 'cpu') # todo: model's device
 model = model.to(device)
 optimizer = torch.optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
+log_memory(flag, device, 'model load')
 
 def train(epoch):
     model.train()
@@ -159,7 +160,7 @@ def train(epoch):
             t1 = time.time()
             sampling_time += t1 - t0
             nvtx_push(gpu, "batch" + str(cnt))
-            log_memory(flag, device, 'forward_start')
+            log_memory(flag, device, 'batch_start') # tag
             nvtx_push(gpu, "forward")
             
             if args.mode == "cluster":
@@ -167,6 +168,7 @@ def train(epoch):
                 t2 = time.time()
                 to_time += t2 - t1
                 optimizer.zero_grad()
+                log_memory(flag, device, 'data load') # tag
                 #nodes, edges = batch.x.shape[0], batch.edge_index.shape[1]
                 #print(f"nodes: {nodes}, edges: {edges}")
                 out = model(batch.x, batch.edge_index)
@@ -185,6 +187,7 @@ def train(epoch):
                     y = data.y[n_id[:batch_size], :].to(device)
                 else:
                     y = data.y[n_id[:batch_size]].to(device)
+                log_memory(flag, device, 'to_end') # tag
                 t2 = time.time()
                 to_time += t2 - t1
                 optimizer.zero_grad()            
@@ -195,14 +198,14 @@ def train(epoch):
                     loss = F.nll_loss(out.log_softmax(dim=-1), y)
             nvtx_pop(gpu)
             
-            log_memory(flag, device, 'forward_end')
+            log_memory(flag, device, 'forward_end') # tag
             nvtx_push(gpu, "backward")
             loss.backward()
             optimizer.step()
             train_time += time.time() - t2
             nvtx_pop(gpu)
             
-            log_memory(flag, device, 'backward_end')
+            log_memory(flag, device, 'backward_end') # tag
             total_loss += loss.item() * batch_size            
             nvtx_pop(gpu)
             
@@ -210,9 +213,6 @@ def train(epoch):
         except StopIteration:
             break
 
-    #print("batchs", cnt, args.batch_size * cnt)
-    #print("sampling", all_nodes, all_edges)
-    #print("real", data.x.shape[0], data.edge_index.shape[1])
     loss = total_loss / total_nodes
     return loss, sampling_time, to_time, train_time, cnt
 

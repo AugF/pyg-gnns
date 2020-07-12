@@ -9,3 +9,5 @@ analysis/*
 test/*
 __pycache__/*
 *test*
+*npy
+out*

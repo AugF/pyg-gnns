@@ -9,7 +9,7 @@ cluster_path = "amp_cluster.npy"
 graphsage_path = "amp_graphsage.npy"
 
 paths = [graph_path, cluster_path, graphsage_path]
-names = ['Original Graph', 'Cluster-GCN Sampling', 'GraphSAGE Sampling']
+names = ['Original Graph', 'Cluster Sampling', 'Neighbor Sampling']
 
 def get_degrees_counts(path):
     # 1. 统计出每个节点的度数
@@ -45,8 +45,13 @@ def get_degrees_counts(path):
 
 
 fig, ax = plt.subplots()
+
+#ax.set_yscale("symlog", basey=2)
+#ax.set_xscale("symlog", basey=2)
 ax.set_yscale('log')
 ax.set_xscale('log')
+ax.set_ylim(ymin=0.5, ymax=1e4)
+ax.set_xlim(xmin=0.5, xmax=1e4)
 ax.set_xlabel("Degrees")
 ax.set_ylabel("Numbers")
 
