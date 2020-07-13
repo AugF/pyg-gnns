@@ -193,7 +193,7 @@ It is conducted over every vertex in $\mathcal{G}$.
 		Complexity \\ \midrule
 		ChebNet \cite{defferrad2016_chebnet} &
 		$\boldsymbol{h}_i^{l+1} = \sum_{k=0}^K \textcolor{blue}{\boldsymbol{W}}^{l,k}  \boldsymbol{s}_{i, k}^{l} $ &
-		$O(d_{in} * d_{out})$ \\
+		$O(K * d_{in} * d_{out})$ \\
 		\textbf{GCN} &
 		$\boldsymbol{h}_i^{l+1} = \textcolor{blue}{\boldsymbol{W}}^l  \boldsymbol{s}_i^{l}$ &
 		$O(d_{in} * d_{out})$ \\
@@ -253,6 +253,6 @@ We classify the typical GNNs into four groups based on their edge/vertex complex
 
 \begin{figure}
 	\centering
-	\includegraphics[width=0.6\columnwidth]{figs/illustration/GNN_complexity_quadrant.png}
+	\includegraphics[width=0.7\columnwidth]{figs/illustration/GNN_complexity_quadrant.png}
 	\caption{Complexity quadrant of typical GNNs. If two GNNs have the same big-O complexity, we further compare their complexity according to the number of parameters.}
 \end{figure}
