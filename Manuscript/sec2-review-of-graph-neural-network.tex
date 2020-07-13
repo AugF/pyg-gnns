@@ -120,7 +120,7 @@ For ChebNet, we report its GNN layer in the tables \footnote{A layer of ChebNet 
 		sum &
 		$\boldsymbol{m}_{j, i}^{(k)} = e_{j, i}\boldsymbol{z}_j^{(k-1)}$ &
 		$O(d_{in})$ \\
-		\textbf{GCN} &
+		\textbf{GCN} \cite{kipf2017_gcn} &
 		Spectral &
 		sum &
 		$\boldsymbol{m}_{j, i}^l = e_{j, i} \boldsymbol{h}_j^l$ &
@@ -197,7 +197,7 @@ For ChebNet, we report its GNN layer in the tables \footnote{A layer of ChebNet 
 		ChebNet \cite{defferrad2016_chebnet} &
 		$\boldsymbol{z}_i^{(k)} = 2\boldsymbol{s}^{(k)}_{i} - \boldsymbol{z}_i^{(k-2)}$&
 		$O(d_{in})$ \\
-		\textbf{GCN} &
+		\textbf{GCN} \cite{kipf2017_gcn} &
 		$\boldsymbol{h}_i^{l+1} = \textcolor{blue}{\boldsymbol{W}}^l  \boldsymbol{s}_i^{l}$ &
 		$O(d_{in} * d_{out})$ \\
 		AGCN &
@@ -253,10 +253,20 @@ The complexity can be decomposed into two parts: the edge computation complexity
 In \tablename~\ref{tab:gnn_overview_edge} and \tablename~\ref{tab:gnn_overview_vertex}, we list the edge and vertex computation complexity, respectively.
 The edge/vertex complexity of a graph neuron are affected by the dimensions of the input/output hidden vectors $d_{in}$ and $d_{out}$ and the dimensions of the model parameters (like the number of heads $K$ in GAT and the dimensions of the view vectors $d_a$/$d_v$ in GaAN).
 
-We classify the typical GNNs into four groups based on their edge/vertex complexity.
+We classify the typical GNNs into four quadrants based on their edge/vertex complexity as shown in \figurename~\ref{fig:gnn_complexity_quadrant}. We pick GCN, GGNN, GAT and GaAN as the representative GNNs of the four quadrants.
 
 \begin{figure}
 	\centering
 	\includegraphics[width=0.7\columnwidth]{figs/illustration/GNN_complexity_quadrant.png}
-	\caption{Complexity quadrant of typical GNNs. If two GNNs have the same big-O complexity, we further compare their complexity according to the number of parameters.}
+	\caption{Complexity quadrants of typical GNNs. If two GNNs have the same complexity under the Big-O notation, we further compare their complexity according to how many parameters they need to train.}
+	\label{fig:gnn_complexity_quadrant}
 \end{figure}
+
+\textbf{GCN} \cite{kipf2017_gcn} (low vertex \& edge computational complexity): Graph convolution network (GCN) is the first-order approximation of the spectral-based graph convolutions.
+%By combining the advantages of both the spectral-based and the spatial-based convolution, it can learn the representation of the local topological structure and vertex features efficiently.
+It has only one parameter to learn at each layer, i.e. the weight matrix $\boldsymbol{W}^l$ in $\gamma$.
+A GCN graph neuron can be expressed as $\boldsymbol{h}^{l+1}_i = \boldsymbol{W}^l\sum_{v_j \in \mathcal{N}(v_i)}{e_{j,i}\boldsymbol{h}^l_j}$, where $e_{j,i}$ is the normalized weight of the edge $(v_j, v_i)$.
+%In the matrix view, $\boldsymbol{H}^{l+1} = (\boldsymbol{A}\boldsymbol{H}^l)\boldsymbol{W}^l$.
+According to the associative law of the matrix multiplication, $\boldsymbol{h}^{l+1}_i = \sum_{v_j \in \mathcal{N}(v_i)}{e_{j,i}\boldsymbol{W}^l\boldsymbol{h}^l_j}$.
+Since the dimension of $\boldsymbol{h}^{l+1}_i$ is usually smaller than $\boldsymbol{h}^l_i$ in practical GCNs, the implementation of GCN \footnote{The implementation of GCN in PyTorch Geometric: \url{ https://github.com/rusty1s/pytorch_geometric/blob/1.5.0/torch_geometric/nn/conv/gcn_conv.py}} chooses to first conduct the vertex computation $\hat{\boldsymbol{h}}^l_j = \boldsymbol{W}^l\boldsymbol{h}^l_j$ for each vertex $v_j$ and then conduct the edge computation $\boldsymbol{h}^{l+1}_i=\sum_{v_j\in\mathcal{N}(v_i)}{\hat{\boldsymbol{h}}^l_j}$.
+As $\hat{\boldsymbol{h}}^l_j$ has the same dimension as $\boldsymbol{h}^{l+1}_i$, the implementation significantly reduces the  computation cost of the edge computation.
