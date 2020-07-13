@@ -5,5 +5,5 @@
 *.spl
 *.out
 *.gz
-ms.pdf
 *.blg
+*.fdb_latexmk
