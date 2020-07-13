@@ -124,7 +124,7 @@ $d_{in}$是layer $l$的输入维度
 $d_{out}$是layer $l$的输出维度
 
 权重：
-$W$
+$\boldsymbol{W}^l \in \mathbb{R}^{d_{out} \times d_{in}}$
 
 ### 3.2. GGNN
 在图神经网络的前期工作GNN上，首次提出采用了a gated recurrent unit(GRU)作为循环函数，将循环次数减少到了固定步骤数，不再需要约束参数以保证收敛
@@ -168,10 +168,12 @@ $$ \boldsymbol{h}_i^{l+1} = \boldsymbol{W}^l_o [\boldsymbol{h}_i^l \parallel (\b
 参数：
 $d_{in}$是layer $l$的输入维度
 $d_{out}$是layer $l$的输出维度
-$k$是多头机制的heads数
+$K$是多头机制的heads数
 
 权重:
-$\bold{W}^l_o \in \mathbb{R}^{d_{out} \times (d_{in} + k d_v)}, \boldsymbol{a} \in \mathbb{R}^{2 * d_a}$
+$\bold{W}^l_o \in \mathbb{R}^{d_{out} \times (K * d_v + d_{in})}, \boldsymbol{a} \in \mathbb{R}^{2 * d_a}$
+$\bold{W}^l_g \in \mathbb{R}^{K \times (2 * d_{in} + d_m)}$
+$\boldsymbol{W}^{l,k}_{xa}, \boldsymbol{W}^{l,k}_{ya} \in \mathbb{R}^{d_a}$
 
 ## 4. 2.4 采样技术
 
