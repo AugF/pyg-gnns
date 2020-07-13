@@ -204,7 +204,7 @@ It is conducted over every vertex in $\mathcal{G}$.
 		$\boldsymbol{h}_i^{l+1} =   \delta(\textcolor{blue}{\boldsymbol{W}}^l  [\boldsymbol{s}_i^{l} \parallel \boldsymbol{h}_i^l])$ &
 		$O(d_{in} * d_{out})$ \\
 		Neural FPs &
-		$\boldsymbol{h}_i^{l+1} = \delta(\textcolor{blue}{\boldsymbol{W}}^{\boldsymbol{N}_i}  \boldsymbol{s}_i^{l})$ &
+		$\boldsymbol{h}_i^{l+1} = \delta(\textcolor{blue}{\boldsymbol{h}_i^l +\boldsymbol{W}}^{\boldsymbol{N}_i}  \boldsymbol{s}_i^{l})$ &
 		$O(d_{in} * d_{out})$ \\
 		SSE &
 		$\boldsymbol{h}_i^{l+1} = (1 - \alpha)  \boldsymbol{h}_i^l +\alpha    \delta(\textcolor{blue}{\boldsymbol{W}}^l_1 \delta(\textcolor{blue}{\boldsymbol{W}}^l_2), \boldsymbol{s}_i^l)$ &
