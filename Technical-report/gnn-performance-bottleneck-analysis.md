@@ -679,9 +679,14 @@ GaAN同样采用多头机制,其计算复杂度受$d_{in}$、$d_v$、$d_a$和头
 # 6 相关工作
 
 1. Survey
-[@wu2020_gnn_survey] 提出了新的GNN的分类，将GNNs分为recurrent GNNs, convolutional GNNs, graph autoencoders and spatial-temproal GNNs四大类，
-[@zhou2018_gnn_survey]
-[@zhang2018_gnn_survey]
+[@wu2020_gnn_survey] 提出了新的GNN的分类，将GNNs分为recurrent GNNs, convolutional GNNs, graph autoencoders and spatial-temproal GNNs四大类，给出了the most comprehensive overview of modern deep learning techniques for graph data. 并且给出了一些开源资源
+[@zhou2018_gnn_survey] 介绍了original models, its variants和一些general frameworks, present different propagation steps in different models using representation，系统地将applications进行了分类，分为structual scenarios, non-structural scenarios和其他scenarios.
+[@zhang2018_gnn_survey]根据model architectures和training strategies将现有模型分为了五大类，然后分析这些方法的组成部分和不同
+
+总说：这三篇论文按照各自的角度对GNN进行了划分，然后对其构成和组成部分进行了详尽地说明，并介绍相关公开的数据集和资源
+
+[@shchur2018_pitfall_of_gnn]
+
 # 7 总结与展望
 
 # 参考文献
