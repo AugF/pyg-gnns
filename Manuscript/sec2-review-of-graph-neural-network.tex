@@ -131,7 +131,7 @@ It is conducted over every vertex in $\mathcal{G}$.
 		$O(d_{in})$ \\
 		GraphSAGE &
 		Non-spectral &
-		mean/LSTM/max &
+		mean/LSTM &
 		$\boldsymbol{m}_{j, i}^l =  \boldsymbol{h}_j^l$ &
 		$O(1)$ \\
 		Neural FPs &
@@ -149,11 +149,6 @@ It is conducted over every vertex in $\mathcal{G}$.
 		sum &
 		$\boldsymbol{m}_{j, i} = \textcolor{blue}{\boldsymbol{W}^l} \boldsymbol{h}_j^l$ &
 		$O(d_{in} * d_{out})$ \\
-		Tree-LSTM &
-		LSTM &
-		sum &
-		$\boldsymbol{m}_{j, i}^l = \boldsymbol{h}_j^l$ &
-		$O(1)$ \\
 		\textbf{GAT}&
 		Attention &
 		sum  &
@@ -204,7 +199,7 @@ It is conducted over every vertex in $\mathcal{G}$.
 		$\boldsymbol{h}_i^{l+1} =   \delta(\textcolor{blue}{\boldsymbol{W}}^l  [\boldsymbol{s}_i^{l} \parallel \boldsymbol{h}_i^l])$ &
 		$O(d_{in} * d_{out})$ \\
 		Neural FPs &
-		$\boldsymbol{h}_i^{l+1} = \delta(\textcolor{blue}{\boldsymbol{h}_i^l +\boldsymbol{W}}^{\boldsymbol{N}_i}  \boldsymbol{s}_i^{l})$ &
+		$\boldsymbol{h}_i^{l+1} = \delta(\boldsymbol{h}_i^l + \textcolor{blue}{\boldsymbol{W}}^{\boldsymbol{N}_i}  \boldsymbol{s}_i^{l})$ &
 		$O(d_{in} * d_{out})$ \\
 		SSE &
 		$\boldsymbol{h}_i^{l+1} = (1 - \alpha)  \boldsymbol{h}_i^l +\alpha    \delta(\textcolor{blue}{\boldsymbol{W}}^l_1 \delta(\textcolor{blue}{\boldsymbol{W}}^l_2), \boldsymbol{s}_i^l)$ &
@@ -220,9 +215,6 @@ It is conducted over every vertex in $\mathcal{G}$.
 		\end{scriptsize}
 		&
 		$O(max(d_{in}, d_{out}) * d_{out})$ \\
-		Tree-LSTM &
-		$h_i^{l+1} = LSTM(\boldsymbol{s}_i^l, \boldsymbol{h}_i^{l})$ &
-		$O(d_{in} * d_{out})$ \\
 		\textbf{GAT}&
 		$\boldsymbol{h}_i^{l+1} = \boldsymbol{s}_i^l$ &
 		$O(1)$ \\
