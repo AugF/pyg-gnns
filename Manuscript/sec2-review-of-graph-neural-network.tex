@@ -103,6 +103,7 @@ They are conducted over every edge in $\mathcal{G}$.
 $\gamma$ is the \emph{vertex computation} function.
 It is conducted over every vertex in $\mathcal{G}$.
 \tablename~\ref{tab:gnn_overview_edge} and \tablename~\ref{tab:gnn_overview_vertex} list the edge functions and the vertex functions of typical GNNs, respectively.
+For ChebNet, we report its GNN layer in the tables \footnote{A layer of ChebNet consists of $K$ GNN sub-layers and a summation layer, i.e., $\boldsymbol{H}^{l+1} = \sum_{k=1}^K{\boldsymbol{Z}^{(k)} \textcolor{blue}{\boldsymbol{W}^{(k)}}}$ with GNN layers $\boldsymbol{Z}^{(1)}=\boldsymbol{H}$, $\boldsymbol{Z}^{(2)}=\hat{\boldsymbol{L}}\boldsymbol{H}$, and $\boldsymbol{Z}^{(k)}=2\hat{\boldsymbol{L}}\boldsymbol{Z}^{(k-1)} - \boldsymbol{Z}^{(k-2)}$. $\boldsymbol{H}^l$ is the matrix of output hidden feature vectors of the layer $l-1$. In the table, we report the GNN sub-layer of ChebNet that calculates $\boldsymbol{Z}^{(k)}$}.
 
 \begin{table}
 	\hspace{-10em}
@@ -117,8 +118,8 @@ It is conducted over every vertex in $\mathcal{G}$.
 		ChebNet \cite{defferrad2016_chebnet} &
 		Spectral &
 		sum &
-		$\boldsymbol{m}_{j, i, , k}^l = T_k(\widetilde{L} )_{j, i} \boldsymbol{h}_j^l$ &
-		$O(K * d_{in})$ \\
+		$\boldsymbol{m}_{j, i}^{(k)} = e_{j, i}\boldsymbol{z}_j^{(k-1)}$ &
+		$O(d_{in})$ \\
 		\textbf{GCN} &
 		Spectral &
 		sum &
@@ -174,7 +175,8 @@ It is conducted over every vertex in $\mathcal{G}$.
 		\bottomrule
 	\end{tabular}
 \end{footnotesize}
-	\caption{Typical graph neural networks and their edge computation functions.$d_{in}$ and $d_{out}$ are dimensions of the input and output hidden feature vectors, respectively. Blue variables are model parameters to learn.}
+	\caption{Typical graph neural networks and their edge computation functions.$d_{in}$ and $d_{out}$ are dimensions of the input and output hidden feature vectors, respectively.
+		Blue variables are model parameters to learn. For ChebNet, we report its GNN sub-layer.}
 	\label{tab:gnn_overview_edge}
 \end{table}
 
@@ -187,8 +189,8 @@ It is conducted over every vertex in $\mathcal{G}$.
 		$\gamma$ &
 		Complexity \\ \midrule
 		ChebNet \cite{defferrad2016_chebnet} &
-		$\boldsymbol{h}_i^{l+1} = \sum_{k=0}^K \textcolor{blue}{\boldsymbol{W}}^{l,k}  \boldsymbol{s}_{i, k}^{l} $ &
-		$O(K * d_{in} * d_{out})$ \\
+		$\boldsymbol{z}_i^{(k)} = 2\boldsymbol{s}^{(k)}_{i} - \boldsymbol{z}_i^{(k-2)}$&
+		$O(d_{in})$ \\
 		\textbf{GCN} &
 		$\boldsymbol{h}_i^{l+1} = \textcolor{blue}{\boldsymbol{W}}^l  \boldsymbol{s}_i^{l}$ &
 		$O(d_{in} * d_{out})$ \\
@@ -228,7 +230,7 @@ It is conducted over every vertex in $\mathcal{G}$.
 		$O(max(d_{in} + K * d_v, 2 * d_{in} + d_m) d_{out})$ \\ \bottomrule
 	\end{tabular}
 \end{footnotesize}
-	\caption{Typical graph neural networks and their vertex computation functions. $d_{in}$ and $d_{out}$ are dimensions of the input and output hidden feature vectors, respectively. Blue variables are model parameters to learn.}
+	\caption{Typical graph neural networks and their vertex computation functions. $d_{in}$ and $d_{out}$ are dimensions of the input and output hidden feature vectors, respectively. Blue variables are model parameters to learn. For ChebNet, we report its GNN sub-layer.}
 	\label{tab:gnn_overview_vertex}
 \end{table}
 
