@@ -45,4 +45,12 @@ M.~Defferrard, X.~Bresson, P.~Vandergheynst,
   2016, pp. 3837--3845.
 \newline\urlprefix\url{http://papers.nips.cc/paper/6081-convolutional-neural-networks-on-graphs-with-fast-localized-spectral-filtering}
 
+\bibitem{kipf2017_gcn}
+T.~N. Kipf, M.~Welling,
+  \href{https://openreview.net/forum?id=SJU4ayYgl}{Semi-supervised
+  classification with graph convolutional networks}, in: 5th International
+  Conference on Learning Representations, {ICLR} 2017, Toulon, France, April
+  24-26, 2017, Conference Track Proceedings, OpenReview.net, 2017.
+\newline\urlprefix\url{https://openreview.net/forum?id=SJU4ayYgl}
+
 \end{thebibliography}
