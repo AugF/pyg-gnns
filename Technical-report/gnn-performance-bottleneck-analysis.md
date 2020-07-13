@@ -623,7 +623,7 @@ GaAN同样采用多头机制,其计算复杂度受$d_{in}$、$d_v$、$d_a$和头
 
 图[@fig:exp_sampling_minibatch_graph_info]展示了两个采样技术中采样出的子图的规模随batch size的变化情况. 对于neighbor sampler, relative batch size等于最后一层GNN中采样的顶点数相对于全图顶点数的比例. 对于cluster sampler, batch size等于采样的partition的数量相比于全图所有partition的数量. *neighbor sampler对于batch size的增长非常敏感*. 随着batch size的增大, 其采样子图的顶点数/边数和平均度数均快速增长后趋于稳定. *cluster sampler对于batch size的增长较不敏感*, 其顶点数/平均度数均随batch size的增长呈线性增长，边数在batch size相对较小时也呈线性增长. 
 
-值得注意的是*采样出的子图的平均度数远低于全图的平均度数, 尤其是在relative batch size较低的情况下*. 以neighbor sampler在relative batch size为6%时为例, `amp`数据集的平均度数为31.1, 但是采样出的子图的平均度数只有X, 远低于全图平均度数; cluster sampler采样出的子图的平均度数更低. 图[@exp_sampling_minibatch_degrees_distribution]展示了采样出的子图的度数分布与原图的对比. 两个采样技术采样出来的度数分布整体低于原图. 其原因是实际图数据集中的顶点度数分布服从幂率分布, 少量顶点的度数非常高, 从而提升了平均度数. 而在采样的过程中, 因为采样方法会对顶点的邻域规模做限制, 从而降低了顶点度数上限, 使平均度数下降明显. 结合4.2节的实验结果， 采样子图的平均度数下降将使得点计算的耗时占比提升，对于点计算复杂度高的GGNN其点计算将取代边计算成为性能瓶颈。
+值得注意的是*采样出的子图的平均度数远低于全图的平均度数, 尤其是在relative batch size较低的情况下*. 以neighbor sampler在relative batch size为6%时为例, `amp`数据集的平均度数为31.1, 但是采样出的子图的平均度数只有5.8, 远低于全图平均度数; cluster sampler采样出的子图的平均度数更低， 只有3.0. 图[@exp_sampling_minibatch_degrees_distribution]展示了采样出的子图的度数分布与原图的对比. 两个采样技术采样出来的度数分布整体低于原图. 其原因是实际图数据集中的顶点度数分布服从幂率分布, 少量顶点的度数非常高, 从而提升了平均度数. 而在采样的过程中, 因为采样方法会对顶点的邻域规模做限制, 从而降低了顶点度数上限, 使平均度数下降明显. 结合4.2节的实验结果， 采样子图的平均度数下降将使得点计算的耗时占比提升，对于点计算复杂度高的GGNN其点计算将取代边计算成为性能瓶颈。
 
 ![Neighbor sampler](figs/experiments/exp_sampling_minibatch_realtive_graph_info_graphsage_gcn.png)
 
@@ -639,39 +639,47 @@ GaAN同样采用多头机制,其计算复杂度受$d_{in}$、$d_v$、$d_a$和头
 
 **图[@exp_sampling_minibatch_degrees_distribution]: 采样子图与原始图的顶点度数分布对比. 数据集:amp. Batch size = 512 (neighbor sampler) / 20 (cluster sampler).**
 
-图[@fig:exp_sampling_batch_train_time]中展示了采用采样技术之后在`cam`和`fli`数据集上每个batch的训练耗时情况随batch size的变化情况. 对于neighbor sampler, 随着batch size的下降, 花在训练阶段的耗时相比全图训练显著降低. 但是因为采样本身的开销, 还有将采用出来的子图传输到GPU上的开销, 整个batch的训练耗时反而有可能超过全图训练耗时. 对于cluster sampler, 其采样出的子图相比neighbor sampler更小, 从而使采样技术的效果更加明显.
+图[@fig:exp_sampling_batch_train_time]中展示了采用采样技术之后在`amc`和`fli`数据集上每个batch的训练耗时情况随batch size的变化情况. 对于neighbor sampler, 只有在batch size非常小, 花在训练阶段的耗时相比全图训练才有明显的降低。在batch size特别小时才体现出训练时间的明显降低. 但因为采样本身存在额外开销, 同时将采样出来的子图传输到GPU上也存在开销， 使得整个batch的训练耗时反而有可能超过全图训练耗时. 对于cluster sampler, 在相同的relative batch size下其采样出的子图比neighbor sampler更小, 从而使采样技术的效果更加明显. 但是当relative batch size增大时，采样技术的额外开销增加非常明显，当relative batch size $\geq$ 25%时, 采样技术每个batch的总耗时甚至远超全图训练耗时。实验表明*现阶段PyG中采样技术的实现非常低效，额外开销较高*。 当batch size稍大时，采样技术的额外开销占整个batch的训练总开销的50%以上。*采样技术只有在非常小的batch上才能降低训练耗时*。
 
-![Neighbor sampler @ com-amazon](figs/experiments/exp_sampling_relative_batch_size_train_time_stack_graphsage_com-amazon.png)
+![Neighbor sampler @ amazon-computers](figs/experiments/exp_sampling_relative_batch_size_train_time_stack_graphsage_amazon-computer.png)
 
-(a) Neighbor sampler on `cam`
+(a) Neighbor sampler on `amc`
 
 ![Neighbor sampler @ flickr](figs/experiments/exp_sampling_relative_batch_size_train_time_stack_graphsage_flickr.png)
 
 (b) Neighbor sampler on `fli`
 
-![Cluster sampler @ com-amazon](figs/experiments/exp_sampling_relative_batch_size_train_time_stack_cluster_com-amazon.png) 
+![Cluster sampler @ com-amazon](figs/experiments/exp_sampling_relative_batch_size_train_time_stack_cluster_amazon-computers.png) 
 
-(c) Cluster sampler on `cam`
+(c) Cluster sampler on `amc`
 
 ![Cluster sampler @ flickr](figs/experiments/exp_sampling_relative_batch_size_train_time_stack_cluster_flickr.png)
 
-(c) Cluster sampler on `fli`
+(d) Cluster sampler on `fli`
 
 **图[@fig:exp_sampling_batch_train_time]: 每个batch的训练耗时随batch size的变化情况. FULL表示全图参与训练阶段(不含evaluation).**
 
-图[@fig:exp_sampling_time_decomposition](#fig:exp_sampling_time_decomposition)展示了采用采样技术后每个epoch训练过程中采样过程耗时 (sampling), mini-batch数据传输耗时 (data transferring)和mini-batch训练(training)阶段的耗时占比. 目前**两个sampling技术的额外开销比较大**, 在GCN和GGNN中额外开销耗时占比超过50%, 在计算复杂度最高的GaAN上也有占比将近30%.
+但*采样技术的优势在于能大幅降低峰值内存使用开销，使大规模图神经网络训练成为可能*。图[@fig:exp_sampling_memory_usage](#fig:exp_sampling_memory_usage)展示了采用采样技术后训练过程中峰值内存使用情况随relative batch size的变化情况. 采样采样技术后，峰值内存使用均大幅度降低。Cluster sampler的降低幅度比neighbor sampler更大。
 
-![GraphSAGE](figs/experiments/exp_sampling_time_decomposition_graphsage.png)
+![graphsage @ amc](figs/experiments/exp_sampling_memory_usage_relative_batch_size_graphsage_amazon-computers_peak_memory.png)
 
-(a) Neighbor sampler
+(a) Neighbor sampler, `amc`
 
-![ClusterGCN](figs/experiments/exp_sampling_time_decomposition_cluster.png)
+![graphsage @ fli](figs/experiments/exp_sampling_memory_usage_relative_batch_size_graphsage_flickr_peak_memory.png)
 
-(b) Cluster sampler
+(b) Neighbor sampler, `fli`
 
-**图[fig:exp_sampling_time_decomposition]: 采用Sampling技术后每个epoch训练过程各阶段耗时分解. 对于每个GNN, 我们在所有的真实数据集上进行了50轮epoch的训练, 并计算出每个epoch耗时占比的平均值. error bar标出了不同数据集上耗时占比的最大值和最小值.**
+![cluster @ amc](figs/experiments/exp_sampling_memory_usage_relative_batch_size_cluster_amazon-computers_peak_memory.png)
 
-图[@fig:exp_sampling_memory_usage](#fig:exp_sampling_memory_usage)展示了采用采样技术后训练过程中峰值内存使用情况.
+(c) Neighbor sampler, `amc`
+
+![cluster @ fli](figs/experiments/exp_sampling_memory_usage_relative_batch_size_cluster_flickr_peak_memory.png)
+
+(d) Neighbor sampler, `fli`
+
+**图[@fig:exp_sampling_memory_usage]: 训练内存峰值使用随batch size的变化情况。FULL表示不采用采样技术时的情况（不含evaluation阶段）。**
+
+
 
 # 5 系统设计建议
 
