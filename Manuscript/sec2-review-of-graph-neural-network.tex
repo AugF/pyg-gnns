@@ -135,16 +135,21 @@ For ChebNet, we report its GNN layer in the tables \footnote{A layer of ChebNet 
 		mean/LSTM &
 		$\boldsymbol{m}_{j, i}^l =  \boldsymbol{h}_j^l$ &
 		$O(1)$ \\
+		GraphSAGE-pool &
+		Non-spectral &
+		max &
+		$\boldsymbol{m}_{j, i}^l =  \delta(\textcolor{blue}{\boldsymbol{W}^l_{pool}} \boldsymbol{h}_j^l + \textcolor{blue}{b}^l)$  &
+		$O(d_{in} * d_{out})$ \\
 		Neural FPs &
 		Non-spectral &
 		sum &
 		$\boldsymbol{m}_{j, i}^l = \boldsymbol{h}_j^l$ &
-		$O(d_{in})$ \\
+		$O(1)$ \\
 		SSE &
 		Recurrent &
 		sum &
 		$\boldsymbol{m}_{j, i}^l = [\boldsymbol{h}_i^{l} \parallel \boldsymbol{h}_j^l]$ &
-		$O(1)$ \\
+		$O(d_{in})$ \\
 		\textbf{GGNN} &
 		Gated &
 		sum &
@@ -156,7 +161,8 @@ For ChebNet, we report its GNN layer in the tables \footnote{A layer of ChebNet 
 		\begin{scriptsize}
 			$\begin{aligned}[t]
 			& \alpha_{j, i}^k = \frac {\exp(LeakyReLU(\textcolor{blue}{\boldsymbol{a}^T} [ \textcolor{blue}{\boldsymbol{W}^{l,k}}  \boldsymbol{h}_j^l \parallel \textcolor{blue}{\boldsymbol{W}^{l,k}}  \boldsymbol{h}_j^l] ))} {\sum_{k \in \mathcal{N}(i)}\exp(LeakyReLU(\textcolor{blue}{\boldsymbol{a}^T} [ \textcolor{blue}{\boldsymbol{W}^{l,k}}  \boldsymbol{h}_j^l \parallel \textcolor{blue}{\boldsymbol{W}^{l,k}}  \boldsymbol{h}_k^l] ))} \\
-			&  \boldsymbol{m}_{j, i}^l = \parallel_{k=1}^K \delta(\alpha_{j, i}^k \textcolor{blue}{\boldsymbol{W}^{l,k}} \boldsymbol{h}_j^{l})
+			& Multi-head\ concatenation: \boldsymbol{m}_{j, i}^l = \parallel_{k=1}^K \delta(\alpha_{j, i}^k \textcolor{blue}{\boldsymbol{W}^{l,k}} \boldsymbol{h}_j^{l}) \\
+			& Multi-head\ average: \boldsymbol{m}_{j, i}^l = \frac{1}{K} \sum_{k=1}^K \delta(\alpha_{j, i}^k \textcolor{blue}{\boldsymbol{W}^{l,k}} \boldsymbol{h}_j^{l})
 			\end{aligned}$
 		\end{scriptsize} &
 		$O(K * d_{in} * d_{out})$ \\
@@ -171,12 +177,12 @@ For ChebNet, we report its GNN layer in the tables \footnote{A layer of ChebNet 
 			&\boldsymbol{m}_{j, i, 3}^l = \boldsymbol{h}_j^l
 			\end{aligned}$
 		\end{scriptsize} &
-		$O(max(d_a, d_m) * K * d_{in})$ \\
+		$O(max(d_a, d_m, d_v) * K * d_{in})$ \\
 		\bottomrule
 	\end{tabular}
 \end{footnotesize}
 	\caption{Typical graph neural networks and their edge computation functions.$d_{in}$ and $d_{out}$ are dimensions of the input and output hidden feature vectors, respectively.
-		Blue variables are model parameters to learn. For ChebNet, we report its GNN sub-layer.}
+		Blue variables are model parameters to learn. For ChebNet, we report its GNN sub-layer. Because two sum operator are interchangeable and sum operator and concatenation operator are interchangeable, we do it for GAT to explain more clearly in edge computations functions.}
 	\label{tab:gnn_overview_edge}
 \end{table}
 
@@ -200,18 +206,21 @@ For ChebNet, we report its GNN layer in the tables \footnote{A layer of ChebNet 
 		GraphSAGE &	
 		$\boldsymbol{h}_i^{l+1} =   \delta(\textcolor{blue}{\boldsymbol{W}}^l  [\boldsymbol{s}_i^{l} \parallel \boldsymbol{h}_i^l])$ &
 		$O(d_{in} * d_{out})$ \\
+		GraphSAGE-pool &	
+		$\boldsymbol{h}_i^{l+1} = \boldsymbol{s}_i^l$ &
+		$O(1)$ \\
 		Neural FPs &
-		$\boldsymbol{h}_i^{l+1} = \delta(\boldsymbol{h}_i^l + \textcolor{blue}{\boldsymbol{W}}^{\boldsymbol{N}_i}  \boldsymbol{s}_i^{l})$ &
+		$\boldsymbol{h}_i^{l+1} = \delta(\boldsymbol{h}_i^l + \textcolor{blue}{\boldsymbol{W}}^{l, |\mathcal{N}(i)|}  \boldsymbol{s}_i^{l})$ &
 		$O(d_{in} * d_{out})$ \\
 		SSE &
-		$\boldsymbol{h}_i^{l+1} = (1 - \alpha)  \boldsymbol{h}_i^l +\alpha    \delta(\textcolor{blue}{\boldsymbol{W}}^l_1 \delta(\textcolor{blue}{\boldsymbol{W}}^l_2), \boldsymbol{s}_i^l)$ &
+		$\boldsymbol{h}_i^{l+1} = (1 - \alpha)  \boldsymbol{h}_i^l +\alpha    \delta(\textcolor{blue}{\boldsymbol{W}}^l_1 \delta(\textcolor{blue}{\boldsymbol{W}}^l_2 \boldsymbol{s}_i^l))$ &
 		$O(d_{in} * d_{out})$ \\
 		\textbf{GGNN} &
 		\begin{scriptsize}
 		$\begin{aligned}[t]
 			& \textcolor{blue}{\boldsymbol{z}}_i^l = \delta ( \textcolor{blue}{\boldsymbol{W}}^z \boldsymbol{s}_i^l + \textcolor{blue}{\boldsymbol{b}}^{sz} + \textcolor{blue}{\boldsymbol{U}}^z \boldsymbol{h}_i^{l} + \textcolor{blue}{\boldsymbol{b}}^{hz}) \\ 
 			&\boldsymbol{r}_i^l = \delta ( \textcolor{blue}{\boldsymbol{W}}^r \boldsymbol{s}_i^l+ \textcolor{blue}{\boldsymbol{b}}^{sr} +\textcolor{blue}{\boldsymbol{U}}^r \boldsymbol{h}_i^{l} + \textcolor{blue}{\boldsymbol{b}}^{hr}) \\ 
-			&\boldsymbol{h}_i^{l+1} = tanh ( \textcolor{blue}{\boldsymbol{W}}^l \boldsymbol{s}_i^l + \textcolor{blue}{\boldsymbol{b}}^s + \textcolor{blue}{\boldsymbol{U}} ( \boldsymbol{r}_i^l \odot \boldsymbol{h}_i^{l} + \textcolor{blue}{\boldsymbol{b}}^h))) \\ 
+			&\boldsymbol{h}_i^{l+1} = tanh ( \textcolor{blue}{\boldsymbol{W}} \boldsymbol{s}_i^l + \textcolor{blue}{\boldsymbol{b}}^s + \textcolor{blue}{\boldsymbol{U}} ( \boldsymbol{r}_i^l \odot \boldsymbol{h}_i^{l} + \textcolor{blue}{\boldsymbol{b}}^h))) \\ 
 			&\boldsymbol{h}_i^{l+1} = (1 - \textcolor{blue}{\boldsymbol{z}}_i^l) \odot \boldsymbol{h}_i^l +  \textcolor{blue}{\boldsymbol{z}}_i^l \odot \boldsymbol{h}_i^{l+1}
 		\end{aligned}$
 		\end{scriptsize}
@@ -224,13 +233,14 @@ For ChebNet, we report its GNN layer in the tables \footnote{A layer of ChebNet 
 		\begin{scriptsize}
 			$\begin{aligned}[t]
 			&\boldsymbol{g}_i = \textcolor{blue}{\boldsymbol{W}}^l_g  [\boldsymbol{h}_i^{l} \parallel \boldsymbol{s}_{i, 2}^l \parallel \boldsymbol{s}_{i, 3}^l]  \\
-			&\boldsymbol{h}_i^{l+1} = \textcolor{blue}{\boldsymbol{W}}^l_o [\boldsymbol{h}_i^l \parallel (\boldsymbol{g}_{i} \odot \boldsymbol{s}_{i, 3}^l) ]
+			&\boldsymbol{h}_i^{l+1} = \textcolor{blue}{\boldsymbol{W}}^l_o [\boldsymbol{h}_i^l \parallel (\boldsymbol{g}_{i} \odot \boldsymbol{s}_{i, 1}^l) ]
 			\end{aligned}$ 
 		\end{scriptsize}&
-		$O(max(d_{in} + K * d_v, 2 * d_{in} + d_m) d_{out})$ \\ \bottomrule
+		$O(max(K * d_v + d_{in}, 2 * d_{in} + d_m) * d_{out})$ \\ \bottomrule
 	\end{tabular}
 \end{footnotesize}
-	\caption{Typical graph neural networks and their vertex computation functions. $d_{in}$ and $d_{out}$ are dimensions of the input and output hidden feature vectors, respectively. Blue variables are model parameters to learn. For ChebNet, we report its GNN sub-layer.}
+	\caption{Typical graph neural networks and their vertex computation functions. $d_{in}$ and $d_{out}$ are dimensions of the input and output hidden feature vectors, respectively. Blue variables are model parameters to learn. For ChebNet, we report its GNN sub-layer.For Neural FPs, $\textcolor{blue}{\boldsymbol{W}}^{l, |\mathcal{N}(i)|}$ is the weight matrix for nodes with degree
+	$|\mathcal{N}(i)|$ at layer $l$.}
 	\label{tab:gnn_overview_vertex}
 \end{table}
 
