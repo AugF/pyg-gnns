@@ -129,14 +129,15 @@ $W$
 ### 3.2. GGNN
 在图神经网络的前期工作GNN上，首次提出采用了a gated recurrent unit(GRU)作为循环函数，将循环次数减少到了固定步骤数，不再需要约束参数以保证收敛
 GNN Layer $l$ node $v_i$的更新公式为:
-$$\boldsymbol{s}_i^{l} = sum_{j \in \mathcal{N}(i)} (\boldsymbol{h}_j^{l}) \\ \boldsymbol{z}_i^l = \delta ( \boldsymbol{W}^z \boldsymbol{s}_i^l + \boldsymbol{b}^{sz} + \boldsymbol{U}^z \boldsymbol{h}_i^{l} + \boldsymbol{b}^{hz}) \\ \boldsymbol{r}_i^l = \delta ( \boldsymbol{W}^r \boldsymbol{s}_i^l+ \boldsymbol{b}^{sr} +\boldsymbol{U}^r \boldsymbol{h}_i^{l} + \boldsymbol{b}^{hr}) \\ \boldsymbol{h}_i^{l+1} = tanh ( \boldsymbol{W}^l \boldsymbol{s}_i^l + \boldsymbol{b}^s + \boldsymbol{U} ( \boldsymbol{r}_i^l \odot \boldsymbol{h}_i^{l} + \boldsymbol{b}^h))) \\ \boldsymbol{h}_i^{l+1} = (1 - \boldsymbol{z}_i^l) \odot \boldsymbol{h}_i^l +  \boldsymbol{z}_i^l \odot \boldsymbol{h}_i^{l+1}$$
+$$\boldsymbol{s}_i^{l} = sum_{j \in \mathcal{N}(i)} (\boldsymbol{h}_j^{l}) \\ \boldsymbol{z}_i^l = \delta ( \boldsymbol{W}^z \boldsymbol{s}_i^l + \boldsymbol{b}^{sz} + \boldsymbol{U}^z \boldsymbol{h}_i^{l} + \boldsymbol{b}^{hz}) \\ \boldsymbol{r}_i^l = \delta ( \boldsymbol{W}^r \boldsymbol{s}_i^l+ \boldsymbol{b}^{sr} +\boldsymbol{U}^r \boldsymbol{h}_i^{l} + \boldsymbol{b}^{hr}) \\ \boldsymbol{h}_i^{l+1} = tanh ( \boldsymbol{W} \boldsymbol{s}_i^l + \boldsymbol{b}^s + \boldsymbol{U} ( \boldsymbol{r}_i^l \odot \boldsymbol{h}_i^{l} + \boldsymbol{b}^h))) \\ \boldsymbol{h}_i^{l+1} = (1 - \boldsymbol{z}_i^l) \odot \boldsymbol{h}_i^l +  \boldsymbol{z}_i^l \odot \boldsymbol{h}_i^{l+1}$$
 
 参数：
 $d_{in}$是layer $l$的输入维度
 $d_{out}$是layer $l$的输出维度
 
 权重：
-$\boldsymbol{W}^z, \boldsymbol{W}^r, \boldsymbol{W}^l \in $
+$\boldsymbol{W}^z, \boldsymbol{W}^r, \boldsymbol{W}, \boldsymbol{U}^z, \boldsymbol{U}^r, \boldsymbol{U}^l  \in \mathbb{R}^{d_{out}\times d_{in}}$
+$\boldsymbol{b}^{sz}, \boldsymbol{b}^{hz}, \boldsymbol{b}^{sr}, \boldsymbol{b}^{hr}, \boldsymbol{b}^s, \boldsymbol{b}^r  \in \mathbb{R}^{d_{out}}$
 
 注意：
 > GGNN是所有层共享同一参数，其他模型GCN,GAT,GaAN的参数每层都是不一样的
@@ -154,7 +155,7 @@ $d_{out}$是layer $l$的输出维度
 $K$是多头机制的heads数
 
 权重:
-$\bold{W}^l \in \mathbb{R}^{d_{out} \times d_{in}}, \boldsymbol{a} \in \mathbb{R}^{2 * d_{out}}$
+$\bold{W}^{l,k} \in \mathbb{R}^{d_{out} \times d_{in}}, \boldsymbol{a} \in \mathbb{R}^{2 * d_{out}}$
 
 
 ### 3.4. GaAN
