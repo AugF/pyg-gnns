@@ -161,8 +161,8 @@ For ChebNet, we report its GNN layer in the tables \footnote{A layer of ChebNet 
 		\begin{scriptsize}
 			$\begin{aligned}[t]
 			& \alpha_{j, i}^k = \frac {\exp(LeakyReLU(\textcolor{blue}{\boldsymbol{a}^T} [ \textcolor{blue}{\boldsymbol{W}^{l,k}}  \boldsymbol{h}_j^l \parallel \textcolor{blue}{\boldsymbol{W}^{l,k}}  \boldsymbol{h}_j^l] ))} {\sum_{k \in \mathcal{N}(i)}\exp(LeakyReLU(\textcolor{blue}{\boldsymbol{a}^T} [ \textcolor{blue}{\boldsymbol{W}^{l,k}}  \boldsymbol{h}_j^l \parallel \textcolor{blue}{\boldsymbol{W}^{l,k}}  \boldsymbol{h}_k^l] ))} \\
-			& Multi-head\ concatenation: \boldsymbol{m}_{j, i}^l = \parallel_{k=1}^K \delta(\alpha_{j, i}^k \textcolor{blue}{\boldsymbol{W}^{l,k}} \boldsymbol{h}_j^{l}) \\
-			& Multi-head\ average: \boldsymbol{m}_{j, i}^l = \frac{1}{K} \sum_{k=1}^K \delta(\alpha_{j, i}^k \textcolor{blue}{\boldsymbol{W}^{l,k}} \boldsymbol{h}_j^{l})
+			& \text{Multi-head concatenation}: \boldsymbol{m}_{j, i}^l = \parallel_{k=1}^K \delta(\alpha_{j, i}^k \textcolor{blue}{\boldsymbol{W}^{l,k}} \boldsymbol{h}_j^{l}) \\
+			& \text{Multi-head average}: \boldsymbol{m}_{j, i}^l = \frac{1}{K} \sum_{k=1}^K \delta(\alpha_{j, i}^k \textcolor{blue}{\boldsymbol{W}^{l,k}} \boldsymbol{h}_j^{l})
 			\end{aligned}$
 		\end{scriptsize} &
 		$O(K * d_{in} * d_{out})$ \\

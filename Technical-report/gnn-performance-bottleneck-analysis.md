@@ -163,7 +163,7 @@ $\bold{W}^{l,k} \in \mathbb{R}^{d_{out} \times d_{in}}, \boldsymbol{a} \in \math
 GNN Layer $l$ node $v_i$的更新公式为:
 
 $$ \boldsymbol{h}_i^{l+1} = \boldsymbol{W}^l_o [\boldsymbol{h}_i^l \parallel (\boldsymbol{g}_{i} \odot sum_{j \in \mathcal{N}(i)}  (\parallel_{k=1}^K \delta(\alpha_{j, i}^k \boldsymbol{W}^{l,k}_v \boldsymbol{h}_j^{l}) ) ] \\ \boldsymbol{g}_i = \boldsymbol{W}^l_g  [\boldsymbol{h}_i^{l} \parallel max_{j \in \mathcal{N}(i)} (\boldsymbol{W}^l_m \boldsymbol{h}_j^{l})  \parallel mean_{j \in \mathcal{N(i)}} \boldsymbol{h}_j^l] 
-\\ \alpha_{j, i}^k = \frac {\exp(\boldsymbol{a}^T [ \boldsymbol{W}^{l,k}_{xa} \boldsymbol{h}_j^l \parallel \boldsymbol{W}^{l,k}_{ya} \boldsymbol{h}_i^l] )} {\sum_{k \in \mathcal{N}(j)}\exp(\boldsymbol{a}^T [ \boldsymbol{W}^{l,k}_{xa} \boldsymbol{h}_j^l \parallel \boldsymbol{W}^{l,k}_{ya}  \boldsymbol{h}_k^l] )}$$
+\\ \alpha_{j, i}^k = \frac {\exp(\boldsymbol{a}^T [ \boldsymbol{W}^{l,k}_{xa} \boldsymbol{h}_j^l \parallel \boldsymbol{W}^{l,k}_{ya} \boldsymbol{h}_i^l] )} {\sum_{s \in \mathcal{N}(j)}\exp(\boldsymbol{a}^T [ \boldsymbol{W}^{l,k}_{xa} \boldsymbol{h}_j^l \parallel \boldsymbol{W}^{l,k}_{ya}  \boldsymbol{h}_s^l] )}$$
 
 参数：
 $d_{in}$是layer $l$的输入维度
@@ -189,7 +189,7 @@ GraphSAGE[@hamilton2017_graphsage]是最早出现的layer Sampling方法，它�
 AESG(这个名称是自己定的) [@zeng2018_aesg], Cluster-GCN[@chiang2019_cluster_gcn], GraphSAINT [@zeng2020_graphsaint]不同于layer Sampling的想法，build mini-batches from subgraphsa.  AESG [@zeng2018_aesg] proposes a specific graph sampling algorithm to ensure connectivity among minibatch nodes. Cluster-GCN[@chiang2019_cluster_gcn] proposes graph clustering based minibatch training. During pre-processing, the training graph is partitioned into densely connected clusters. During training, clusters are randomly selected to form minibatches, and intra-cluster edge connections remain unchanged. GraphSAINT[@zeng2020_graphsaint]也采用了graph sampling的方法，并且decouple the sampling from the forward and backward propagation, and extend GraphSAINT with many architecture variants
 ![Graph_Sampling](figs/illustration/graph_sampling.png){#fig:Graph_Sampling width=60%}
 
-在实验中，考虑采样技术时，我们从以上两大类采样算法中选取了代表性的采样算法作为训练前的一个形成Dataloader的步骤，分析了加入采样技术后GPU性能瓶颈的变化。 对于layer Sampling采样，我们选取了最经典的GraphSAGE作为研究，主要原因是它的实用性；另外对于Graph Sampling采样方法，我们选取了Cluster-GCN算法，因为该算法是最早开源的
+在实验中，考虑采样技术时，我们从以上两大类采样算法中选取了代表性的采样算法作为训练前的一个形成Dataloader的步骤，分析了加入采样技术后GPU性能瓶颈的变化。 对于layer Sampling采样，我们选取了最经典的GraphSAGE作为研究，主要原因是它的实用性；另外对于Graph Sampling采样方法，我们选取了Cluster-GCN算法，因为该算法是最早开源的。
 
 # 3 实验设计
 
@@ -231,8 +231,6 @@ Python 3.7.7, PyTorch 1.5.0, Pytorch Geometric 1.5.0
 
 我们选择了node classificaton，因为其在实际应用中使用广泛、公开数据集充足。
 
-单标签数据集: `F.nll_loss` (F表示pytorch的functions)
-
 ### 3.2. 3.3.2 学习类型
 
 学习类型可以分为两种：
@@ -240,10 +238,12 @@ Python 3.7.7, PyTorch 1.5.0, Pytorch Geometric 1.5.0
 2. inductive learning: 在训练阶段，只能看到部分图，在验证和测试阶段，针对原图中没有的顶点进行预测
 
 在实验1,2,3分析中，我们采用transductive learning, 对整个epoch分析 
-在实验4中，我们采用inductive learning, 对train阶段分析
+在实验4的sampling实验中，我们采用inductive learning, 对train阶段分析
 
 > 为什么用两种setting? 为什么分析阶段不同？
-> 初衷：在transductive learning中，train, eval往往为一个epoch的两个过程, 所以纳入eval分析; 在inductive learning中, eval阶段采用的技巧不一样所以不纳入选择
+> 初衷：
+在transductive learning中，train, eval往往为一个epoch的两个过程, 而且两个过程操作图都相同，不影响分析; 
+由于Sampling技术的实验多设置在Inductive learning, 舍去了Evalutaion阶段的分析
 
 ### 3.3. 3.3.3 算法实现
 
