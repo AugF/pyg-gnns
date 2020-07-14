@@ -19,7 +19,7 @@ subfigGrid: true
 
 近年来，图神经网络是人工智能领域内的研究热点，在多种任务多个领域下取得了卓越的成果. 这些成功与graph structure相比于grid data structure有更强大的表现能力，以及深度学习端到端强大的学习能力息息相关。随着图神经网络在多个领域取得好的结果，在系统领域也陆续提出了一系列并行或分布式的图神经网络计算系统。这些系统从大量图神经网络中抽象出图神经网络计算模型，并针对计算模型设计了高效的实现。并在实现中使用了大量的性能优化技巧。
 1. message-passing通用模型
-PyG[@fey_2019_pyg], DGL[@dgl_website]基于message-passing机制[@gilmer_messgae_passing]的计算系统，$\boldsymbol{h}_i^{l+1}  = \gamma (\boldsymbol{h}_i^{ll}, \Sigma_{j \in \mathcal{N}(i)} \phi(\boldsymbol{h}_i^l, \boldsymbol{h}_j^l, \boldsymbol{e}_{j, i}^l))$, 将图卷积操作定义边计算操作message function、聚合操作reduction fucnction和点计算操作update function. 该论文对应的代码实现即pytorch-geometric, 基于PyTorch后端的图神经网络的计算框架。DGL也是基于message-passing的编程模型
+PyG[@PyG], DGL[@dgl_website]基于message-passing机制[@gilmer_messgae_passing]的计算系统，$\boldsymbol{h}_i^{l+1}  = \gamma (\boldsymbol{h}_i^{ll}, \Sigma_{j \in \mathcal{N}(i)} \phi(\boldsymbol{h}_i^l, \boldsymbol{h}_j^l, \boldsymbol{e}_{j, i}^l))$, 将图卷积操作定义边计算操作message function、聚合操作reduction fucnction和点计算操作update function. 该论文对应的代码实现即pytorch-geometric, 基于PyTorch后端的图神经网络的计算框架。DGL也是基于message-passing的编程模型
 
 2. SAGA-NN通用模型
 NeuGraph[4]为图神经网络训练提出了SAGA-NN（Scatter-ApplyEdge-Gather-ApplyVertex with Neural Networks）编程模型。SAGA-NN模型将图神经网络中每一层的前向计算划分为4个阶段：Scatter、ApplyEdge、Gather和ApplyVertex。其中ApplyEdge和ApplyVertex阶段执行用户提供的基于神经网络的边特征向量和点特征向量的计算。Scatter和Gather是由NeuGraph系统隐式触发的阶段，这两个阶段为ApplyEdge和ApplyVertex阶段准备数据。在编程时，用户只需利用给定的算子实现ApplyEdge和ApplyVertex函数，并指定Gather方式，即可利用NeuGraph自动地完成GNN的训练。
@@ -54,7 +54,7 @@ A graph is representeed as $\mathcal{G}=(\mathcal{V}, \mathcal{E})$, where V is 
 
 ## 1. 2.1 图神经网络的通用结构
 
-从[@wu2020_gnn_survey], 我们总结出GNN通用网络结构往往可以表示为以下形式：
+从[@comprehensive-survey-wu-2020], 我们总结出GNN通用网络结构往往可以表示为以下形式：
 Input Layer + 若干 GNN Layers + Prediction Layer
 其中，Input Layer是GNN的输入层，GNN Layer是GNN的信息更新层，Prediction Layer为输出层，与实际GNN处理的任务场景有关，常见的有node classification, link prediction, graph classification等等。
 
@@ -229,7 +229,7 @@ Python 3.7.7, PyTorch 1.5.0, Pytorch Geometric 1.5.0
 
 ### 3.1. 3.3.1 学习任务
 
-常见的Learning Task可分为[@wu2020_gnn_survey]:
+常见的Learning Task可分为[@comprehensive-survey-wu-2020]:
 - Node Level: node regression and node classification
 - Edge Level: edge classification and link prediction
 - Graph Level: graph classification
@@ -693,15 +693,15 @@ GaAN同样采用多头机制,其计算复杂度受$d_{in}$、$d_v$、$d_a$和头
 # 6 相关工作
 
 1. Survey
-[@wu2020_gnn_survey] 提出了新的GNN的分类，将GNNs分为recurrent GNNs, convolutional GNNs, graph autoencoders and spatial-temproal GNNs四大类，给出了the most comprehensive overview of modern deep learning techniques for graph data. 并且给出了一些开源资源
-[@zhou2018_gnn_survey] 介绍了original models, its variants和一些general frameworks, present different propagation steps in different models using representation，系统地将applications进行了分类，分为structual scenarios, non-structural scenarios和其他scenarios.
+[@comprehensive-survey-wu-2020] 提出了新的GNN的分类，将GNNs分为recurrent GNNs, convolutional GNNs, graph autoencoders and spatial-temproal GNNs四大类，给出了the most comprehensive overview of modern deep learning techniques for graph data. 并且给出了一些开源资源
+[@zhou2018_gnn_review] 介绍了original models, its variants和一些general frameworks, present different propagation steps in different models using representation，系统地将applications进行了分类，分为structual scenarios, non-structural scenarios和其他scenarios.
 [@zhang2018_gnn_survey]根据model architectures和training strategies将现有模型分为了五大类，然后分析这些方法的组成部分和不同
 
 总说：这三篇论文按照各自的角度对GNN进行了划分，然后对其构成和组成部分进行了详尽地说明，并介绍相关公开的数据集和资源
 
 2. GNN训练系统方面的相关工作
-在系统方面， PyG[@fey_2019_pyg], DGL[@wang2019_dgl], Euler[@website_euler], PGL[@website_pgl], NeuGraph[@ma2019_neugraph], AliGraph[@zhu2019_aligraph]等系统都提供了对图神经网络训练的支持。
-PyG[@fey_2019_pyg], DGL[@wang2019_dgl], PGL[@website_pgl]都是基于message-passing编程模型的面向深度图神经网络的计算框架, 但是它们所支持的后端不同，PyG, PGL支持的后端分别是PyTorch, PaddlePaddle; DGL[@wang2019_dgl]支持多后端(MXNet, TensorFlow, PyTorch). DGL[@wang2019_dgl]相对于PyG为用户提供了更多可用的reduce operation, PGL[@website_pgl]则在DGL基础上对reduce functions进行了进一步的优化。
+在系统方面， PyG[@PyG], DGL[@DGL], Euler[@website_euler], PGL[@website_pgl], NeuGraph[@ma2019_neugraph], AliGraph[@zhu2019_aligraph]等系统都提供了对图神经网络训练的支持。
+PyG[@PyG], DGL[@DGL], PGL[@website_pgl]都是基于message-passing编程模型的面向深度图神经网络的计算框架, 但是它们所支持的后端不同，PyG, PGL支持的后端分别是PyTorch, PaddlePaddle; DGL[@DGL]支持多后端(MXNet, TensorFlow, PyTorch). DGL[@DGL]相对于PyG为用户提供了更多可用的reduce operation, PGL[@website_pgl]则在DGL基础上对reduce functions进行了进一步的优化。
 Euler[@website_euler]是基于大规模分布式的图学习框架，支持Tensorflow计算后端. 另外，它还支持大规模图分布式存储，并且对GNN类的算法通过Message Passing建模范式的抽象，将一个GNN类的算法模型定义为子图抽样，图卷积和可选的池化模块。
 NeuGraph[@ma2019_neugraph]为图神经网络训练提出了新的编程模型，SAGA-NN(Scater-ApplyEdge-Gather-ApplyVertex with Neural Networks), 使用了2D图划分技术将图划分为多个子图进行训练，并在单机多GPU的环境下从硬件角度进行了高效地实现。
 AliGraph[@zhu2019_aligraph]对于大规模图提出了AliGraph系统，由storage layer, sampling layer和operator三部分组成，storage layer利用namely structual and attributed specific storage, graph partition和caching neighbors of some import vertics实现了high-level操作和算法对数据的快速获取，sampling layer将采样技术划分为了三种采样方法, Traverse, Neigborhood, Negative, 分别复杂点采样，邻居采样和采样; operator layer则提供了多种关于Aggregate(边计算), Combine(点计算)的扩展。
@@ -722,7 +722,7 @@ AliGraph[@zhu2019_aligraph]对于大规模图提出了AliGraph系统，由storag
 4. ZENG H, ZHOU H, SRIVASTAVA A, 等. GraphSAINT: Graph Sampling Based Inductive Learning Method[C]//8th International Conference on Learning Representations, ICLR 2020, Addis Ababa, Ethiopia, April 26-30, 2020. OpenReview.net, 2020. [@zeng2020_graphsaint]
 5. YANG J, LESKOVEC J. Defining and Evaluating Network Communities Based on Ground-Truth[C]//ZAKI M J, SIEBES A, YU J X, 等. 12th IEEE International Conference on Data Mining, ICDM 2012, Brussels, Belgium, December 10-13, 2012. IEEE Computer Society, 2012: 745–754. [@yang2012_defining]
 6. CHAKRABARTI D, ZHAN Y, FALOUTSOS C. R-MAT: A Recursive Model for Graph Mining[C]//Proceedings of the 2004 SIAM International Conference on Data Mining.: 442–446. [@rmat-generator]
-7. Fey, M., & Lenssen, J. E. (2019). Fast Graph Representation Learning with PyTorch Geometric. (1), 1–9. [@fey_2019_pyg]
+7. Fey, M., & Lenssen, J. E. (2019). Fast Graph Representation Learning with PyTorch Geometric. (1), 1–9. [@PyG]
 8. https://github.com/dmlc/dgl [@dgl_website]
 9. Gilmer, J., Schoenholz, S. S., Riley, P. F., Vinyals, O., & Dahl, G. E. (n.d.). Neural Message Passing for Quantum Chemistry. [@gilmer_messgae_passing]
 10. Rossi R A , Ahmed N K . The Network Data Repository with Interactive Graph Analytics and Visualization[C]// Proceedings of the Twenty-Ninth AAAI Conference on Artificial Intelligence. AAAI Press, 2015. http://networkrepository.com/networks.php [@network-repository]
@@ -730,8 +730,8 @@ AliGraph[@zhu2019_aligraph]对于大规模图提出了AliGraph系统，由storag
 12. Kipf, T. N., & Welling, M. (2017). Semi-Supervised Classification with Graph Convolutional Networks. ICLR. Retrieved from https://openreview.net/group?id=ICLR.cc/2017/conference [@kipf2017_gcn]
 13. Li, Y., Tarlow, D., Brockschmidt, M., & Zemel, R. (2015). Gated Graph Sequence Neural Networks. ICLR, (1), 1–20. Retrieved from http://arxiv.org/abs/1511.05493 [@li2015_ggnn]
 14. Huang, J., Shen, H., Hou, L., & Cheng, X. (2018). Graph Attention Networks. DBLP, 11731 LNCS(2005), 566–577. https://doi.org/10.1007/978-3-030-30493-5_53 [@huang2018_gat]
-15. Wu, Z., Pan, S., Chen, F., Long, G., Zhang, C., & Yu, P. S. (2020). A Comprehensive Survey on Graph Neural Networks. IEEE Transactions on Neural Networks and Learning Systems, 1–21. https://doi.org/10.1109/tnnls.2020.2978386 [@wu2020_gnn_survey]
-16. Zhou, J., Cui, G., Zhang, Z., Yang, C., Liu, Z., Wang, L., … Sun, M. (2018). Graph Neural Networks: A Review of Methods and Applications. 1–22. Retrieved from http://arxiv.org/abs/1812.08434 [@zhou2018_gnn_survey]
+15. Wu, Z., Pan, S., Chen, F., Long, G., Zhang, C., & Yu, P. S. (2020). A Comprehensive Survey on Graph Neural Networks. IEEE Transactions on Neural Networks and Learning Systems, 1–21. https://doi.org/10.1109/tnnls.2020.2978386 [@comprehensive-survey-wu-2020]
+16. Zhou, J., Cui, G., Zhang, Z., Yang, C., Liu, Z., Wang, L., … Sun, M. (2018). Graph Neural Networks: A Review of Methods and Applications. 1–22. Retrieved from http://arxiv.org/abs/1812.08434 [@zhou2018_gnn_review]
 17. Zhang, Z., Cui, P., & Zhu, W. (2018). Deep Learning on Graphs: A Survey. 14(8), 1–24. Retrieved from http://arxiv.org/abs/1812.04202 [@zhang2018_gnn_survey]
 18. M. Defferrard, X. Bresson, and P. Van der Gheynst, “Convolutional neural networks on graphs with fast localized spectral filtering,” in Proc. NIPS, 2016, pp. 3844–3852 [@defferrad2016_chebnet]
 19. R. Li, S. Wang, F. Zhu, and J. Huang, “Adaptive graph convolutional neural networks,” in Proc. AAAI, 2018, pp. 3546–3553 [@li2018_agcn]
@@ -749,7 +749,7 @@ AliGraph[@zhu2019_aligraph]对于大规模图提出了AliGraph系统，由storag
 31. Hanqing Zeng, Hongkuan Zhou, Ajitesh Srivastava, Rajgopal Kannan, and Viktor K. Prasanna. Accurate, efficient and scalable graph embedding. CoRR, abs/1810.11899, 2018. URL http: //arxiv.org/abs/1810.11899. [@zeng2018_aesg]
 32. Yan, M., Chen, Z., Deng, L., Ye, X., Zhang, Z., Fan, D., & Xie, Y. (2020). Characterizing and Understanding GCNs on GPU. IEEE Computer Architecture Letters, 19(1), 22–25. https://doi.org/10.1109/LCA.2020.2970395 [@yan2020_analysis_gcns_gpu]
 33. Zhang, Z., Leng, J., Ma, L., Miao, Y., Li, C., & Guo, M. (2020). Architectural Implications of Graph Neural Networks. IEEE Computer Architecture Letters, 19(1), 59–62. https://doi.org/10.1109/LCA.2020.2988991 [@zhang2020_analysis_neugraph]
-34. WANG M, YU L, ZHENG D, 等. Deep Graph Library: Towards Efficient and Scalable Deep Learning on Graphs[J/OL]. arXiv:1909.01315 [cs, stat], 2019[2020–06–20]. http://arxiv.org/abs/1909.01315.[@wang2019_dgl]
+34. WANG M, YU L, ZHENG D, 等. Deep Graph Library: Towards Efficient and Scalable Deep Learning on Graphs[J/OL]. arXiv:1909.01315 [cs, stat], 2019[2020–06–20]. http://arxiv.org/abs/1909.01315.[@DGL]
 35. https://github.com/PaddlePaddle/PGL [@website_pgl]
 36. https://github.com/alibaba/euler [@website_euler]
 37. NeuGraph: Parallel Deep Neural Network Computation on Large Graphs[C/OL]//2019 USENIX Annual Technical Conference (USENIX ATC 19). Renton, WA: USENIX Association, 2019: [@ma2019_neugraph]
