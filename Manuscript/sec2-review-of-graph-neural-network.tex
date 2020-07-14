@@ -13,7 +13,7 @@ As illustracted in \figurename~\ref{fig:general_structure_of_gnn}, a typical GNN
 
 \begin{figure}
 	\centering
-	\includegraphics[width=1.1\columnwidth]{figs/illustration/GNN_common_architecture.png}
+	\includegraphics[width=1\columnwidth]{figs/illustration/GNN_common_architecture.png}
 	\caption{Structure of a typical graph neural network. (a) Demo GNN, (b) Demo graph. The target application is the node classification. The demo GNN has two GNN layers.}
 	\label{fig:general_structure_of_gnn}
 \end{figure}
@@ -106,7 +106,7 @@ It is conducted over every vertex in $\mathcal{G}$.
 For ChebNet, we report its GNN layer in the tables \footnote{A layer of ChebNet consists of $K$ GNN sub-layers and a summation layer, i.e., $\boldsymbol{H}^{l+1} = \sum_{k=1}^K{\boldsymbol{Z}^{(k)} \textcolor{blue}{\boldsymbol{W}^{(k)}}}$ with GNN layers $\boldsymbol{Z}^{(1)}=\boldsymbol{H}$, $\boldsymbol{Z}^{(2)}=\hat{\boldsymbol{L}}\boldsymbol{H}$, and $\boldsymbol{Z}^{(k)}=2\hat{\boldsymbol{L}}\boldsymbol{Z}^{(k-1)} - \boldsymbol{Z}^{(k-2)}$. $\boldsymbol{H}^l$ is the matrix of output hidden feature vectors of the layer $l-1$. In the table, we report the GNN sub-layer of ChebNet that calculates $\boldsymbol{Z}^{(k)}$}.
 
 \begin{table}
-	\hspace{-10em}
+	\hspace{-5em}
     \begin{footnotesize}
         \begin{tabular}{ccp{8em}p{22em}r}
 		\toprule
@@ -134,7 +134,7 @@ For ChebNet, we report its GNN layer in the tables \footnote{A layer of ChebNet 
 		Non-spectral &
 		mean/LSTM &
 		$\boldsymbol{m}_{j, i}^l =  \boldsymbol{h}_j^l$ &
-		$O(1)$ \\
+		$O(d_{in})$ \\
 		GraphSAGE-pool &
 		Non-spectral &
 		max &
@@ -144,7 +144,7 @@ For ChebNet, we report its GNN layer in the tables \footnote{A layer of ChebNet 
 		Non-spectral &
 		sum &
 		$\boldsymbol{m}_{j, i}^l = \boldsymbol{h}_j^l$ &
-		$O(1)$ \\
+		$O(d_{in})$ \\
 		SSE &
 		Recurrent &
 		sum &
@@ -196,7 +196,7 @@ For ChebNet, we report its GNN layer in the tables \footnote{A layer of ChebNet 
 		Complexity \\ \midrule
 		ChebNet \cite{defferrad2016_chebnet} &
 		$\boldsymbol{z}_i^{(k)} = 2\boldsymbol{s}^{(k)}_{i} - \boldsymbol{z}_i^{(k-2)}$&
-		$O(d_{in})$ \\
+		$O(d_{out})$ \\
 		\textbf{GCN} \cite{kipf2017_gcn} &
 		$\boldsymbol{h}_i^{l+1} = \textcolor{blue}{\boldsymbol{W}}^l  \boldsymbol{s}_i^{l}$ &
 		$O(d_{in} * d_{out})$ \\
@@ -208,7 +208,7 @@ For ChebNet, we report its GNN layer in the tables \footnote{A layer of ChebNet 
 		$O(d_{in} * d_{out})$ \\
 		GraphSAGE-pool &	
 		$\boldsymbol{h}_i^{l+1} = \boldsymbol{s}_i^l$ &
-		$O(1)$ \\
+		$O(d_{out})$ \\
 		Neural FPs &
 		$\boldsymbol{h}_i^{l+1} = \delta(\boldsymbol{h}_i^l + \textcolor{blue}{\boldsymbol{W}}^{l, |\mathcal{N}(i)|}  \boldsymbol{s}_i^{l})$ &
 		$O(d_{in} * d_{out})$ \\
@@ -218,17 +218,17 @@ For ChebNet, we report its GNN layer in the tables \footnote{A layer of ChebNet 
 		\textbf{GGNN} &
 		\begin{scriptsize}
 		$\begin{aligned}[t]
-			& \textcolor{blue}{\boldsymbol{z}}_i^l = \delta ( \textcolor{blue}{\boldsymbol{W}}^z \boldsymbol{s}_i^l + \textcolor{blue}{\boldsymbol{b}}^{sz} + \textcolor{blue}{\boldsymbol{U}}^z \boldsymbol{h}_i^{l} + \textcolor{blue}{\boldsymbol{b}}^{hz}) \\ 
+			& {\boldsymbol{z}}_i^l = \delta ( \textcolor{blue}{\boldsymbol{W}}^z \boldsymbol{s}_i^l + \textcolor{blue}{\boldsymbol{b}}^{sz} + \textcolor{blue}{\boldsymbol{U}}^z \boldsymbol{h}_i^{l} + \textcolor{blue}{\boldsymbol{b}}^{hz}) \\ 
 			&\boldsymbol{r}_i^l = \delta ( \textcolor{blue}{\boldsymbol{W}}^r \boldsymbol{s}_i^l+ \textcolor{blue}{\boldsymbol{b}}^{sr} +\textcolor{blue}{\boldsymbol{U}}^r \boldsymbol{h}_i^{l} + \textcolor{blue}{\boldsymbol{b}}^{hr}) \\ 
 			&\boldsymbol{h}_i^{l+1} = tanh ( \textcolor{blue}{\boldsymbol{W}} \boldsymbol{s}_i^l + \textcolor{blue}{\boldsymbol{b}}^s + \textcolor{blue}{\boldsymbol{U}} ( \boldsymbol{r}_i^l \odot \boldsymbol{h}_i^{l} + \textcolor{blue}{\boldsymbol{b}}^h))) \\ 
-			&\boldsymbol{h}_i^{l+1} = (1 - \textcolor{blue}{\boldsymbol{z}}_i^l) \odot \boldsymbol{h}_i^l +  \textcolor{blue}{\boldsymbol{z}}_i^l \odot \boldsymbol{h}_i^{l+1}
+			&\boldsymbol{h}_i^{l+1} = (1 - {\boldsymbol{z}}_i^l) \odot \boldsymbol{h}_i^l +  {\boldsymbol{z}}_i^l \odot \boldsymbol{h}_i^{l+1}
 		\end{aligned}$
 		\end{scriptsize}
 		&
-		$O(max(d_{in}, d_{out}) * d_{out})$ \\
+		$O(d_{in} * d_{out})$ \\
 		\textbf{GAT}&
 		$\boldsymbol{h}_i^{l+1} = \boldsymbol{s}_i^l$ &
-		$O(1)$ \\
+		$O(d_{out})$ \\
 		\textbf{GaAN} &
 		\begin{scriptsize}
 			$\begin{aligned}[t]
@@ -270,3 +270,5 @@ A GCN graph neuron can be expressed as $\boldsymbol{h}^{l+1}_i = \boldsymbol{W}^
 According to the associative law of the matrix multiplication, $\boldsymbol{h}^{l+1}_i = \sum_{v_j \in \mathcal{N}(v_i)}{e_{j,i}\boldsymbol{W}^l\boldsymbol{h}^l_j}$.
 Since the dimension of $\boldsymbol{h}^{l+1}_i$ is usually smaller than $\boldsymbol{h}^l_i$ in practical GCNs, the implementation of GCN \footnote{The implementation of GCN in PyTorch Geometric: \url{ https://github.com/rusty1s/pytorch_geometric/blob/1.5.0/torch_geometric/nn/conv/gcn_conv.py}} chooses to first conduct the vertex computation $\hat{\boldsymbol{h}}^l_j = \boldsymbol{W}^l\boldsymbol{h}^l_j$ for each vertex $v_j$ and then conduct the edge computation $\boldsymbol{h}^{l+1}_i=\sum_{v_j\in\mathcal{N}(v_i)}{\hat{\boldsymbol{h}}^l_j}$.
 As $\hat{\boldsymbol{h}}^l_j$ has the same dimension as $\boldsymbol{h}^{l+1}_i$, the implementation significantly reduces the  computation cost of the edge computation.
+
+\textbf{GGNN} ()
