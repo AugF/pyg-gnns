@@ -318,7 +318,6 @@ ClusterGCN: Edge Sampling, 每层的图结构固定
 - 实验 4：采样技术
   - 随batch_size的变化
     - graph_info
-      
       > 度数图：散点图
   - 耗时占比的变化
   - 峰值内存的变化
