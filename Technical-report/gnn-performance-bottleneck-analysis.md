@@ -381,6 +381,9 @@ ClusterGCN: Edge Sampling, 每层的图结构固定
 
 [@fig:exp_absolute_training_time]中比较了各GNN每个epoch的训练耗时,其排名为GaAN >> GAT > GGNN > GCN. 其耗时排名与复杂度分析相符. 因为图中边的数量一般远超点的数量, 因此边计算复杂度更高的GAT算法比点计算复杂度高的算法GGNN更耗时. [@fig:exp_absolute_training_time] 同时表明个别epoch的训练耗时异常地高, 其主要是由profiling overhead和python解释器的GC停顿造成.该现象证实了去处异常epoch的必要性.
 
+The goal of this experiment is to verify the impact of GNN hyperparameters (such as $d_{in}$, $d_{out}$, $K$, etc.) on the training time and the use of memory, and verify [@tbl:gnn_overview] Accuracy of complexity analysis.
+
+[@fig:exp_absolute_training_time] compares the training time of each epoch of each GNN, and its ranking is GaAN >> GAT> GGNN> GCN. Its time-consuming ranking is consistent with the complexity analysis. Because the number of edges in the figure is generally far more than The number of points, so the GAT algorithm with higher edge calculation complexity is more time-consuming than the GGNN algorithm with high point calculation complexity. [@fig:exp_absolute_training_time] At the same time, it shows that the training time of individual epochs is abnormally high, which is mainly caused by profiling Overhead and the GC pause of the Python interpreter. This phenomenon confirms the necessity of removing abnormal epochs.
 
 ![pubmed](./figs/experiments/exp_absolute_training_time_comparison_pubmed.png)
 
