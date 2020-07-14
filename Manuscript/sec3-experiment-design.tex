@@ -78,27 +78,27 @@ The answers to those questions will give us a more comprehensive view on the per
 We design extensive experiments to find the answers emperically.
 \begin{itemize}
 	
-	\item[Q1] \emph{How do the hyper-parameters affect the training time and the memory usage of a GNN?}
+	\item[Q1] \emph{How do the hyper-parameters affect the training time and the memory usage of a GNN?} (Section~\ref{sec:effects_of_hyper-parameters_on_performance})
 	
 			Every GNN has a group of hyper-parameters like the number of GNN layers and the dimision of hidden feature vectors. The hyper-parameters affect the training time per epoch and the peak memory usage during the training.
 			To evaluate their effects, we measured how the training time per epoch and the peak memory usage (of GPU) changed as we increased the values of the hyper-parameters.
 			Through the experiments, we want to verify the validity of the computational complexity analysis in \tablename~\ref{tab:gnn_overview_edge} and \tablename~\ref{tab:gnn_overview_vertex}.
 			If the complexity analysis is valid, we can analyze the bottleneck theoretically.
 
-	\item[Q2] \emph{Which stage is the most time-consuming stage in GNN training?}
+	\item[Q2] \emph{Which stage is the most time-consuming stage in GNN training?} (Section~\ref{sec:training_time_breakdown})
 	
 			We can decompose the training time on different levels: layer level, vertex/edge computation level and the basic operator level.
 			On each level, we breakdown the training time of an epoch into several stages. The most time-consuming stage is the performance bottleneck in time.
 			Optimizing its implementation can significantly reduce the training time.
 			
-	\item[Q3] \emph{Which consumes most of memory in GNN training?}
+	\item[Q3] \emph{Which consumes most of memory in GNN training?} (Section~\ref{sec:memory_usage_analysis})
 	
 			The limited memory capacity of a GPU card is the main factor preventing us training GNNs on big graphs.
 			We measured the peak memory usage in the GNN training under different graph scales, hyper-parameters and average vertex degrees.
 			Based on the results, we analyze which is the most memory-consuming component.
 			Reducing its memory usage will enable us training bigger GNNs under the same memory capacity.
 		
-	\item[Q4] \emph{Can the sampling techniques remove the performance bottleneck in GNN training?}
+	\item[Q4] \emph{Can the sampling techniques remove the performance bottleneck in GNN training?} (Section~\ref{sec:effects_of_sampling_techniques_on_performance})
 	
 			In theory, the sampling techniques can significantly reduce the graph neurons that participate in the training of a batch.
 			Consequently, the training time and the memory usage should also decrease.
