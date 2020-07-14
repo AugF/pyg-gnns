@@ -736,7 +736,6 @@ AliGraph[@zhu2019_aligraph]对于大规模图提出了AliGraph系统，由storag
 19. R. Li, S. Wang, F. Zhu, and J. Huang, “Adaptive graph convolutional neural networks,” in Proc. AAAI, 2018, pp. 3546–3553 [@li2018_agcn]
 20. Hamilton, W. L., Ying, R., & Leskovec, J. (2017). Inductive Representation Learning on Large Graphs. NIPS, 2017-Decem(Nips), 1025–1035. Retrieved from http://arxiv.org/abs/1706.02216 [@hamilton2017_graphsage]
 21. D. K. Duvenaud, D. Maclaurin, J. Aguileraiparraguirre, R. Gomezbombarelli, T. D. Hirzel, A. Aspuruguzik, and R. P. Adams, “Convolutional networks on graphs for learning molecular fingerprints,” NIPS 2015, pp. 2224–2232, 2015 [@duvenaud2015_neural_fps]
-22. Y. Zhang, Q. Liu, and L. Song, “Sentence-state lstm for text representation,” ACL 2018, vol. 1, pp. 317–327, 2018.[@zhang2018_tree_lstm]
 23. Chiang, W. L., Li, Y., Liu, X., Bengio, S., Si, S., & Hsieh, C. J. (2019). Cluster-GCN: An efficient algorithm for training deep and large graph convolutional networks. SIGKDD, 257–266. https://doi.org/10.1145/3292500.3330925 [@chiang2019_cluster_gcn]
 24. Joan Bruna, Wojciech Zaremba, Arthur Szlam, and Yann LeCun. Spectral networks and locally connected networks on graphs. CoRR, abs/1312.6203, 2013. URL http://arxiv.org/abs/ 1312.6203.[@bruna2013_spectral_gnn]
 25. Jie Chen, Tengfei Ma, and Cao Xiao. Fastgcn: Fast learning with graph convolutional networks via importance sampling. In International Conference on Learning Representations (ICLR), 2018b.[@chen2018_fastgcn]
