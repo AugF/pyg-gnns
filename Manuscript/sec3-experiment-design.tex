@@ -49,14 +49,14 @@ Vertices were divided into 10 classes randomly.
 We used the node classification as the target task in GNNs due to its popularity in real-world applications.
 We trained GNNs with the semi-supervised learning setting.
 The whole data graph was used in the forward/backward/evaluation phases, but only parts of vertices had labels during the forward phase and they were used to calculate the loss and gradients.
-The remaining vertices were used in the evaluation phsae to check the accuracy of the current parameters.
-Since model parameters of GNNs were not restricted by the topological structure of $\mathcal{G}$, the model learned from the semi-supervised learning can directly extrapolate to unseen vertices.
+The vertices with unseed labels were used in the evaluation phsae to check the accuracy of the current parameters.
+%Since model parameters of GNNs were not restricted by the topological structure of $\mathcal{G}$, the model learned from the semi-supervised learning can directly extrapolate to unseen vertices.
 
 \paragraph{GNN Implementation}
 We implemented the four typical GNNs--GCN, GGNN, GAT, GaAN--with PyTorch Geometric 1.5.0.
 To compare the performance characteristics of four GNNs side-by-side, we used a unified GNN structure for them: Input Layer $\rightarrow$ GNN Layer 0 $\rightarrow$ GNN Layer 1 $\rightarrow$ Softmax Layer (to prediction).
 The structure was popular in the experimental evaluation of GCN \cite{kipf2017_gcn}, GAT \cite{huang2018_gat} and GaAN \cite{zhang2018_gaan}.
-Since a GGNN layer requires the input and output hidden feature vectors have the same dimension, we added two MLP layers to transform the dimensions of the input/output feature vectors of the whole GNN: Input Layer $\rightarrow$ MLP $\rightarrow$ GNN Layer 0 $\rightarrow$ GNN Layer 1 $\rightarrow$ MLP $\rightarrow$ Softmax Layer.
+Since a GGNN layer requires the input and output hidden feature vectors have the same dimension, for GGNN, we added two MLP layers to transform the dimensions of the input/output feature vectors of the whole GNN: Input Layer $\rightarrow$ MLP $\rightarrow$ GNN Layer 0 $\rightarrow$ GNN Layer 1 $\rightarrow$ MLP $\rightarrow$ Softmax Layer.
 
 \paragraph{Hyper-parameters}
 We picked the hyper-parameters of all GNNs according to their popularity in the experimental evaluation in their original papers.
