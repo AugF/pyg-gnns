@@ -183,13 +183,16 @@ $\boldsymbol{W}^{l,k}_{xa}, \boldsymbol{W}^{l,k}_{ya} \in \mathbb{R}^{d_a}$
 layer Sampling一般来说包括三部步骤：1) Construct a complete GCN on the full traning graph. 2) Sampling nodes or edges of each layer to form minibatches 3) Propagate forward and backward among the sampled GCN.
 Step 2)和3) 迭代地进行梯度更新
 GraphSAGE[@hamilton2017_graphsage]是最早出现的layer Sampling方法，它通过最终层需要训练的节点，反向每层按照指定邻居节点构成训练的子图。PinSage [@ying2018_pinsage] proposed sampling neighbors using random walks on graphs along with several implementation improvements including coordination between the CPU and GPU, a map-reduce inference pipeline, and so on。 FastGCN[@chen2018_fastgcn]则在[@hamilton2017_graphsage]基础上，enhances the layer sampler by introducing an importance score to each neighbor. The algorithm presumably leads to less information loss due to weighted（每层采样相同数目固定的点） aggregation. StochasticGCN [@chen2018_sgcn]further proposed reducing the sampling variances by using the historical activations of the last batches as a control variate, allowing for arbitrarily small sample sizes with a theoretical guarantee. Adapt [@huang2018_adap] further proposed sampling nodes in the lower layers conditioned on their top layer; this approach was more adaptive and applicable to explicitly reduce variances. 
-![Layer_Sampling](figs/illustration/layer_sampling.png){#fig:Layer_Sampling width=60%}
+
+
 
 2. Graph Sampling (Edge Sampling) 特点：保证了每层的顶点的连接关系一致
 AESG(这个名称是自己定的) [@zeng2018_aesg], Cluster-GCN[@chiang2019_cluster_gcn], GraphSAINT [@zeng2020_graphsaint]不同于layer Sampling的想法，build mini-batches from subgraphsa.  AESG [@zeng2018_aesg] proposes a specific graph sampling algorithm to ensure connectivity among minibatch nodes. Cluster-GCN[@chiang2019_cluster_gcn] proposes graph clustering based minibatch training. During pre-processing, the training graph is partitioned into densely connected clusters. During training, clusters are randomly selected to form minibatches, and intra-cluster edge connections remain unchanged. GraphSAINT[@zeng2020_graphsaint]也采用了graph sampling的方法，并且decouple the sampling from the forward and backward propagation, and extend GraphSAINT with many architecture variants
-![Graph_Sampling](figs/illustration/graph_sampling.png){#fig:Graph_Sampling width=60%}
 
 在实验中，考虑采样技术时，我们从以上两大类采样算法中选取了代表性的采样算法作为训练前的一个形成Dataloader的步骤，分析了加入采样技术后GPU性能瓶颈的变化。 对于layer Sampling采样，我们选取了最经典的GraphSAGE作为研究，主要原因是它的实用性；另外对于Graph Sampling采样方法，我们选取了Cluster-GCN算法，因为该算法是最早开源的。
+
+对于layer sampling, 我们这里以GraphSAGE(figs/illustration/layer_sampling.png){#fig:Layer_Sampling width=60%}作为展示说明; 以Cluster-GCN进行展示graph_sampling
+![Graph_Sampling](figs/illustration/graph_sampling.png){#fig:Graph_Sampling width=60%}
 
 # 3 实验设计
 
@@ -198,6 +201,8 @@ AESG(这个名称是自己定的) [@zeng2018_aesg], Cluster-GCN[@chiang2019_clus
 NVIDIA Tesla T4 15079MiB X 1
 Linux gpu1 3.10.0-957.el7.x86_64 #1 SMP Thu Nov 8 23:39:32 UTC 2018 x86_64 x86_64 x86_64 GNU/Linux
 Python 3.7.7, PyTorch 1.5.0, Pytorch Geometric 1.5.0
+
+本实验采用GPU单卡训练，因为目前多GPU不支持训练一张大图
 
 ## 2. 3.2 实验数据集
 
@@ -683,7 +688,6 @@ GaAN同样采用多头机制,其计算复杂度受$d_{in}$、$d_v$、$d_a$和头
 **图[@fig:exp_sampling_memory_usage]: 训练内存峰值使用随batch size的变化情况。FULL表示不采用采样技术时的情况（不含evaluation阶段）。**
 
 
-
 # 5 系统设计建议
 
 # 6 相关工作
@@ -695,7 +699,18 @@ GaAN同样采用多头机制,其计算复杂度受$d_{in}$、$d_v$、$d_a$和头
 
 总说：这三篇论文按照各自的角度对GNN进行了划分，然后对其构成和组成部分进行了详尽地说明，并介绍相关公开的数据集和资源
 
-[@shchur2018_pitfall_of_gnn]
+2. GNN训练系统方面的相关工作
+在系统方面， PyG[@fey_2019_pyg], DGL[@wang2019_dgl], Euler[@website_euler], PGL[@website_pgl], NeuGraph[@ma2019_neugraph], AliGraph[@zhu2019_aligraph]等系统都提供了对图神经网络训练的支持。
+PyG[@fey_2019_pyg], DGL[@wang2019_dgl], PGL[@website_pgl]都是基于message-passing编程模型的面向深度图神经网络的计算框架, 但是它们所支持的后端不同，PyG, PGL支持的后端分别是PyTorch, PaddlePaddle; DGL[@wang2019_dgl]支持多后端(MXNet, TensorFlow, PyTorch). DGL[@wang2019_dgl]相对于PyG为用户提供了更多可用的reduce operation, PGL[@website_pgl]则在DGL基础上对reduce functions进行了进一步的优化。
+Euler[@website_euler]是基于大规模分布式的图学习框架，支持Tensorflow计算后端. 另外，它还支持大规模图分布式存储，并且对GNN类的算法通过Message Passing建模范式的抽象，将一个GNN类的算法模型定义为子图抽样，图卷积和可选的池化模块。
+NeuGraph[@ma2019_neugraph]为图神经网络训练提出了新的编程模型，SAGA-NN(Scater-ApplyEdge-Gather-ApplyVertex with Neural Networks), 使用了2D图划分技术将图划分为多个子图进行训练，并在单机多GPU的环境下从硬件角度进行了高效地实现。
+AliGraph[@zhu2019_aligraph]对于大规模图提出了AliGraph系统，由storage layer, sampling layer和operator三部分组成，storage layer利用namely structual and attributed specific storage, graph partition和caching neighbors of some import vertics实现了high-level操作和算法对数据的快速获取，sampling layer将采样技术划分为了三种采样方法, Traverse, Neigborhood, Negative, 分别复杂点采样，邻居采样和采样; operator layer则提供了多种关于Aggregate(边计算), Combine(点计算)的扩展。
+
+3. GNN评测方面的工作
+[@shchur2018_pitfall_of_gnn] 研究了train/val/test的划分比例对不同算法在不同数据集上的表现，表示仅考虑单个train/val/test划分比结果是很脆弱的，更简单的模型更能支持复杂的参数选择。
+[@dwivedi2020_benchmark_of_gnn](Benchmarking Graph Neural Networks) 探讨了不同GNN算法在不同场景的图数据集下的性能表现, 给出了不同场景下设计effective GNNs的key operators。
+[@yan2020_analysis_gcns_gpu]通过GNN算法与Graph Processing任务(选择PageRank)和MLP-based Neural Network任务(MLP-MNIST)在GPU下的特性进行了分析，发现实际图中的顶点度数分布符合幂律分布的特性，因此缓存高度数的顶点，有可能可以提升硬件Cache的命中率。因为aggregation阶段需要并发地、原子地更新顶点的输出特征向量，因此向量化原子访问有可能可以提升aggregation阶段的效率。
+[@zhang2020_analysis_neugraph]在DGL上基于SAGA-NN编程模型对GNN的GPU训练在inference阶段的性能热点进行了探讨，通过对SAGA-NN编程模型各阶段的分析，作者发现GNN没有固定的性能瓶颈，认为各部分都有优化的价值
 
 # 7 总结与展望
 
@@ -732,3 +747,10 @@ GaAN同样采用多头机制,其计算复杂度受$d_{in}$、$d_v$、$d_a$和头
 29. Zou, D., Hu, Z., Wang, Y., Jiang, S., Sun, Y., & Gu, Q. (2019). Layer-Dependent Importance Sampling for Training Deep and Large Graph Convolutional Networks. (NeurIPS).[@zou2019_ldis]
 30. W. Huang, T. Zhang, Y. Rong, and J. Huang, “Adaptive sampling towards fast graph representation learning,” in Advances in Neural Information Processing Systems, 2018.[@huang2018_adap]
 31. Hanqing Zeng, Hongkuan Zhou, Ajitesh Srivastava, Rajgopal Kannan, and Viktor K. Prasanna. Accurate, efficient and scalable graph embedding. CoRR, abs/1810.11899, 2018. URL http: //arxiv.org/abs/1810.11899. [@zeng2018_aesg]
+32. Yan, M., Chen, Z., Deng, L., Ye, X., Zhang, Z., Fan, D., & Xie, Y. (2020). Characterizing and Understanding GCNs on GPU. IEEE Computer Architecture Letters, 19(1), 22–25. https://doi.org/10.1109/LCA.2020.2970395 [@yan2020_analysis_gcns_gpu]
+33. Zhang, Z., Leng, J., Ma, L., Miao, Y., Li, C., & Guo, M. (2020). Architectural Implications of Graph Neural Networks. IEEE Computer Architecture Letters, 19(1), 59–62. https://doi.org/10.1109/LCA.2020.2988991 [@zhang2020_analysis_neugraph]
+34. WANG M, YU L, ZHENG D, 等. Deep Graph Library: Towards Efficient and Scalable Deep Learning on Graphs[J/OL]. arXiv:1909.01315 [cs, stat], 2019[2020–06–20]. http://arxiv.org/abs/1909.01315.[@wang2019_dgl]
+35. https://github.com/PaddlePaddle/PGL [@website_pgl]
+36. https://github.com/alibaba/euler [@website_euler]
+37. NeuGraph: Parallel Deep Neural Network Computation on Large Graphs[C/OL]//2019 USENIX Annual Technical Conference (USENIX ATC 19). Renton, WA: USENIX Association, 2019: [@ma2019_neugraph]
+38. AliGraph: A Comprehensive Graph Neural Network Platform[J]. Proceedings of the VLDB Endowment, 2019, 12(12): 2094–2105. DOI:10.14778/3352063.3352127.[@zhu2019_aligraph]
