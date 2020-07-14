@@ -161,7 +161,7 @@ For ChebNet, we report its GNN layer in the tables \footnote{A layer of ChebNet 
 		sum  &
 		\begin{scriptsize}
 			$\begin{aligned}[t]
-			& \alpha_{j, i}^k = \frac {\exp(LeakyReLU(\textcolor{blue}{\boldsymbol{a}^T} [ \textcolor{blue}{\boldsymbol{W}^{l,k}}  \boldsymbol{h}_j^l \parallel \textcolor{blue}{\boldsymbol{W}^{l,k}}  \boldsymbol{h}_i^l] ))} {\sum_{k \in \mathcal{N}(i)}\exp(LeakyReLU(\textcolor{blue}{\boldsymbol{a}^T} [ \textcolor{blue}{\boldsymbol{W}^{l,k}}  \boldsymbol{h}_j^l \parallel \textcolor{blue}{\boldsymbol{W}^{l,k}}  \boldsymbol{h}_k^l] ))} \\
+			& \alpha_{j, i}^k = \frac {\exp(LeakyReLU(\textcolor{blue}{\boldsymbol{a}^T} [\hat{\boldsymbol{h}}^{l,k}_i \parallel \hat{\boldsymbol{h}}^{l,k}_j] ))} {\sum_{k \in \mathcal{N}(i)}\exp(LeakyReLU(\textcolor{blue}{\boldsymbol{a}^T} [\hat{\boldsymbol{h}}^{l,k}_i \parallel \hat{\boldsymbol{h}}^{l,k}_j] ))} \\
 			& \text{Multi-head concatenation}: \boldsymbol{m}_{j, i}^l = \parallel_{k=1}^K \delta(\alpha_{j, i}^k \textcolor{blue}{\boldsymbol{W}^{l,k}} \boldsymbol{h}_j^{l}) \\
 			& \text{Multi-head average}: \boldsymbol{m}_{j, i}^l = \frac{1}{K} \sum_{k=1}^K \delta(\alpha_{j, i}^k \textcolor{blue}{\boldsymbol{W}^{l,k}} \boldsymbol{h}_j^{l})
 			\end{aligned}$
@@ -188,7 +188,6 @@ For ChebNet, we report its GNN layer in the tables \footnote{A layer of ChebNet 
 \end{table}
 
 \begin{table}
-	\hspace{-3em}
     \begin{footnotesize}
         \begin{tabular}{cp{20em}r}
 		\toprule
@@ -228,8 +227,8 @@ For ChebNet, we report its GNN layer in the tables \footnote{A layer of ChebNet 
 		&
 		$O(d_{in} * d_{out})$ \\
 		\textbf{GAT}&
-		$\boldsymbol{h}_i^{l+1} = \boldsymbol{s}_i^l$ &
-		$O(1)$ \\
+		$\hat{\boldsymbol{h}}^{l,k}_{i}} = \textcolor{blue}{\boldsymbol{W}^{l,k}} \boldsymbol{h}_i^{l}$ (pre-edge), $\boldsymbol{h}_i^{l+1} = \boldsymbol{s}_i^l$ &
+		$O(d_{in} * d_{out})$ \\
 		\textbf{GaAN} &
 		\begin{scriptsize}
 			$\begin{aligned}[t]
@@ -282,4 +281,4 @@ GGNN further requires the dimension of $\boldsymbol{h}^{l+1}$ is equal to the di
 GAT introduces the attention mechanism into the graph neural networks.
 During the message passing, it dynamically determines the weight for an edge based on the hidden feature vectors of its two end vertices.
 Moreover, it adopts the multi-head mechanism that generates $K$ independent views for an edge, where $K$ is a hyperparameter.
-In its message function $\phi$, $\$ 
+In its message function $\phi$.
