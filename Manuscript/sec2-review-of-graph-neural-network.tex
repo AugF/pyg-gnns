@@ -1,8 +1,8 @@
 \section{Review of Graph Neural Networks}
 
-In this section, we introduce the concepts related to the graph neural network (GNN, for short) and breifly survey typical graph neural networks.
+In this section, we formally define the graph neural network (GNN, for short) and breifly survey typical graph neural networks.
 We denote a simple graph $\mathcal{G}$ as $\mathcal{G}=(\mathcal{V}, \mathcal{E})$, where $\mathcal{V}$ and $\mathcal{E}$ are the vertex set and the edge set of $\mathcal{G}$, respectively.
-Let $n=|\mathcal{V}|$ and $m=|\mathcal{E}|$ as the number of vertices/edges. 
+Let $n=|\mathcal{V}|$ and $m=|\mathcal{E}|$ as the number of vertices/edges.
 We use $v_i$ $(0 \leq i < n)$ to denote a vertex and $e_{i,j}=(v_i, v_j)$ to denote the edge pointing from $v_i$ to $v_j$.
 The adjacency set of $v_i$ is $\mathcal{N}(v_i)=\{v|(v_i, v) \in \mathcal{E}\}$.
 We denote a \emph{vector} with a bold lower case letter like $\boldsymbol{x}$ and a \emph{matri}x with a bold upper case letter like $\boldsymbol{X}$.
@@ -35,7 +35,7 @@ We elaborate on their details later.
 The connection between the input layer and the first GNN layer is determined by the topology of $\mathcal{G}$.
 In the traditional neural networks, neurons of neighboring layers are fully connected.
 In GNNs, two graph neurons are connected only if their corresponding vertices have an edge between them in $\mathcal{G}$.
-Most real-world graphs are very \emph{sparse}, i.e. $|\mathcal{E}| \ll |\mathcal{V}|^2$. 
+Most real-world graphs are very \emph{sparse}, i.e. $|\mathcal{E}| \ll |\mathcal{V}|^2$.
 
 
 In the next GNN layer (Layer 1), the graph neuron of $v_i$ collects the hidden feature vectors of itself $\boldsymbol{h}^1_i$ and its neighbors ($\boldsymbol{h}^1_j$ with $v_j \in \mathcal{N}(v_i)$) from the \emph{previous} GNN layer.
@@ -88,7 +88,7 @@ A graph neuron collects messages from its neighbor graph neurons and outputs a h
 Graph neurons at layer $l$ are made of three \emph{differentiable} functions: $\phi^l$, $\Sigma^l$ and $\gamma^l$.
 The graph neuron calculates the output hidden vector $\boldsymbol{h}^{l+1}_i$ by
 $$
-\boldsymbol{h}^{l+1}_i = \gamma^l(\boldsymbol{h}^l_i, \mathlarger{\Sigma}^l_{v_j \in \mathcal{N}(v_i)}{\phi^l(\boldsymbol{h}^l_i, \boldsymbol{h}^l_j,	\boldsymbol{e}_{j,i})}).
+	\boldsymbol{h}^{l+1}_i = \gamma^l(\boldsymbol{h}^l_i, \mathlarger{\Sigma}^l_{v_j \in \mathcal{N}(v_i)}{\phi^l(\boldsymbol{h}^l_i, \boldsymbol{h}^l_j,	\boldsymbol{e}_{j,i})}).
 $$
 
 $\phi^l$ is the \emph{message} function.
@@ -108,139 +108,139 @@ For ChebNet, we report its GNN layer in the tables \footnote{A layer of ChebNet 
 
 \begin{table}
 	\hspace{-5em}
-    \begin{footnotesize}
-        \begin{tabular}{ccp{8em}p{22em}r}
-		\toprule
-		GNN &
-		Type &
-		$\Sigma$ &
-		$\phi$ &
-		Complexity \\ \midrule
-		ChebNet \cite{defferrad2016_chebnet} &
-		Spectral &
-		sum &
-		$\boldsymbol{m}_{j, i}^{(k)} = e_{j, i}\boldsymbol{z}_j^{(k-1)}$ &
-		$O(d_{in})$ \\
-		\textbf{GCN} \cite{kipf2017_gcn} &
-		Spectral &
-		sum &
-		$\boldsymbol{m}_{j, i}^l = e_{j, i} \boldsymbol{h}_j^l$ &
-		$O(d_{in})$ \\
-		AGCN &
-		Spectral &
-		sum &
-		$\boldsymbol{m}_{j, i}^l = \tilde{e}_{j, i}^l \boldsymbol{h}_j^l$ &
-		$O(d_{in})$ \\
-		GraphSAGE &
-		Non-spectral &
-		mean/LSTM &
-		$\boldsymbol{m}_{j, i}^l =  \boldsymbol{h}_j^l$ &
-		$O(1)$ \\
-		GraphSAGE-pool &
-		Non-spectral &
-		max &
-		$\boldsymbol{m}_{j, i}^l =  \delta(\textcolor{blue}{\boldsymbol{W}^l_{pool}} \boldsymbol{h}_j^l + \textcolor{blue}{b}^l)$  &
-		$O(d_{in} * d_{out})$ \\
-		Neural FPs &
-		Non-spectral &
-		sum &
-		$\boldsymbol{m}_{j, i}^l = \boldsymbol{h}_j^l$ &
-		$O(1)$ \\
-		SSE &
-		Recurrent &
-		sum &
-		$\boldsymbol{m}_{j, i}^l = [\boldsymbol{x}_j \parallel \boldsymbol{h}_j^l]$ &
-		$O(f+d_{in})$ \\
-		\textbf{GGNN} &
-		Gated &
-		sum &
-		$\boldsymbol{m}_{j, i} = \textcolor{blue}{\boldsymbol{W}^l} \boldsymbol{h}_j^l$ &
-		$O(d_{in} * d_{out})$ \\
-		\textbf{GAT}&
-		Attention &
-		sum  &
-		\begin{scriptsize}
-			$\begin{aligned}[t]
-			& \alpha_{j, i}^k = \frac {\exp(LeakyReLU(\textcolor{blue}{\boldsymbol{a}^T} [\hat{\boldsymbol{h}}^{l,k}_i \parallel \hat{\boldsymbol{h}}^{l,k}_j] ))} {\sum_{k \in \mathcal{N}(i)}\exp(LeakyReLU(\textcolor{blue}{\boldsymbol{a}^T} [\hat{\boldsymbol{h}}^{l,k}_i \parallel \hat{\boldsymbol{h}}^{l,k}_j] ))} \\
-			& \text{Multi-head concatenation}: \boldsymbol{m}_{j, i}^l = \parallel_{k=1}^K \delta(\alpha_{j, i}^k \textcolor{blue}{\boldsymbol{W}^{l,k}} \boldsymbol{h}_j^{l}) \\
-			& \text{Multi-head average}: \boldsymbol{m}_{j, i}^l = \frac{1}{K} \sum_{k=1}^K \delta(\alpha_{j, i}^k \textcolor{blue}{\boldsymbol{W}^{l,k}} \boldsymbol{h}_j^{l})
-			\end{aligned}$
-		\end{scriptsize} &
-		$O(K * d_{in} * d_{out})$ \\
-		\textbf{GaAN} &
-		Attention &
-		sum,max,mean &
-		\begin{scriptsize}
-			$\begin{aligned}[t]
-			&\alpha_{j, i}^k = \frac {\exp(\textcolor{blue}{\boldsymbol{a}^T} [ \textcolor{blue}{\boldsymbol{W}^{l, k}_{xa}} \boldsymbol{h}_j^l \parallel \textcolor{blue}{\boldsymbol{W}^{l,k}_{ya}} \boldsymbol{h}_i^l] )} {\sum_{k \in \mathcal{N}(j)}\exp(\textcolor{blue}{\boldsymbol{a}^T} [ \textcolor{blue}{\boldsymbol{W}^{l,k}_{xa}} \boldsymbol{h}_j^l \parallel \textcolor{blue}{\boldsymbol{W}^{l,k}_{ya}}  \boldsymbol{h}_k^l] )} \\
-			&\boldsymbol{m}_{j, i, 1}^l = \parallel_{k=1}^K \delta(\alpha_{j, i}^k \textcolor{blue}{\boldsymbol{W}^{l,k}_v} \boldsymbol{h}_j^{l}) \\
-			&\boldsymbol{m}_{j, i, 2}^l = \textcolor{blue}{\boldsymbol{W}^l_m} \boldsymbol{h}_j^{l} \\
-			&\boldsymbol{m}_{j, i, 3}^l = \boldsymbol{h}_j^l
-			\end{aligned}$
-		\end{scriptsize} &
-		$O(max(d_a, d_m, d_v) * K * d_{in})$ \\
-		\bottomrule
-	\end{tabular}
-\end{footnotesize}
+	\begin{footnotesize}
+		\begin{tabular}{ccp{8em}p{22em}r}
+			\toprule
+			GNN                                                                                                                       &
+			Type                                                                                                                      &
+			$\Sigma$                                                                                                                  &
+			$\phi$                                                                                                                    &
+			Complexity                                                                                                                  \\ \midrule
+			ChebNet \cite{defferrad2016_chebnet}                                                                                      &
+			Spectral                                                                                                                  &
+			sum                                                                                                                       &
+			$\boldsymbol{m}_{j, i}^{(k)} = e_{j, i}\boldsymbol{z}_j^{(k-1)}$                                                          &
+			$O(d_{in})$                                                                                                                 \\
+			\textbf{GCN} \cite{kipf2017_gcn}                                                                                          &
+			Spectral                                                                                                                  &
+			sum                                                                                                                       &
+			$\boldsymbol{m}_{j, i}^l = e_{j, i} \boldsymbol{h}_j^l$                                                                   &
+			$O(d_{in})$                                                                                                                 \\
+			AGCN                                                                                                                      &
+			Spectral                                                                                                                  &
+			sum                                                                                                                       &
+			$\boldsymbol{m}_{j, i}^l = \tilde{e}_{j, i}^l \boldsymbol{h}_j^l$                                                         &
+			$O(d_{in})$                                                                                                                 \\
+			GraphSAGE                                                                                                                 &
+			Non-spectral                                                                                                              &
+			mean/LSTM                                                                                                                 &
+			$\boldsymbol{m}_{j, i}^l =  \boldsymbol{h}_j^l$                                                                           &
+			$O(1)$                                                                                                                      \\
+			GraphSAGE-pool                                                                                                            &
+			Non-spectral                                                                                                              &
+			max                                                                                                                       &
+			$\boldsymbol{m}_{j, i}^l =  \delta(\textcolor{blue}{\boldsymbol{W}^l_{pool}} \boldsymbol{h}_j^l + \textcolor{blue}{b}^l)$ &
+			$O(d_{in} * d_{out})$                                                                                                       \\
+			Neural FPs                                                                                                                &
+			Non-spectral                                                                                                              &
+			sum                                                                                                                       &
+			$\boldsymbol{m}_{j, i}^l = \boldsymbol{h}_j^l$                                                                            &
+			$O(1)$                                                                                                                      \\
+			SSE                                                                                                                       &
+			Recurrent                                                                                                                 &
+			sum                                                                                                                       &
+			$\boldsymbol{m}_{j, i}^l = [\boldsymbol{x}_j \parallel \boldsymbol{h}_j^l]$                                               &
+			$O(f+d_{in})$                                                                                                               \\
+			\textbf{GGNN}                                                                                                             &
+			Gated                                                                                                                     &
+			sum                                                                                                                       &
+			$\boldsymbol{m}_{j, i} = \textcolor{blue}{\boldsymbol{W}^l} \boldsymbol{h}_j^l$                                           &
+			$O(d_{in} * d_{out})$                                                                                                       \\
+			\textbf{GAT}                                                                                                              &
+			Attention                                                                                                                 &
+			sum                                                                                                                       &
+			\begin{scriptsize}
+				$\begin{aligned}[t]
+						 & \alpha_{j, i}^k = \frac {\exp(LeakyReLU(\textcolor{blue}{\boldsymbol{a}^T} [\hat{\boldsymbol{h}}^{l,k}_i \parallel \hat{\boldsymbol{h}}^{l,k}_j] ))} {\sum_{k \in \mathcal{N}(i)}\exp(LeakyReLU(\textcolor{blue}{\boldsymbol{a}^T} [\hat{\boldsymbol{h}}^{l,k}_i \parallel \hat{\boldsymbol{h}}^{l,k}_j] ))} \\
+						 & \text{Multi-head concatenation}: \boldsymbol{m}_{j, i}^l = \parallel_{k=1}^K \delta(\alpha_{j, i}^k \textcolor{blue}{\boldsymbol{W}^{l,k}} \boldsymbol{h}_j^{l})                                                                                                                                             \\
+						 & \text{Multi-head average}: \boldsymbol{m}_{j, i}^l = \frac{1}{K} \sum_{k=1}^K \delta(\alpha_{j, i}^k \textcolor{blue}{\boldsymbol{W}^{l,k}} \boldsymbol{h}_j^{l})
+					\end{aligned}$
+			\end{scriptsize}                                                                                             &
+			$O(K * d_{in} * d_{out})$                                                                                                   \\
+			\textbf{GaAN}                                                                                                             &
+			Attention                                                                                                                 &
+			sum,max,mean                                                                                                              &
+			\begin{scriptsize}
+				$\begin{aligned}[t]
+						 & \alpha_{j, i}^k = \frac {\exp(\textcolor{blue}{\boldsymbol{a}^T} [ \textcolor{blue}{\boldsymbol{W}^{l, k}_{xa}} \boldsymbol{h}_j^l \parallel \textcolor{blue}{\boldsymbol{W}^{l,k}_{ya}} \boldsymbol{h}_i^l] )} {\sum_{k \in \mathcal{N}(j)}\exp(\textcolor{blue}{\boldsymbol{a}^T} [ \textcolor{blue}{\boldsymbol{W}^{l,k}_{xa}} \boldsymbol{h}_j^l \parallel \textcolor{blue}{\boldsymbol{W}^{l,k}_{ya}}  \boldsymbol{h}_k^l] )} \\
+						 & \boldsymbol{m}_{j, i, 1}^l = \parallel_{k=1}^K \delta(\alpha_{j, i}^k \textcolor{blue}{\boldsymbol{W}^{l,k}_v} \boldsymbol{h}_j^{l})                                                                                                                                                                                                                                                                                               \\
+						 & \boldsymbol{m}_{j, i, 2}^l = \textcolor{blue}{\boldsymbol{W}^l_m} \boldsymbol{h}_j^{l}                                                                                                                                                                                                                                                                                                                                             \\
+						 & \boldsymbol{m}_{j, i, 3}^l = \boldsymbol{h}_j^l
+					\end{aligned}$
+			\end{scriptsize}                                                                                            &
+			$O(max(d_a, d_m, d_v) * K * d_{in})$                                                                                        \\
+			\bottomrule
+		\end{tabular}
+	\end{footnotesize}
 	\caption{Typical graph neural networks and their edge computation functions.$d_{in}$ and $d_{out}$ are dimensions of the input and output hidden feature vectors, respectively.
 		Blue variables are model parameters to learn. For ChebNet, we report its GNN sub-layer. Because two sum operator are interchangeable and sum operator and concatenation operator are interchangeable, we do it for GAT to explain more clearly in edge computations functions.}
 	\label{tab:gnn_overview_edge}
 \end{table}
 
 \begin{table}
-    \begin{footnotesize}
-        \begin{tabular}{cp{20em}r}
-		\toprule
-		GNN &
-		$\gamma$ &
-		Complexity \\ \midrule
-		ChebNet \cite{defferrad2016_chebnet} &
-		$\boldsymbol{z}_i^{(k)} = 2\boldsymbol{s}^{(k)}_{i} - \boldsymbol{z}_i^{(k-2)}$&
-		$O(d_{out})$ \\
-		\textbf{GCN} \cite{kipf2017_gcn} &
-		$\boldsymbol{h}_i^{l+1} = \textcolor{blue}{\boldsymbol{W}}^l  \boldsymbol{s}_i^{l}$ &
-		$O(d_{in} * d_{out})$ \\
-		AGCN &
-		$\boldsymbol{h}_i^{l+1} = \textcolor{blue}{\boldsymbol{W}}^l  \boldsymbol{s}_i^{l}$ &
-		$O(d_{in} * d_{out})$ \\
-		GraphSAGE &	
-		$\boldsymbol{h}_i^{l+1} =   \delta(\textcolor{blue}{\boldsymbol{W}}^l  [\boldsymbol{s}_i^{l} \parallel \boldsymbol{h}_i^l])$ &
-		$O(d_{in} * d_{out})$ \\
-		GraphSAGE-pool &	
-		$\boldsymbol{h}_i^{l+1} = \boldsymbol{s}_i^l$ &
-		$O(1)$ \\
-		Neural FPs &
-		$\boldsymbol{h}_i^{l+1} = \delta(\textcolor{blue}{\boldsymbol{W}}^{l, |\mathcal{N}(i)|}  (\boldsymbol{h}_i^l + \boldsymbol{s}_i^{l}))$ &
-		$O(d_{in} * d_{out})$ \\
-		SSE &
-		$\boldsymbol{h}_i^{l+1} = (1 - \alpha)  \boldsymbol{h}_i^l +\alpha    \delta(\textcolor{blue}{\boldsymbol{W}}^l_1 \delta(\textcolor{blue}{\boldsymbol{W}}^l_2 [\boldsymbol{x}_i \parallel \boldsymbol{s}_i^l]))$ &
-		$O((f + d_{in}) * d_{out})$ \\
-		\textbf{GGNN} &
-		\begin{scriptsize}
-		$\begin{aligned}[t]
-			& {\boldsymbol{z}}_i^l = \delta ( \textcolor{blue}{\boldsymbol{W}}^z \boldsymbol{s}_i^l + \textcolor{blue}{\boldsymbol{b}}^{sz} + \textcolor{blue}{\boldsymbol{U}}^z \boldsymbol{h}_i^{l} + \textcolor{blue}{\boldsymbol{b}}^{hz}) \\ 
-			&\boldsymbol{r}_i^l = \delta ( \textcolor{blue}{\boldsymbol{W}}^r \boldsymbol{s}_i^l+ \textcolor{blue}{\boldsymbol{b}}^{sr} +\textcolor{blue}{\boldsymbol{U}}^r \boldsymbol{h}_i^{l} + \textcolor{blue}{\boldsymbol{b}}^{hr}) \\ 
-			&\boldsymbol{h}_i^{l+1} = tanh ( \textcolor{blue}{\boldsymbol{W}} \boldsymbol{s}_i^l + \textcolor{blue}{\boldsymbol{b}}^s + \textcolor{blue}{\boldsymbol{U}} ( \boldsymbol{r}_i^l \odot \boldsymbol{h}_i^{l}) + \textcolor{blue}{\boldsymbol{b}}^h)) \\ 
-			&\boldsymbol{h}_i^{l+1} = (1 - {\boldsymbol{z}}_i^l) \odot \boldsymbol{h}_i^l + {\boldsymbol{z}}_i^l \odot \boldsymbol{h}_i^{l+1}
-		\end{aligned}$
-		\end{scriptsize}
-		&
-		$O(d_{in} * d_{out})$ \\
-		\textbf{GAT}&
-		$\hat{\boldsymbol{h}}^{l,k}_{i} = \textcolor{blue}{\boldsymbol{W}^{l,k}} \boldsymbol{h}_i^{l}$ (pre-edge), $\boldsymbol{h}_i^{l+1} = \boldsymbol{s}_i^l$ &
-		$O(d_{in} * d_{out})$ \\
-		\textbf{GaAN} &
-		\begin{scriptsize}
-			$\begin{aligned}[t]
-			&\boldsymbol{g}_i = \textcolor{blue}{\boldsymbol{W}}^l_g  [\boldsymbol{h}_i^{l} \parallel \boldsymbol{s}_{i, 2}^l \parallel \boldsymbol{s}_{i, 3}^l]  \\
-			&\boldsymbol{h}_i^{l+1} = \textcolor{blue}{\boldsymbol{W}}^l_o [\boldsymbol{h}_i^l \parallel (\boldsymbol{g}_{i} \odot \boldsymbol{s}_{i, 1}^l) ]
-			\end{aligned}$ 
-		\end{scriptsize}&
-		$O(max(K * d_v + d_{in}, 2 * d_{in} + d_m) * d_{out})$ \\ \bottomrule
-	\end{tabular}
-\end{footnotesize}
+	\begin{footnotesize}
+		\begin{tabular}{cp{20em}r}
+			\toprule
+			GNN                                                                                                                                                                                                              &
+			$\gamma$                                                                                                                                                                                                         &
+			Complexity                                                                                                                                                                                                         \\ \midrule
+			ChebNet \cite{defferrad2016_chebnet}                                                                                                                                                                             &
+			$\boldsymbol{z}_i^{(k)} = 2\boldsymbol{s}^{(k)}_{i} - \boldsymbol{z}_i^{(k-2)}$                                                                                                                                  &
+			$O(d_{out})$                                                                                                                                                                                                       \\
+			\textbf{GCN} \cite{kipf2017_gcn}                                                                                                                                                                                 &
+			$\boldsymbol{h}_i^{l+1} = \textcolor{blue}{\boldsymbol{W}}^l  \boldsymbol{s}_i^{l}$                                                                                                                              &
+			$O(d_{in} * d_{out})$                                                                                                                                                                                              \\
+			AGCN                                                                                                                                                                                                             &
+			$\boldsymbol{h}_i^{l+1} = \textcolor{blue}{\boldsymbol{W}}^l  \boldsymbol{s}_i^{l}$                                                                                                                              &
+			$O(d_{in} * d_{out})$                                                                                                                                                                                              \\
+			GraphSAGE                                                                                                                                                                                                        &
+			$\boldsymbol{h}_i^{l+1} =   \delta(\textcolor{blue}{\boldsymbol{W}}^l  [\boldsymbol{s}_i^{l} \parallel \boldsymbol{h}_i^l])$                                                                                     &
+			$O(d_{in} * d_{out})$                                                                                                                                                                                              \\
+			GraphSAGE-pool                                                                                                                                                                                                   &
+			$\boldsymbol{h}_i^{l+1} = \boldsymbol{s}_i^l$                                                                                                                                                                    &
+			$O(1)$                                                                                                                                                                                                             \\
+			Neural FPs                                                                                                                                                                                                       &
+			$\boldsymbol{h}_i^{l+1} = \delta(\textcolor{blue}{\boldsymbol{W}}^{l, |\mathcal{N}(i)|}  (\boldsymbol{h}_i^l + \boldsymbol{s}_i^{l}))$                                                                           &
+			$O(d_{in} * d_{out})$                                                                                                                                                                                              \\
+			SSE                                                                                                                                                                                                              &
+			$\boldsymbol{h}_i^{l+1} = (1 - \alpha)  \boldsymbol{h}_i^l +\alpha    \delta(\textcolor{blue}{\boldsymbol{W}}^l_1 \delta(\textcolor{blue}{\boldsymbol{W}}^l_2 [\boldsymbol{x}_i \parallel \boldsymbol{s}_i^l]))$ &
+			$O((f + d_{in}) * d_{out})$                                                                                                                                                                                        \\
+			\textbf{GGNN}                                                                                                                                                                                                    &
+			\begin{scriptsize}
+				$\begin{aligned}[t]
+						 & {\boldsymbol{z}}_i^l = \delta ( \textcolor{blue}{\boldsymbol{W}}^z \boldsymbol{s}_i^l + \textcolor{blue}{\boldsymbol{b}}^{sz} + \textcolor{blue}{\boldsymbol{U}}^z \boldsymbol{h}_i^{l} + \textcolor{blue}{\boldsymbol{b}}^{hz})                    \\
+						 & \boldsymbol{r}_i^l = \delta ( \textcolor{blue}{\boldsymbol{W}}^r \boldsymbol{s}_i^l+ \textcolor{blue}{\boldsymbol{b}}^{sr} +\textcolor{blue}{\boldsymbol{U}}^r \boldsymbol{h}_i^{l} + \textcolor{blue}{\boldsymbol{b}}^{hr})                        \\
+						 & \boldsymbol{h}_i^{l+1} = tanh ( \textcolor{blue}{\boldsymbol{W}} \boldsymbol{s}_i^l + \textcolor{blue}{\boldsymbol{b}}^s + \textcolor{blue}{\boldsymbol{U}} ( \boldsymbol{r}_i^l \odot \boldsymbol{h}_i^{l}) + \textcolor{blue}{\boldsymbol{b}}^h)) \\
+						 & \boldsymbol{h}_i^{l+1} = (1 - {\boldsymbol{z}}_i^l) \odot \boldsymbol{h}_i^l + {\boldsymbol{z}}_i^l \odot \boldsymbol{h}_i^{l+1}
+					\end{aligned}$
+			\end{scriptsize}
+			                                                                                                                                                                                                                 &
+			$O(d_{in} * d_{out})$                                                                                                                                                                                              \\
+			\textbf{GAT}                                                                                                                                                                                                     &
+			$\hat{\boldsymbol{h}}^{l,k}_{i} = \textcolor{blue}{\boldsymbol{W}^{l,k}} \boldsymbol{h}_i^{l}$ (pre-edge), $\boldsymbol{h}_i^{l+1} = \boldsymbol{s}_i^l$                                                         &
+			$O(d_{in} * d_{out})$                                                                                                                                                                                              \\
+			\textbf{GaAN}                                                                                                                                                                                                    &
+			\begin{scriptsize}
+				$\begin{aligned}[t]
+						 & \boldsymbol{g}_i = \textcolor{blue}{\boldsymbol{W}}^l_g  [\boldsymbol{h}_i^{l} \parallel \boldsymbol{s}_{i, 2}^l \parallel \boldsymbol{s}_{i, 3}^l] \\
+						 & \boldsymbol{h}_i^{l+1} = \textcolor{blue}{\boldsymbol{W}}^l_o [\boldsymbol{h}_i^l \parallel (\boldsymbol{g}_{i} \odot \boldsymbol{s}_{i, 1}^l) ]
+					\end{aligned}$
+			\end{scriptsize}                                                                                                                                                                                   &
+			$O(max(K * d_v + d_{in}, 2 * d_{in} + d_m) * d_{out})$                                                                                                                                                             \\ \bottomrule
+		\end{tabular}
+	\end{footnotesize}
 	\caption{Typical graph neural networks and their vertex computation functions. $d_{in}$ and $d_{out}$ are dimensions of the input and output hidden feature vectors, respectively. Blue variables are model parameters to learn. For ChebNet, we report its GNN sub-layer.For Neural FPs, $\textcolor{blue}{\boldsymbol{W}}^{l, |\mathcal{N}(i)|}$ is the weight matrix for nodes with degree
-	$|\mathcal{N}(i)|$ at layer $l$.}
+		$|\mathcal{N}(i)|$ at layer $l$.}
 	\label{tab:gnn_overview_vertex}
 \end{table}
 
@@ -281,7 +281,7 @@ GGNN further requires the dimension of $\boldsymbol{h}^{l+1}$ is equal to the di
 GAT introduces the attention mechanism into the graph neural networks.
 During the message passing, it dynamically determines the weight for an edge based on the hidden feature vectors of its two end vertices.
 Moreover, it adopts the multi-head mechanism that generates $K$ independent views for an edge, where $K$ is a hyperparameter.
-GAT moves the vertex update function $\gamma$ before the edge computation. 
+GAT moves the vertex update function $\gamma$ before the edge computation.
 $\hat{\boldsymbol{h}}^{l,k}_{i} = \textcolor{blue}{\boldsymbol{W}^{l,k}} \boldsymbol{h}_i^{l}$ with $1 \leq k \leq K$ are conducted for every vertex $v_i$ before the message function $\phi$.
 $\phi$ uses $\hat{\boldsymbol{h}}^{l,k}_{i}$ to get the weight of each edge in every head $k$.
 After the edge computation, GAT uses the aggreated vector $\boldsymbol{s}^l_i$ directly as the output hidden vector.
@@ -310,10 +310,9 @@ They first sample several vertices from $\mathcal{V}$ in the last GNN layer.
 Then they repeatedly sample the neighbors of those vertices in the previous layer until the input layer.
 The sampled subgraphs of different GNN layers may be \emph{different}, as shown in \figurename~\ref{fig:gnn_sampling_neigbhor_sampling}.
 GraphSAGE \cite{hamilton2017_graphsage} is the representative technique.
-For every sampled vertex $v_i$ in the GNN layer $l$, GraphSAGE samples at most $S^l$ neighbors of $v_i$ in the previous GNN layer. 
+For every sampled vertex $v_i$ in the GNN layer $l$, GraphSAGE samples at most $S^l$ neighbors of $v_i$ in the previous GNN layer.
 $S^l$ is the hyperparameter that is usually much smaller than $|\mathcal{V}|$.
-By this way, GraphSAGE limits the neighborhood sizes of the vertices in the sampled subgraph, especially high-degree vertices. 
-
+By this way, GraphSAGE limits the neighborhood sizes of the vertices in the sampled subgraph, especially high-degree vertices.
 
 \begin{figure}
 	\centering
@@ -324,5 +323,10 @@ By this way, GraphSAGE limits the neighborhood sizes of the vertices in the samp
 	\label{fig:gnn_sampling}
 \end{figure}
 
-
+The graph sampling techniques \cite{zeng2018_aesg, chiang2019_cluster_gcn, zeng2020_graphsaint} sample a subgraph for each mini-batch and use the same sampled graph for all GNN layers, as shown in \figurename~\ref{fig:gnn_sampling_graph_sampling}.
+They differ in the methods to sample subgraphs.
+The cluster sampler technique \cite{chiang2019_cluster_gcn} is the representative technique.
+Given a training graph $\mathcal{G}$, it partitions $\mathcal{G}$ into closely connected clusters.
+For each mini-batch, it randomly picks $K$ clusters, where $K$ is the hyperparameter.
+The technique ignores the inter-cluster edges and only keeps the intra-cluster edges in the subgraph.
 
