@@ -17,7 +17,7 @@ by observing the effects the hyper-parameters of the GNN on training time-consum
     \subfloat[amazon-computers\label{fig:exp_absolute_training_time_amazon-computers}]{\includegraphics[height=4cm]{figs/experiments/exp_absolute_training_time_comparison_amazon-computers.png}}
     \subfloat[flickr\label{fig:exp_absolute_training_time_flickr}]{\includegraphics[height=4cm]{figs/experiments/exp_absolute_training_time_comparison_flickr.png}}
     \subfloat[com-amazon\label{fig:exp_absolute_training_time_com-amazon}]{\includegraphics[height=4cm]{figs/experiments/exp_absolute_training_time_comparison_com-amazon.png}}
-    \caption{Different Datasets's absolute training time per epoch in four GNN models. (total 50 epochs)}
+    \caption{The impact of training time}
 	\label{fig:exp_absolute_training_time}
 \end{figure}
 
@@ -31,17 +31,13 @@ According to Table~\ref{tab:gnn_overview_edge}, Table~\ref{tab:gnn_overview_vert
 hyper-parameters of each model(such as $d_{dims}$, $K$, etc). In order to vertex this linear relationship, we measured the change of the training time of each GNN model with the hyperparameters.
 
 \begin{figure}
-    \centering
-    \includegraphics[width=0.7\columnwidth]{figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gcn.png}
-    \caption{GCN}
-    \label{fig:exp_hyperparameter_on_vertex_edge_phase_time_gcn}
-\end{figure}
-
-\begin{figure}
-    \centering
-    \includegraphics[width=0.7\columnwidth]{figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_ggnn.png}
-    \caption{GGNN}
-    \label{fig:exp_hyperparameter_on_vertex_edge_phase_time_ggnn}
+	\centering
+    \subfloat[GCN\label{fig:exp_hyperparameter_on_vertex_edge_phase_time_gcn}]{\includegraphics[height=4cm]{figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gcn.png}}\\
+    \subfloat[GGNN\label{fig:exp_hyperparameter_on_vertex_edge_phase_time_ggnn}]{\includegraphics[height=4cm]{figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_ggnn.png}}\\
+    \subfloat[GAT\label{fig:exp_hyperparameter_on_vertex_edge_phase_time_gat}]{\includegraphics[height=4cm]{figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gat.png}}\\
+    \subfloat[GaAN\label{fig:exp_hyperparameter_on_vertex_edge_phase_time_gaan}]{\includegraphics[height=4cm]{figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gaan.png}}
+    \caption{The influence of hyperparameters on GNN vertex/edge calculation time}
+	\label{fig:exp_hyperparameter_on_vertex_edge_phase_time}
 \end{figure}
 
 The computational complexity of GCN and GGNN is affected by the hidden vector dimension $d_{dim}$. $d_{dim}$ affects both the output hidden vector dimension fo Layer0 and
@@ -54,12 +50,6 @@ Because in the GAT model $d^1_{in}=d^0_{out}$, adjusting $d_{head}$ and $K$ is e
 Fig~\ref{fig:exp_hyperparameter_on_vertex_edge_phase_time_gat} shows that the GAT training time is affected by the hyperparameters $d_{head}$ and $K$, 
 GAT training time increases linearly with $d_{head}$ and $K$.
 
-\begin{figure}
-    \centering
-    \includegraphics[width=0.7\columnwidth]{figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gat.png}
-    \caption{GAT}
-    \label{fig:exp_hyperparameter_on_vertex_edge_phase_time_gat}
-\end{figure}
 
 GaAN also uses a multi-head mechanism, and its computational complexity is affected by $d_{in}$, $d_v$, $d_a$ and the number of heads $K$.
 Fig~\ref{fig:exp_hyperparameter_on_vertex_edge_phase_time_gat} demonstrates that GaAN training time is affected by hyperparameters.
@@ -67,12 +57,6 @@ The experiment verifies the complexity analysis results given in Table~\ref{tab:
 When the hidden vector dimension $d_(in)$ is too low, the calculations involving hidden vectors account for a very low proportion of the total calculation time, resulting in an insignificant change in the total training time.
 When the hidden vector dimension is large enough, the total training time increases linearly with $d_{in}$.
 
-\begin{figure}
-    \centering
-    \includegraphics[width=0.7\columnwidth]{figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gaan.png}
-    \caption{GaAN}
-    \label{fig:exp_hyperparameter_on_vertex_edge_phase_time_gaan}
-\end{figure}
 
 Fig~\ref{fig:exp_hyperparameter_memory_usage} also shows how each GNN model's use of GPU memory varies with the algorithm's hyperparameters.
 With the increase of hyperparameters, GNN's memory usage has also increased linearly.
@@ -83,7 +67,7 @@ With the increase of hyperparameters, GNN's memory usage has also increased line
     \subfloat[GGNN]{\includegraphics[height=4cm]{figs/experiments/exp_hyperparameter_on_memory_usage_ggnn.png}}\\
     \subfloat[GAT]{\includegraphics[height=4cm]{figs/experiments/exp_hyperparameter_on_memory_usage_gat.png}}\\
     \subfloat[GaAN]{\includegraphics[height=4cm]{figs/experiments/exp_hyperparameter_on_memory_usage_gaan.png}}
-    \caption{The memory Usage of each GNN Model in different hyperparameter}
+    \caption{The effect of hyperparameters on GPU memory usage during the training phase (excluding the dataset itself)}
 	\label{fig:exp_hyperparameter_memory_usage}
 \end{figure}
 
@@ -113,7 +97,7 @@ In summary, \textbf{edge calculation is the main time-consuming factor of GNN tr
     \subfloat[GGNN]{\includegraphics[height=4cm]{figs/experiments/exp_vertex_edge_cal_proportion_ggnn.png}}\\
     \subfloat[GAT]{\includegraphics[height=4cm]{figs/experiments/exp_vertex_edge_cal_proportion_gat.png}}
     \subfloat[GaAN]{\includegraphics[height=4cm]{figs/experiments/exp_vertex_edge_cal_proportion_gaan.png}}
-    \caption{The vertex calculation and edge calculation of each GNN Model}
+    \caption{Vertex/edge calculation time-consuming ratio.}
 	\label{fig:exp_vertex_edge_cal_proportion}
 \end{figure}
 
@@ -131,7 +115,7 @@ Therefore, the focus of \textbf{GNN training optimization should improve the eff
     \subfloat[GGNN]{\includegraphics[height=4cm]{figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_ggnn.png}}\\
     \subfloat[GAT]{\includegraphics[height=4cm]{figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_gat.png}}
     \subfloat[GaAN]{\includegraphics[height=4cm]{figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_gaan.png}}
-    \caption{The vertex calculation and edge calculation of each GNN Model}
+    \caption{The effect of the average vertex degree on the time-consuming proportion of vertex/edge calculation.}
 	\label{fig:exp_avg_degree_on_vertex_edge_cal_time}
 \end{figure}
 
@@ -142,7 +126,7 @@ edge index is a matrix that holds the size of the edge set of the graph as $M*2$
 and the two columns of the matrix respectively store the source vertex and the target vertex of each edge.
 The edge index remains unchanged throughout the calculation process.
 The collect step is used to prepare the data structure required for edge calculation.
-This step will input the vertex hidden vector of the GNN layer $\boldsymbol{h}_i^l (1 \leq i \ leq N)$
+This step will input the vertex hidden vector of the GNN layer $\boldsymbol{h}_i^l (1 \leq i \leq N)$
 is copied to the two layers of each edge according to the edge index, forming the input parameter tensor of the input edge calculation function $\phi$
 (including $\boldsymbol{h}_i^l$,$\boldsymbol{h}_j^ l$ and $\boldsymbol{e}_{j, i}^l$).
 There is no calculation in this step, only data access is involved. The message step calls the function given by the user $\phi$ to
@@ -155,7 +139,7 @@ The aggregated vector $a_i^l$ after the update process will be input into the ve
 \begin{figure}
     \centering
     \includegraphics[width=0.7\columnwidth]{figs/illustration/steps_in_edge_calculation.png}
-    \caption{Steps in edge calculation}
+    \caption{Step decomposition of edge calculation}
     \label{fig:steps_in_edge_calculation}
 \end{figure}
 
@@ -181,7 +165,7 @@ optimizing the collect and aggregate steps can significantly reduce training tim
     \subfloat[GGNN]{\includegraphics[height=4cm]{figs/experiments/exp_edge_calc_decomposition_ggnn.png}}\\
     \subfloat[GAT]{\includegraphics[height=4cm]{figs/experiments/exp_edge_calc_decomposition_gat.png}}
     \subfloat[GaAN]{\includegraphics[height=4cm]{figs/experiments/exp_edge_calc_decomposition_gaan.png}}
-    \caption{The vertex calculation and edge calculation of each GNN Model}
+    \caption{Time-consuming decomposition of edge calculations (including Layer0 and Layer1).}
 	\label{fig:exp_edge_calc_decomposition}
 \end{figure}
 
@@ -266,7 +250,7 @@ GaAN was unable to complete the training due to memory overflow during the train
 \begin{figure}
     \centering
     \includegraphics[width=0.7\columnwidth]{figs/experiments/exp_memory_usage_stage_amp.png}
-    \caption{Figure: Maximum memory usage in each stage. Data Load refers to memory usage after data is loaded. Data set: amp. Other datasets are similar}
+    \caption{Maximum memory usage in each stage. Data Load refers to memory usage after data is loaded. dataset: amp. Other datasets are similar}
     \label{fig:exp_memory_usage_stage_amp}
 \end{figure}
 
@@ -304,9 +288,9 @@ especially restricting GNN with high edge calculation complexity.
 \end{figure}
 
 Fig~\ref{fig:exp_memory_expansion_ratio} also shows that the expansion ratio of the same GNN under the same hyperparameters changes with different datasets.
-Because the input feature dimension of the cph data set is much higher than the hidden vector of the GNN layer The dimension of the input feature vector matrix
+Because the input feature dimension of the cph dataset is much higher than the hidden vector of the GNN layer The dimension of the input feature vector matrix
 of the graph is much higher than the matrix size of the intermediate calculation result of the cache, 
-so its expansion ratio is particularly low, and the cam data set is the opposite. In order to measure the effect of the input feature vector dimension on the memory
+so its expansion ratio is particularly low, and the cam dataset is the opposite. In order to measure the effect of the input feature vector dimension on the memory
 expansion ratio , We randomly generated feature vectors of specific dimensions for different datasets.
 Fig~\ref{fig:exp_memory_expension_ratio_input_feature_dimension} shows the change in the expansion ratio under different input feature vector dimensions.
 \textbf{In the same GNN structure and hyperparameter settings, using a higher-dimensional input feature vector can reduce memory expansion ratio} .
@@ -314,7 +298,7 @@ Fig~\ref{fig:exp_memory_expension_ratio_input_feature_dimension} shows the chang
 \begin{figure}
     \centering
     \includegraphics[width=0.7\columnwidth]{figs/experiments/exp_memory_expansion_ratio_input_feature_dimension_com-amazon.png}
-    \caption{The change of the memory expansion ratio with the dimension of the input feature vector. Data set: cam, other datasets are similar}
+    \caption{The change of the memory expansion ratio with the dimension of the input feature vector. dataset: cam, other datasets are similar}
     \label{fig:exp_memory_expension_ratio_input_feature_dimension}
 \end{figure}
 
@@ -381,9 +365,9 @@ be performed within a fixed time, thereby accelerating convergence. The experime
 analyze the impact of sampling techniques on training performance.
 
 In the current implementation of PyG, the GNN model parameters always reside on the GPU,
-and the data set resides in the main memory. When processing each epoch, the CPU samples
-the graph data set in the main memory and generates several batches,
-Each batch is a small-scale subgraph of the data set. When training each batch, 
+and the dataset resides in the main memory. When processing each epoch, the CPU samples
+the graph dataset in the main memory and generates several batches,
+Each batch is a small-scale subgraph of the dataset. When training each batch, 
 PyG copies the subgraph data corresponding to the batch to the GPU's memory,
 trains based on the subgraph and updates the model parameters according to the gradient.
 Based on the sampling technology and SGD optimization technology, 
@@ -393,7 +377,7 @@ Therefore, the statistical data in the experiments in this section does not incl
 Neighbor is selected in this section Sampler and cluster sampler are two typical graph sampling techniques for analysis.
 
 Fig~\ref{fig:exp_sampling_minibatch_graph_info} shows how the size of the subgraphs sampled in the two sampling techniques varies with the batch size.
-For the neighbor sampler, the relative batch size is equal to the number of vertices sampled in the last layer of GNN relative to the top of the full graph The proportion of points.
+For the neighbor sampler, the relative batch size is equal to the number of vertices sampled in the last layer of GNN relative to the top of the full graph The proportion of verticess.
 For cluster sampler, the batch size is equal to the number of partitions sampled compared to the number of all partitions in the whole image.
 \textbf{neighbor sampler is very sensitive to the increase in batch size*. As the batch size increases, 
 the sampling sub-graph The number of vertices/edges and the average degree both increase rapidly and tend to stabilize}.
@@ -408,14 +392,14 @@ which is much lower than the average degree of the full picture;
 the average degree of the subgraphs sampled by the cluster sampler is lower, only 3.0.
 Fig~\ref{fig:exp_sampling_minibatch_degrees_distribution) shows the comparison of the distribution of the sampled sub-graphs with the original image.
 The overall distribution of the samples sampled by the two sampling techniques is lower than that of the original image. 
-The reason is that the distribution of vertices in the actual graph data set follows a power-rate distribution, and a small number of vertices The degree is very high,
+The reason is that the distribution of vertices in the actual graph dataset follows a power-rate distribution, and a small number of vertices The degree is very high,
 which improves the average degree. In the sampling process, because the sampling method will limit the neighborhood size of the vertex, thereby reducing the upper limit of the vertex degree,
 so that the average degree drops significantly. Combined with the experimental results in section 4.2 The decrease in the average degree of sampling subgraphs will increase the time-consuming
-proportion of point calculation. For GGNN with high point calculation complexity, point calculation will replace edge calculation and become a performance bottleneck.
+proportion of vertex calculation. For GGNN with high vertex calculation complexity, vertex calculation will replace edge calculation and become a performance bottleneck.
 
 \begin{figure}
     \centering
-    \subfloat[Neighbor Sampler]{\includegraphics[height=4cm]{figs/experiments/exp_sampling_minibatch_realtive_graph_info_graphsage_gcn.png}}
+    \subfloat[Neighbor Sampler]{\includegraphics[height=4cm]{figs/experiments/exp_sampling_minibatch_realtive_graph_info_graphsage_gcn.png}} \\
     \subfloat[Cluster Sampler]{\includegraphics[height=4cm]{figs/experiments/exp_sampling_minibatch_realtive_graph_info_cluster_gcn.png}}
     \caption{The size of the sampled subgraph changes with the batch size. Each batch size is sampled 50 times, and the error bar represents the standard deviation. The relative batch size is the ratio relative to the full image.)}
     \label{fig:exp_sampling_minibatch_graph_info}
@@ -425,7 +409,7 @@ proportion of point calculation. For GGNN with high point calculation complexity
 \begin{figure}
     \centering
     \includegraphics[width=0.7\columnwidth]{figs/experiments/exp_sampling_minibatch_degrees_distribution_amazon-photo.png}
-    \caption{Comparison of the vertex degree distribution of the sampled subgraph and the original graph. Data set: amp. Batch size = 512 (neighbor sampler) / 20 (cluster sampler)}
+    \caption{Comparison of the vertex degree distribution of the sampled subgraph and the original graph. dataset: amp. Batch size = 512 (neighbor sampler) / 20 (cluster sampler)}
     \label{fig:exp_sampling_minibatch_degrees_distribution}
 \end{figure}
 
@@ -444,7 +428,7 @@ When the batch size is slightly larger, the additional cost of sampling technolo
 \begin{figure}
     \centering
     \subfloat[Neighbor Sampler on amc]{\includegraphics[height=4cm]{figs/experiments/exp_sampling_relative_batch_size_train_time_stack_graphsage_amazon-computers.png}}
-    \subfloat[Neighbor Sampler on fli]{\includegraphics[height=4cm]{figs/experiments/exp_sampling_relative_batch_size_train_time_stack_graphsage_flickr.png}}
+    \subfloat[Neighbor Sampler on fli]{\includegraphics[height=4cm]{figs/experiments/exp_sampling_relative_batch_size_train_time_stack_graphsage_flickr.png}} \\
     \subfloat[Cluster Sampler on amc]{\includegraphics[height=4cm]{figs/experiments/exp_sampling_relative_batch_size_train_time_stack_cluster_amazon-computers.png}}
     \subfloat[Cluster Sampler on fli]{\includegraphics[height=4cm]{figs/experiments/exp_sampling_relative_batch_size_train_time_stack_cluster_flickr.png}}
     \caption{The training time of each batch changes with the batch size. FULL means that the full image participates in the training phase (excluding evaluation).}
@@ -460,10 +444,10 @@ The decrease of cluster sampler is greater than that of neighbor sampler.
 \begin{figure}
     \centering
     \subfloat[Neighbor Sampler on amc]{\includegraphics[height=4cm]{figs/experiments/exp_sampling_memory_usage_relative_batch_size_graphsage_amazon-computers_peak_memory.png}}
-    \subfloat[Neighbor Sampler on fli]{\includegraphics[height=4cm]{figs/experiments/exp_sampling_memory_usage_relative_batch_size_graphsage_flickr_peak_memory.png}}
+    \subfloat[Neighbor Sampler on fli]{\includegraphics[height=4cm]{figs/experiments/exp_sampling_memory_usage_relative_batch_size_graphsage_flickr_peak_memory.png}} \\
     \subfloat[Cluster Sampler on amc]{\includegraphics[height=4cm]{figs/experiments/exp_sampling_memory_usage_relative_batch_size_cluster_amazon-computers_peak_memory.png}}
     \subfloat[Cluster Sampler on fli]{\includegraphics[height=4cm]{figs/experiments/exp_sampling_memory_usage_relative_batch_size_cluster_flickr_peak_memory.png}}
     \caption{Change in peak memory usage with batch size. FULL indicates the case when the sampling technique is not used (excluding the evaluation stage).}
-    \label{fig:exp_sampling_batch_train_time}
+    \label{fig:exp_sampling_memory_usage}
 \end{figure}
 \label{sec:effects_of_sampling_techniques_on_performance}
