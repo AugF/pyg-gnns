@@ -73,30 +73,37 @@ $d_a=d_v=8$ and $d_m=64$ in GaAN.
 \subsection{Experimental Scheme}
 \label{sec:experimental_scheme}
 
-To find out performance bottleneck in GNN training, we decompose the bottleneck analysis into four questions.
+To find out performance bottleneck in GNN training, we conduct the bottleneck analysis with four questions.
 The answers to those questions will give us a more comprehensive view on the performance characteristics of GNN training.
 We design extensive experiments to find the answers emperically.
 \begin{itemize}
 	
 	\item[Q1] \emph{How do the hyper-parameters affect the training time and the memory usage of a GNN?}
-	\begin{itemize}
-		\item Every GNN has a group of hyper-parameters like the number of GNN layers and the dimision of hidden feature vectors. The hyper-parameters affect the training time per epoch and the peak memory usage during the training.
-		
-		\item To evaluate their effects, we measured how the training time per epoch and the peak memory usage (of GPU) changed as we increased the values of the hyper-parameters.
-		
-		\item Through the experiments, we want to verify the validity of the computational complexity analysis in \tablename~\ref{tab:gnn_overview_edge} and \tablename~\ref{tab:gnn_overview_vertex}.
-		If the complexity analysis is valid, we can analyze the bottleneck theoretically.
-	\end{itemize}
+	
+			Every GNN has a group of hyper-parameters like the number of GNN layers and the dimision of hidden feature vectors. The hyper-parameters affect the training time per epoch and the peak memory usage during the training.
+			To evaluate their effects, we measured how the training time per epoch and the peak memory usage (of GPU) changed as we increased the values of the hyper-parameters.
+			Through the experiments, we want to verify the validity of the computational complexity analysis in \tablename~\ref{tab:gnn_overview_edge} and \tablename~\ref{tab:gnn_overview_vertex}.
+			If the complexity analysis is valid, we can analyze the bottleneck theoretically.
 
 	\item[Q2] \emph{Which stage is the most time-consuming stage in GNN training?}
-	\begin{itemize}
-		\item We can decompose the training time on different levels: layer level, vertex/edge computation level and the basic operator level.
-		\item On each level, we breakdown the training time of an epoch into several stages. The most time-consuming stage is the performance bottleneck in time. Optimizing its implementation can significantly reduce the training time.
-	\end{itemize}
-	\item[Q3] \emph{Which factor prevents us training GNNs on big graphs?}
-	\begin{itemize}
-		\item 
-	\end{itemize}
+	
+			We can decompose the training time on different levels: layer level, vertex/edge computation level and the basic operator level.
+			On each level, we breakdown the training time of an epoch into several stages. The most time-consuming stage is the performance bottleneck in time.
+			Optimizing its implementation can significantly reduce the training time.
+			
+	\item[Q3] \emph{Which consumes most of memory in GNN training?}
+	
+			The limited memory capacity of a GPU card is the main factor preventing us training GNNs on big graphs.
+			We measured the peak memory usage in the GNN training under different graph scales, hyper-parameters and average vertex degrees.
+			Based on the results, we analyze which is the most memory-consuming component.
+			Reducing its memory usage will enable us training bigger GNNs under the same memory capacity.
+		
 	\item[Q4] \emph{Can the sampling techniques remove the performance bottleneck in GNN training?}
+	
+			In theory, the sampling techniques can significantly reduce the graph neurons that participate in the training of a batch.
+			Consequently, the training time and the memory usage should also decrease.
+			To validate the effectiveness of the sampling techniques, we measured the training time and peak memory usage under different batch sizes.
+			If the sampling techniques are effective, they are the keys to conduct GNN training on very big graphs.
+			If they are not effective, we want to find out which impairs its efficiency.
 \end{itemize}
 
