@@ -134,7 +134,7 @@ For ChebNet, we report its GNN layer in the tables \footnote{A layer of ChebNet 
 		Non-spectral &
 		mean/LSTM &
 		$\boldsymbol{m}_{j, i}^l =  \boldsymbol{h}_j^l$ &
-		$O(d_{in})$ \\
+		$O(1)$ \\
 		GraphSAGE-pool &
 		Non-spectral &
 		max &
@@ -144,12 +144,12 @@ For ChebNet, we report its GNN layer in the tables \footnote{A layer of ChebNet 
 		Non-spectral &
 		sum &
 		$\boldsymbol{m}_{j, i}^l = \boldsymbol{h}_j^l$ &
-		$O(d_{in})$ \\
+		$O(1)$ \\
 		SSE &
 		Recurrent &
 		sum &
 		$\boldsymbol{m}_{j, i}^l = [\boldsymbol{x}_j \parallel \boldsymbol{h}_j^l]$ &
-		$O(d_{in})$ \\
+		$O(f+d_{in})$ \\
 		\textbf{GGNN} &
 		Gated &
 		sum &
@@ -208,7 +208,7 @@ For ChebNet, we report its GNN layer in the tables \footnote{A layer of ChebNet 
 		$O(d_{in} * d_{out})$ \\
 		GraphSAGE-pool &	
 		$\boldsymbol{h}_i^{l+1} = \boldsymbol{s}_i^l$ &
-		$O(d_{out})$ \\
+		$O(1)$ \\
 		Neural FPs &
 		$\boldsymbol{h}_i^{l+1} = \delta(\textcolor{blue}{\boldsymbol{W}}^{l, |\mathcal{N}(i)|}  (\boldsymbol{h}_i^l + \boldsymbol{s}_i^{l}))$ &
 		$O(d_{in} * d_{out})$ \\
@@ -228,7 +228,7 @@ For ChebNet, we report its GNN layer in the tables \footnote{A layer of ChebNet 
 		$O(d_{in} * d_{out})$ \\
 		\textbf{GAT}&
 		$\boldsymbol{h}_i^{l+1} = \boldsymbol{s}_i^l$ &
-		$O(d_{out})$ \\
+		$O(1)$ \\
 		\textbf{GaAN} &
 		\begin{scriptsize}
 			$\begin{aligned}[t]
