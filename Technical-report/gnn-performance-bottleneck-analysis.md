@@ -19,7 +19,7 @@ subfigGrid: true
 
 近年来，图神经网络是人工智能领域内的研究热点，在多种任务多个领域下取得了卓越的成果. 这些成功与graph structure相比于grid data structure有更强大的表现能力，以及深度学习端到端强大的学习能力息息相关。随着图神经网络在多个领域取得好的结果，在系统领域也陆续提出了一系列并行或分布式的图神经网络计算系统。这些系统从大量图神经网络中抽象出图神经网络计算模型，并针对计算模型设计了高效的实现。并在实现中使用了大量的性能优化技巧。
 1. message-passing通用模型
-PyG[@PyG], DGL[@dgl_website]基于message-passing机制[@gilmer_messgae_passing]的计算系统，$\boldsymbol{h}_i^{l+1}  = \gamma (\boldsymbol{h}_i^{ll}, \Sigma_{j \in \mathcal{N}(i)} \phi(\boldsymbol{h}_i^l, \boldsymbol{h}_j^l, \boldsymbol{e}_{j, i}^l))$, 将图卷积操作定义边计算操作message function、聚合操作reduction fucnction和点计算操作update function. 该论文对应的代码实现即pytorch-geometric, 基于PyTorch后端的图神经网络的计算框架。DGL也是基于message-passing的编程模型
+PyG[@PyG], DGL[@DGL]基于message-passing机制[@gilmer_messgae_passing]的计算系统，$\boldsymbol{h}_i^{l+1}  = \gamma (\boldsymbol{h}_i^{ll}, \Sigma_{j \in \mathcal{N}(i)} \phi(\boldsymbol{h}_i^l, \boldsymbol{h}_j^l, \boldsymbol{e}_{j, i}^l))$, 将图卷积操作定义边计算操作message function、聚合操作reduction fucnction和点计算操作update function. 该论文对应的代码实现即pytorch-geometric, 基于PyTorch后端的图神经网络的计算框架。DGL也是基于message-passing的编程模型
 
 2. SAGA-NN通用模型
 NeuGraph[4]为图神经网络训练提出了SAGA-NN（Scatter-ApplyEdge-Gather-ApplyVertex with Neural Networks）编程模型。SAGA-NN模型将图神经网络中每一层的前向计算划分为4个阶段：Scatter、ApplyEdge、Gather和ApplyVertex。其中ApplyEdge和ApplyVertex阶段执行用户提供的基于神经网络的边特征向量和点特征向量的计算。Scatter和Gather是由NeuGraph系统隐式触发的阶段，这两个阶段为ApplyEdge和ApplyVertex阶段准备数据。在编程时，用户只需利用给定的算子实现ApplyEdge和ApplyVertex函数，并指定Gather方式，即可利用NeuGraph自动地完成GNN的训练。
@@ -723,7 +723,7 @@ AliGraph[@zhu2019_aligraph]对于大规模图提出了AliGraph系统，由storag
 5. YANG J, LESKOVEC J. Defining and Evaluating Network Communities Based on Ground-Truth[C]//ZAKI M J, SIEBES A, YU J X, 等. 12th IEEE International Conference on Data Mining, ICDM 2012, Brussels, Belgium, December 10-13, 2012. IEEE Computer Society, 2012: 745–754. [@yang2012_defining]
 6. CHAKRABARTI D, ZHAN Y, FALOUTSOS C. R-MAT: A Recursive Model for Graph Mining[C]//Proceedings of the 2004 SIAM International Conference on Data Mining.: 442–446. [@rmat-generator]
 7. Fey, M., & Lenssen, J. E. (2019). Fast Graph Representation Learning with PyTorch Geometric. (1), 1–9. [@PyG]
-8. https://github.com/dmlc/dgl [@dgl_website]
+8. https://github.com/dmlc/dgl [@DGL]
 9. Gilmer, J., Schoenholz, S. S., Riley, P. F., Vinyals, O., & Dahl, G. E. (n.d.). Neural Message Passing for Quantum Chemistry. [@gilmer_messgae_passing]
 10. Rossi R A , Ahmed N K . The Network Data Repository with Interactive Graph Analytics and Visualization[C]// Proceedings of the Twenty-Ninth AAAI Conference on Artificial Intelligence. AAAI Press, 2015. http://networkrepository.com/networks.php [@network-repository]
 11. Zhang, J., Shi, X., Xie, J., Ma, H., King, I., & Yeung, D. Y. (2018). GaAN: Gated attention networks for learning on large and spatiotemporal graphs. 34th Conference on Uncertainty in Artificial Intelligence 2018, UAI 2018, 1, 339–349. [@zhang2018_gaan]
