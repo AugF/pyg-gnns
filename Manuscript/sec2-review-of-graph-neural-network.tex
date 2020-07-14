@@ -148,7 +148,7 @@ For ChebNet, we report its GNN layer in the tables \footnote{A layer of ChebNet 
 		SSE &
 		Recurrent &
 		sum &
-		$\boldsymbol{m}_{j, i}^l = [\boldsymbol{h}_i^{l} \parallel \boldsymbol{h}_j^l]$ &
+		$\boldsymbol{m}_{j, i}^l = [\boldsymbol{x}_j \parallel \boldsymbol{h}_j^l]$ &
 		$O(d_{in})$ \\
 		\textbf{GGNN} &
 		Gated &
@@ -213,8 +213,8 @@ For ChebNet, we report its GNN layer in the tables \footnote{A layer of ChebNet 
 		$\boldsymbol{h}_i^{l+1} = \delta(\textcolor{blue}{\boldsymbol{W}}^{l, |\mathcal{N}(i)|}  (\boldsymbol{h}_i^l + \boldsymbol{s}_i^{l}))$ &
 		$O(d_{in} * d_{out})$ \\
 		SSE &
-		$\boldsymbol{h}_i^{l+1} = (1 - \alpha)  \boldsymbol{h}_i^l +\alpha    \delta(\textcolor{blue}{\boldsymbol{W}}^l_1 \delta(\textcolor{blue}{\boldsymbol{W}}^l_2 \boldsymbol{s}_i^l))$ &
-		$O(d_{in} * d_{out})$ \\
+		$\boldsymbol{h}_i^{l+1} = (1 - \alpha)  \boldsymbol{h}_i^l +\alpha    \delta(\textcolor{blue}{\boldsymbol{W}}^l_1 \delta(\textcolor{blue}{\boldsymbol{W}}^l_2 [\boldsymbol{x}_i \parallel \boldsymbol{s}_i^l]))$ &
+		$O((2 * f + d_{in}) * d_{out})$ \\
 		\textbf{GGNN} &
 		\begin{scriptsize}
 		$\begin{aligned}[t]
