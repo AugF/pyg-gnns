@@ -84,6 +84,7 @@ The graph neuron aggregates the received hidden feature vectors, applies non-lin
 We follow the message-passing model \cite{gilmer_messgae_passing} to formally define a graph neuron.
 The message-passing model is widely used in the cutting-edge GNN training systems like PyTorch Geometric (PyG) \cite{PyG} and Deep Graph Library (DGL) \cite{DGL}.
 \figurename~\ref{fig:graph_neuron_structure} shows the structure of a graph neuron in the message-passing model.
+A graph neuron collects messages from its neighbor graph neurons and outputs a hidden feature vector according to the aggregated messages.
 Graph neurons at layer $l$ are made of three \emph{differentiable} functions: $\phi^l$, $\Sigma^l$ and $\gamma^l$.
 The graph neuron calculates the output hidden vector $\boldsymbol{h}^{l+1}_i$ by
 $$
@@ -92,8 +93,8 @@ $$
 
 $\phi^l$ is the \emph{message} function.
 For every incident edge $(v_j, v_i)$ of $v_i$, $\phi$ receives the output hidden feature vectors $\boldsymbol{h}^l_i$ and $\boldsymbol{h}^l_j$ of the previous GNN layer and the edge feature vector $\boldsymbol{e}_{j,i}$ as the input.
-$\phi^l$ outputs a message vector $\boldsymbol{m}^l_{j,i}$ for every edge $(v_j, v_i)$ at layer $l$, i.e., $\boldsymbol{m}^l_{j,i}=\phi^l(\boldsymbol{h}^l_i, \boldsymbol{h}^l_j, \boldsymbol{e}_{j,i})$.
-For $v_i$, the message vectors $\boldsymbol{m}^l_{x,j}$ with $v_x \in \mathcal{N}(v_i)$ are aggregated by the \emph{aggregation} function $\Sigma^l$ to produce an aggregated vector $\boldsymbol{s}^l_i$, i.e., $\boldsymbol{s}^l_i=\mathlarger{\Sigma}^l_{v_j \in \mathcal{N}(v_i)}\boldsymbol{m}^l_{j,i}$.
+$\phi^l$ emits a message vector $\boldsymbol{m}^l_{j,i}$ for every edge $(v_j, v_i)$ at layer $l$, i.e., $\boldsymbol{m}^l_{j,i}=\phi^l(\boldsymbol{h}^l_i, \boldsymbol{h}^l_j, \boldsymbol{e}_{j,i})$.
+For $v_i$, the message vectors $\boldsymbol{m}^l_{x,j}$ of its adjacent edges ($v_x \in \mathcal{N}(v_i)$) are aggregated by the \emph{aggregation} function $\Sigma^l$ to produce an aggregated vector $\boldsymbol{s}^l_i$, i.e., $\boldsymbol{s}^l_i=\mathlarger{\Sigma}^l_{v_j \in \mathcal{N}(v_i)}\boldsymbol{m}^l_{j,i}$.
 $v_i$'s aggregated vector $\boldsymbol{s}^l_i$ and its hidden vector $\boldsymbol{h}^l_i$ from the previous GNN layer are fed into the \emph{vertex update} function $\gamma^l$ to calculate the output hidden vector $\boldsymbol{h}^{l+1}_i$ of the current layer $l$, i.e., $\boldsymbol{h}^{l+1}_i = \gamma^l(\boldsymbol{h}^l_i, \boldsymbol{s}^l_i)$
 The end-to-end training requires $\phi^l$ and $\gamma^l$ (like multi layer perceptrons and GRU) and $\Sigma_l$ (like mean, sum, element-wise min/max) are \emph{differentiable} to make the whole GNN differentialble.
 
@@ -160,7 +161,7 @@ For ChebNet, we report its GNN layer in the tables \footnote{A layer of ChebNet 
 		sum  &
 		\begin{scriptsize}
 			$\begin{aligned}[t]
-			& \alpha_{j, i}^k = \frac {\exp(LeakyReLU(\textcolor{blue}{\boldsymbol{a}^T} [ \textcolor{blue}{\boldsymbol{W}^{l,k}}  \boldsymbol{h}_j^l \parallel \textcolor{blue}{\boldsymbol{W}^{l,k}}  \boldsymbol{h}_j^l] ))} {\sum_{k \in \mathcal{N}(i)}\exp(LeakyReLU(\textcolor{blue}{\boldsymbol{a}^T} [ \textcolor{blue}{\boldsymbol{W}^{l,k}}  \boldsymbol{h}_j^l \parallel \textcolor{blue}{\boldsymbol{W}^{l,k}}  \boldsymbol{h}_k^l] ))} \\
+			& \alpha_{j, i}^k = \frac {\exp(LeakyReLU(\textcolor{blue}{\boldsymbol{a}^T} [ \textcolor{blue}{\boldsymbol{W}^{l,k}}  \boldsymbol{h}_i^l \parallel \textcolor{blue}{\boldsymbol{W}^{l,k}}  \boldsymbol{h}_j^l] ))} {\sum_{k \in \mathcal{N}(i)}\exp(LeakyReLU(\textcolor{blue}{\boldsymbol{a}^T} [ \textcolor{blue}{\boldsymbol{W}^{l,k}}  \boldsymbol{h}_j^l \parallel \textcolor{blue}{\boldsymbol{W}^{l,k}}  \boldsymbol{h}_k^l] ))} \\
 			& \text{Multi-head concatenation}: \boldsymbol{m}_{j, i}^l = \parallel_{k=1}^K \delta(\alpha_{j, i}^k \textcolor{blue}{\boldsymbol{W}^{l,k}} \boldsymbol{h}_j^{l}) \\
 			& \text{Multi-head average}: \boldsymbol{m}_{j, i}^l = \frac{1}{K} \sum_{k=1}^K \delta(\alpha_{j, i}^k \textcolor{blue}{\boldsymbol{W}^{l,k}} \boldsymbol{h}_j^{l})
 			\end{aligned}$
@@ -271,4 +272,14 @@ According to the associative law of the matrix multiplication, $\boldsymbol{h}^{
 Since the dimension of $\boldsymbol{h}^{l+1}_i$ is usually smaller than $\boldsymbol{h}^l_i$ in practical GCNs, the implementation of GCN \footnote{The implementation of GCN in PyTorch Geometric: \url{ https://github.com/rusty1s/pytorch_geometric/blob/1.5.0/torch_geometric/nn/conv/gcn_conv.py}} chooses to first conduct the vertex computation $\hat{\boldsymbol{h}}^l_j = \boldsymbol{W}^l\boldsymbol{h}^l_j$ for each vertex $v_j$ and then conduct the edge computation $\boldsymbol{h}^{l+1}_i=\sum_{v_j\in\mathcal{N}(v_i)}{\hat{\boldsymbol{h}}^l_j}$.
 As $\hat{\boldsymbol{h}}^l_j$ has the same dimension as $\boldsymbol{h}^{l+1}_i$, the implementation significantly reduces the  computation cost of the edge computation.
 
-\textbf{GGNN} ()
+\textbf{GGNN} (high vertex \& low edge computational complexity):
+GGNN introduces the gated recurrent unit (GRU) into the graph neural networks.
+The vertex update function $\phi$ of GGNN is a modified GRU unit that has 12 model parameters to learn, having high computational complexity.
+To lower the training cost, all GNN layers share the same group of parameters in GGNN.
+GGNN further requires the dimension of $\boldsymbol{h}^{l+1}$ is equal to the dimension of $\boldsymbol{h}^l$.
+
+\textbf{GAT} (low vertex \& high edge computational complexity):
+GAT introduces the attention mechanism into the graph neural networks.
+During the message passing, it dynamically determines the weight for an edge based on the hidden feature vectors of its two end vertices.
+Moreover, it adopts the multi-head mechanism that generates $K$ independent views for an edge, where $K$ is a hyperparameter.
+In its message function $\phi$, $\$ 
