@@ -692,6 +692,8 @@ GaAN同样采用多头机制,其计算复杂度受$d_{in}$、$d_v$、$d_a$和头
 
 # 6 相关工作
 
+> 备注：一个节点
+
 1. Survey
 [@comprehensive-survey-wu-2020] 提出了新的GNN的分类，将GNNs分为recurrent GNNs, convolutional GNNs, graph autoencoders and spatial-temproal GNNs四大类，给出了the most comprehensive overview of modern deep learning techniques for graph data. 并且给出了一些开源资源
 [@zhou2018_gnn_review] 介绍了original models, its variants和一些general frameworks, present different propagation steps in different models using representation，系统地将applications进行了分类，分为structual scenarios, non-structural scenarios和其他scenarios.
@@ -706,11 +708,16 @@ Euler[@website_euler]是基于大规模分布式的图学习框架，支持Tenso
 NeuGraph[@ma2019_neugraph]为图神经网络训练提出了新的编程模型，SAGA-NN(Scater-ApplyEdge-Gather-ApplyVertex with Neural Networks), 使用了2D图划分技术将图划分为多个子图进行训练，并在单机多GPU的环境下从硬件角度进行了高效地实现。
 AliGraph[@zhu2019_aligraph]对于大规模图提出了AliGraph系统，由storage layer, sampling layer和operator三部分组成，storage layer利用namely structual and attributed specific storage, graph partition和caching neighbors of some import vertics实现了high-level操作和算法对数据的快速获取，sampling layer将采样技术划分为了三种采样方法, Traverse, Neigborhood, Negative, 分别复杂点采样，邻居采样和采样; operator layer则提供了多种关于Aggregate(边计算), Combine(点计算)的扩展。
 
-3. GNN评测方面的工作
+总的来说，在这些GNN系统设计中使用了各种优化技巧，但是这些优化技巧是否匹配GNN实际训练中的性能瓶颈是值得研究的问题
+
+3. GNN评测方面的工作;
 [@shchur2018_pitfall_of_gnn] 研究了train/val/test的划分比例对不同算法在不同数据集上的表现，表示仅考虑单个train/val/test划分比结果是很脆弱的，更简单的模型更能支持复杂的参数选择。
 [@dwivedi2020_benchmark_of_gnn](Benchmarking Graph Neural Networks) 探讨了不同GNN算法在不同场景的图数据集下的性能表现, 给出了不同场景下设计effective GNNs的key operators。
 [@yan2020_analysis_gcns_gpu]通过GNN算法与Graph Processing任务(选择PageRank)和MLP-based Neural Network任务(MLP-MNIST)在GPU下的特性进行了分析，发现实际图中的顶点度数分布符合幂律分布的特性，因此缓存高度数的顶点，有可能可以提升硬件Cache的命中率。因为aggregation阶段需要并发地、原子地更新顶点的输出特征向量，因此向量化原子访问有可能可以提升aggregation阶段的效率。
 [@zhang2020_analysis_neugraph]在DGL上基于SAGA-NN编程模型对GNN的GPU训练在inference阶段的性能热点进行了探讨，通过对SAGA-NN编程模型各阶段的分析，作者发现GNN没有固定的性能瓶颈，认为各部分都有优化的价值
+
+的工作对比了GNN算法, Graph Processing, MLP-based Neural Network在GPU下的性能的特点， 
+在DGL基于SAGA-NN编程模型对GNN的训练在inference的性能热点进行了探讨和我们主题相似，但是本文与他们的工作讨论角度不同，并且增加了对图规模和采样技术的有无的对比
 
 # 7 总结与展望
 
