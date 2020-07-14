@@ -53,4 +53,12 @@ T.~N. Kipf, M.~Welling,
   24-26, 2017, Conference Track Proceedings, OpenReview.net, 2017.
 \newline\urlprefix\url{https://openreview.net/forum?id=SJU4ayYgl}
 
+\bibitem{zeng2020_graphsaint}
+H.~Zeng, H.~Zhou, A.~Srivastava, R.~Kannan, V.~K. Prasanna,
+  \href{https://openreview.net/forum?id=BJe8pkHFwS}{Graphsaint: Graph sampling
+  based inductive learning method}, in: 8th International Conference on
+  Learning Representations, {ICLR} 2020, Addis Ababa, Ethiopia, April 26-30,
+  2020, OpenReview.net, 2020.
+\newline\urlprefix\url{https://openreview.net/forum?id=BJe8pkHFwS}
+
 \end{thebibliography}
