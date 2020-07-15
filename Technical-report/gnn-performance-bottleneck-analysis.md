@@ -692,23 +692,19 @@ GaAN同样采用多头机制,其计算复杂度受$d_{in}$、$d_v$、$d_a$和头
 
 # 5 系统设计建议
 
-通过第4节中，实验的设计，我们对GNN系统设计有以下建议：
-
-1. 通过实验1，GNN在实际运行中，点边耗时，峰值内存和膨胀比例的变化与每层点边计算的时间复杂度分析是一致的。这意味着，算法设计者信任点边时间复杂度的分析，以此进行超参数对内存和时间的预估
-2. 通过实验2，优化边计算框架中的collect和aggregate是对所有算法都非常有收益的一件事，尤其是点 计算高的算法；
-对于边计算高的算法，还需要进行message操作的运算量，例如可以通过将message可以提前计算的部分预处理，以及优化message阶段所涉及到算子能带来很大提升, kernel fusion. 
-3. 通过实验3，GNN训练中的GPU内存占用可以达到输入数据规模的数百数十倍；在固定顶点数的情况下，GNN的峰值内存和图的边数成线性关系，内存膨胀比例会逐渐稳定到由边计算复杂度决定的固定值。
-4. 采样技术的优势在于大幅度降低峰值内存使用的开销，使大规模图神经网络训练成为可能。但是当relative batch size增大时，采样技术的额外开销增加非常明显；并且实验表明：现阶段PyG中采样技术实现非常低效，占比在训练总耗时的50%以上。
-
-同时，我们的实验也验证了现有GNN系统的性能优化手段;
+通过，我们的实验，证明了现有图神经网络训练优化手段的成功性。
 
 AliGraph将采样作为了GNN层的一部分； NeuGraph也进行了图划分，并且在GPU显存利用方面做了很多工作; DGL相对于PyG性能得到大幅度提升手段，主要的优化手段也是来自于fuse compusion操作，将message function与update function进行结合，这与本文得到的分析是一致的。
 
-[@zhang2020_analysis_neugraph]一文中，作者认为computation-intensive GEMM kernel不是GNN的性能热点，这里的分析和热点分析一致
+跟[@zhang2020_analysis_neugraph]的工作相比，作者computation-intensive GEMM kernel不是GNN的性能热点，这里的分析和热点分析不大一致，这里因为这篇文章中作者和本文选取算法的角度不同，它选取的想法主要是涵盖所有操作，而忽略了图神经网络的结构中，复杂度的增加是MLP堆叠带来的。另外，这篇文章中，作者选取的数据平均度数都很低，而图的平均度数本身就是一个很重要的指标，作者没有进行考虑。另外，作者提出的kernel fusion对性能的提升的结论与我们论文相似。
+
+另外，根据我们的实验，我们为GNN的系统优化提供了以下参考：
+1. 超参数在内存和训练时间上和时间复杂度上的表现一样，可以忽略对它的考虑
+2. GPU内存膨胀是制约GNN算法扩展性的最显著因素。处理大规模图时，如何有效节约内存是始终需要放在首位的事；内存和边的复杂度成线性关系
+3. 除小规模图外，边计算是耗时瓶颈所在，边计算的collect, message, aggregate每个阶段都值得优化，尤其是message阶段，当边计算复杂度高时，是最显著的耗时；
+4. 采样技术的优势在于大幅度降低峰值内存使用的开销，使大规模图神经网络训练成为可能，优化采样技术的耗时也对整个训练会带来很大的增益
 
 # 6 相关工作
-
-> 备注：一个节点
 
 1. Survey
 [@comprehensive-survey-wu-2020] 提出了新的GNN的分类，将GNNs分为recurrent GNNs, convolutional GNNs, graph autoencoders and spatial-temproal GNNs四大类，给出了the most comprehensive overview of modern deep learning techniques for graph data. 并且给出了一些开源资源
