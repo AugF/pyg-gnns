@@ -740,6 +740,8 @@ AliGraph[@zhu2019_aligraph]对于大规模图提出了AliGraph系统，由storag
 
 我们系统地从点边时间复杂度的角度选择算法对图神经网络训练过程进行了分析。我们分析了超参数对训练时间的影响，并对训练时间进行由上到下分解，影响GPu内存的因素和采样技术对训练耗时的影响进行了分析，验证实际中时间和内存符合超参数的时间复杂度的分析; 并且发现在现实图（度数大于10）下，边计算是性能瓶颈，边计算优化collect阶段和aggregate阶段是值得做的事，但是当边计算复杂度高时，message阶段最应该优化的阶段；同深度学习的特点，GPU显存使用是GNN的可扩展性的重要限制所在，边计算的复杂度更是与显存使用呈上升的线性关系。采样技术能很好地解决内存限制问题，但是当batch_size得到扩展时，采样算法的这些额外开销是值得特别注意的地方。
 
+未来工作：在我们的工作中，选取的算法要求的aggregate一般都是min, max, mean较为简单，当aggregate变得复杂后，性能是否带来进一步的改变，可以作为未来研究的工作
+
 # 参考文献
 
 1. ZHOU J, CUI G, ZHANG Z, 等. Graph Neural Networks: A Review of Methods and Applications[J]. 2018.[@zhou2018_gnn_review]
