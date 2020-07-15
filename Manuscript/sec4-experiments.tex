@@ -21,9 +21,9 @@ by observing the effects the hyper-parameters of the GNN on training time-consum
 	\label{fig:exp_absolute_training_time}
 \end{figure}
 
-Fig~\ref{fig:exp_absolute_training_time} compares the training time per epoch for each GNN model, the ranking is $\boldsymbol{GaAN} \gg \boldsymbol{GAT} > \boldsymbol{GGNN} > \boldsymbol{GCN}$.
-Its time-consuming ranking is consistent with the complexity analysis because the number of edges in the graph generally far exceeds the number of nodes, 
-the GAT algorithm with higher edge computing complexity is more time-consuming than the algorithm GGNN with high vertex computational complexity. At the same time, 
+Fig~\ref{fig:exp_absolute_training_time} compares the training time per epoch for each GNN model, the ranking is GaAN $\gg$ GAT $>$ GGNN $>$ GCN.
+Its time-consuming ranking is consistent with the complexity analysis. Because the number of edges in the graph generally far exceeds the number of nodes, 
+the GAT with higher edge computing complexity is more time-consuming than the algorithm GGNN with high vertex computational complexity. At the same time, 
 Fig~\ref{fig:exp_absolute_training_time} shows that the training time of individual epochs is abnormally high, which is mainly caused by profiling overhead and the GC pause of the Python interpreter.
 This phenomenon confirms the necessity of removing abnormal epochs.
 
@@ -34,10 +34,23 @@ hyper-parameters of each model(such as $d_{dims}$, $K$, etc). In order to vertex
 	\centering
     \subfloat[GCN\label{fig:exp_hyperparameter_on_vertex_edge_phase_time_gcn}]{\includegraphics[height=4cm]{figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gcn.png}}\\
     \subfloat[GGNN\label{fig:exp_hyperparameter_on_vertex_edge_phase_time_ggnn}]{\includegraphics[height=4cm]{figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_ggnn.png}}\\
-    \subfloat[GAT\label{fig:exp_hyperparameter_on_vertex_edge_phase_time_gat}]{\includegraphics[height=4cm]{figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gat.png}}\\
-    \subfloat[GaAN\label{fig:exp_hyperparameter_on_vertex_edge_phase_time_gaan}]{\includegraphics[height=4cm]{figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gaan.png}}
-    \caption{The influence of hyperparameters on GNN vertex/edge calculation time}
+    \caption{The influence of hyperparameters on GCN/GGNN vertex/edge calculation time}
 	\label{fig:exp_hyperparameter_on_vertex_edge_phase_time}
+\end{figure}
+
+
+\begin{figure}
+	\centering
+    \includegraphics[height=8cm]{figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gat.png}
+    \caption{The influence of hyperparameters on GAT vertex/edge calculation time}
+	\label{fig:exp_hyperparameter_on_vertex_edge_phase_time_gat}
+\end{figure}
+
+\begin{figure}
+	\centering
+    \includegraphics[height=8cm]{figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gaan.png}
+    \caption{The influence of hyperparameters on GaAN vertex/edge calculation time}
+	\label{fig:exp_hyperparameter_on_vertex_edge_phase_time_gaan}
 \end{figure}
 
 The computational complexity of GCN and GGNN is affected by the hidden vector dimension $d_{dim}$. $d_{dim}$ affects both the output hidden vector dimension fo Layer0 and
@@ -107,7 +120,7 @@ We measure the change of the time-consuming proportion of the vertex/edge calcul
 as shown in Fig~\ref{fig:exp_avg_degree_on_vertex_edge_cal_time}. The time calculation of the edge increases linearly with the increase of the average degree,
 \textbf{The time calculation of the edge calculation dominates the entire calculation time in most cases}. 
 Only when the vertex calculation complexity is very high and the average degree is very low, the vertex calculation time can overtake the edge calculation time.
-Therefore, the focus of \textbf{GNN training optimization should improve the efficiency of edge calculation}.
+Therefore, \textbf{the focus of GNN training optimization should improve the efficiency of edge calculation}.
 
 \begin{figure}
 	\centering
@@ -138,7 +151,7 @@ The aggregated vector $a_i^l$ after the update process will be input into the ve
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.7\columnwidth]{figs/illustration/steps_in_edge_calculation.png}
+    \includegraphics[width=1\columnwidth]{figs/illustration/steps_in_edge_calculation.png}
     \caption{Step decomposition of edge calculation}
     \label{fig:steps_in_edge_calculation}
 \end{figure}
@@ -416,7 +429,7 @@ proportion of vertex calculation. For GGNN with high vertex calculation complexi
 Fig~\ref{fig:exp_sampling_batch_train_time} shows the change of the training time of each batch on the `amc` and `fli` datasets with the batch size after using the sampling technique.
 For the neighbor sampler, only when the batch size is very small The time spent in the training phase is significantly reduced compared to full-picture training. 
 When the batch size is particularly small, the training time is significantly reduced. However, because the sampling itself has additional overhead, 
-and there is also an overhead in transferring the sampled sub-image to the GPU, the training time of the entire batch may exceed the full image. 
+and there is also an overhead in transferring the sampled subgraph to the GPU, the training time of the entire batch may exceed the full image. 
 Training is time-consuming. For cluster sampler, the sampled subgraph is smaller than neighbor sampler under the same relative batch size,
 which makes the effect of sampling technology more obvious. But when the relative batch size increases, 
 the additional cost of sampling technology The increase is very obvious. When the relative batch size $\geq$ 25\%,
