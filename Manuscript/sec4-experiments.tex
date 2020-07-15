@@ -7,7 +7,7 @@ In this section, we answers the four questions in Section~\ref{sec:experimental_
 \label{sec:effects_of_hyper-parameters_on_performance}
 
 The goal of this experiment is to verify the accuracy of complexity analysis in Table~\ref{tab:gnn_overview_edge}, Table~\ref{tab:gnn_overview_vertex} 
-by observing the effects the hyper-parameters of the GNN on training time-consuming and memory usage.
+by observing the effects the hyper-parameters of each GNN model on training time per epoch and memory usage.
 
 \begin{figure}
 	\centering
@@ -23,7 +23,7 @@ by observing the effects the hyper-parameters of the GNN on training time-consum
 
 Fig~\ref{fig:exp_absolute_training_time} compares the training time per epoch for each GNN model, the ranking is GaAN $\gg$ GAT $>$ GGNN $>$ GCN.
 Its time-consuming ranking is consistent with the complexity analysis. Because the number of edges in the graph generally far exceeds the number of nodes, 
-the GAT with higher edge computing complexity is more time-consuming than the algorithm GGNN with high vertex computational complexity. At the same time, 
+the algorithm GAT with higher edge computing complexity is more time-consuming than the algorithm GGNN with high vertex computational complexity. At the same time, 
 Fig~\ref{fig:exp_absolute_training_time} shows that the training time of individual epochs is abnormally high, which is mainly caused by profiling overhead and the GC pause of the Python interpreter.
 This phenomenon confirms the necessity of removing abnormal epochs.
 
@@ -67,12 +67,12 @@ GAT training time increases linearly with $d_{head}$ and $K$.
 GaAN also uses a multi-head mechanism, and its computational complexity is affected by $d_{in}$, $d_v$, $d_a$ and the number of heads $K$.
 Fig~\ref{fig:exp_hyperparameter_on_vertex_edge_phase_time_gat} demonstrates that GaAN training time is affected by hyperparameters.
 The experiment verifies the complexity analysis results given in Table~\ref{tab:gnn_overview_edge}, Table~\ref{tab:gnn_overview_vertex}. The training time of each GNN model algorithm increases linearly with the increase of hyperparameters.
-When the hidden vector dimension $d_(in)$ is too low, the calculations involving hidden vectors account for a very low proportion of the total calculation time, resulting in an insignificant change in the total training time.
+When the hidden vector dimension $d_{in}$ is too low, the calculations involving hidden vectors account for a very low proportion of the total calculation time, resulting in an insignificant change in the total training time.
 When the hidden vector dimension is large enough, the total training time increases linearly with $d_{in}$.
 
 
-Fig~\ref{fig:exp_hyperparameter_memory_usage} also shows how each GNN model's use of GPU memory varies with the algorithm's hyperparameters.
-With the increase of hyperparameters, GNN's memory usage has also increased linearly.
+Fig~\ref{fig:exp_hyperparameter_memory_usage} also shows how each GNN model's GPU memory usage varies with the algorithm's hyperparameters.
+With the increase of hyperparameters, GNN's memory usage also increases linearly.
 
 \begin{figure}
 	\centering
@@ -80,12 +80,12 @@ With the increase of hyperparameters, GNN's memory usage has also increased line
     \subfloat[GGNN]{\includegraphics[height=4cm]{figs/experiments/exp_hyperparameter_on_memory_usage_ggnn.png}}\\
     \subfloat[GAT]{\includegraphics[height=4cm]{figs/experiments/exp_hyperparameter_on_memory_usage_gat.png}}\\
     \subfloat[GaAN]{\includegraphics[height=4cm]{figs/experiments/exp_hyperparameter_on_memory_usage_gaan.png}}
-    \caption{The effect of hyperparameters on GPU memory usage during the training phase (excluding the dataset itself)}
+    \caption{The effect of hyperparameters on GPU memory usage during the training phase (excluding the dataset memory)}
 	\label{fig:exp_hyperparameter_memory_usage}
 \end{figure}
 
 The experiment verifies the effectiveness of the complexity analysis in Table~\ref{tab:gnn_overview_edge}, Table~\ref{tab:gnn_overview_vertex}. \textbf{GNN training time and memory usage are linearly related to hyperparameters}.
-This allows algorithm engineers to use larger hyperparameters to increase the complexity of GNN Without worrying about the time-consuming training and the explosive growth of memory usage.
+This allows algorithm engineers to use larger hyperparameters to increase the complexity of GNN without worrying about the time-consuming training and the explosive growth of memory usage.
 
 \subsection{Training Time Breakdown}
 \label{sec:training_time_breakdown}
@@ -97,11 +97,11 @@ by decomposing the time-consuming training.
 
 For vertex calculation and edge calculation, Fig~\ref{fig:exp_vertex_edge_cal_proportion} shows the ratio of the vertex/edge calculation time of different GNN layers in each algorithm
 to the total training time (including forward, backward and evaluation stages). The GCN algorithm takes the most time to calculate on most datasets, 
-only the cph dataset is a special case, because the dimension of the input feature vector of this dataset is very high, resulting in the 
+only the \textit{cph} dataset is a special case, because the dimension of the input feature vector of this dataset is very high, resulting in the 
 high vertex calculation time-consuming of Layer0. Because of its high vertex calculation complexity, GGNN makes its vertex calculation time-consuming\
 ratio significantly higher than other algorithms, but on most datasets, edge calculation still occupies the main calculation time-consuming. 
-Only in pub and cam dataset, the edge calculation cost and the vertex calculation cost are close, because the average degree of the two datasets is low (only 4.5 and 2.8).
-For the GAT and GaAN algorithms, because of their high edge calculation complexity, their edge calculation cost Time is absolutely dominant. 
+Only in \textit{pub} and cam dataset, the edge calculation cost and the vertex calculation cost are close, because the average degree of the two datasets is low (only 4.5 and 2.8).
+For the GAT and GaAN algorithms, because of their high edge calculation complexity, their edge calculation cost time is absolutely dominant. 
 In summary, \textbf{edge calculation is the main time-consuming factor of GNN training}, especially in the case of more complicated edge calculation.
 
 \begin{figure}
@@ -161,8 +161,8 @@ and the results are shown in Fig~\ref{fig:exp_edge_calc_decomposition}.
 The time-consuming decomposition of the edge calculation of each GNN is relatively stable, 
 and the dataset correlation is not strong. Although the collect step only performs data preparation,
 it occupies a lot of execution time in all GNNs. For the message step, in the GNN (GAT and GaAN) with high edge calculation complexity, 
-Which occupies the absolute dominant. Although its side calculation in GCN only has a simple multiplication operation, it still takes more than 20\% of the time; 
-In GGNN, because its side calculation function $\boldsymbol{m}_{j,i }^l=\boldsymbol{W}^l\boldsymbol{h}_{j}^l$ is only related to the source vertex, 
+which occupies the absolute dominant. Although its edge calculation in GCN only has a simple multiplication operation, it still takes more than 20\% of the time; 
+In GGNN, because its edge calculation function $\boldsymbol{m}_{j,i }^l=\boldsymbol{W}^l\boldsymbol{h}_{j}^l$ is only related to the source vertex, 
 so in the implementation of PyG will be $\boldsymbol{W}^l\boldsymbol{h}_j The calculation of ^l$ is carried out before the edge calculation starts
 (because this part of the calculation is only related to vertices, so we count the calculation into the vertex calculation phase),
 the calculated result is cached, and it is directly read when the message step is performed The result is that the message step of GGNN takes 0.
@@ -203,8 +203,8 @@ The analysis of the time-consuming operators of each algorithm is as follows:
 
 \begin{enumerate}
     \item The matrix multiplication operator mm in GCN is mainly used for vertex calculation $\gamma$, 
-    this operator is particularly time-consuming on the cph dataset, 
-    because the dimensionality of the vertex feature vector input by cph is very high,
+    this operator is particularly time-consuming on the \textit{cph} dataset, 
+    because the dimensionality of the vertex feature vector input by \textit{cph} is very high,
     making the matrix multiplication in the vertex calculation of Layer0 The calculation is very high.
     Mul is the multiplication operation in the edge calculation function $\phi$.
     Both scatter\_add and gather are used to implement the aggregation step $\Sigma$ in the edge calculation,
@@ -229,7 +229,7 @@ In terms of commonality,
 so it is very suitable for calculation with GPU. Although the calculation of the aggregate step in edge calculation is relatively simple,
 but Because it involves data synchronization and non-regular calculations (the degree of different vertices is very different),
 the related operators scatter\_add and gather still occupy a certain amount of time.
-Although the collection step in the side calculation does not have any calculations,
+Although the collection step in the edge calculation does not have any calculations,
 but the related calculations The index\_select operator still accounts for about 10\% of the time-consuming.
 \textbf{aggregate step and collect step are one of the computational performance bottlenecks of all GNN training},
 optimizing the corresponding operator will improve the training efficiency of all GNNs.
@@ -247,7 +247,7 @@ optimizing the corresponding operator will improve the training efficiency of al
         Taking GAT as an example, The most time-consuming operator \_index\_put\_impl in GAT is mainly used in the backward stage of the softmax calculation ($\alpha^k_{ij}$) in $\phi$,
         which only involves data movement.
         The optimized softmax implementation on the GPU can Significantly reduce GAT training time.
-        \item If the computational complexity of $\phi$ is low, the collect and aggregate steps in its side calculations are bottlenecks in computational performance. The collect step only involves a large amount of data movement. The aggregate step calculation is relatively simple (such as sum/average/maximum) Value, etc.), but because it involves data synchronization and irregular calculation, its time-consuming is still significant.
+        \item If the computational complexity of $\phi$ is low, the collect and aggregate steps in its edge calculations are bottlenecks in computational performance. The collect step only involves a large amount of data movement. The aggregate step calculation is relatively simple (such as sum/average/maximum) Value, etc.), but because it involves data synchronization and irregular calculation, its time-consuming is still significant.
          Optimizing the implementation of these two steps on the GPU will improve the training performance of this type of GNN.
     \end{itemize}
 \end{itemize}
@@ -258,7 +258,7 @@ optimizing the corresponding operator will improve the training efficiency of al
 At present, all data (including datasets and intermediate calculation results) of PyG in the process of training GNN with GPU
 are stored in GPU memory. Compared with the main memory of the system, the memory capacity on GPU is very limited.
 \textbf{GPU memory capacity is limited to Determinants of the size of the training dataset}. 
-GaAN was unable to complete the training due to memory overflow during the training of the `cph` dataset.
+GaAN was unable to complete the training due to memory overflow during the training of the `\textit{cph}` dataset.
 
 \begin{figure}
     \centering
@@ -301,7 +301,7 @@ especially restricting GNN with high edge calculation complexity.
 \end{figure}
 
 Fig~\ref{fig:exp_memory_expansion_ratio} also shows that the expansion ratio of the same GNN under the same hyperparameters changes with different datasets.
-Because the input feature dimension of the cph dataset is much higher than the hidden vector of the GNN layer The dimension of the input feature vector matrix
+Because the input feature dimension of the \textit{cph} dataset is much higher than the hidden vector of the GNN layer The dimension of the input feature vector matrix
 of the graph is much higher than the matrix size of the intermediate calculation result of the cache, 
 so its expansion ratio is particularly low, and the cam dataset is the opposite. In order to measure the effect of the input feature vector dimension on the memory
 expansion ratio , We randomly generated feature vectors of specific dimensions for different datasets.
@@ -322,8 +322,8 @@ We measured the GPU peak memory The usage and expansion ratios are affected by t
 In the case of a fixed number of vertices in the graph, we use the R-MAT generator to generate random graphs with different average degrees (number of edges).
 The Fig~\ref{fig:exp_memory_expansion_ratio_input_graph_number_of_edges} shows how the memory usage during training varies with the average degree.
 \textbf{As the average degree increases, the peak memory usage increases linearly.
-The intermediate results generated by the side calculation gradually dominate, and the memory expansion ratio of each GNN gradually stabilizes}. 
-The expansion ratio is affected by the complexity of the side calculation.
+The intermediate results generated by the edge calculation gradually dominate, and the memory expansion ratio of each GNN gradually stabilizes}. 
+The expansion ratio is affected by the complexity of the edge calculation.
 Except for GGNN, the memory expansion ratio of other GNNs increases with the increase of degree. GGNN has a high vertex calculation complexity.
 When the average degree is low, its memory expansion ratio is mainly affected by the intermediate results of vertex calculation;
 when the average When the degree is increased, the memory expansion ratio is gradually determined by the edge calculation complexity.
@@ -400,7 +400,7 @@ it also increases linearly.}
 
 It is worth noting that \textbf{the average degree of the subgraph sampled is much lower than the average degree of the whole picture,
 especially when the relative batch size is low}. Taking the neighbor sampler at a relative batch size of 6\% as an example,
-The average degree of the amp dataset is 31.1, but the average degree of the sampled subgraphs is only 5.8,
+The average degree of the \textit{amp} dataset is 31.1, but the average degree of the sampled subgraphs is only 5.8,
 which is much lower than the average degree of the full picture;
 the average degree of the subgraphs sampled by the cluster sampler is lower, only 3.0.
 Fig~\ref{fig:exp_sampling_minibatch_degrees_distribution) shows the comparison of the distribution of the sampled sub-graphs with the original image.
@@ -426,7 +426,7 @@ proportion of vertex calculation. For GGNN with high vertex calculation complexi
     \label{fig:exp_sampling_minibatch_degrees_distribution}
 \end{figure}
 
-Fig~\ref{fig:exp_sampling_batch_train_time} shows the change of the training time of each batch on the `amc` and `fli` datasets with the batch size after using the sampling technique.
+Fig~\ref{fig:exp_sampling_batch_train_time} shows the change of the training time of each batch on the \textit{amc} and \textit{fli} datasets with the batch size after using the sampling technique.
 For the neighbor sampler, only when the batch size is very small The time spent in the training phase is significantly reduced compared to full-picture training. 
 When the batch size is particularly small, the training time is significantly reduced. However, because the sampling itself has additional overhead, 
 and there is also an overhead in transferring the sampled subgraph to the GPU, the training time of the entire batch may exceed the full image. 
