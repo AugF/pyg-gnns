@@ -387,27 +387,27 @@ Based on the sampling technology and SGD optimization technology,
 the evaluation of the model parameters is performed every several epochs. 
 The evaluation can be carried out on the CPU or on the GPU. 
 Therefore, the statistical data in the experiments in this section does not include the evaluation phase. 
-Neighbor is selected in this section Sampler and cluster sampler are two typical graph sampling techniques for analysis.
+Neighbor is selected in this section Sampler and Cluster Sampler are two typical graph sampling techniques for analysis.
 
-Fig~\ref{fig:exp_sampling_minibatch_graph_info} shows how the size of the subgraphs sampled in the two sampling techniques varies with the batch size.
-For the neighbor sampler, the relative batch size is equal to the number of vertices sampled in the last layer of GNN relative to the top of the full graph The proportion of verticess.
-For cluster sampler, the batch size is equal to the number of partitions sampled compared to the number of all partitions in the whole image.
-\textbf{neighbor sampler is very sensitive to the increase in batch size*. As the batch size increases, 
-the sampling sub-graph The number of vertices/edges and the average degree both increase rapidly and tend to stabilize}.
-\textbf{cluster sampler is less sensitive to the increase in batch size*, the number of vertices/average degree increases
+Fig~\ref{fig:exp_sampling_minibatch_graph_info} shows how the size of the subgraph sampled in the two sampling techniques varies with the batch size.
+For the Neighbor Sampler, the relative batch size is equal to the number of vertices sampled in the last layer of GNN relative to the top of the full graph The proportion of verticess.
+For Cluster Sampler, the batch size is equal to the number of partitions sampled compared to the number of all partitions in the whole image.
+\textbf{Neighbor Sampler is very sensitive to the increase in batch size*. As the batch size increases, 
+the sampling subgraph The number of vertices/edges and the average degree both increase rapidly and tend to stabilize}.
+\textbf{Cluster Sampler is less sensitive to the increase in batch size*, the number of vertices/average degree increases
 linearly with the increase in batch size, and the number of edges is in the batch When the size is relatively small,
 it also increases linearly.}
 
 It is worth noting that \textbf{the average degree of the subgraph sampled is much lower than the average degree of the whole picture,
-especially when the relative batch size is low}. Taking the neighbor sampler at a relative batch size of 6\% as an example,
-The average degree of the \textit{amp} dataset is 31.1, but the average degree of the sampled subgraphs is only 5.8,
+especially when the relative batch size is low}. Taking the Neighbor Sampler at a relative batch size of 6\% as an example,
+The average degree of the \textit{amp} dataset is 31.1, but the average degree of the sampled subgraph is only 5.8,
 which is much lower than the average degree of the full picture;
-the average degree of the subgraphs sampled by the cluster sampler is lower, only 3.0.
-Fig~\ref{fig:exp_sampling_minibatch_degrees_distribution) shows the comparison of the distribution of the sampled sub-graphs with the original image.
+the average degree of the subgraph sampled by the Cluster Sampler is lower, only 3.0.
+Fig~\ref{fig:exp_sampling_minibatch_degrees_distribution) shows the comparison of the distribution of the sampled subgraph with the original image.
 The overall distribution of the samples sampled by the two sampling techniques is lower than that of the original image. 
 The reason is that the distribution of vertices in the actual graph dataset follows a power-rate distribution, and a small number of vertices The degree is very high,
 which improves the average degree. In the sampling process, because the sampling method will limit the neighborhood size of the vertex, thereby reducing the upper limit of the vertex degree,
-so that the average degree drops significantly. Combined with the experimental results in section 4.2 The decrease in the average degree of sampling subgraphs will increase the time-consuming
+so that the average degree drops significantly. Combined with the experimental results in section 4.2 The decrease in the average degree of sampling subgraph will increase the time-consuming
 proportion of vertex calculation. For GGNN with high vertex calculation complexity, vertex calculation will replace edge calculation and become a performance bottleneck.
 
 \begin{figure}
@@ -422,15 +422,15 @@ proportion of vertex calculation. For GGNN with high vertex calculation complexi
 \begin{figure}
     \centering
     \includegraphics[width=0.7\columnwidth]{figs/experiments/exp_sampling_minibatch_degrees_distribution_amazon-photo.png}
-    \caption{Comparison of the vertex degree distribution of the sampled subgraph and the original graph. dataset: amp. Batch size = 512 (neighbor sampler) / 20 (cluster sampler)}
+    \caption{Comparison of the vertex degree distribution of the sampled subgraph and the original graph. dataset: amp. Batch size = 512 (Neighbor Sampler) / 20 (Cluster Sampler)}
     \label{fig:exp_sampling_minibatch_degrees_distribution}
 \end{figure}
 
 Fig~\ref{fig:exp_sampling_batch_train_time} shows the change of the training time of each batch on the \textit{amc} and \textit{fli} datasets with the batch size after using the sampling technique.
-For the neighbor sampler, only when the batch size is very small The time spent in the training phase is significantly reduced compared to full-picture training. 
+For the Neighbor Sampler, only when the batch size is very small The time spent in the training phase is significantly reduced compared to full-batch training. 
 When the batch size is particularly small, the training time is significantly reduced. However, because the sampling itself has additional overhead, 
 and there is also an overhead in transferring the sampled subgraph to the GPU, the training time of the entire batch may exceed the full image. 
-Training is time-consuming. For cluster sampler, the sampled subgraph is smaller than neighbor sampler under the same relative batch size,
+Training is time-consuming. For Cluster Sampler, the sampled subgraph is smaller than Neighbor Sampler under the same relative batch size,
 which makes the effect of sampling technology more obvious. But when the relative batch size increases, 
 the additional cost of sampling technology The increase is very obvious. When the relative batch size $\geq$ 25\%,
 the total time of each batch of the sampling technique even exceeds the time of the full image training. 
@@ -452,7 +452,7 @@ However, \textbf{the advantage of the sampling technique is that it can greatly 
 making large-scale graph neural network training possible}. 
 Fig~\ref{fig:exp_sampling_memory_usage} shows how the peak memory usage changes with the relative batch size during the training process after sampling technology is used.
 After sampling sampling technology, peak memory usage is greatly reduced. 
-The decrease of cluster sampler is greater than that of neighbor sampler.
+The decrease of Cluster Sampler is greater than that of Neighbor Sampler.
 
 \begin{figure}
     \centering
