@@ -2,7 +2,7 @@
 
 In recent years, graph neural network is a hot reasearch topic in the field of artifical intelligence, 
 and has achieved excellent performance on tasks such as node classification, link prediction and graph classification.\cite{comprehensive-survey-wu-2020}
-\cite{zhou2018_gnn_review}, \cite{zhou2018_gnn_review}. These successes is related to graph strucure which reflects the vast majority of real-word data compared
+\cite{zhou2018_gnn_review}, \cite{zhang2018_gnn_survey}. These successes is related to graph strucure which reflects the vast majority of real-word data compared
 to grid data strucure such as citation network and knowledge graph and deep learning's end-to-end learning capability.
 At the same time, a series of parallel or distributed graph neural network systems have appeared.  
 These systems abstract the graph neural network computing model from a large number of graph neural networks,
@@ -17,7 +17,7 @@ and design efficient implementations for the computing model with a lot of perfo
     \item SAGA-NN general model
     NeuGraph \cite{ma2019_neugraph} proposed SAGA-NN (Scatter-ApplyEdge-Gather-ApplyVertex with Neural Networks) programming model for graph neural network training.
     The SAGA-NN model divides the forward calculation of each layer in the graph neural network into four stages: Scatter, ApplyEdge, Gather, and ApplyVertex. 
-    The ApplyEdge and ApplyVertex stages perform the calculation of the edge feature vector and vertex feature vector based on the neural network provided by the user. 
+    The ApplyEdge and ApplyVertex stages perform the calculation of the edge  cfeature vector and vertex feature vector based on the neural network provided by the user. 
     Scatter and Gather are stages implicitly triggered by the NeuGraph system. These two stages prepare data for the ApplyEdge and ApplyVertex stages. 
     When programming, users only need to use the given operator to implement the ApplyEdge and ApplyVertex functions, and specify the Gather method,
     then they can use NeuGraph to automatically complete GNN training.
@@ -61,39 +61,48 @@ study the performance bottleneck of GNN algorithm training. In survey\cite{compr
 we performed point-edge complexity analysis on most GNN algorithms, and classified different algorithms into different quadrants. 
 Four typical algorithms GCN, GGNN, GAT and GaAN are selected from the four quadrants. 
 In the experiment, we selected six data sets with different characteristics, and considered the R-MAT generator to generate random graphs, 
-and fixed the number of layers and common hyperparameters of the four algorithms. \\
+and fixed the number of layers and common hyperparameters of the four algorithms. \par
 To explore the bottleneck of GNN training, we transformed into discussing the following four issues:
-Q1. How do hyperparameters affect training time and memory usage? Does it meet the time complexity analysis?\\
-Q2. Which stage of GNN training is the most time-consuming?\\
-Q3. Which factor has the greatest impact on memory in GNN training?\\
-Q4. Can the sampling technique solve the performance bottleneck of GNN training?\\
-For the above four problems, our Key Findings are:\\
-For Q1, for each algorithm, we analyzed the impact of its various parameters on training time and memory usage. 
-Experiments show that hyperparameters meet the time complexity analysis for training time and memory usage \\
-For Q2, we can divide the training time into different levels: layer level, vertex/edge computation leval 
-and basic operator leval, our training time of bareakdowon to different stages. We found that the characteristics of GNN
-calculation are in line with GPU operations, and the bottleneck of GNN training is affected by the average degree.
-In the real world, the average degree is more than 10 degrees, concentrated in the edge calculation part. 
-When the calculation complexity is high, the performance bottleneck is concentrated on the basic operator of the calculation; 
-while the calculation complexity is low, optimizing collect and aggreagte can improve performance \\
-For Q3, we measured the impact of peak memory usage and expansion ratio on the scale, points and edges of input features dims, graphs. 
-The peak memory usage of GNN during training can reach tens of times or even hundreds times, under fixed vertices, 
-the peak memory of GNN increases linearly with the growth of edges; 
-under the condition that the hyperparameters of the network structure are fixed, 
-higher-dimensional input feature vectors can reduce the proportion of GPU memory expansion \\
-For Q4, in order to verify the effectiveness of the sampling algorithm, we measured the change of training time
-and memory with batch size. 
-We found that the sampling technique can indeed greatly alleviate the memory problem, 
-thereby extending the GNN algorithm to large-scale graphs. However, after the batching technique is increased, 
-the sampling technique itself will cause more extra time, but it will be more time-consuming.\\
-Through the above analysis, we provide the following suggestions for the GNN system:\\
-1. The performance of hyperparameters in memory and training time is consistent with time complexity, 
-we can theoretically analyze performance bottlenecks\\
-2. GPU memory expansion is the most significant factor restricting the scalability of the GNN algorithm. 
-When dealing with large-scale graphs, how to effectively save memory is always a priority; memory and edge complexity are linearly related \\
-3. For real-world graphs, edge calculation is the time-consuming bottleneck. 
-The collection, message, and aggregation of edge calculation are worth optimizing at each stage, especially the message stage. 
-When the complexity of edge calculation is high, it is the most significant time-consuming; \\
-4. The advantage of sampling technology is that it greatly reduces the overhead of peak memory usage, 
-making large-scale graph neural network training possible, 
-and the time-consuming optimization of sampling technology will also bring great gains to the entire training.
+\begin{itemize}
+    \item Q1 How do hyperparameters affect training time and memory usage? Does it meet the time complexity analysis?
+    \item Q2 Which stage of GNN training is the most time-consuming?
+    \item Q3 Which factor has the greatest impact on memory in GNN training?
+    \item Q4 Can the sampling technique solve the performance bottleneck of GNN training?
+\end{itemize}
+
+For the above four problems, our Key Findings are:
+\begin{itemize}
+    \item For Q1, for each algorithm, we analyzed the impact of its various parameters on training time and memory usage. 
+    Experiments show that hyperparameters meet the time complexity analysis for training time and memory usage 
+    \item For Q2, we can divide the training time into different levels: layer level, vertex/edge computation leval 
+    and basic operator leval, our training time of bareakdowon to different stages. We found that the characteristics of GNN
+    calculation are in line with GPU operations, and the bottleneck of GNN training is affected by the average degree.
+    In the real world, the average degree is more than 10 degrees, concentrated in the edge calculation part. 
+    When the calculation complexity is high, the performance bottleneck is concentrated on the basic operator of the calculation; 
+    while the calculation complexity is low, optimizing collect and aggreagte can improve performance.
+    \item For Q3, we measured the impact of peak memory usage and expansion ratio on the scale, points and edges of input features dims, graphs. 
+    The peak memory usage of GNN during training can reach tens of times or even hundreds times, under fixed vertices, 
+    the peak memory of GNN increases linearly with the growth of edges;
+    under the condition that the hyperparameters of the network structure are fixed, 
+    higher-dimensional input feature vectors can reduce the proportion of GPU memory expansion 
+    \item For Q4, in order to verify the effectiveness of the sampling algorithm, we measured the change of training time
+    and memory with batch size. 
+    We found that the sampling technique can indeed greatly alleviate the memory problem, 
+    thereby extending the GNN algorithm to large-scale graphs. However, after the batching technique is increased, 
+    the sampling technique itself will cause more extra time, but it will be more time-consuming.
+\end{itemize}
+
+Through the above analysis, we provide the following suggestions for the GNN system:
+
+\begin{itemize}
+    \item The performance of hyperparameters in memory and training time is consistent with time complexity, 
+    we can theoretically analyze performance bottlenecks
+    \item GPU memory expansion is the most significant factor restricting the scalability of the GNN algorithm. 
+    When dealing with large-scale graphs, how to effectively save memory is always a priority; memory and edge complexity are linearly related 
+    \item For real-world graphs, edge calculation is the time-consuming bottleneck. 
+    The collection, message, and aggregation of edge calculation are worth optimizing at each stage, especially the message stage. 
+    When the complexity of edge calculation is high, it is the most significant time-consuming 
+    \item The advantage of sampling technology is that it greatly reduces the overhead of peak memory usage, 
+    making large-scale graph neural network training possible, 
+    and the time\-consuming optimization of sampling technology will also bring great gains to the entire training.
+\end{itemize}

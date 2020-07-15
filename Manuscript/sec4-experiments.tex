@@ -403,9 +403,9 @@ Neighbor Sampler and Cluster Sampler is selected in this section as they are two
 \figurename~\ref{fig:exp_sampling_minibatch_graph_info} shows how the size of the subgraph sampled in the two sampling techniques varies with the batch size.
 For Neighbor Sampler, the relative batch size is equal to the number of vertices sampled in the last layer of GNN relative to the top of the full graph the proportion of vertices.
 For Cluster Sampler, the batch size is equal to the number of partitions sampled compared to the number of all partitions in the whole graph.
-\textbf{Neighbor Sampler is very sensitive to the increase in batch size*. As the batch size increases, 
+\textbf{Neighbor Sampler is very sensitive to the increase in batch size. As the batch size increases, 
 the sampling subgraph The number of vertices/edges and the average degree both increase rapidly and tend to stabilize}.
-\textbf{Cluster Sampler is less sensitive to the increase in batch size*, the number of vertices/average degree increases
+\textbf{Cluster Sampler is less sensitive to the increase in batch size, the number of vertices/average degree increases
 linearly with the increase in batch size, and the number of edges is in the batch When the size is relatively small,
 it also increases linearly.}
 
