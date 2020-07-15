@@ -1,1 +1,12 @@
 \section{Conclusion and Future Work}
+
+We systematically study the performance bottleneck of graph neural networks. We first analyze the GNN training
+from the perspective of edge/vertex time complexity and prove the validity of computation analysis on training
+time and memory usage. We then decompose the training time from top to bottom and analyze factors that affected GPU memory and
+the impact of sampling technology. Our analysis suggests that the edge calculation is the performance bottleneck of GNN model
+and optimizing the collection stage and aggregation stage is always worth doing, but when the complexity of computing is high, the message stage is
+the most stage that should be optimized. In addition, the huge memory usage is a big problem of GNN training and is linearly related of the number for edges.
+Sampling technology is one of ways to greatly reduce the peak memory usage overhead.
+
+In our work, the aggregator required by the selected algorithm is generally min, max, and mean.
+When the aggregate becomes complicated, whether the performance brings further changes can be used as future research work.

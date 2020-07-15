@@ -1,1 +1,29 @@
 \section{Insights}
+
+Through our experiments, we prove the existing graph neural network system's performance optimization
+technologies. For exampling, \ref{sec:effects_of_sampling_techniques_on_performance} finds that the advantage of 
+sampling techniques can greatly reduce the peak memory usage, which clearly explains that when scaling up to large-scale
+graph sampling layer is an essential part of AliGraph \cite{zhu2019_aligraph}. \ref{sec:training_time_breakdown} shows that in real graph datasets
+(average degress over than 10), collect step of edge calculation is performance bottleneck. DGL \cite{DGL}'s key optimization
+methods kernel fusion operation that combines message function with update funsion and requires message function withour parameters. 
+
+Compared to \cite{zhang2020_analysis_neugraph}, the autor thinks that computation-intensive GEMM kernel is not the bottleneck of GNN training. This
+is not consistent with the hotspot analysis in \ref{sec:training_time_breakdown}. This is because the standard of selecting algorithms of the paper is to cover the varieties for GNN workloads 
+while ignoring the complexity of GNN, which is mainly brought by matrix multiplication. In addition, the author's conclusion that kernel fusion can imporove performance
+that is similar to our findings.
+
+According to our experiments, we propose the following key findings:
+
+\begin{itemize}
+    \item The edge/vertex complexity analysis can be used to theoretically analyze performance bottleneck. And it allows algorithm engineers to use larger hyperparameters to
+    increase the complexity of GNN without worrying about the time-consuming training and the explosive growth of memory usage.
+    \item Edge computation is performance bottleneck of GNN training for real-world graphs. When the complexity of edge calculation is high, 
+    optimization on collect step is most important. When the complexity of edge calculation is low, the collect and aggregate step is the main performance bottleneck.
+    \item GPU memory expansion is the most significant fator restricting the scalabiltiy of the GNN algorithm. When dealing with larger-scale graphs, how to effectively save memory is always
+    a priority
+    \item The advantage of sampling technology is that it greatly reduces the overhead of peak memory usage, making large-scale graph neural network training possible.
+    And the time-consuming optimization of sampling technology will also bring great gains to the entire training.
+\end{itemize}
+
+
+
