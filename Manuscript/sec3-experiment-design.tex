@@ -16,7 +16,7 @@ We implemented all the GNNs with PyTorch Geometric 1.5.0.
 The execution time decomposition was collected with NVIDIA Nsight systems.
 
 \paragraph{Dataset}
-We used six real-world graph datasets as listed in \tablename~\ref{tab:dataset_overview} that were popular in the GNN accuracy evaluation \cite{yang2016_revisiting_semisupervise, zeng2020_graphsaint, shchur2018_pitfall_of_gnn}.
+We used six real-world graph datasets as listed in \tablename~\ref{tab:dataset_overview} that were popular in the GNN accuracy evaluation \cite{yang2016_revisiting_semisupervised, zeng2020_graphsaint, shchur2018_pitfall_of_gnn}.
 For directed graphs, PyG converts them into undirected ones during the data loading.
 Thus, the average degree of a directed graph $\bar{d}=\frac{2|\mathcal{E}|}{|\mathcal{V}|}$.
 For an undirected graph, $\mathcal{E}$ already contains two-direction edges and $\bar{d}=\frac{|\mathcal{E}|}{|\mathcal{V}|}$.
@@ -31,17 +31,17 @@ Vertices were divided into 10 classes randomly.
     \small
     \begin{tabular}{cccccccc}
         \toprule
-        Dataset                                                 & $|\mathcal{V}|$ & $|\mathcal{E}|$ & $\bar{d}$ & $|\boldsymbol{x}|$ & Sparsity & \#Class & Directed \\
+        Dataset                                                 & $|\mathcal{V}|$ & $|\mathcal{E}|$ & $\bar{d}$ & $dim(\boldsymbol{x})$ & Sparsity & \#Class & Directed \\
         \midrule
         pubmed (pub) \cite{yang2016_revisiting_semisupervised}  & 19,717          & 44,324          & 4.5       & 500                & 0.90     & 3       & Yes      \\
         amazon-photo (amp) \cite{shchur2018_pitfall_of_gnn}     & 7,650           & 119,081         & 31.1      & 745                & 0.65     & 8       & Yes      \\
         amazon-computers (amc) \cite{shchur2018_pitfall_of_gnn} & 13,752          & 245,861         & 35.8      & 767                & 0.65     & 10      & Yes      \\
         coauthor-physics (cph) \cite{shchur2018_pitfall_of_gnn} & 34,493          & 247,962         & 14.4      & 8415               & 0.996    & 5       & Yes      \\
         flickr (fli) \cite{zeng2020_graphsaint}                 & 89,250          & 899,756         & 10.1      & 500                & 0.54     & 7       & No       \\
-        com-amazon (cam) \cite{ang2012_defining}                & 334,863         & 925,872         & 2.8       & 32                 & 0.0      & 10      & No       \\
+        com-amazon (cam) \cite{yang2012_defining}                & 334,863         & 925,872         & 2.8       & 32                 & 0.0      & 10      & No       \\
         \bottomrule
     \end{tabular}
-    \caption{Dataset overview. $\bar{d}$ represents the average vertex degree. $|\boldsymbol{x}|$ is the dimension of the input feature vector. The sparsity is the proportion of zero elements in the input feature vectors.}
+    \caption{Dataset overview. $\bar{d}$ represents the average vertex degree. $dim(\boldsymbol{x})$ is the dimension of the input feature vector. The sparsity is the proportion of zero elements in the input feature vectors.}
     \label{tab:dataset_overview}
 \end{table}
 
@@ -61,11 +61,13 @@ We stored the dataset and the model parameters in the memory of GPU.
 We conducted all the training on GPU.
 
 \paragraph{Hyper-parameters}
-We picked the hyper-parameters of allupdated GNNs according to their popularity in the experimental evaluation in their original papers.
-We use $|\boldsymbol{v}|$ to denote the dimension of a vector $\boldsymbol{v}$.
-For GCN/GAT/GaAN, $\boldsymbol{h}^0_i = \boldsymbol{x}_i$, i.e. the input feature vector.
-$|\boldsymbol{h}^1_i|$ was 64 and $|\boldsymbol{h}^2_i|$ was the number of classes.
-For GGNN, $|\boldsymbol{h}^0_i| = |\boldsymbol{h}^1_i| = |\boldsymbol{h}^2_i| = 64$.
+We use $dim(\boldsymbol{v}$ to denote the dimension of a vector $\boldsymbol{v}$.
+We picked the hyper-parameters of GNNs according to their original papers.
+As a GNN used different hyper-parameters for different tasks, we picked the most popular hyper-parameters.
+Some hyper-parameters, such as the numbers of GNN layers and the dimensions of hidden feature vectors, were common hyper-parameters in all the GNNs.
+We set them to the same values in the four GNNs.
+For GCN/GAT/GaAN, $\boldsymbol{h}^0_i = \boldsymbol{x}_i$, $dim(\boldsymbol{h}^1_i)=64$, and $dim(\boldsymbol{h}^2_i)$ was the number of classes.
+For GGNN, since it uses extra MLP layers to transform the dimensions of the input/output feature vectors, we set $dim(\boldsymbol{h}^0_i) = dim(\boldsymbol{h}^1_i) = dim(\boldsymbol{h}^2_i) = 64$.
 We used 8 heads in GAT and GaAN.
 $d_{head}=8$ in GAT.
 $d_a=d_v=8$ and $d_m=64$ in GaAN.
@@ -106,4 +108,3 @@ We design extensive experiments to find the answers emperically.
 			If the sampling techniques are effective, they are the keys to conduct GNN training on very big graphs.
 			If they are not effective, we want to find out which impairs its efficiency.
 \end{itemize}
-

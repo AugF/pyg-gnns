@@ -99,9 +99,9 @@ $v_i$'s aggregated vector $\boldsymbol{s}^l_i$ and its hidden vector $\boldsymbo
 The end-to-end training requires $\phi^l$ and $\gamma^l$ (like multi layer perceptrons and GRU) and $\Sigma_l$ (like mean, sum, element-wise min/max) are \emph{differentiable} to make the whole GNN differentialble.
 
 Different GNNs adopt different kinds of graph neurons and have different definitions of the three functions.
-$\phi$ and $\Sigma$ are the \emph{edge computation} functions.
+$\phi$ and $\Sigma$ are the \emph{edge calculation} functions.
 They are conducted over every edge in $\mathcal{G}$.
-$\gamma$ is the \emph{vertex computation} function.
+$\gamma$ is the \emph{vertex calculation} function.
 It is conducted over every vertex in $\mathcal{G}$.
 \tablename~\ref{tab:gnn_overview_edge} and \tablename~\ref{tab:gnn_overview_vertex} list the edge functions and the vertex functions of typical GNNs, respectively.
 For ChebNet, we report its GNN layer in the tables \footnote{A layer of ChebNet consists of $K$ GNN sub-layers and a summation layer, i.e., $\boldsymbol{H}^{l+1} = \sum_{k=1}^K{\boldsymbol{Z}^{(k)} \textcolor{blue}{\boldsymbol{W}^{(k)}}}$ with GNN layers $\boldsymbol{Z}^{(1)}=\boldsymbol{H}$, $\boldsymbol{Z}^{(2)}=\hat{\boldsymbol{L}}\boldsymbol{H}$, and $\boldsymbol{Z}^{(k)}=2\hat{\boldsymbol{L}}\boldsymbol{Z}^{(k-1)} - \boldsymbol{Z}^{(k-2)}$. $\boldsymbol{H}^l$ is the matrix of output hidden feature vectors of the layer $l-1$. In the table, we report the GNN sub-layer of ChebNet that calculates $\boldsymbol{Z}^{(k)}$}.
@@ -182,8 +182,8 @@ For ChebNet, we report its GNN layer in the tables \footnote{A layer of ChebNet 
 			\bottomrule
 		\end{tabular}
 	\end{footnotesize}
-	\caption{Typical graph neural networks and their edge computation functions.$d_{in}$ and $d_{out}$ are dimensions of the input and output hidden feature vectors, respectively.
-		Blue variables are model parameters to learn. For ChebNet, we report its GNN sub-layer. Because two sum operator are interchangeable and sum operator and concatenation operator are interchangeable, we do it for GAT to explain more clearly in edge computations functions.}
+	\caption{Typical graph neural networks and their edge calculation functions.$d_{in}$ and $d_{out}$ are dimensions of the input and output hidden feature vectors, respectively.
+		Blue variables are model parameters to learn. For ChebNet, we report its GNN sub-layer. Because two sum operator are interchangeable and sum operator and concatenation operator are interchangeable, we do it for GAT to explain more clearly in edge calculations functions.}
 	\label{tab:gnn_overview_edge}
 \end{table}
 
@@ -239,57 +239,59 @@ For ChebNet, we report its GNN layer in the tables \footnote{A layer of ChebNet 
 			$O(max(K * d_v + d_{in}, 2 * d_{in} + d_m) * d_{out})$                                                                                                                                                             \\ \bottomrule
 		\end{tabular}
 	\end{footnotesize}
-	\caption{Typical graph neural networks and their vertex computation functions. $d_{in}$ and $d_{out}$ are dimensions of the input and output hidden feature vectors, respectively. Blue variables are model parameters to learn. For ChebNet, we report its GNN sub-layer.For Neural FPs, $\textcolor{blue}{\boldsymbol{W}}^{l, |\mathcal{N}(i)|}$ is the weight matrix for nodes with degree
-		$|\mathcal{N}(i)|$ at layer $l$.}
+	\caption{Typical graph neural networks and their vertex calculation functions.
+        $d_{in}$ and $d_{out}$ are dimensions of the input and output hidden feature vectors, respectively.
+        Blue variables are model parameters to learn. For ChebNet, we report its GNN sub-layer.
+        For Neural FPs, $\textcolor{blue}{\boldsymbol{W}}^{l, |\mathcal{N}(i)|}$ is the weight matrix for nodes with degree $|\mathcal{N}(i)|$ at layer $l$.}
 	\label{tab:gnn_overview_vertex}
 \end{table}
 
 \subsection{Classification of GNNs}
 
-Since we focus on analyzing the performance bottleneck in training GNNs, we classify the typical GNNs from the view of computational complexity.
-The computational complexity of a GNN layer is related to the complexity of its vertex and edge functions, i.e. $O(m * (O_\phi + O_\Sigma) + n * O_\gamma)$, where $O_\phi$/$O_\Sigma$/$O_\gamma$ are the computational complexity of the three functions.
+Since we focus on analyzing the performance bottleneck in training GNNs, we classify the typical GNNs from the view of time complexity.
+We use $O_\phi$/$O_\Sigma$/$O_\gamma$ to denote the time complexity of the three functions in the message-passing model.
+The time complexity of a GNN layer is made up of two parts: the edge calculation complexity $m * (O_\phi$ + $O_\Sigma)$ and the vertex calculation complexity $n * O_\gamma$.
 
-The complexity can be decomposed into two parts: the edge computation complexity $O_\phi$ + $O_\Sigma$ and the vertex computation complexity $O_\gamma$.
-In \tablename~\ref{tab:gnn_overview_edge} and \tablename~\ref{tab:gnn_overview_vertex}, we list the edge and vertex computation complexity, respectively.
-The edge/vertex complexity of a graph neuron are affected by the dimensions of the input/output hidden vectors $d_{in}$ and $d_{out}$ and the dimensions of the model parameters (like the number of heads $K$ in GAT and the dimensions of the view vectors $d_a$/$d_v$ in GaAN).
+In \tablename~\ref{tab:gnn_overview_edge} and \tablename~\ref{tab:gnn_overview_vertex}, we list the edge and vertex calculation complexity, respectively.
+The time complexity of a graph neuron are affected by the dimensions of the input/output hidden vectors $d_{in}$ and $d_{out}$ and the dimensions of the model parameters (like the number of heads $K$ in GAT and the dimensions of the view vectors $d_a$/$d_v$ in GaAN).
 
 We classify the typical GNNs into four quadrants based on their edge/vertex complexity as shown in \figurename~\ref{fig:gnn_complexity_quadrant}. We pick GCN, GGNN, GAT and GaAN as the \emph{representative GNNs} of the four quadrants.
 
 \begin{figure}
 	\centering
-	\includegraphics[width=0.7\columnwidth]{figs/illustration/GNN_complexity_quadrant.png}
+	\includegraphics[width=0.7\columnwidth]{fig_GNN_complexity_quadrant.pdf}
 	\caption{Complexity quadrants of typical GNNs. If two GNNs have the same complexity under the Big-O notation, we further compare their complexity according to how many parameters they need to train.}
 	\label{fig:gnn_complexity_quadrant}
 \end{figure}
 
-\textbf{GCN} \cite{kipf2017_gcn} (low vertex \& edge computational complexity): Graph convolution network (GCN) is the first-order approximation of the spectral-based graph convolutions.
+\textbf{GCN} \cite{kipf2017_gcn} (low vertex \& edge calculation complexity): Graph convolution network (GCN) is the first-order approximation of the spectral-based graph convolutions.
 %By combining the advantages of both the spectral-based and the spatial-based convolution, it can learn the representation of the local topological structure and vertex features efficiently.
 It has only one parameter to learn at each layer, i.e. the weight matrix $\boldsymbol{W}^l$ in $\gamma$.
 A GCN graph neuron can be expressed as $\boldsymbol{h}^{l+1}_i = \boldsymbol{W}^l\sum_{v_j \in \mathcal{N}(v_i)}{e_{j,i}\boldsymbol{h}^l_j}$, where $e_{j,i}$ is the normalized weight of the edge $(v_j, v_i)$.
 %In the matrix view, $\boldsymbol{H}^{l+1} = (\boldsymbol{A}\boldsymbol{H}^l)\boldsymbol{W}^l$.
 According to the associative law of the matrix multiplication, $\boldsymbol{h}^{l+1}_i = \sum_{v_j \in \mathcal{N}(v_i)}{e_{j,i}\boldsymbol{W}^l\boldsymbol{h}^l_j}$.
-Since the dimension of $\boldsymbol{h}^{l+1}_i$ is usually smaller than $\boldsymbol{h}^l_i$ in practical GCNs, the implementation of GCN \footnote{The implementation of GCN in PyTorch Geometric: \url{ https://github.com/rusty1s/pytorch_geometric/blob/1.5.0/torch_geometric/nn/conv/gcn_conv.py}} chooses to first conduct the vertex computation $\hat{\boldsymbol{h}}^l_j = \boldsymbol{W}^l\boldsymbol{h}^l_j$ for each vertex $v_j$ and then conduct the edge computation $\boldsymbol{h}^{l+1}_i=\sum_{v_j\in\mathcal{N}(v_i)}{\hat{\boldsymbol{h}}^l_j}$.
-As $\hat{\boldsymbol{h}}^l_j$ has the same dimension as $\boldsymbol{h}^{l+1}_i$, the implementation significantly reduces the  computation cost of the edge computation.
+Since the dimension of $\boldsymbol{h}^{l+1}_i$ is usually smaller than $\boldsymbol{h}^l_i$ in practical GCNs, the implementation of GCN in PyTorch Geometric chooses to first conduct the vertex calculation $\hat{\boldsymbol{h}}^l_j = \boldsymbol{W}^l\boldsymbol{h}^l_j$ for each vertex $v_j$ and then conduct the edge calculation $\boldsymbol{h}^{l+1}_i=\sum_{v_j\in\mathcal{N}(v_i)}{\hat{\boldsymbol{h}}^l_j}$.
+As $\hat{\boldsymbol{h}}^l_j$ has the same dimension as $\boldsymbol{h}^{l+1}_i$, the implementation significantly reduces the  computation cost of the edge calculation.
 
-\textbf{GGNN} (high vertex \& low edge computational complexity):
+\textbf{GGNN} (high vertex \& low edge calculation complexity):
 GGNN introduces the gated recurrent unit (GRU) into the graph neural networks.
 The vertex update function $\phi$ of GGNN is a modified GRU unit that has 12 model parameters to learn, having high computational complexity.
 To lower the training cost, all GNN layers share the same group of parameters in GGNN.
 GGNN further requires the dimension of $\boldsymbol{h}^{l+1}$ is equal to the dimension of $\boldsymbol{h}^l$.
 
-\textbf{GAT} (low vertex \& high edge computational complexity):
+\textbf{GAT} (low vertex \& high edge calculation complexity):
 GAT introduces the attention mechanism into the graph neural networks.
 During the message passing, it dynamically determines the weight for an edge based on the hidden feature vectors of its two end vertices.
 Moreover, it adopts the multi-head mechanism that generates $K$ independent views for an edge, where $K$ is a hyperparameter.
-GAT moves the vertex update function $\gamma$ before the edge computation.
+GAT moves the vertex update function $\gamma$ before the edge calculation.
 $\hat{\boldsymbol{h}}^{l,k}_{i} = \textcolor{blue}{\boldsymbol{W}^{l,k}} \boldsymbol{h}_i^{l}$ with $1 \leq k \leq K$ are conducted for every vertex $v_i$ before the message function $\phi$.
 $\phi$ uses $\hat{\boldsymbol{h}}^{l,k}_{i}$ to get the weight of each edge in every head $k$.
-After the edge computation, GAT uses the aggreated vector $\boldsymbol{s}^l_i$ directly as the output hidden vector.
+After the edge calculation, GAT uses the aggreated vector $\boldsymbol{s}^l_i$ directly as the output hidden vector.
 
-\textbf{GaAN} (high vertex \& edge computational complexity):
+\textbf{GaAN} (high vertex \& edge calculation complexity):
 Based on the multi-head machanism, GaAN introduces a convolutional subnetwork to control the weight of each head.
 Thus, it introduces more edge-related parameters to train.
-Moreover, GaAN aggregates three messages simutaneously, further increasing the edge computational complexity.
+Moreover, GaAN aggregates three messages simutaneously, further increasing the edge calculational complexity.
 
 \subsection{Sampling Techniques}
 
