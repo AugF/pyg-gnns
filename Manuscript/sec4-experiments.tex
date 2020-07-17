@@ -2,65 +2,51 @@
 \label{sec:experiment_results}
 
 In this section, we answers the four questions in Section~\ref{sec:experimental_scheme} one by one with experiments.
+Without otherwise mentioned, when we report the training time per epoch of a GNN, we measure the training time of 50 epoches, exclude the epoches with abnormal training time \footnote{During the training of some epoches, there were extra profiling overheads from NVIDIA Nsight Systems and GC pauses from the Python interpreter that significantly increased the training time. Assume Q1 and Q3 are the 25\% and 75\% quantiles of the training time of 50 epoches, respectively. We regard the epoches with the training time \emph{outside} the range of $[Q1 - 1.5 * (Q3-Q1), Q3 + 1.5 * (Q3-Q1)]$ as abnormal epoches.} and report the average time of the remaining epoches.
 
 \subsection{Effects of Hyper-parameters on Performance}
 \label{sec:effects_of_hyper-parameters_on_performance}
 
-To verify the accuracy of complexity analysis in \tablename~\ref{tab:gnn_overview_edge}, \tablename~\ref{tab:gnn_overview_vertex}, we 
-design following experiments to observe the effects the hyper-parameters on training time and memory usage of a GNN. Especially, the memory usage
-points to GPU memory usage, same to below.
-
-\paragraph{the neccessity of removing abnormal epochs}
-The absolute training time of four GNN models is shown in \figurename~\ref{fig:exp_absolute_training_time}.
-In figure, we can conclude that the time ranking is GaAN $\gg$ GAT $>$ GGNN $>$ GCN. In all datasets, the number of edges is greater than that of nodes, so the correlation of training time between GAT and GGNN is
-GAT $>$ GGNN. And the remaining relationship is consistent with complexity analysis. In addition, we find that there are some outliers in \figurename~\ref{fig:exp_absolute_training_time} because of profiling overhead
-and GC pause of the Python interpreter. So in all the experiments below, we will remove abnormal epochs and use the average of remaining epochs to analysis.
+To verify the time complexity analysis in \tablename~\ref{tab:gnn_overview_edge} and \tablename~\ref{tab:gnn_overview_vertex}, we first compare the training time of the four GNNs on the same dataset.
+\figurename~\ref{fig:exp_absolute_training_time} shows the wall-clock training time per epoch of the GNNs on the real-world datasets.
+The ranking of the training time was GaAN $\gg$ GAT $>$ GGNN $>$ GCN in all cases.
+Since the real-world graphs had more edges than edges ($m > n$), the time complexity of the edge computation affected more than the vertex computation.
+The ranking was consistent with the time complexity analysis.
 
 \begin{figure}
 	\centering
-    \subfloat[pubmed\label{fig:exp_absolute_training_time_pubmed}]{\includegraphics[height=4cm]{figs/experiments/exp_absolute_training_time_comparison_pubmed.png}}
-    \subfloat[amazon-photo\label{fig:exp_absolute_training_time_amazon-photo}]{\includegraphics[height=4cm]{figs/experiments/exp_absolute_training_time_comparison_amazon-photo.png}}
-    \subfloat[coauthor-physics\label{fig:exp_absolute_training_time_coauthor-physics}]{\includegraphics[height=4cm]{figs/experiments/exp_absolute_training_time_comparison_coauthor-physics.png}} \\
-    \subfloat[amazon-computers\label{fig:exp_absolute_training_time_amazon-computers}]{\includegraphics[height=4cm]{figs/experiments/exp_absolute_training_time_comparison_amazon-computers.png}}
-    \subfloat[flickr\label{fig:exp_absolute_training_time_flickr}]{\includegraphics[height=4cm]{figs/experiments/exp_absolute_training_time_comparison_flickr.png}}
-    \subfloat[com-amazon\label{fig:exp_absolute_training_time_com-amazon}]{\includegraphics[height=4cm]{figs/experiments/exp_absolute_training_time_comparison_com-amazon.png}}
-    \caption{The impact of training time}
+    \subfloat[\texttt{pub}\label{fig:exp_absolute_training_time_pubmed}]{\includegraphics[height=4cm]{figs/experiments/exp_absolute_training_time_comparison_pubmed.png}}	
+    \subfloat[\texttt{aph}\label{fig:exp_absolute_training_time_amazon-photo}]{\includegraphics[height=4cm]{figs/experiments/exp_absolute_training_time_comparison_amazon-photo.png}}
+    \subfloat[\texttt{cph}\label{fig:exp_absolute_training_time_coauthor-physics}]{\includegraphics[height=4cm]{figs/experiments/exp_absolute_training_time_comparison_coauthor-physics.png}} \\
+    \subfloat[\texttt{amc}\label{fig:exp_absolute_training_time_amazon-computers}]{\includegraphics[height=4cm]{figs/experiments/exp_absolute_training_time_comparison_amazon-computers.png}}
+    \subfloat[\texttt{fli}\label{fig:exp_absolute_training_time_flickr}]{\includegraphics[height=4cm]{figs/experiments/exp_absolute_training_time_comparison_flickr.png}}
+    \subfloat[\texttt{cam}\label{fig:exp_absolute_training_time_com-amazon}]{\includegraphics[height=4cm]{figs/experiments/exp_absolute_training_time_comparison_com-amazon.png}}
+    \caption{Distribution of the wall-clock training time of 50 epoches on different datasets. GaAN crashed due to out of memory exception on the \texttt{cph} dataset.}
 	\label{fig:exp_absolute_training_time}
 \end{figure}
 
-\paragraph{the effects of hyper-parameters on training time}
-
-According to \tablename~\ref{tab:gnn_overview_edge}, \tablename~\ref{tab:gnn_overview_vertex}, the computational complexity of edge and vetex of each GNN is linearly related to the 
-hyper-parameters of each model(such as $d_{dim}$, $K$, etc at al). 
-In order to prove this linear relationship, we measured the change of the training time of each GNN model with the hyperparameters.
+Fixing other hyper-parameters, the time complexity of $\phi$/$\gamma$ is linear to each hyper-parameter separately, according to the analysis in \tablename~\ref{tab:gnn_overview_edge} and \tablename~\ref{tab:gnn_overview_vertex}.
+If we increase one of the hyper-parameters, the training time should also increase linearly.
+In order to verify the linearity, we measured the training time of each GNN with varying hyper-parameters in \figurename~\ref{fig:exp_hyperparameter_on_vertex_edge_phase_time}.
 
 \begin{figure}
 	\centering
-    \subfloat[GCN\label{fig:exp_hyperparameter_on_vertex_edge_phase_time_gcn}]{\includegraphics[height=4cm]{figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gcn.png}}\\
-    \subfloat[GGNN\label{fig:exp_hyperparameter_on_vertex_edge_phase_time_ggnn}]{\includegraphics[height=4cm]{figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_ggnn.png}}\\
-    \caption{The influence of hyperparameters on GCN/GGNN vertex/edge calculation time}
+    \subfloat[GCN\label{fig:exp_hyperparameter_on_vertex_edge_phase_time_gcn}]{\includegraphics[height=3cm]{figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gcn.png}}
+    %
+    \subfloat[GGNN\label{fig:exp_hyperparameter_on_vertex_edge_phase_time_ggnn}]{\includegraphics[height=3cm]{figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_ggnn.png}}
+
+    \subfloat[GAT]{\includegraphics[height=6cm]{figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gat.png}}
+
+    \subfloat[GaAN]{\includegraphics[height=6cm]{figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gaan.png}}
+
+    \caption{Effects of hyper-parameters on vertex/edge calculation time.}
 	\label{fig:exp_hyperparameter_on_vertex_edge_phase_time}
 \end{figure}
 
 
-\begin{figure}
-	\centering
-    \includegraphics[height=8cm]{figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gat.png}
-    \caption{The influence of hyperparameters on GAT vertex/edge calculation time}
-	\label{fig:exp_hyperparameter_on_vertex_edge_phase_time_gat}
-\end{figure}
-
-\begin{figure}
-	\centering
-    \includegraphics[height=8cm]{figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gaan.png}
-    \caption{The influence of hyperparameters on GaAN vertex/edge calculation time}
-	\label{fig:exp_hyperparameter_on_vertex_edge_phase_time_gaan}
-\end{figure}
-
-For GCN and GGNN, the computational complexity is affected by the hidden vector dimension $d_{dim}$. $d_{dim}$ affects both the output hidden vector dimension of Layer0 and
-the input hidden vector dimension of Layer1($d_{dim} = d^0_{out} = d^1_{in}$).
-\figurename~\ref{fig:exp_hyperparameter_on_vertex_edge_phase_time_gcn} and \figurename~\ref{fig:exp_hyperparameter_on_vertex_edge_phase_time_ggnn}
-display that the training time of GCN and GGNN is affected by $d_{dim}$. As $d_{dim}$ increases, the training time increases linearly.
+For GCN (\figurename~\ref{fig:exp_hyperparameter_on_vertex_edge_phase_time_gcn}) and GGNN (\figurename~\ref{fig:exp_hyperparameter_on_vertex_edge_phase_time_ggnn}), the only modifiable hyper-parameter is the hidden dimension $dim(\boldsymbol{h}^1)$, as $dim(\boldsymbol{h}^0)$ and $dim(\boldsymbol{h}^2)$ is determined by the dataset with $dim(\boldsymbol{h}^0)=dim(\boldsymbol{x})$ and $dim(\boldsymbol{h}^2)=$\#Classes.
+$dim(\boldsymbol{h}^1)$ affects the dimensions of the output hidden feature vector $d_{out}$ of Layer 0 and the input hidden feature vector $d_{in}$ of Layer 1 simultaneously, i.e., $dim(\boldsymbol{h}^1) = d^0_{out} = d^1_{in}$.
+The training time of GCN and GGNN increased linearly under big $dim(\boldsymbol{h}^1)$, consistent with the time complexity analysis.
 
 For GAT,  which uses a multi-head mechanism, its computational complexity is affected by the input hidden vector dimension $d_{in}$ and the hidden vector dimension $d_{head}$ of each head, and the number of heads $K$.
 The output hidden vector dimension of each layer is $d_{out}=K d_{head}$.
