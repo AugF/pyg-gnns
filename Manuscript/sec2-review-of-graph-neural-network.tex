@@ -104,7 +104,14 @@ They are conducted over every edge in $\mathcal{G}$.
 $\gamma$ is the \emph{vertex calculation} function.
 It is conducted over every vertex in $\mathcal{G}$.
 \tablename~\ref{tab:gnn_overview_edge} and \tablename~\ref{tab:gnn_overview_vertex} list the edge functions and the vertex functions of typical GNNs, respectively.
-For ChebNet, we report its GNN layer in the tables \footnote{A layer of ChebNet consists of $K$ GNN sub-layers and a summation layer, i.e., $\boldsymbol{H}^{l+1} = \sum_{k=1}^K{\boldsymbol{Z}^{(k)} \textcolor{blue}{\boldsymbol{W}^{(k)}}}$ with GNN layers $\boldsymbol{Z}^{(1)}=\boldsymbol{H}$, $\boldsymbol{Z}^{(2)}=\hat{\boldsymbol{L}}\boldsymbol{H}$, and $\boldsymbol{Z}^{(k)}=2\hat{\boldsymbol{L}}\boldsymbol{Z}^{(k-1)} - \boldsymbol{Z}^{(k-2)}$. $\boldsymbol{H}^l$ is the matrix of output hidden feature vectors of the layer $l-1$. In the table, we report the GNN sub-layer of ChebNet that calculates $\boldsymbol{Z}^{(k)}$}.
+For ChebNet, we report its GNN sub-layer in the tables. 
+A ChebNet layer consists of $K$ GNN sub-layers and a summation layer:
+$\boldsymbol{H}^{l+1} = \sum_{k=1}^K{\boldsymbol{Z}^{(k)} \textcolor{blue}{\boldsymbol{W}^{(k)}}}$ with the GNN sub-layers $\boldsymbol{Z}^{(1)}=\boldsymbol{H}^l$, $\boldsymbol{Z}^{(2)}=\hat{\boldsymbol{L}}\boldsymbol{H}^l$, and $\boldsymbol{Z}^{(k)}=2\hat{\boldsymbol{L}}\boldsymbol{Z}^{(k-1)} - \boldsymbol{Z}^{(k-2)}$, where $\boldsymbol{H}^l$ is the matrix of output hidden feature vectors of the layer $l-1$.
+For GAT, a GAT layer consists of two sub-layers:
+the first sub-layer calculates the summation $\sum_{k \in \mathcal{N}(i)}\exp(LeakyReLU(\textcolor{blue}{\boldsymbol{a}^T} [\hat{\boldsymbol{h}}^{l,k}_i \parallel \hat{\boldsymbol{h}}^{l,k}_j] ))$, and the second sub-layer calculates $\alpha_{j, i}^k$ and $\boldsymbol{m}^l_{j,i}$.
+The vertex calculation of a GAT layer is decomposed into two parts: $\hat{\boldsymbol{h}}^{l,k}_{i}$/$\boldsymbol{h}^{l+1}_i$ is calculated for every vertex before/after the message-passing, respectively.
+The edge calculation of GAT uses $\hat{\boldsymbol{h}}^{l,k}_{i}$ during the message-passing.
+For GaAN, a GaAN layer consists of four sub-layers: the first sub-layer calculates the summation $\sum_{k \in \mathcal{N}(j)}\exp(\textcolor{blue}{\boldsymbol{a}^T} [ \textcolor{blue}{\boldsymbol{W}^{l,k}_{xa}} \boldsymbol{h}_j^l \parallel \textcolor{blue}{\boldsymbol{W}^{l,k}_{ya}}  \boldsymbol{h}_k^l] )$, and the other three layers calculate $\boldsymbol{m}^l_{j,i,1}$/$\boldsymbol{m}^l_{j,i,2}$/$\boldsymbol{m}^l_{j,i,3}$.
 
 \begin{table}
 	\hspace{-5em}
@@ -162,11 +169,13 @@ For ChebNet, we report its GNN layer in the tables \footnote{A layer of ChebNet 
 			\begin{scriptsize}
 				$\begin{aligned}[t]
 						 & \alpha_{j, i}^k = \frac {\exp(LeakyReLU(\textcolor{blue}{\boldsymbol{a}^T} [\hat{\boldsymbol{h}}^{l,k}_i \parallel \hat{\boldsymbol{h}}^{l,k}_j] ))} {\sum_{k \in \mathcal{N}(i)}\exp(LeakyReLU(\textcolor{blue}{\boldsymbol{a}^T} [\hat{\boldsymbol{h}}^{l,k}_i \parallel \hat{\boldsymbol{h}}^{l,k}_j] ))} \\
-						 & \text{Multi-head concatenation}: \boldsymbol{m}_{j, i}^l = \parallel_{k=1}^K \delta(\alpha_{j, i}^k \textcolor{blue}{\boldsymbol{W}^{l,k}} \boldsymbol{h}_j^{l})                                                                                                                                             \\
-						 & \text{Multi-head average}: \boldsymbol{m}_{j, i}^l = \frac{1}{K} \sum_{k=1}^K \delta(\alpha_{j, i}^k \textcolor{blue}{\boldsymbol{W}^{l,k}} \boldsymbol{h}_j^{l})
+						 & \text{Multi-head concatenation}: \boldsymbol{m}_{j, i}^l = \parallel_{k=1}^K \delta(\alpha_{j, i}^k \hat{\boldsymbol{h}}^{l,k}_j)                                                                                                                                             \\
+						 & \text{Multi-head average}: \boldsymbol{m}_{j, i}^l = \frac{1}{K} \sum_{k=1}^K \delta(\alpha_{j, i}^k \hat{\boldsymbol{h}}^{l,k}_j)
 					\end{aligned}$
 			\end{scriptsize}                                                                                             &
-			$O(K * d_{in} * d_{out})$                                                                                                   \\
+			\makecell[r]{concat: $O(d_{in}*d_{out})$ \\
+                 average: $O(K * d_{in} * d_{out})$  \\ Two sub-layers} 
+             \\
 			\textbf{GaAN}                                                                                                             &
 			Attention                                                                                                                 &
 			sum,max,mean                                                                                                              &
@@ -178,12 +187,15 @@ For ChebNet, we report its GNN layer in the tables \footnote{A layer of ChebNet 
 						 & \boldsymbol{m}_{j, i, 3}^l = \boldsymbol{h}_j^l
 					\end{aligned}$
 			\end{scriptsize}                                                                                            &
-			$O(max(d_a, d_m, d_v) * K * d_{in})$                                                                                        \\
+			\makecell[r]{$O(max(d_a, d_m, d_v) * K * d_{in})$ \\
+                        Four sub-layers}\\
 			\bottomrule
 		\end{tabular}
 	\end{footnotesize}
-	\caption{Typical graph neural networks and their edge calculation functions.$d_{in}$ and $d_{out}$ are dimensions of the input and output hidden feature vectors, respectively.
-		Blue variables are model parameters to learn. For ChebNet, we report its GNN sub-layer. Because two sum operator are interchangeable and sum operator and concatenation operator are interchangeable, we do it for GAT to explain more clearly in edge calculations functions.}
+	\caption{Typical graph neural networks and their edge calculation functions.
+		$d_{in}$ and $d_{out}$ are dimensions of the input and output hidden feature vectors, respectively.
+		Blue variables are model parameters to learn.
+	}
 	\label{tab:gnn_overview_edge}
 \end{table}
 
@@ -227,8 +239,10 @@ For ChebNet, we report its GNN layer in the tables \footnote{A layer of ChebNet 
 			                                                                                                                                                                                                                 &
 			$O(d_{in} * d_{out})$                                                                                                                                                                                              \\
 			\textbf{GAT}                                                                                                                                                                                                     &
-			$\hat{\boldsymbol{h}}^{l,k}_{i} = \textcolor{blue}{\boldsymbol{W}^{l,k}} \boldsymbol{h}_i^{l}$ (pre-edge), $\boldsymbol{h}_i^{l+1} = \boldsymbol{s}_i^l$                                                         &
-			$O(d_{in} * d_{out})$                                                                                                                                                                                              \\
+			\makecell[l]{$\hat{\boldsymbol{h}}^{l,k}_{i} = \textcolor{blue}{\boldsymbol{W}^{l,k}} \boldsymbol{h}_i^{l}$ (pre edge calculation),\\ $\boldsymbol{h}_i^{l+1} = \boldsymbol{s}_i^l$}                                                         &
+			\makecell[r]{concat: $O(d_{in}*d_{out}/K)$\\ average: $O(d_{in}*d_{out})$
+             \\ Two sub-layers}
+			\\
 			\textbf{GaAN}                                                                                                                                                                                                    &
 			\begin{scriptsize}
 				$\begin{aligned}[t]
@@ -236,13 +250,15 @@ For ChebNet, we report its GNN layer in the tables \footnote{A layer of ChebNet 
 						 & \boldsymbol{h}_i^{l+1} = \textcolor{blue}{\boldsymbol{W}}^l_o [\boldsymbol{h}_i^l \parallel (\boldsymbol{g}_{i} \odot \boldsymbol{s}_{i, 1}^l) ]
 					\end{aligned}$
 			\end{scriptsize}                                                                                                                                                                                   &
-			$O(max(K * d_v + d_{in}, 2 * d_{in} + d_m) * d_{out})$                                                                                                                                                             \\ \bottomrule
+			\makecell[r]{$O(max(K * d_v + d_{in}, 2 * d_{in} + d_m) * d_{out})$\\
+                         Four sub-layers}
+            \\ \bottomrule
 		\end{tabular}
 	\end{footnotesize}
 	\caption{Typical graph neural networks and their vertex calculation functions.
-        $d_{in}$ and $d_{out}$ are dimensions of the input and output hidden feature vectors, respectively.
-        Blue variables are model parameters to learn. For ChebNet, we report its GNN sub-layer.
-        For Neural FPs, $\textcolor{blue}{\boldsymbol{W}}^{l, |\mathcal{N}(i)|}$ is the weight matrix for nodes with degree $|\mathcal{N}(i)|$ at layer $l$.}
+		$d_{in}$ and $d_{out}$ are dimensions of the input and output hidden feature vectors, respectively.
+		Blue variables are model parameters to learn.
+		For Neural FPs, $\textcolor{blue}{\boldsymbol{W}}^{l, |\mathcal{N}(i)|}$ is the weight matrix for nodes with degree $|\mathcal{N}(i)|$ at layer $l$.}
 	\label{tab:gnn_overview_vertex}
 \end{table}
 
@@ -259,7 +275,7 @@ We classify the typical GNNs into four quadrants based on their edge/vertex comp
 
 \begin{figure}
 	\centering
-	\includegraphics[width=0.7\columnwidth]{fig_GNN_complexity_quadrant.pdf}
+	\includegraphics[width=0.7\columnwidth]{figs/illustration/GNN_complexity_quadrant.pdf}
 	\caption{Complexity quadrants of typical GNNs. If two GNNs have the same complexity under the Big-O notation, we further compare their complexity according to how many parameters they need to train.}
 	\label{fig:gnn_complexity_quadrant}
 \end{figure}
@@ -318,9 +334,9 @@ By this way, GraphSAGE limits the neighborhood sizes of the vertices in the samp
 
 \begin{figure}
 	\centering
-	\subfloat[Neighbor sampling\label{fig:gnn_sampling_neigbhor_sampling}]{\includegraphics[height=4cm]{figs/illustration/layer_sampling.png}}
+	\subfloat[Neighbor sampling\label{fig:gnn_sampling_neigbhor_sampling}]{\includegraphics[height=4cm]{figs/illustration/layer_sampling.pdf}}
 	%
-	\subfloat[Graph sampling\label{fig:gnn_sampling_graph_sampling}]{\includegraphics[height=4cm]{figs/illustration/graph_sampling.png}}
+	\subfloat[Graph sampling\label{fig:gnn_sampling_graph_sampling}]{\includegraphics[height=4cm]{figs/illustration/graph_sampling.pdf}}
 	\caption{Training a GNN with sampling techniques. The faded graph neurons and their connections are inactivated.}
 	\label{fig:gnn_sampling}
 \end{figure}

@@ -7,6 +7,7 @@
 \usepackage{amsmath, amsthm}
 \usepackage{relsize}
 \usepackage{booktabs}
+\usepackage{makecell}
 \usepackage{lscape}
 \usepackage{xcolor}
 \usepackage{subfig}
@@ -18,25 +19,25 @@
 
 \begin{frontmatter}
 
-\title{Analyzing Performance Bottleneck in Graph Neural Network Training: An Experimental View}
-\author{Zhaokang Wang, Yunpan Wang, Chunfeng Yuan, Yihua Huang\corref{correspondingauthor}}
-\cortext[correspondingauthor]{Corresponding author}
-\ead{\{wangzhaokang, wangyp\}@smail.nju.edu.cn, \{cfyuan, yhuang\}@nju.edu.cn}
-\address{State Key Laboratory for Novel Software Technology, Department of Computer Science and Technology, Nanjing University, Nanjing 210023, China}
+	\title{Analyzing Performance Bottleneck in Graph Neural Network Training: An Experimental View}
+	\author{Zhaokang Wang, Yunpan Wang, Chunfeng Yuan, Yihua Huang\corref{correspondingauthor}}
+	\cortext[correspondingauthor]{Corresponding author}
+	\ead{\{wangzhaokang, wangyp\}@smail.nju.edu.cn, \{cfyuan, yhuang\}@nju.edu.cn}
+	\address{State Key Laboratory for Novel Software Technology, Department of Computer Science and Technology, Nanjing University, Nanjing 210023, China}
 
-\begin{abstract}
-    Graph neural network has become a research hotspot in the field of artificial intelligence due to state-of-the-art of performance
-    achieved in many grpah-related tasks. At the same time, various of graph neural network system has emrged one after another.
-    These systems have used their own skills in implementation, but there are very few works to study the performance bottleneck
-    on graph neural network training. In contrast to prior works that present characterization of GCNs and select GNNs cover GNN workloads,
-    we select typical algorithms by complexity of edge/vertex calculation. We analyze the performance bottleneck by breaking down training
-    time, study the affects of hyper-parameters and sampling technologies and find factors of memory usage. We finally put forward some key
-    findings for GNN training and hope our work can help GNN system researchers. 
-\end{abstract}
+	\begin{abstract}
+		Graph neural network has become a research hotspot in the field of artificial intelligence due to state-of-the-art of performance
+		achieved in many grpah-related tasks. At the same time, various of graph neural network system has emrged one after another.
+		These systems have used their own skills in implementation, but there are very few works to study the performance bottleneck
+		on graph neural network training. In contrast to prior works that present characterization of GCNs and select GNNs cover GNN workloads,
+		we select typical algorithms by complexity of edge/vertex calculation. We analyze the performance bottleneck by breaking down training
+		time, study the affects of hyper-parameters and sampling technologies and find factors of memory usage. We finally put forward some key
+		findings for GNN training and hope our work can help GNN system researchers.
+	\end{abstract}
 
-\begin{keyword}
-    graph neural network, performance bottleneck, deep learning, characterization
-\end{keyword}
+	\begin{keyword}
+		graph neural network, performance bottleneck, deep learning, characterization
+	\end{keyword}
 
 \end{frontmatter}
 
