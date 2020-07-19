@@ -1,8 +1,8 @@
 \section{Experiment Results and Analysis}
 \label{sec:experiment_results}
 
-In this section, we answers the four questions in Section~\ref{sec:experimental_scheme} one by one with experiments.
-Without otherwise mentioned, when we report the training time per epoch of a GNN, we measure the training time of 50 epoches, exclude the epoches with abnormal training time \footnote{During the training of some epoches, there were extra profiling overheads from NVIDIA Nsight Systems and GC pauses from the Python interpreter that significantly increased the training time. Assume Q1 and Q3 are the 25\% and 75\% quantiles of the training time of 50 epoches, respectively. We regard the epoches with the training time \emph{outside} the range of $[Q1 - 1.5 * (Q3-Q1), Q3 + 1.5 * (Q3-Q1)]$ as abnormal epoches.} and report the average time of the remaining epoches.
+We answer the four questions in Section~\ref{sec:experimental_scheme} one by one with experiments.
+Without otherwise mentioned, the reported training time per epoch is the average wall-clock training time of 50 epoches, excluding abnormal epoches \footnote{During the training of some epoches, there were extra profiling overheads from NVIDIA Nsight Systems and GC pauses from the Python interpreter that significantly increased the training time. Assume Q1 and Q3 are the 25\% and 75\% quantiles of the training time of 50 epoches, respectively. We regard the epoches with the training time \emph{outside} the range of $[Q1 - 1.5 * (Q3-Q1), Q3 + 1.5 * (Q3-Q1)]$ as abnormal epoches.}.
 
 \subsection{Effects of Hyper-parameters on Performance}
 \label{sec:effects_of_hyper-parameters_on_performance}
@@ -25,7 +25,7 @@ The ranking was consistent with the time complexity analysis.
     \label{fig:exp_absolute_training_time}
 \end{figure}
 
-Fixing other hyper-parameters, the time complexity of $\phi$/$\gamma$ is linear to each hyper-parameter separately, according to the analysis in \tablename~\ref{tab:gnn_overview_edge} and \tablename~\ref{tab:gnn_overview_vertex}.
+Fixing other hyper-parameters, the time complexities of $\phi$ and $\gamma$ are linear to each hyper-parameter separately, according to the analysis in \tablename~\ref{tab:gnn_overview_edge} and \tablename~\ref{tab:gnn_overview_vertex}.
 If we increase one of the hyper-parameters, the training time should also increase linearly.
 In order to verify the linearity, we measured the training time of each GNN with varying hyper-parameters in \figurename~\ref{fig:exp_hyperparameter_on_vertex_edge_phase_time}.
 
@@ -34,47 +34,33 @@ In order to verify the linearity, we measured the training time of each GNN with
     \subfloat[GCN\label{fig:exp_hyperparameter_on_vertex_edge_phase_time_gcn}]{\includegraphics[height=3cm]{figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gcn.pdf}}
     %
     \subfloat[GGNN\label{fig:exp_hyperparameter_on_vertex_edge_phase_time_ggnn}]{\includegraphics[height=3cm]{figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_ggnn.pdf}}
-
-    \subfloat[GAT]{\includegraphics[height=6cm]{figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gat.pdf}}
-
-    \subfloat[GaAN]{\includegraphics[height=6cm]{figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gaan.pdf}}
+    \\
+    \subfloat[GAT\label{fig:exp_hyperparameter_on_vertex_edge_phase_time_gat}]{\includegraphics[height=6cm]{figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gat.pdf}}
+    \\
+    \subfloat[GaAN\label{fig:exp_hyperparameter_on_vertex_edge_phase_time_gaan}]{\includegraphics[height=6cm]{figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gaan.pdf}}
 
     \caption{Effects of hyper-parameters on vertex/edge calculation time.}
     \label{fig:exp_hyperparameter_on_vertex_edge_phase_time}
 \end{figure}
 
 
-For GCN (\figurename~\ref{fig:exp_hyperparameter_on_vertex_edge_phase_time_gcn}) and GGNN (\figurename~\ref{fig:exp_hyperparameter_on_vertex_edge_phase_time_ggnn}), the only modifiable hyper-parameter is the hidden dimension $dim(\boldsymbol{h}^1)$, as $dim(\boldsymbol{h}^0)$ and $dim(\boldsymbol{h}^2)$ is determined by the dataset with $dim(\boldsymbol{h}^0)=dim(\boldsymbol{x})$ and $dim(\boldsymbol{h}^2)=$\#Classes.
-$dim(\boldsymbol{h}^1)$ affects the dimensions of the output hidden feature vector of Layer 0 $d^{0}_{out}$ and the input hidden feature vector of Layer 1 $d^1_{in}$ simultaneously, i.e., $dim(\boldsymbol{h}^1) = d^0_{out} = d^1_{in}$.
-The training time of GCN and GGNN increased linearly under big $dim(\boldsymbol{h}^1)$, consistent with the time complexity analysis.
+For GCN and GGNN, the only modifiable hyper-parameter is the hidden dimension $dim(\boldsymbol{h}^1)$ with $dim(\boldsymbol{h}^1) = d^0_{out} = d^1_{in}$.
+$dim(\boldsymbol{h}^0)$ and $dim(\boldsymbol{h}^2)$ is determined by the dataset with $dim(\boldsymbol{h}^0)=dim(\boldsymbol{x})$ and $dim(\boldsymbol{h}^2)=$\#Classes.
+\figurename~\ref{fig:exp_hyperparameter_on_vertex_edge_phase_time_gcn} and \figurename~\ref{fig:exp_hyperparameter_on_vertex_edge_phase_time_ggnn} show that the training time of GCN and GGNN increased linearly under big $dim(\boldsymbol{h}^1)$, consistent with the time complexity analysis.
 
-For GAT (\figurename~\ref{fig:exp_hyperparameter_on_vertex_edge_phase_time_gat}), it uses the multi-head mechanism.
-Each head outputs a hidden feature vector of dimension $d_{out}$.
-Its time complexity is affected by the dimensions of the input/output hidden vectors $d_{in}$/$d_{out}$ and the number of heads $K$.
-The output hidden vector dimension of each layer is $d_{out}=K d_{head}$.
-Because of GAT model structure $d^1_{in}=d^0_{out}$, adjusting $d_{head}$ and $K$ is equivalent to adjusting Layer1’s $d^1_{in}$.
-\figurename~\ref{fig:exp_hyperparameter_on_vertex_edge_phase_time_gat} shows that the GAT training time increases linearly with $d_{head}$ and $K$, two.
-For GaAN, which also has a multi-head mechanism, its computational complexity is affected by $d_{in}$, $d_v$, $d_a$ and the number of heads $K$.
-\figurename~\ref{fig:exp_hyperparameter_on_vertex_edge_phase_time_gat} demonstrates that GaAN training time is linearly affected by hyperparameters.
+For GAT, we modified the number of heads $K$ and the dimension of each head $d_{head}$ in the GAT layer 0.
+The dimenstion of the hidden feature vector was determined correspondingly as $d^0_{out} = d^1_{in} = dim(\boldsymbol{h}^1) = K h_{head}$.
+\figurename~\ref{fig:exp_hyperparameter_on_vertex_edge_phase_time_gat} shows that the GAT training time increases linearly under big $d_{head}$ and $K$.
+
+For GaAN, it also adopts the multi-head mechanism.
+Its time complexity is affected by $d_{in}$, $d_v$, $d_a$ and the number of heads $K$.
+\figurename~\ref{fig:exp_hyperparameter_on_vertex_edge_phase_time_gaan} demonstrates that the training time of GaAN is linearly affected by hyperparameters.
 These experiments prove the complexity analysis results given in \tablename~\ref{tab:gnn_overview_edge}, \tablename~\ref{tab:gnn_overview_vertex}.
 The training time of each GNN model increases linearly with the increase of hyperparameters.
 When the hidden vector dimension $d_{in}$ is too low, the calculations involving hidden vectors account for a very low proportion of the total calculation time,
 resulting in an insignificant change in the total training time.
 When the hidden vector dimension is large enough, the total training time increases linearly with $d_{in}$.
 
-\begin{figure}
-    \centering
-    \includegraphics[height=8cm]{figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gat.png}
-    \caption{The influence of hyperparameters on GAT vertex/edge calculation time}
-    \label{fig:exp_hyperparameter_on_vertex_edge_phase_time_gat}
-\end{figure}
-
-\begin{figure}
-    \centering
-    \includegraphics[height=8cm]{figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gaan.png}
-    \caption{The influence of hyperparameters on GaAN vertex/edge calculation time}
-    \label{fig:exp_hyperparameter_on_vertex_edge_phase_time_gaan}
-\end{figure}
 
 \paragraph{The effects of hyper-parameters on memory usage}
 \figurename~\ref{fig:exp_hyperparameter_memory_usage} shows how each GNN model's memory usage varies with the algorithm's hyperparameters.
@@ -319,7 +305,7 @@ expansion ratio , We randomly generated feature vectors of specific dimensions f
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.7\columnwidth]{figs/experiments/exp_memory_expansion_ratio_input_feature_dimension_com-amazon.png}
+    \includegraphics[width=0.7\columnwidth]{figs/experiments/exp_memory_expansion_ratio_input_feature_dimension_com-amazon.pdf}
     \caption{The change of the memory expansion ratio with the dimension of the input feature vector. dataset: cam, other datasets are similar}
     \label{fig:exp_memory_expension_ratio_input_feature_dimension}
 \end{figure}
