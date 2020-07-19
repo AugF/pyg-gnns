@@ -107,10 +107,7 @@ It is conducted over every vertex in $\mathcal{G}$.
 For ChebNet, we report its GNN sub-layer in the tables. 
 A ChebNet layer consists of $K$ GNN sub-layers and a summation layer:
 $\boldsymbol{H}^{l+1} = \sum_{k=1}^K{\boldsymbol{Z}^{(k)} \textcolor{blue}{\boldsymbol{W}^{(k)}}}$ with the GNN sub-layers $\boldsymbol{Z}^{(1)}=\boldsymbol{H}^l$, $\boldsymbol{Z}^{(2)}=\hat{\boldsymbol{L}}\boldsymbol{H}^l$, and $\boldsymbol{Z}^{(k)}=2\hat{\boldsymbol{L}}\boldsymbol{Z}^{(k-1)} - \boldsymbol{Z}^{(k-2)}$, where $\boldsymbol{H}^l$ is the matrix of output hidden feature vectors of the layer $l-1$.
-For GAT, a GAT layer consists of two sub-layers:
-the first sub-layer calculates the summation $\sum_{k \in \mathcal{N}(i)}\exp(LeakyReLU(\textcolor{blue}{\boldsymbol{a}^T} [\hat{\boldsymbol{h}}^{l,k}_i \parallel \hat{\boldsymbol{h}}^{l,k}_j] ))$, and the second sub-layer calculates $\alpha_{j, i}^k$ and $\boldsymbol{m}^l_{j,i}$.
-The vertex calculation of a GAT layer is also decomposed into two parts: $\hat{\boldsymbol{h}}^{l,k}_{i}$/$\boldsymbol{h}^{l+1}_i$ is calculated for every vertex before/after the message-passing, respectively.
-The edge calculation of GAT uses $\hat{\boldsymbol{h}}^{l,k}_{i}$ during the message-passing.
+For GAT, a GAT layer consists of two sub-layers and it conducts part of the vertex calculation before the two sub-layers.
 For GaAN, a GaAN layer consists of four sub-layers: the first sub-layer calculates the summation $\sum_{k \in \mathcal{N}(j)}\exp(\textcolor{blue}{\boldsymbol{a}^T} [ \textcolor{blue}{\boldsymbol{W}^{l,k}_{xa}} \boldsymbol{h}_j^l \parallel \textcolor{blue}{\boldsymbol{W}^{l,k}_{ya}}  \boldsymbol{h}_k^l] )$, and the other three layers calculate $\boldsymbol{m}^l_{j,i,1}$/$\boldsymbol{m}^l_{j,i,2}$/$\boldsymbol{m}^l_{j,i,3}$.
 
 \begin{table}
@@ -250,7 +247,7 @@ For GaAN, a GaAN layer consists of four sub-layers: the first sub-layer calculat
 			\textbf{GAT} &
             \begin{scriptsize}
                 $\begin{aligned}[t]
-                & \text{Before edge calculation:}\\
+                & \text{Preprocessing:}\\
                 & \hat{\boldsymbol{h}}^{l}_{i,(k)} = \textcolor{blue}{\boldsymbol{W}^{l,k}} \boldsymbol{h}_i^{l}\\
                 & \text{Sub-layer 0:}\\
                 & \hat{\boldsymbol{a}}^{l,0}_{i,(k)} = \boldsymbol{s}^{l,0}_{i,(k)}\\
@@ -320,16 +317,14 @@ To lower the training cost, all GNN layers share the same group of parameters in
 GGNN further requires the dimension of $\boldsymbol{h}^{l+1}$ is equal to the dimension of $\boldsymbol{h}^l$.
 
 \textbf{GAT} (low vertex \& high edge calculation complexity):
-GAT introduces the attention mechanism into the graph neural networks.
-Each GAT layer consists of two sub-layers.
-The first sub-layer calculates the attention weights of every edge $(v_i, v_j)$ $\exp(LeakyReLU(\textcolor{blue}{\boldsymbol{a}^T} [\hat{\boldsymbol{h}}^{l,k}_i \parallel \hat{\boldsymbol{h}}^{l,k}_j]$ and aggregates the attention weights of all adjacency edges of every vertex $v_i$ as $\sum_{k \in \mathcal{N}(i)}\exp(LeakyReLU(\textcolor{blue}{\boldsymbol{a}^T} [\hat{\boldsymbol{h}}^{l,k}_i \parallel \hat{\boldsymbol{h}}^{l,k}_j] ))$.
-The second sub-layer uses 
-During the message passing, it dynamically determines the weight for an edge based on the hidden feature vectors of its two end vertices.
-Moreover, it adopts the multi-head mechanism that generates $K$ independent views for an edge, where $K$ is a hyperparameter.
-GAT moves the vertex update function $\gamma$ before the edge calculation.
-$\hat{\boldsymbol{h}}^{l,k}_{i} = \textcolor{blue}{\boldsymbol{W}^{l,k}} \boldsymbol{h}_i^{l}$ with $1 \leq k \leq K$ are conducted for every vertex $v_i$ before the message function $\phi$.
-$\phi$ uses $\hat{\boldsymbol{h}}^{l,k}_{i}$ to get the weight of each edge in every head $k$.
-After the edge calculation, GAT uses the aggreated vector $\boldsymbol{s}^l_i$ directly as the output hidden vector.
+GAT introduces the attention and multi-head mechanism into the graph neural networks.
+The $K$ heads generate $K$ independent views for an edge, where $K$ is a hyper-parameter.
+Each GAT layer consists of a preprocessing step and two sub-layers.
+In the preprocessing step, GAT calculates the attention vectors $\hat{\boldsymbol{h}}^{l}_{i,(k)}$ for every vertex $v_i$ in every head $k$.
+The first sub-layer uses the attention vectors to calculate the attention weights of every edge in every head $\boldsymbol{m}^{l,0}_{j,i,(k)}$.
+After the message-passing, the first-layer gets the summation of attention weights of every vertex in every head $\hat{\boldsymbol{a}}^{l,0}_{i,(k)}$.
+The second sub-layer gets the normalized attention weights $\alpha_{j, i, (k)}$ for every edge in every head and aggregates the hidden feature vectors with the normalized weights in the message-passing. 
+GAT uses the aggreated vector $\boldsymbol{s}^{l,1}_i$ of the second sub-layer as the output hidden vector directly.
 
 \textbf{GaAN} (high vertex \& edge calculation complexity):
 Based on the multi-head machanism, GaAN introduces a convolutional subnetwork to control the weight of each head.
