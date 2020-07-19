@@ -297,7 +297,7 @@ We classify the typical GNNs into four quadrants based on their edge/vertex comp
 \begin{figure}
 	\centering
 	\includegraphics[width=0.7\columnwidth]{figs/illustration/GNN_complexity_quadrant.pdf}
-	\caption{Complexity quadrants of typical GNNs. If two GNNs have the same complexity under the Big-O notation, we further compare their complexity according to how many parameters they need to train.}
+	\caption{Complexity quadrants of typical GNNs. We compare the complexity according to the number of sub-layers, the Big-O notation and the number of parameters to train.}
 	\label{fig:gnn_complexity_quadrant}
 \end{figure}
 
@@ -319,11 +319,14 @@ GGNN further requires the dimension of $\boldsymbol{h}^{l+1}$ is equal to the di
 \textbf{GAT} (low vertex \& high edge calculation complexity):
 GAT introduces the attention and multi-head mechanism into the graph neural networks.
 The $K$ heads generate $K$ independent views for an edge, where $K$ is a hyper-parameter.
+The views of $K$ heads can be merged by concatenating or by averaging.
+For concatenating, the dimension of the hidden feature vector of each view is $d_{out}/K$.
+For averaging, the dimension is $d_{out}$, multiplying the complexity by $K$.
 Each GAT layer consists of a preprocessing step and two sub-layers.
 In the preprocessing step, GAT calculates the attention vectors $\hat{\boldsymbol{h}}^{l}_{i,(k)}$ for every vertex $v_i$ in every head $k$.
 The first sub-layer uses the attention vectors to calculate the attention weights of every edge in every head $\boldsymbol{m}^{l,0}_{j,i,(k)}$.
 After the message-passing, the first-layer gets the summation of attention weights of every vertex in every head $\hat{\boldsymbol{a}}^{l,0}_{i,(k)}$.
-The second sub-layer gets the normalized attention weights $\alpha_{j, i, (k)}$ for every edge in every head and aggregates the hidden feature vectors with the normalized weights in the message-passing. 
+The second sub-layer gets the normalized attention weights $\alpha_{j, i, (k)}$ for every edge in every head and aggregates the hidden feature vectors with the normalized weights in the message-passing.
 GAT uses the aggreated vector $\boldsymbol{s}^{l,1}_i$ of the second sub-layer as the output hidden vector directly.
 
 \textbf{GaAN} (high vertex \& edge calculation complexity):
