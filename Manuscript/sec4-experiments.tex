@@ -109,10 +109,10 @@ Therefore, \textbf{the focus of GNN training optimization should improve the eff
 
 \begin{figure}
     \centering
-    \subfloat[GCN]{\includegraphics[height=4cm]{figs/experiments/exp_vertex_edge_cal_proportion_gcn.pdf}}
-    \subfloat[GGNN]{\includegraphics[height=4cm]{figs/experiments/exp_vertex_edge_cal_proportion_ggnn.pdf}}\\
-    \subfloat[GAT]{\includegraphics[height=4cm]{figs/experiments/exp_vertex_edge_cal_proportion_gat.pdf}}
-    \subfloat[GaAN]{\includegraphics[height=4cm]{figs/experiments/exp_vertex_edge_cal_proportion_gaan.pdf}}
+    \subfloat[GCN]{\includegraphics[height=4cm]{figs/experiments/exp_layer_time_proportion_gcn.pdf}}
+    \subfloat[GGNN]{\includegraphics[height=4cm]{figs/experiments/exp_layer_time_proportion_ggnn.pdf}}\\
+    \subfloat[GAT]{\includegraphics[height=4cm]{figs/experiments/exp_layer_time_proportion_gat.pdf}}
+    \subfloat[GaAN]{\includegraphics[height=4cm]{figs/experiments/exp_layer_time_proportion_gaan.pdf}}
     \caption{Vertex/edge calculation time-consuming ratio.}
     \label{fig:exp_vertex_edge_cal_proportion}
 \end{figure}
@@ -329,7 +329,7 @@ Because GGNN has the lowest edge calculation complexity, its stable expansion ra
     \subfloat[]{\includegraphics[height=4cm]{figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_edges_peak_memory.png}}
     \subfloat[]{\includegraphics[height=4cm]{figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_edges_expansion_ratio.png}}
     \caption{The change of memory usage with the average degree of the graph (R-MAT random graph, the number of vertices is fixed at 10k, and the input feature vector dimension is 32}
-    \label{fig:exp_memory_expension_ratio_input_feature_dimension}
+    \label{fig:exp_memory_expansion_ratio_input_graph_number_of_edges}
 \end{figure}
 
 In the case of a fixed number of edges in the graph, we use the R-MAT generator to generate random graphs with different numbers of vertices
