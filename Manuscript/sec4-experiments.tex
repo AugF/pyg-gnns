@@ -7,6 +7,10 @@ Without otherwise mentioned, the reported training time per epoch is the average
 \subsection{Effects of Hyper-parameters on Performance}
 \label{sec:effects_of_hyper-parameters_on_performance}
 
+Theoretically, the hyper-parameters should affect the training time in a \emph{linear} way.
+According to \tablename~\ref{tab:gnn_overview_edge} and \tablename~\ref{tab:gnn_overview_vertex}, the time complexities of $\phi$ and $\gamma$ are linear to each hyper-parameter separately.
+If we increase one of the hyper-parameters and fix the others, the training time should increase linearly.
+
 To verify the time complexity analysis in \tablename~\ref{tab:gnn_overview_edge} and \tablename~\ref{tab:gnn_overview_vertex}, we first compare the training time of the four GNNs on the same dataset.
 \figurename~\ref{fig:exp_absolute_training_time} shows the wall-clock training time per epoch of the GNNs on the real-world datasets.
 The ranking of the training time was GaAN $\gg$ GAT $>$ GGNN $>$ GCN in all cases.
@@ -25,9 +29,7 @@ The ranking was consistent with the time complexity analysis.
     \label{fig:exp_absolute_training_time}
 \end{figure}
 
-Fixing other hyper-parameters, the time complexities of $\phi$ and $\gamma$ are linear to each hyper-parameter separately, according to the analysis in \tablename~\ref{tab:gnn_overview_edge} and \tablename~\ref{tab:gnn_overview_vertex}.
-If we increase one of the hyper-parameters, the training time should also increase linearly.
-In order to verify the linearity, we measured the training time of each GNN with varying hyper-parameters in \figurename~\ref{fig:exp_hyperparameter_on_vertex_edge_phase_time}.
+To further evaluate the effects of hyper-parameters, we measured the training time of each GNN with varying hyper-parameters in \figurename~\ref{fig:exp_hyperparameter_on_vertex_edge_phase_time}.
 
 \begin{figure}
     \centering
@@ -39,7 +41,7 @@ In order to verify the linearity, we measured the training time of each GNN with
     \\
     \subfloat[GaAN\label{fig:exp_hyperparameter_on_vertex_edge_phase_time_gaan}]{\includegraphics[height=6cm]{figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gaan.pdf}}
 
-    \caption{Effects of hyper-parameters on vertex/edge calculation time.}
+    \caption{Effects of hyper-parameters on the vertex/edge calculation time.}
     \label{fig:exp_hyperparameter_on_vertex_edge_phase_time}
 \end{figure}
 
@@ -52,60 +54,41 @@ For GAT, we modified the number of heads $K$ and the dimension of each head $d_{
 The dimenstion of the hidden feature vector was determined correspondingly as $d^0_{out} = d^1_{in} = dim(\boldsymbol{h}^1) = K h_{head}$.
 \figurename~\ref{fig:exp_hyperparameter_on_vertex_edge_phase_time_gat} shows that the GAT training time increases linearly under big $d_{head}$ and $K$.
 
-For GaAN, it also adopts the multi-head mechanism.
+For GaAN, it is also based on the multi-head mechanism.
 Its time complexity is affected by $d_{in}$, $d_v$, $d_a$ and the number of heads $K$.
-\figurename~\ref{fig:exp_hyperparameter_on_vertex_edge_phase_time_gaan} demonstrates that the training time of GaAN is linearly affected by hyperparameters.
-These experiments prove the complexity analysis results given in \tablename~\ref{tab:gnn_overview_edge}, \tablename~\ref{tab:gnn_overview_vertex}.
-The training time of each GNN model increases linearly with the increase of hyperparameters.
-When the hidden vector dimension $d_{in}$ is too low, the calculations involving hidden vectors account for a very low proportion of the total calculation time,
-resulting in an insignificant change in the total training time.
-When the hidden vector dimension is large enough, the total training time increases linearly with $d_{in}$.
-
-
-\paragraph{The effects of hyper-parameters on memory usage}
-\figurename~\ref{fig:exp_hyperparameter_memory_usage} shows how each GNN model's memory usage varies with the algorithm's hyperparameters.
-With the increase of hyperparameters, GNN's memory usage also increases linearly.
+\figurename~\ref{fig:exp_hyperparameter_on_vertex_edge_phase_time_gaan} demonstrates that the training time increased linearly with the hyper-parameters, except for $dim(\boldsymbol{h}^1)$.
+As $dim(\boldsymbol{h}^1)$ increased, the training time increased first slightly and then linearly.
+We could observe similar phenomena in GCN, GGNN and GAT with low hyper-parameters.
+When the hyper-parameter was too low, the GNN training could not make use of the full computing power of the GPU.
+When it became high enough, the training time increased linearly.
 
 \begin{figure}
     \centering
-    \subfloat[GCN]{\includegraphics[height=4cm]{figs/experiments/exp_hyperparameter_on_memory_usage_gcn.png}}
-    \subfloat[GGNN]{\includegraphics[height=4cm]{figs/experiments/exp_hyperparameter_on_memory_usage_ggnn.png}}\\
-    \subfloat[GAT]{\includegraphics[height=4cm]{figs/experiments/exp_hyperparameter_on_memory_usage_gat.png}}\\
-    \subfloat[GaAN]{\includegraphics[height=4cm]{figs/experiments/exp_hyperparameter_on_memory_usage_gaan.png}}
-    \caption{The effect of hyperparameters on GPU memory usage during the training phase (excluding the dataset memory)}
+    \subfloat[GCN]{\includegraphics[height=3cm]{figs/experiments/exp_hyperparameter_on_memory_usage_gcn.png}}
+    \subfloat[GGNN]{\includegraphics[height=3cm]{figs/experiments/exp_hyperparameter_on_memory_usage_ggnn.png}}\\
+    \subfloat[GAT]{\includegraphics[height=3cm]{figs/experiments/exp_hyperparameter_on_memory_usage_gat.png}}\\
+    \subfloat[GaAN]{\includegraphics[height=3cm]{figs/experiments/exp_hyperparameter_on_memory_usage_gaan.png}}
+    \caption{Effects of hyper-parameters on the peak GPU memory usage during the training, excluding the memory used by the dataset and the model parameters.}
     \label{fig:exp_hyperparameter_memory_usage}
 \end{figure}
 
+The experimental results support the time complexity analysis.
+We further measured the effects of the hyper-parameters on the peak GPU memory usage in \figurename~\ref{fig:exp_hyperparameter_memory_usage}.
+The memory usage also increased linearly as the hyper-parameters increased for all GNNs, except for GaAN on $dim(\boldsymbol{h}^1)$.
+As the hidden feature vectors $\boldsymbol{h}^1$ consumed a small proportion of memory in GaAN, the growth in the memory usage was not noticable until $dim(\boldsymbol{h}^1)$ was large enough.
+
 \paragraph{Summary}
 
-We can answer the question Q1 in \ref{sec:experimental_env}: the complexity analysis in \tablename~\ref{tab:gnn_overview_edge}, \tablename~\ref{tab:gnn_overview_vertex} is valid.
-\textbf{GNN training time and memory usage are linearly related to hyperparameters}.
-This allows algorithm engineers to use larger hyperparameters to increase the complexity of GNN without worrying about the time-consuming training and the explosive growth of memory usage.
+The complexity analysis in \tablename~\ref{tab:gnn_overview_edge} and \tablename~\ref{tab:gnn_overview_vertex} is valid.
+The hyper-parameters affect the training time and the memory usage of the GNN training \textbf{in a linear way}.
+Algorithm enginners can use larger hyper-parameters to increase the expressive power of a GNN model without worrying the explosive growth in the training time and memory usage.
 
 \subsection{Training Time Breakdown}
 \label{sec:training_time_breakdown}
 
-In this subsection, we aims to find what stage is the most time-consuming stage in GNN training by decomposing the time-consuming training.
+To find out which stage dominates the training time, we breakdown the training time and analyze the performance bottleneck level by level.
 
-\paragraph{Vertex/edge calculation time-consuming proportion analysis}
-
-\figurename~\ref{fig:exp_vertex_edge_cal_proportion} shows the ratio of the vertex/edge calculation time of different GNN layers
-to the total training time (including forward, backward and evaluation). GCN spends most of time on edge calculation in most datasets. A special case is  \textit{cph} dataset because of
-the dimension of the input feature vector of this dataset is very high, resulting in the high vertex calculation of Layer0.
-High vertex calculation makes GGNN's vertex calculation time-consuming ratio significantly higher than other algorithms.
-But in most datasets, for GGNN, edge calculation still occupies the majority of total time.
-In \textit{pub} and cam dataset, the edge calculation cost and the vertex calculation cost are close for GGNN
-because the average degree of the two datasets is low (only 4.5 and 2.8).
-For the GAT and GaAN algorithms, due to their high edge calculation complexity, their edge calculation cost time is absolutely dominant.
-In summary, \textbf{edge calculation is the main time-consuming factor of GNN training}, especially in the case of more complicated edge calculation.
-
-Experiments also show that \textbf{the average degree of the dataset affects the time-consuming proportion of vertex/edge calculation}.
-We use the R-MAT generator to generate random graphs with an average degree between 10 and 100. The number of nodes of these graphs is fixed at 50k.
-Then we measure the change of the time-consuming proportion of the vertex/edge calculation in each GNN model varies with the average degree of the graph,
-as shown in \figurename~\ref{fig:exp_avg_degree_on_vertex_edge_cal_time}. The edge calculation time increases linearly with the increase of the average degree,
-\textbf{The edge calculation time dominates the entire calculation time in most cases}.
-Only when the vertex calculation complexity is very high and the average degree is very low, the vertex calculation time can overtake the edge calculation time.
-Therefore, \textbf{the focus of GNN training optimization should improve the efficiency of edge calculation}.
+\subsubsection{Layer Level}
 
 \begin{figure}
     \centering
@@ -113,9 +96,27 @@ Therefore, \textbf{the focus of GNN training optimization should improve the eff
     \subfloat[GGNN]{\includegraphics[height=4cm]{figs/experiments/exp_layer_time_proportion_ggnn.pdf}}\\
     \subfloat[GAT]{\includegraphics[height=4cm]{figs/experiments/exp_layer_time_proportion_gat.pdf}}
     \subfloat[GaAN]{\includegraphics[height=4cm]{figs/experiments/exp_layer_time_proportion_gaan.pdf}}
-    \caption{Vertex/edge calculation time-consuming ratio.}
+    \caption{Training time breakdown on the layer level, including the time spent on the forward, backward and evaluation phase. Each layer is further decomposed into the vertex and the edge calculation stages.}
     \label{fig:exp_vertex_edge_cal_proportion}
 \end{figure}
+
+\figurename~\ref{fig:exp_vertex_edge_cal_proportion} decomposes the training time of a GNN on the layer level.
+The training time of each layer is the summation of the time in the forward, backward and evaluation phases.
+In GCN, GAT and GaAN, the time spent on the layer 0 was much larger than the layer 1.
+In those GNNs, the dimensions of the input/output feature vectors in the layer 0 were much larger than the dimensions in the layer 1.
+$d^0_{in}=dim(\boldsymbol{x})$, $d^0_{out}=d^1_{in}=64$ and $d^1_{out}=\#Class$ and $dim(\boldsymbol{x}) \gg \#Class$.
+For GaAN, since it required the dimensions of the input/output feature vectors must be same, $d^0_{in}=d^0_{out}=d^1_{in}=d^1_{out}=64$ and the training time of both layers were close.
+
+Each GNN layer can be further divided in the vertex and the edge calculation stages.
+In \figurename~\ref{fig:exp_vertex_edge_cal_proportion}, GCN spent most of the training time on the edge calculation in most datasets.
+A special case is \texttt{cph} dataset.
+The dimension of the input feature vectors was very high in \texttt{cph}, making the vertex calculation stage of the GCN Layer 0 spend considerable time.
+GGNN also spent the majority of its training time on the edge calculation.
+But the high time complexity of its vertex update function $\gamma$ made the ratio of the vertex calculation in the total training time much higher than other GNNs.
+%In \textit{pub} and cam dataset, the edge calculation cost and the vertex calculation cost are close for GGNN
+%because the average degree of the two datasets is low (only 4.5 and 2.8).
+For GAT and GaAN, due to their high edge calculation complexity, the edge calculation is the absolutely dominant stage.
+In summary, \emph{the edge calculation is the most time-consuming stage in the GNN training}.
 
 \begin{figure}
     \centering
@@ -123,33 +124,38 @@ Therefore, \textbf{the focus of GNN training optimization should improve the eff
     \subfloat[GGNN]{\includegraphics[height=4cm]{figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_ggnn.png}}\\
     \subfloat[GAT]{\includegraphics[height=4cm]{figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_gat.png}}
     \subfloat[GaAN]{\includegraphics[height=4cm]{figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_gaan.png}}
-    \caption{The effect of the average vertex degree on the time-consuming proportion of vertex/edge calculation.}
+    \caption{Effects of the average degree on the time proportion of the vertex/edge calculation. Graphs were generated with the R-MAT generator by fixing the number of vertices as 50,000. }
     \label{fig:exp_avg_degree_on_vertex_edge_cal_time}
 \end{figure}
 
-\paragraph{Time-consuming decomposition analysis of edge calculation}
+The experimental results also indicate that the average degree of the dataset affects the time-consuming proportion of the vertex/edge calculation.
+For GaAN, the time spent on the vertex calculation exceeded the edge calculation on the \texttt{pub} and \texttt{cam} datasets, because the avaerage degrees of the two datasets were low, making $|\mathcal{E}|$ and $|\mathcal{V}|$ much closer.
+To evaluate the effects of the average degree, we used the R-MAT model to generate random graphs with 50k vertices and the average degrees ranging from 2 to 100.
+\figurename~\ref{fig:exp_avg_degree_on_vertex_edge_cal_time} shows the training time of the four GNNs under different average degrees.
+As the average degree increased, the training time of the edge calculation grew \emph{linearly}.
+For GCN, GAT and GaAN, the edge calculation dominated the entire training time even under small average degrees.
+Only for GGNN that had high vertex and low edge calculation complexities, the training time of the vertex calculation could exceed the edge calculation under low average degrees ($<5$).
+Therefore, \emph{to reduce the GNN training time, one should focus on improving the efficiency of the edge calculation}.
+
+\subsubsection{Step Level in Edge Calculation}
 
 \begin{figure}
     \centering
-    \includegraphics[width=1\columnwidth]{figs/illustration/steps_in_edge_calculation.png}
-    \caption{Step decomposition of edge calculation}
+    \includegraphics[width=1\columnwidth]{figs/illustration/steps_in_edge_calculation.pdf}
+    \caption{Step decomposition of the edge calculation in the GNN layer $l$.}
     \label{fig:steps_in_edge_calculation}
 \end{figure}
 
-The edge calculation phase can be further decomposed into four steps of collect, message, aggregate and update,
-as shown in \figurename~\ref{fig:steps_in_edge_calculation}. The figure shows the edge calculation process of GNN layer $l$,
-edge index is a matrix that holds the edge sets of the graph with shape $M*2$, where $M$ is the number of edges,
-and two columns of the matrix respectively store the source vertex and the target vertex of each edge.
-Edge index remains unchanged throughout the calculation process.
-The collect step is used to prepare data structure required for edge calculation and will use the vertex hidden vector of the GNN layer $\boldsymbol{h}_i^l (1 \leq i \leq N)$
-as input, which is copied to the two layers of each edge according to the edge index, forming the input parameter tensor of the edge calculation function $\phi$
-(including $\boldsymbol{h}_i^l$,$\boldsymbol{h}_j^ l$ and $\boldsymbol{e}_{j, i}^l$).
-There is no calculation in this step, only data access is involved.
-The message step calls the function given by the user $\phi$ to complete the edge calculation process, and get message vector of each edge $\boldsymbol{m}_{j, i}^l (\boldsymbol{e}_{j, i}^l \in E(G))$.
-The aggregate step is based on the target of each edge, the message vector with the same target vertex is aggregated by the aggregation operator $\Sigma$,
-and then each vertex aggregation vector $\boldsymbol{a}_i^l (1 \leq i \leq N)$ is obtained.
-The last update step is optional, and it can perform additional correction processing on the aggregated vector (for example, adding bias to GCN).
-The aggregated vector $a_i^l$ after the update process will be input into the vertex calculation function $\gamma$ as an input parameter.
+In the implementation of PyG, the edge calculation stage can be decomposed into four steps: collect, message, aggregate and update, as shown in \figurename~\ref{fig:steps_in_edge_calculation}.
+The edge index is a matrix with $M$ rows and 2 columns that holds the edge set of the graph, where $M=|\mathcal{E}|$.
+The two columns of the matrix store the source vertex and the target vertex of each edge, respectively.
+The collect step copies the vertex feature vectors from the previous layer $\boldsymbol{h}_i^l$ to the ends of each edge 
+in the edge index, to form the parameters $[\boldsymbol{h}^l_i, \boldsymbol{h}^l_{j}, \boldsymbol{e}^l_{i,j}]$ of the message function $\phi$.
+This step only involves the data movement.
+The message step calls the message function $\phi$ to get message vectors of all edges $\boldsymbol{m}_{i, j}^l$.
+The aggregate step aggregates the message vectors with the same target vertex into a single aggregated vector $\boldsymbol{s}^l_i$ with the aggregation operation $\Sigma$.
+The update step \emph{optinally} performs additional transformation on the aggregated vectors (for example, adding bias to GCN).
+The aggregated vectors $\emph{s}^l_i$ (after the update step) will be fed into the vertex update function $\gamma$ as an input parameter.
 
 We performed the execution time decomposition of the edge calculation process of each GNN algorithm on different datasets,
 and the results are shown in \figurename~\ref{fig:exp_edge_calc_decomposition}.
