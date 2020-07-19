@@ -107,10 +107,7 @@ It is conducted over every vertex in $\mathcal{G}$.
 For ChebNet, we report its GNN sub-layer in the tables. 
 A ChebNet layer consists of $K$ GNN sub-layers and a summation layer:
 $\boldsymbol{H}^{l+1} = \sum_{k=1}^K{\boldsymbol{Z}^{(k)} \textcolor{blue}{\boldsymbol{W}^{(k)}}}$ with the GNN sub-layers $\boldsymbol{Z}^{(1)}=\boldsymbol{H}^l$, $\boldsymbol{Z}^{(2)}=\hat{\boldsymbol{L}}\boldsymbol{H}^l$, and $\boldsymbol{Z}^{(k)}=2\hat{\boldsymbol{L}}\boldsymbol{Z}^{(k-1)} - \boldsymbol{Z}^{(k-2)}$, where $\boldsymbol{H}^l$ is the matrix of output hidden feature vectors of the layer $l-1$.
-For GAT, a GAT layer consists of two sub-layers:
-the first sub-layer calculates the summation $\sum_{k \in \mathcal{N}(i)}\exp(LeakyReLU(\textcolor{blue}{\boldsymbol{a}^T} [\hat{\boldsymbol{h}}^{l,k}_i \parallel \hat{\boldsymbol{h}}^{l,k}_j] ))$, and the second sub-layer calculates $\alpha_{j, i}^k$ and $\boldsymbol{m}^l_{j,i}$.
-The vertex calculation of a GAT layer is decomposed into two parts: $\hat{\boldsymbol{h}}^{l,k}_{i}$/$\boldsymbol{h}^{l+1}_i$ is calculated for every vertex before/after the message-passing, respectively.
-The edge calculation of GAT uses $\hat{\boldsymbol{h}}^{l,k}_{i}$ during the message-passing.
+For GAT, a GAT layer consists of two sub-layers and it conducts part of the vertex calculation before the two sub-layers.
 For GaAN, a GaAN layer consists of four sub-layers: the first sub-layer calculates the summation $\sum_{k \in \mathcal{N}(j)}\exp(\textcolor{blue}{\boldsymbol{a}^T} [ \textcolor{blue}{\boldsymbol{W}^{l,k}_{xa}} \boldsymbol{h}_j^l \parallel \textcolor{blue}{\boldsymbol{W}^{l,k}_{ya}}  \boldsymbol{h}_k^l] )$, and the other three layers calculate $\boldsymbol{m}^l_{j,i,1}$/$\boldsymbol{m}^l_{j,i,2}$/$\boldsymbol{m}^l_{j,i,3}$.
 
 \begin{table}
@@ -168,13 +165,22 @@ For GaAN, a GaAN layer consists of four sub-layers: the first sub-layer calculat
 			sum                                                                                                                       &
 			\begin{scriptsize}
 				$\begin{aligned}[t]
-						 & \alpha_{j, i}^k = \frac {\exp(LeakyReLU(\textcolor{blue}{\boldsymbol{a}^T} [\hat{\boldsymbol{h}}^{l,k}_i \parallel \hat{\boldsymbol{h}}^{l,k}_j] ))} {\sum_{k \in \mathcal{N}(i)}\exp(LeakyReLU(\textcolor{blue}{\boldsymbol{a}^T} [\hat{\boldsymbol{h}}^{l,k}_i \parallel \hat{\boldsymbol{h}}^{l,k}_j] ))} \\
-						 & \text{Multi-head concatenation}: \boldsymbol{m}_{j, i}^l = \parallel_{k=1}^K \delta(\alpha_{j, i}^k \hat{\boldsymbol{h}}^{l,k}_j)                                                                                                                                             \\
-						 & \text{Multi-head average}: \boldsymbol{m}_{j, i}^l = \frac{1}{K} \sum_{k=1}^K \delta(\alpha_{j, i}^k \hat{\boldsymbol{h}}^{l,k}_j)
+                         & \text{Sub-layer 0:}\\
+                         & \boldsymbol{m}^{l,0}_{j,i,(k)} = \exp(LeakyReLU(\textcolor{blue}{\boldsymbol{a}^T} [\hat{\boldsymbol{h}}^{l}_{i,(k)} \parallel \hat{\boldsymbol{h}}^{l}_{j, (k)}]))\\
+                         & \text{Sub-layer 1:}\\
+						 & \alpha_{j, i, (k)} = \frac {\exp(LeakyReLU(\textcolor{blue}{\boldsymbol{a}^T} [\hat{\boldsymbol{h}}^{l}_{i,(k)} \parallel \hat{\boldsymbol{h}}^{l}_{j,(k)}] ))} {\hat{\boldsymbol{a}}^{l,0}_{i,(k)}} \\
+						 & \text{Multi-head concatenation}: \boldsymbol{m}_{j, i}^{l,1} = \parallel_{k=1}^K \delta(\alpha_{j, i, (k)} \hat{\boldsymbol{h}}^{l}_{j,(k)})                                                                                                                                             \\
+						 & \text{Multi-head average}: \boldsymbol{m}_{j, i}^{l,1} = \frac{1}{K} \sum_{k=1}^K \delta(\alpha_{j, i, (k)} \hat{\boldsymbol{h}}^{l}_{j,(k)})
 					\end{aligned}$
-			\end{scriptsize}                                                                                             &
-			\makecell[r]{concat: $O(d_{in}*d_{out})$ \\
-                 average: $O(K * d_{in} * d_{out})$  \\ Two sub-layers} 
+			\end{scriptsize}
+             &
+             $
+             \begin{aligned}[t]
+                \text{concat: } O(d_{out}) &\\
+                \text{average: } O(K * d_{out}) &\\
+                \text{Two sub-layers} &
+             \end{aligned}
+             $ 
              \\
 			\textbf{GaAN}                                                                                                             &
 			Attention                                                                                                                 &
@@ -238,11 +244,26 @@ For GaAN, a GaAN layer consists of four sub-layers: the first sub-layer calculat
 			\end{scriptsize}
 			                                                                                                                                                                                                                 &
 			$O(d_{in} * d_{out})$                                                                                                                                                                                              \\
-			\textbf{GAT}                                                                                                                                                                                                     &
-			\makecell[l]{$\hat{\boldsymbol{h}}^{l,k}_{i} = \textcolor{blue}{\boldsymbol{W}^{l,k}} \boldsymbol{h}_i^{l}$ (pre edge calculation),\\ $\boldsymbol{h}_i^{l+1} = \boldsymbol{s}_i^l$}                                                         &
-			\makecell[r]{concat: $O(d_{in}*d_{out}/K)$\\ average: $O(d_{in}*d_{out})$
-             \\ Two sub-layers}
-			\\
+			\textbf{GAT} &
+            \begin{scriptsize}
+                $\begin{aligned}[t]
+                & \text{Preprocessing:}\\
+                & \hat{\boldsymbol{h}}^{l}_{i,(k)} = \textcolor{blue}{\boldsymbol{W}^{l,k}} \boldsymbol{h}_i^{l}\\
+                & \text{Sub-layer 0:}\\
+                & \hat{\boldsymbol{a}}^{l,0}_{i,(k)} = \boldsymbol{s}^{l,0}_{i,(k)}\\
+                & \text{Sub-layer 1:}\\
+                & \boldsymbol{h}_i^{l+1} = \boldsymbol{s}_i^{l,1}
+                \end{aligned}
+                $
+            \end{scriptsize} &
+             $
+             \begin{aligned}[t]
+             \text{concat:} O(d_{in}*d_{out}) &\\
+             \text{average:} O(K*d_{in}*d_{out}) &\\
+             \text{Two sub-layers}&
+            \end{aligned}
+             $
+           \\
 			\textbf{GaAN}                                                                                                                                                                                                    &
 			\begin{scriptsize}
 				$\begin{aligned}[t]
@@ -276,7 +297,7 @@ We classify the typical GNNs into four quadrants based on their edge/vertex comp
 \begin{figure}
 	\centering
 	\includegraphics[width=0.7\columnwidth]{figs/illustration/GNN_complexity_quadrant.pdf}
-	\caption{Complexity quadrants of typical GNNs. If two GNNs have the same complexity under the Big-O notation, we further compare their complexity according to how many parameters they need to train.}
+	\caption{Complexity quadrants of typical GNNs. We compare the complexity according to the number of sub-layers, the Big-O notation and the number of parameters to train.}
 	\label{fig:gnn_complexity_quadrant}
 \end{figure}
 
@@ -296,13 +317,17 @@ To lower the training cost, all GNN layers share the same group of parameters in
 GGNN further requires the dimension of $\boldsymbol{h}^{l+1}$ is equal to the dimension of $\boldsymbol{h}^l$.
 
 \textbf{GAT} (low vertex \& high edge calculation complexity):
-GAT introduces the attention mechanism into the graph neural networks.
-During the message passing, it dynamically determines the weight for an edge based on the hidden feature vectors of its two end vertices.
-Moreover, it adopts the multi-head mechanism that generates $K$ independent views for an edge, where $K$ is a hyperparameter.
-GAT moves the vertex update function $\gamma$ before the edge calculation.
-$\hat{\boldsymbol{h}}^{l,k}_{i} = \textcolor{blue}{\boldsymbol{W}^{l,k}} \boldsymbol{h}_i^{l}$ with $1 \leq k \leq K$ are conducted for every vertex $v_i$ before the message function $\phi$.
-$\phi$ uses $\hat{\boldsymbol{h}}^{l,k}_{i}$ to get the weight of each edge in every head $k$.
-After the edge calculation, GAT uses the aggreated vector $\boldsymbol{s}^l_i$ directly as the output hidden vector.
+GAT introduces the attention and multi-head mechanism into the graph neural networks.
+The $K$ heads generate $K$ independent views for an edge, where $K$ is a hyper-parameter.
+The views of $K$ heads can be merged by concatenating or by averaging.
+For concatenating, the dimension of the hidden feature vector of each view is $d_{out}/K$.
+For averaging, the dimension is $d_{out}$, multiplying the complexity by $K$.
+Each GAT layer consists of a preprocessing step and two sub-layers.
+In the preprocessing step, GAT calculates the attention vectors $\hat{\boldsymbol{h}}^{l}_{i,(k)}$ for every vertex $v_i$ in every head $k$.
+The first sub-layer uses the attention vectors to calculate the attention weights of every edge in every head $\boldsymbol{m}^{l,0}_{j,i,(k)}$.
+After the message-passing, the first-layer gets the summation of attention weights of every vertex in every head $\hat{\boldsymbol{a}}^{l,0}_{i,(k)}$.
+The second sub-layer gets the normalized attention weights $\alpha_{j, i, (k)}$ for every edge in every head and aggregates the hidden feature vectors with the normalized weights in the message-passing.
+GAT uses the aggreated vector $\boldsymbol{s}^{l,1}_i$ of the second sub-layer as the output hidden vector directly.
 
 \textbf{GaAN} (high vertex \& edge calculation complexity):
 Based on the multi-head machanism, GaAN introduces a convolutional subnetwork to control the weight of each head.
