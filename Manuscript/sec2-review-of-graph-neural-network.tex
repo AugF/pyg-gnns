@@ -343,7 +343,7 @@ It updates the parameters only once for each epoch, slowing the convergence of g
 
 To train GNNs in a mini-batch way, several sampling techniques \cite{chiang2019_cluster_gcn} are proposed.
 In each mini-batch, they sample a small subgraph from the whole graph $\mathcal{G}$ and uses the subgraph to update the model parameters.
-In other words, the sampling techniques only active the graph neurons and the connections that appear in the sampled subgraph between GNN layers, as shown in \figurename~\ref{fig:graph_sampling}.
+In other words, the sampling techniques only active the graph neurons and the connections that appear in the sampled subgraph between GNN layers, as shown in \figurename~\ref{fig:gnn_sampling}.
 Inactive graph neurons and connetions do not participate in the training of this mini-batch, saving lots of computation and storage costs.
 Moreover, it may reduce the risk of overfitting the training graph.
 Based on whether different GNN layers sample different subgraphs, the existing sampling techniques can be devided into two groups \cite{zeng2020_graphsaint}: the neighbor sampling and the graph sampling.
@@ -351,7 +351,7 @@ Based on whether different GNN layers sample different subgraphs, the existing s
 The neighbor sampling techniques \cite{hamilton2017_graphsage, ying2018_pinsage, chen2018_fastgcn, chen2018_sgcn, huang2018_adap} sample the subgraphs layer by layer.
 They first sample several vertices from $\mathcal{V}$ in the last GNN layer.
 Then they repeatedly sample the neighbors of those vertices in the previous layer until the input layer.
-The sampled subgraphs of different GNN layers may be \emph{different}, as shown in \figurename~\ref{fig:gnn_sampling_neigbhor_sampling}.
+The sampled subgraphs of different GNN layers may be \emph{different}, as shown in \figurename~\ref{fig:gnn_sampling_neighbor_sampling}.
 GraphSAGE \cite{hamilton2017_graphsage} is the representative technique.
 For every sampled vertex $v_i$ in the GNN layer $l$, GraphSAGE samples at most $S^l$ neighbors of $v_i$ in the previous GNN layer.
 $S^l$ is the hyperparameter that is usually much smaller than $|\mathcal{V}|$.
@@ -359,7 +359,7 @@ By this way, GraphSAGE limits the neighborhood sizes of the vertices in the samp
 
 \begin{figure}
 	\centering
-	\subfloat[Neighbor sampling\label{fig:gnn_sampling_neigbhor_sampling}]{\includegraphics[height=4cm]{figs/illustration/layer_sampling.pdf}}
+	\subfloat[Neighbor sampling\label{fig:gnn_sampling_neighbor_sampling}]{\includegraphics[height=4cm]{figs/illustration/layer_sampling.pdf}}
 	%
 	\subfloat[Graph sampling\label{fig:gnn_sampling_graph_sampling}]{\includegraphics[height=4cm]{figs/illustration/graph_sampling.pdf}}
 	\caption{Training a GNN with sampling techniques. The faded graph neurons and their connections are inactivated.}
