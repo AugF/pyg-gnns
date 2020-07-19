@@ -10,10 +10,9 @@ The experiment results are presented and analyzed later in Section~\ref{sec:expe
 \paragraph{Experimental Environment}
 All the experiments were conducted in a CentOS 7 Linux server with the kernel version 3.10.0.
 The server had 40 cores and 90 GB main meory.
-The server was also equipped with a NVIDIA Tesla T4 GPU card with 16GB GDDR6 memory.
+The server was equipped with a NVIDIA Tesla T4 GPU card with 16GB GDDR6 memory.
 For the software environment, we adopted Python 3.7.7, PyTorch 1.5.0 and CUDA 10.1.
 We implemented all the GNNs with PyTorch Geometric 1.5.0.
-The execution time decomposition was collected with NVIDIA Nsight systems.
 
 \paragraph{Dataset}
 We used six real-world graph datasets as listed in \tablename~\ref{tab:dataset_overview} that were popular in the GNN accuracy evaluation \cite{yang2016_revisiting_semisupervised, zeng2020_graphsaint, shchur2018_pitfall_of_gnn}.
@@ -53,24 +52,25 @@ The vertices with unseed labels were used in the evaluation phsae to check the a
 %Since model parameters of GNNs were not restricted by the topological structure of $\mathcal{G}$, the model learned from the semi-supervised learning can directly extrapolate to unseen vertices.
 
 \paragraph{GNN Implementation}
-We implemented the four typical GNNs--GCN, GGNN, GAT, GaAN--with PyTorch Geometric 1.5.0.
+We implemented the four typical GNNs (GCN, GGNN, GAT, GaAN) with PyTorch Geometric 1.5.0.
 To compare the performance characteristics of four GNNs side-by-side, we used a unified GNN structure for them: Input Layer $\rightarrow$ GNN Layer 0 $\rightarrow$ GNN Layer 1 $\rightarrow$ Softmax Layer (to prediction).
 The structure was popular in the experimental evaluation of GCN \cite{kipf2017_gcn}, GAT \cite{huang2018_gat} and GaAN \cite{zhang2018_gaan}.
-Since a GGNN layer requires the input and output hidden feature vectors have the same dimension, for GGNN, we added two MLP layers to transform the dimensions of the input/output feature vectors of the whole GNN: Input Layer $\rightarrow$ MLP $\rightarrow$ GNN Layer 0 $\rightarrow$ GNN Layer 1 $\rightarrow$ MLP $\rightarrow$ Softmax Layer.
+Since a GGNN layer requires the input and output hidden feature vectors have the same dimension, we added two MLP layers to transform the dimensions of the input/output feature vectors of the whole GNN: Input Layer $\rightarrow$ MLP $\rightarrow$ GGNN Layer 0 $\rightarrow$ GGNN Layer 1 $\rightarrow$ MLP $\rightarrow$ Softmax Layer.
 We stored the dataset and the model parameters in the memory of GPU.
-We conducted all the training on GPU.
+All the training was conducted on GPU.
 
 \paragraph{Hyper-parameters}
-We use $dim(\boldsymbol{v}$ to denote the dimension of a vector $\boldsymbol{v}$.
+We use $dim(\boldsymbol{v})$ to denote the dimension of a vector $\boldsymbol{v}$.
 We picked the hyper-parameters of GNNs according to their original papers.
-As a GNN used different hyper-parameters for different tasks, we picked the most popular hyper-parameters.
-Some hyper-parameters, such as the numbers of GNN layers and the dimensions of hidden feature vectors, were common hyper-parameters in all the GNNs.
+As GNNs used different hyper-parameters for different datasets, we picked the most popular hyper-parameters and used the same set of hyper-parameters for all the datasets in our experiments.
+Some hyper-parameters like the dimensions of hidden feature vectors were common hyper-parameters.
 We set them to the same values in the four GNNs.
-For GCN/GAT/GaAN, $\boldsymbol{h}^0_i = \boldsymbol{x}_i$, $dim(\boldsymbol{h}^1_i)=64$, and $dim(\boldsymbol{h}^2_i)$ was the number of classes.
+For GCN/GAT/GaAN, we set $\boldsymbol{h}^0_i = \boldsymbol{x}_i$, $dim(\boldsymbol{h}^1_i)=64$, and $dim(\boldsymbol{h}^2_i)=\#Classes$.
+For GAT, we set the hyper-parameters according to \cite{huang2018_gat}.
+The first GAT layer had 8 heads with $d^0_{head}=8$ and merged the heads by concatenating.
+The second GAT layer used a single head with $d^1_{head}=d^1_{out}=\#Classes$.
 For GGNN, since it uses extra MLP layers to transform the dimensions of the input/output feature vectors, we set $dim(\boldsymbol{h}^0_i) = dim(\boldsymbol{h}^1_i) = dim(\boldsymbol{h}^2_i) = 64$.
-We used 8 heads in GAT and GaAN.
-$d_{head}=8$ in GAT.
-$d_a=d_v=8$ and $d_m=64$ in GaAN.
+We used 8 heads in the both GaAN layers with $d_a=d_v=8$ and $d_m=64$.
 
 \subsection{Experimental Scheme}
 \label{sec:experimental_scheme}

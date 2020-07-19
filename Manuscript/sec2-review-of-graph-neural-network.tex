@@ -320,8 +320,8 @@ GGNN further requires the dimension of $\boldsymbol{h}^{l+1}$ is equal to the di
 GAT introduces the attention and multi-head mechanism into the graph neural networks.
 The $K$ heads generate $K$ independent views for an edge, where $K$ is a hyper-parameter.
 The views of $K$ heads can be merged by concatenating or by averaging.
-For concatenating, the dimension of the hidden feature vector of each view is $d_{out}/K$.
-For averaging, the dimension is $d_{out}$, multiplying the complexity by $K$.
+For concatenating, the dimension of the hidden feature vector of each head $d_{head}$ is $d_{out}/K$.
+For averaging, $d_{head}$ is $d_{out}$, multiplying the complexity by $K$.
 Each GAT layer consists of a preprocessing step and two sub-layers.
 In the preprocessing step, GAT calculates the attention vectors $\hat{\boldsymbol{h}}^{l}_{i,(k)}$ for every vertex $v_i$ in every head $k$.
 The first sub-layer uses the attention vectors to calculate the attention weights of every edge in every head $\boldsymbol{m}^{l,0}_{j,i,(k)}$.
