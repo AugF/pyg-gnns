@@ -277,8 +277,8 @@ For GaAN, a GaAN layer consists of four sub-layers: the first sub-layer calculat
 						& \text{Sub-layer 0:}\\
 						& \hat{\boldsymbol{a}}^{l,0}_{i,(k)} = \boldsymbol{s}^{l,0}_{i,(k)}\\
 						& \text{Sub-layer 1,2,3:}\\
-						& \boldsymbol{g}_i = \textcolor{blue}{\boldsymbol{FC}_{\theta^l_g}}(\boldsymbol{h}_i^{l} \parallel \boldsymbol{s}_{i}^{l, 2} \parallel \boldsymbol{s}_{i}^{l, 3}) \\
-						& \boldsymbol{h}_i^{l+1} = \textcolor{blue}{\boldsymbol{FC}_{\theta^l_o}} (\boldsymbol{h}_i^l \parallel (\boldsymbol{g}_{i} \odot \boldsymbol{s}_{i}^{l, 1}))
+						& \boldsymbol{g}_i^l = \textcolor{blue}{\boldsymbol{FC}_{\theta^l_g}}(\boldsymbol{h}_i^{l} \parallel \boldsymbol{s}_{i}^{l, 2} \parallel \boldsymbol{s}_{i}^{l, 3}) \\
+						& \boldsymbol{h}_i^{l+1} = \textcolor{blue}{\boldsymbol{FC}_{\theta^l_o}} (\boldsymbol{h}_i^l \parallel (\boldsymbol{g}_{i}^l \odot \boldsymbol{s}_{i}^{l, 1}))
 					\end{aligned}$
 			\end{scriptsize}                                                                                                                                                                                   &
 			\makecell[r]{$O(max(K * d_v + d_{in}, 2 * d_{in} + d_m) * d_{out})$\\
@@ -289,7 +289,7 @@ For GaAN, a GaAN layer consists of four sub-layers: the first sub-layer calculat
 	\caption{Typical graph neural networks and their vertex calculation functions.
 		$d_{in}$ and $d_{out}$ are dimensions of the input and output hidden feature vectors, respectively.
 		Blue variables are model parameters to learn.
-		For Neural FPs, $\textcolor{blue}{\boldsymbol{W}}^{l, |\mathcal{N}(i)|}$ is the weight matrix for vertices with degree $|\mathcal{N}(i)|$ at layer $l$. 
+		In Neural FPs, $\textcolor{blue}{\boldsymbol{W}}^{l, |\mathcal{N}(i)|}$ is the weight matrix for vertices with degree $|\mathcal{N}(i)|$ at layer $l$. 
 		In GaAN, $FC^{\alpha}_{\theta}(x) = \alpha(\boldsymbol{W}\boldsymbol{x} + \boldsymbol{b})$, 
 		where $\theta=\{\boldsymbol{W}, \boldsymbol{b}\}$, $\theta$ with different subscripts mean different transformation parameters, we denote $h(\cdot)$
 		to be the $LeakyReLU$ for activation functions and $FC_{\theta}(x)$ means applying no activation function after the linear transform.}
