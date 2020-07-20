@@ -347,7 +347,7 @@ GAT uses the aggreated vector $\boldsymbol{s}^{l,1}_i$ of the second sub-layer a
 
 \textbf{GaAN} (high vertex \& edge calculation complexity):
 Based on the multi-head machanism, GaAN introduces a convolutional subnetwork to control the weight of each head. Different to multi-head machanism in GAT, GaAN project the center vertex feature to the query vector (dimension is $d_v$) and
-the neighboring vertex features are projected to get key and value vectors (dimensions are $d_{xa}$ and $d_{ya}$, because they are set to the same value in the original paper experiment, we use $d_a$ to represent $d_{xa}$ and $d_{ya}$ in the description that follows).
+the neighboring vertex features are projected to get key and value vectors. The dimension of key and values vectors are the same, we set to $d_a$.
 $K$ is the number of attention heads. The weight of each head is calculated by a convolutional network, which takes the feature of each vertex and its neighbors as input to get the gated values with number of $K$. 
 The convolutional network is built by combining average pooling and max pooling. Moreover, the max pooling needs to project the vertex feature to a transformed vector with dimension of $d_m$, costing an additional computational overhead.
 Each GaAN layer consists of four sub-layers. The first sub-layer aims to get the summation of attention weights of every vertex in each head.
