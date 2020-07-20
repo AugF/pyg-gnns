@@ -363,7 +363,7 @@ The full-batch gradient descent has two disadvantages \cite{chiang2019_cluster_g
 It has to cache intermediate results of all vertices in the forward phase, which consumes lots of memory space.
 It updates the parameters only once for each epoch, slowing the convergence of gradient descent.
 
-To train GNNs in a mini-batch way, several sampling techniques \cite{chiang2019_cluster_gcn} are proposed.
+To train GNNs in a mini-batch way, several sampling techniques are proposed.
 In each mini-batch, they sample a small subgraph from the whole graph $\mathcal{G}$ and uses the subgraph to update the model parameters.
 In other words, the sampling techniques only active the graph neurons and the connections that appear in the sampled subgraph between GNN layers, as shown in \figurename~\ref{fig:gnn_sampling}.
 Inactive graph neurons and connetions do not participate in the training of this mini-batch, saving lots of computation and storage costs.

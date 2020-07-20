@@ -86,7 +86,7 @@ Algorithm enginners can use larger hyper-parameters to increase the expressive p
 \subsection{Training Time Breakdown}
 \label{sec:training_time_breakdown}
 
-To find out which stage dominates the training time, we breakdown the training time and analyze the performance bottleneck level by level.
+To find out which stage/step dominates the training time, we breakdown the training time and analyze the performance bottleneck level by level.
 
 \subsubsection{Layer Level}
 
@@ -233,122 +233,114 @@ The performance bottleneck in the edge calculation depends on the time complexit
 
 \subsection{Memory Usage Analysis}
 
-At present, all data (including datasets and intermediate calculation results) of PyG in the process of training GNN with GPU
-are stored in GPU memory. Compared with the main memory of the system, the memory capacity on GPU is very limited.
-\textbf{GPU memory capacity is limited to Determinants of the size of the training dataset}.
-GaAN was unable to complete the training due to memory overflow during the training of the `\textit{cph}` dataset.
+During the GNN training, all data (including datasets and intermediate results) are stored in the on-chip memory of GPU. 
+Compared with the main memory on the host side, the capacity of the GPU memory is very limited.
+\emph{The GPU memory capacity limits the scale of graphs that a GPU can train GNNs on}.
+For example, GaAN was unable to complete the training due to memory overflow exception on \texttt{cph} dataset.
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.7\columnwidth]{figs/experiments/exp_memory_usage_stage_amp.png}
-    \caption{Maximum memory usage in each stage. Data Load refers to memory usage after data is loaded. dataset: amp. Other datasets are similar}
+    \includegraphics[height=5cm]{figs/experiments/exp_memory_usage_stage_amp.pdf}
+    \caption{Memory usage of each phase. Dataset: \texttt{amp}.}
     \label{fig:exp_memory_usage_stage_amp}
 \end{figure}
 
-\figurename~\ref{fig:exp_memory_usage_stage_amp} shows the peak memory usage of each stage when each GNN is trained on the cam dataset, the situation is similar on other datasets.
-\textbf{The memory usage in GNN training is forward The peak in the phase and the backward phase},
-because a large number of temporary calculation results will be generated in the forward phase,
-and the key intermediate calculation results will be cached.
-The cached intermediate results will be used in the gradient calculation of the backward phase.
-\figurename~\ref{fig:ggnn_vertex_func_computation_graph} shows the calculation graph of GGNN's vertex calculation function $\gamma$.
-It can be seen that a large number of operators are involved in GGNN vertex calculation and a large number of intermediate calculation results are generated.The key calculation results will also be cached,
-which is exacerbated Memory usage. Most of the peak memory usage in the loss phase comes from the intermediate calculation results of the cache.
-With the end of the backward phase, the memory of the intermediate calculation results is released.
-In the evaluation phase, there is no need to cache intermediate results for gradient calculations, Peak memory usage dropped significantly.
-
 \begin{figure}
     \centering
-    \includegraphics[width=0.7\columnwidth]{figs/illustration/ggnn_vertex_func_computation_graph.png}
-    \caption{The calculation graph of the GGNN vertex calculation function $\gamma$. The output of the Cached Operator will be cached for gradient calculation in the backward process}
+    \includegraphics[height=4.5cm]{figs/illustration/ggnn_vertex_func_computation_graph.pdf}
+    \caption{Computation graph of the vertex update function $\gamma$ of GGNN.}
     \label{fig:ggnn_vertex_func_computation_graph}
 \end{figure}
 
-It is worth noting that \textbf{the peak memory during GNN training far exceeds the memory usage of the dataset itself}.
-The ratio of the highest peak memory usage during our training compared to the memory usage after data Load is
-defined as the memory expansion ratio. \figurename~\ref{fig:exp_memory_expansion_ratio} compares the memory expansion ratios
-of different GNNs on different datasets. The expansion ratio of GCN is the lowest, between 5-14 times,
-and the expansion ratio of GaAN is the highest, up to 101 times.
-\textbf{Very high expansion ratio severely limits the data scalability of GNN, making GPU unable to process large-scale graph datasets},
-especially restricting GNN with high edge calculation complexity.
+\figurename~\ref{fig:exp_memory_usage_stage_amp} shows the peak memory usage of each phase in the GNN training on the \texttt{amp} dataset.
+The trend was similar on other datasets.
+\emph{The GNN training achieved its peak memory usage in the forward and the backward phases}.
+The forward phase generated a large number of intermediate results.
+Some key intermediate results were cached, increasing the memory usage.
+The cached results were used in the gradient calculation in the backward phase.
+\figurename~\ref{fig:ggnn_vertex_func_computation_graph} shows the computation graph of the vertex update function $\gamma$ of GGNN.
+The computation graph had a large number of operators, each operator generating an intermediate matrix.
+Some key intermediate matrices were cached.
+The cached matrices were the main source of memory usage in the loss phase.
+By the end of the backward phase, the cached results were released.
+Since the evaluation phase did not need to calculate the gradients, it did not cache intermediate results.
+Its memory usage declined sharply.
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.7\columnwidth]{figs/experiments/exp_memory_expansion_ratio.png}
-    \caption{The proportion of memory expansion of each GNN on different datasets.}
+    \includegraphics[height=5cm]{figs/experiments/exp_memory_expansion_ratio.pdf}
+    \caption{Memory expansion ratios of typical GNNs.}
     \label{fig:exp_memory_expansion_ratio}
 \end{figure}
 
-\figurename~\ref{fig:exp_memory_expansion_ratio} also shows that the expansion ratio of the same GNN under the same hyperparameters changes with different datasets.
-Because the input feature dimension of the \textit{cph} dataset is much higher than the hidden vector of the GNN layer The dimension of the input feature vector matrix
-of the graph is much higher than the matrix size of the intermediate calculation result of the cache,
-so its expansion ratio is particularly low, and the cam dataset is the opposite. In order to measure the effect of the input feature vector dimension on the memory
-expansion ratio , We randomly generated feature vectors of specific dimensions for different datasets.
-\figurename~\ref{fig:exp_memory_expension_ratio_input_feature_dimension} shows the change in the expansion ratio under different input feature vector dimensions.
-\textbf{In the same GNN structure and hyperparameter settings, using a higher-dimensional input feature vector can reduce memory expansion ratio} .
+The peak memory usage during the GNN training far exceeds the size of the dataset itself.
+We define the \emph{memory expansion ratio} (MER) as the ratio of the peak memory usage during the training to the memory usage after loading the dataset.
+\figurename~\ref{fig:exp_memory_expansion_ratio} compares MER of different GNNs.
+GCN had the lowest MER (up to 14) while GaAN had the highest MER (up to 101).
+\emph{The high MER limits the data scalability of GNNs}, making GPU unable to handle big graphs.
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.7\columnwidth]{figs/experiments/exp_memory_expansion_ratio_input_feature_dimension_com-amazon.pdf}
-    \caption{The change of the memory expansion ratio with the dimension of the input feature vector. dataset: cam, other datasets are similar}
+    \includegraphics[height=5cm]{figs/experiments/exp_memory_expansion_ratio_input_feature_dimension_com-amazon.pdf}
+    \caption{Memory expansion ratio under different dimensions of the input feature vectors. Dataset: \texttt{cam}.}
     \label{fig:exp_memory_expension_ratio_input_feature_dimension}
 \end{figure}
 
-Different GNNs have different vertex/edge calculation complexity, and the scale of the generated intermediate results has different sensitivity
-to the number of vertices/edges in the graph, resulting in the memory expansion ratio being affected by the average degree of the graph.
-We measured the GPU peak memory The usage and expansion ratios are affected by the scale of the graph.
+\figurename~\ref{fig:exp_memory_expansion_ratio} also indicates that the same GNN had different MERs for different datasets.
+Two characteristics of the dataset affects the MER: the dimension of the input feature vector and the average degree.
 
-In the case of a fixed number of vertices in the graph, we use the R-MAT generator to generate random graphs with different average degrees (number of edges).
-The \figurename~\ref{fig:exp_memory_expansion_ratio_input_graph_number_of_edges} shows how the memory usage during training varies with the average degree.
-\textbf{As the average degree increases, the peak memory usage increases linearly.
-    The intermediate results generated by the edge calculation gradually dominate, and the memory expansion ratio of each GNN gradually stabilizes}.
-The expansion ratio is affected by the complexity of the edge calculation.
-Except for GGNN, the memory expansion ratio of other GNNs increases with the increase of degree. GGNN has a high vertex calculation complexity.
-When the average degree is low, its memory expansion ratio is mainly affected by the intermediate results of vertex calculation;
-when the average When the degree is increased, the memory expansion ratio is gradually determined by the edge calculation complexity.
-Because GGNN has the lowest edge calculation complexity, its stable expansion ratio is the lowest.
+Given the same graph, the scales of the intermediate results are mainly affected by the hyper-parameters of the GNN.
+If the dimension of the input feature vectors is high (like the \texttt{cph} dataset), the size of the dataset is large.
+The size becomes comparable to the scales of the intermediate results,  making the MER low.
+To find out how the dimension affects the MER, we generated random input feature vectors with different dimensions for the \texttt{cam} dataset and measured the MER in \figurename~\ref{fig:exp_memory_expension_ratio_input_feature_dimension}.
+For a GNN under the same hyper-parameters, \emph{the MER decreased as the dimension of the input feature vectors increased}.
 
 \begin{figure}
     \centering
-    \subfloat[]{\includegraphics[height=4cm]{figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_edges_peak_memory.png}}
-    \subfloat[]{\includegraphics[height=4cm]{figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_edges_expansion_ratio.png}}
-    \caption{The change of memory usage with the average degree of the graph (R-MAT random graph, the number of vertices is fixed at 10k, and the input feature vector dimension is 32}
+    \subfloat[Peak memory usage]{\includegraphics[height=4cm]{figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_edges_peak_memory.pdf}}
+    \subfloat[Memory expansion ratio]{\includegraphics[height=4cm]{figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_edges_expansion_ratio.pdf}}
+    \caption{Memory usage under different average degrees of the graph. The graph was generated with the R-MAT generator fixing the number of vertices at 10K and the dimension of the input feature vectors at 32.}
     \label{fig:exp_memory_expansion_ratio_input_graph_number_of_edges}
 \end{figure}
 
-In the case of a fixed number of edges in the graph, we use the R-MAT generator to generate random graphs with different numbers of vertices
-\figurename~\ref{@fig:exp_memory_expansion_ratio_input_graph_number_of_vertices_fixed_edge} shows the change of memory usage with the number of vertices during training.
-Except for GGNN, the number of vertices increases, the number of vertices increases, the number of vertices increases,
-and the number of vertices increases. The size of the eigenvector matrix of the vertex input becomes larger,
-but the peak memory usage only increases slightly, which makes the proportion of memory expansion decrease to a certain extent.
-Only GGNN has a large number of intermediate calculation results during the vertex calculation process because of the high vertex calculation complexity.
-The memory expansion factor has a small increase. The experimental data shows that \textbf{the intermediate result produced by the edge calculation is the dominant factor
-    in memory usage, and the peak memory usage of each GNN increases linearly with the increase in the number of edges}.
+The average degree of the graph also affects MER by influencing the relative scale of the intermediate results from vertex/edge calculation.
+Fixing the number of vertices $|\mathcal{V}|$, we used the R-MAT generator to generate random graphs with different average degrees.
+\figurename~\ref{fig:exp_memory_expansion_ratio_input_graph_number_of_edges} shows how the memory usage changes according to the average degrees.
+As the average degree $\bar{d}$ increased, the number of edges $|\mathcal{E}|$ increased and the peak memory usage increased \emph{linearly} with $\bar{d}$.
+The edge calculation gradually dominated the memory usage and \emph{the MER converged to a stable value}.
+The stable value was determined by the complexity of the edge calculation.
+Except for GGNN, the MERs of the other GNNs increased as $\bar{d}$ increased.
+As GGNN had high vertex calculation complexity, the MER related to the vertex calculation was much larger than the edge calculation.
+When the edge calculation dominated the memory usage, its MER became smaller.
 
 \begin{figure}
     \centering
-    \subfloat[]{\includegraphics[height=4cm]{figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_vertices_fixed_edge_peak_memory.png}}
-    \subfloat[]{\includegraphics[height=4cm]{figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_vertices_fixed_edge_expansion_ratio.png}}
-    \caption{Memory usage changes with the number of graph vertices (R-MAT random graph, the number of edges is fixed at 500k, and the input feature vector dimension is 32)}
+    \subfloat[Peak memory usage]{\includegraphics[height=4cm]{figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_vertices_fixed_edge_peak_memory.pdf}}
+    \subfloat[Memory expansion ratio]{\includegraphics[height=4cm]{figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_vertices_fixed_edge_expansion_ratio.pdf}}
+    \caption{Memory usage under different numbers of vertices of the graph. The graph was generated with the R-MAT generator fixing the number of edges at 500K and the dimension of the input feature vectors at 32.}
     \label{fig:exp_memory_expansion_ratio_input_graph_number_of_vertices_fixed_edge}
 \end{figure}
 
-\paragraph{Bottleneck restricting data scalability}
-\begin{itemize}
-    \item \textbf{GPU memory capacity is the decisive factor limiting the scalability of the training dataset}.
-    \item \textbf{GPU memory usage mainly comes from the intermediate calculation results generated during the calculation process,
-              especially the intermediate calculation results of the edge calculation. Because part of the intermediate calculation results
-              will be cached to participate in backward calculation, high GPU memory usage runs through the forward and backward stages.}
-    \item \textbf{GNN's peak memory usage during training can reach tens or even hundreds of times the size of the input data. The limited memory capacity of the GPU severely limits the size of the input data that can be trained}.
-    \item \textbf{In the case of a fixed number of vertices, The peak memory usage of GNN increases linearly with the increase of the number of edges of the graph, The proportion of memory expansion will gradually stabilize to a fixed value determined by the complexity of the edge calculation}.
-    \item \textbf{In the case where the network structure and various hyperparameters are fixed, using a higher-dimensional input feature vector can reduce the expansion ratio of GPU memory usage}.
-\end{itemize}
+We also fixed the number of edges $|\mathcal{E}|$ in the graph and generated random graphs with different $|\mathcal{V}|$.
+\figurename~\ref{fig:exp_memory_expansion_ratio_input_graph_number_of_vertices_fixed_edge} shows how the memory usage changed according to $|\mathcal{V}|$.
+All GNNs were much more insensitive to the changes in $|\mathcal{V}|$ compared to $|\mathcal{E}|$.
+Except for GGNN, the MERs of the other GNNs declined as $|\mathcal{V}|$ increased because the scale of the dataset increased quicklier than the scales of the intermediate results.
+As GGNN had high vertex calculation complexity, the scales of the intermediate results were much more sensitive to $|\mathcal{V}|$.
+It indicates that \emph{the intermediate results of the edge calculation dominated the memory usage during the GNN training}.
 
-\label{sec:memory_usage_analysis}
+\paragraph{Summary}
+The \emph{high} memory expansion ratio severely restricted the data scalability of the GNN training.
+The memory usage mainly came from the intermediate results of the \emph{edge calculation}.
+Fixing the number of vertices, the memory usage increased \emph{linearly} along with the number of edges.
+Optimizing the memory usage of the edge calculation could significantly reduce the memory expansion ratio.
+Fixing the GNN structure and the hyper-parameters, increasing the dimension of the input feature vectors could also reduce the memory expansion ratio.
+
 \subsection{Effects of Sampling Techniques on Performance}
 
-Before the sampling technique, GNN training is full batch, that is, all the vertices and edges in the training set participate in the training and calculate the gradient at the same time.
-Full batch training can ensure convergence, but the training overhead is large each time, resulting in slow convergence.
-Inspired by the minibatch training method in stochastic gradient descent, a series of GNN sampling techniques are proposed.
+Without the sampling technique, GNNs are trained in a full batch manner.
+All the vertices and edges in the training set participate in the training.
+The full-batch training ensures the convergence, but the training time per epoch is long, showing the wall-clock convergence speed.
+Inspired by the mini-batch training in stochastic gradient descent, a series of GNN sampling techniques are proposed.
 The sampling technique decomposes the training of the full graph (i.e. epoch) into several batches, and
 each batch uses only part of the graph vertices and edges to participate training and performing gradient
 updates greatly reduces the training time of each batch, allowing multiple rounds of gradient descent to
