@@ -307,7 +307,7 @@ It has only one parameter to learn at each layer, i.e. the weight matrix $\bolds
 A GCN graph neuron can be expressed as $\boldsymbol{h}^{l+1}_i = \boldsymbol{W}^l\sum_{v_j \in \mathcal{N}(v_i)}{e_{j,i}\boldsymbol{h}^l_j}$, where $e_{j,i}$ is the normalized weight of the edge $(v_j, v_i)$.
 %In the matrix view, $\boldsymbol{H}^{l+1} = (\boldsymbol{A}\boldsymbol{H}^l)\boldsymbol{W}^l$.
 According to the associative law of the matrix multiplication, $\boldsymbol{h}^{l+1}_i = \sum_{v_j \in \mathcal{N}(v_i)}{e_{j,i}\boldsymbol{W}^l\boldsymbol{h}^l_j}$.
-Since the dimension of $\boldsymbol{h}^{l+1}_i$ is usually smaller than $\boldsymbol{h}^l_i$ in practical GCNs, the implementation of GCN in PyTorch Geometric chooses to first conduct the vertex calculation $\hat{\boldsymbol{h}}^l_j = \boldsymbol{W}^l\boldsymbol{h}^l_j$ for each vertex $v_j$ and then conduct the edge calculation $\boldsymbol{h}^{l+1}_i=\sum_{v_j\in\mathcal{N}(v_i)}{\hat{\boldsymbol{h}}^l_j}$.
+Since the dimension of $\boldsymbol{h}^{l+1}_i$ is usually smaller than $\boldsymbol{h}^l_i$ in practical GCNs, the implementation of GCN in PyTorch Geometric chooses to first conduct the vertex calculation $\hat{\boldsymbol{h}}^l_j = \boldsymbol{W}^l\boldsymbol{h}^l_j$ for each vertex $v_j$ and then conduct the edge calculation $\boldsymbol{h}^{l+1}_i=\sum_{v_j\in\mathcal{N}(v_i)}{e_{j,i}\hat{\boldsymbol{h}}^l_j}$.
 As $\hat{\boldsymbol{h}}^l_j$ has the same dimension as $\boldsymbol{h}^{l+1}_i$, the implementation significantly reduces the  computation cost of the edge calculation.
 
 \textbf{GGNN} (high vertex \& low edge calculation complexity):
@@ -315,6 +315,9 @@ GGNN introduces the gated recurrent unit (GRU) into the graph neural networks.
 The vertex update function $\phi$ of GGNN is a modified GRU unit that has 12 model parameters to learn, having high computational complexity.
 To lower the training cost, all GNN layers share the same group of parameters in GGNN.
 GGNN further requires the dimension of $\boldsymbol{h}^{l+1}$ is equal to the dimension of $\boldsymbol{h}^l$.
+Since the message function $\phi$ only uses the hidden feature vector $\boldsymbol{h}^l_j$ of the source vertex $v_j$ of an edge $(v_j, v_i)$, in the implementation, GGNN conducts the pre-processing vertex calculation $\hat{\boldsymbol{h}}^l_i=\boldsymbol{W}\boldsymbol{h}^l_i$ for every vertex $v_i$ before the message-passing.
+The message function $\phi$ directly uses $\hat{\boldsymbol{h}}^l_j$ as the message vector for the edge $(v_j, v_i)$. 
+By this way, GGNN further reduces the time complexity of the edge calculation to $O(1)$ without increasing the time complexity of the vertex calculation. 
 
 \textbf{GAT} (low vertex \& high edge calculation complexity):
 GAT introduces the attention and multi-head mechanism into the graph neural networks.
