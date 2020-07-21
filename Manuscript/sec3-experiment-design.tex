@@ -26,22 +26,22 @@ Input feature vectors of the random graphs were random dense vectors with the di
 Vertices were divided into 10 classes randomly.
 
 \begin{table}
-    \centering
-    \small
-    \begin{tabular}{cccccccc}
-        \toprule
-        Dataset                                                 & $|\mathcal{V}|$ & $|\mathcal{E}|$ & $\bar{d}$ & $dim(\boldsymbol{x})$ & Sparsity & \#Class & Directed \\
-        \midrule
-        pubmed (pub) \cite{yang2016_revisiting_semisupervised}  & 19,717          & 44,324          & 4.5       & 500                & 0.90     & 3       & Yes      \\
-        amazon-photo (amp) \cite{shchur2018_pitfall_of_gnn}     & 7,650           & 119,081         & 31.1      & 745                & 0.65     & 8       & Yes      \\
-        amazon-computers (amc) \cite{shchur2018_pitfall_of_gnn} & 13,752          & 245,861         & 35.8      & 767                & 0.65     & 10      & Yes      \\
-        coauthor-physics (cph) \cite{shchur2018_pitfall_of_gnn} & 34,493          & 247,962         & 14.4      & 8415               & 0.996    & 5       & Yes      \\
-        flickr (fli) \cite{zeng2020_graphsaint}                 & 89,250          & 899,756         & 10.1      & 500                & 0.54     & 7       & No       \\
-        com-amazon (cam) \cite{yang2012_defining}                & 334,863         & 925,872         & 2.8       & 32                 & 0.0      & 10      & No       \\
-        \bottomrule
-    \end{tabular}
-    \caption{Dataset overview. $\bar{d}$ represents the average vertex degree. $dim(\boldsymbol{x})$ is the dimension of the input feature vector. The sparsity is the proportion of zero elements in the input feature vectors.}
-    \label{tab:dataset_overview}
+	\centering
+	\small
+	\begin{tabular}{cccccccc}
+		\toprule
+		Dataset                                                 & $|\mathcal{V}|$ & $|\mathcal{E}|$ & $\bar{d}$ & $dim(\boldsymbol{x})$ & Sparsity & \#Class & Directed \\
+		\midrule
+		pubmed (pub) \cite{yang2016_revisiting_semisupervised}  & 19,717          & 44,324          & 4.5       & 500                   & 0.90     & 3       & Yes      \\
+		amazon-photo (amp) \cite{shchur2018_pitfall_of_gnn}     & 7,650           & 119,081         & 31.1      & 745                   & 0.65     & 8       & Yes      \\
+		amazon-computers (amc) \cite{shchur2018_pitfall_of_gnn} & 13,752          & 245,861         & 35.8      & 767                   & 0.65     & 10      & Yes      \\
+		coauthor-physics (cph) \cite{shchur2018_pitfall_of_gnn} & 34,493          & 247,962         & 14.4      & 8415                  & 0.996    & 5       & Yes      \\
+		flickr (fli) \cite{zeng2020_graphsaint}                 & 89,250          & 899,756         & 10.1      & 500                   & 0.54     & 7       & No       \\
+		com-amazon (cam) \cite{yang2012_defining}               & 334,863         & 925,872         & 2.8       & 32                    & 0.0      & 10      & No       \\
+		\bottomrule
+	\end{tabular}
+	\caption{Dataset overview. $\bar{d}$ represents the average vertex degree. $dim(\boldsymbol{x})$ is the dimension of the input feature vector. The sparsity is the proportion of zero elements in the input feature vectors.}
+	\label{tab:dataset_overview}
 \end{table}
 
 \paragraph{Learning Task}
@@ -72,6 +72,12 @@ The second GAT layer used a single head with $d^1_{head}=d^1_{out}=\#Classes$.
 For GGNN, since it uses extra MLP layers to transform the dimensions of the input/output feature vectors, we set $dim(\boldsymbol{h}^0_i) = dim(\boldsymbol{h}^1_i) = dim(\boldsymbol{h}^2_i) = 64$.
 We used 8 heads in the both GaAN layers with $d_a=d_v=8$ and $d_m=64$.
 
+\paragraph{Sampling Techniques}
+
+We picked the neighbor sampler from GraphSAGE \cite{hamilton2017_graphsage} and the cluster sampler from ClusterGCN \cite{chiang2019_cluster_gcn} as the typical neighbor sampling and graph sampling techniques, respectively.
+For the neigbhor sampler, we used the neighborhood sample sizes (25 for GNN Layer 1, and 10 for GNN Layer 0) and the default batch size (512) from \cite{hamilton2017_graphsage}.
+For the cluster sampler, we partitioned every input graph into 1500 partitions and used 20 partitions per batch according to \cite{chiang2019_cluster_gcn}.
+
 \subsection{Experimental Scheme}
 \label{sec:experimental_scheme}
 
@@ -79,32 +85,32 @@ To find out performance bottleneck in GNN training, we conduct the bottleneck an
 The answers to those questions will give us a more comprehensive view on the performance characteristics of GNN training.
 We design extensive experiments to find the answers emperically.
 \begin{itemize}
-	
+
 	\item[Q1] \emph{How do the hyper-parameters affect the training time and the memory usage of a GNN?} (Section~\ref{sec:effects_of_hyper-parameters_on_performance})
-	
-			Every GNN has a group of hyper-parameters like the number of GNN layers and the dimision of hidden feature vectors. The hyper-parameters affect the training time per epoch and the peak memory usage during the training.
-			To evaluate their effects, we measured how the training time per epoch and the peak memory usage (of GPU) changed as we increased the values of the hyper-parameters.
-			Through the experiments, we want to verify the validity of the computational complexity analysis in \tablename~\ref{tab:gnn_overview_edge} and \tablename~\ref{tab:gnn_overview_vertex}.
-			If the complexity analysis is valid, we can analyze the bottleneck theoretically.
+
+	      Every GNN has a group of hyper-parameters like the number of GNN layers and the dimision of hidden feature vectors. The hyper-parameters affect the training time per epoch and the peak memory usage during the training.
+	      To evaluate their effects, we measured how the training time per epoch and the peak memory usage (of GPU) changed as we increased the values of the hyper-parameters.
+	      Through the experiments, we want to verify the validity of the computational complexity analysis in \tablename~\ref{tab:gnn_overview_edge} and \tablename~\ref{tab:gnn_overview_vertex}.
+	      If the complexity analysis is valid, we can analyze the bottleneck theoretically.
 
 	\item[Q2] \emph{Which stage is the most time-consuming stage in GNN training?} (Section~\ref{sec:training_time_breakdown})
-	
-			We can decompose the training time on different levels: layer level, vertex/edge computation level and the basic operator level.
-			On each level, we breakdown the training time of an epoch into several stages. The most time-consuming stage is the performance bottleneck.
-			Optimizing its implementation can significantly reduce the training time.
-			
+
+	      We can decompose the training time on different levels: layer level, vertex/edge computation level and the basic operator level.
+	      On each level, we breakdown the training time of an epoch into several stages. The most time-consuming stage is the performance bottleneck.
+	      Optimizing its implementation can significantly reduce the training time.
+
 	\item[Q3] \emph{Which consumes most of memory in GNN training?} (Section~\ref{sec:memory_usage_analysis})
-	
-			The limited memory capacity of a GPU card is the main factor preventing us training GNNs on big graphs.
-			We measured the peak memory usage in the GNN training under different graph scales, input feature dimensions and average vertex degrees.
-			Based on the results, we analyze which is the most memory-consuming component.
-			Reducing its memory usage will enable us training bigger GNNs under the same memory capacity.
-		
+
+	      The limited memory capacity of a GPU card is the main factor preventing us training GNNs on big graphs.
+	      We measured the peak memory usage in the GNN training under different graph scales, input feature dimensions and average vertex degrees.
+	      Based on the results, we analyze which is the most memory-consuming component.
+	      Reducing its memory usage will enable us training bigger GNNs under the same memory capacity.
+
 	\item[Q4] \emph{Can the sampling techniques remove the performance bottleneck in GNN training?} (Section~\ref{sec:effects_of_sampling_techniques_on_performance})
-	
-			In theory, the sampling techniques can significantly reduce the graph neurons that participate in the training of a batch.
-			Consequently, the training time and the memory usage should also decrease.
-			To validate the effectiveness of the sampling techniques, we measured the training time and peak memory usage under different batch sizes.
-			If the sampling techniques are effective, they are the keys to conduct GNN training on very big graphs.
-			If they are not effective, we want to find out which impairs its efficiency.
+
+	      In theory, the sampling techniques can significantly reduce the graph neurons that participate in the training of a batch.
+	      Consequently, the training time and the memory usage should also decrease.
+	      To validate the effectiveness of the sampling techniques, we measured the training time and peak memory usage under different batch sizes.
+	      If the sampling techniques are effective, they are the keys to conduct GNN training on very big graphs.
+	      If they are not effective, we want to find out which impairs its efficiency.
 \end{itemize}

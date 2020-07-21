@@ -149,7 +149,7 @@ Therefore, \emph{improving the efficiency of the edge calculation is the key to 
 In the implementation of PyG, the edge calculation stage can be decomposed into four steps: collect, message, aggregate and update, as shown in \figurename~\ref{fig:steps_in_edge_calculation}.
 The edge index is a matrix with $M$ rows and 2 columns that holds the edge set of the graph, where $M=|\mathcal{E}|$.
 The two columns of the matrix store the source vertex and the target vertex of each edge, respectively.
-The collect step copies the vertex feature vectors from the previous layer $\boldsymbol{h}_i^l$ to the ends of each edge 
+The collect step copies the vertex feature vectors from the previous layer $\boldsymbol{h}_i^l$ to the ends of each edge
 in the edge index, to form the parameters $[\boldsymbol{h}^l_i, \boldsymbol{h}^l_{j}, \boldsymbol{e}^l_{i,j}]$ of the message function $\phi$.
 This step only involves the data movement.
 The message step calls the message function $\phi$ to get message vectors of all edges $\boldsymbol{m}_{i, j}^l$.
@@ -172,7 +172,7 @@ We decomposed the execution time of the edge calculation step in \figurename~\re
 In each GNN, the proportion of the four steps were rather stable, rarely affected by datasets.
 For GAT and GaAN with the high edge calculation complexity, the message step consumed most of the execution time.
 For GCN and GGNN with the low complexity, the proportions of the steps were close.
-Since the message function $\phi$ of GGNN used the pre-computed $\hat{\boldsymbol{h}}^l_i$ as the message vector directly in the implementation, the time spent on the message step of GGNN was negligible. 
+Since the message function $\phi$ of GGNN used the pre-computed $\hat{\boldsymbol{h}}^l_i$ as the message vector directly in the implementation, the time spent on the message step of GGNN was negligible.
 Although the collect step did not conduct any computation and only involved data movement, it occupied noticeable execution time in all the GNNs.
 The experiments show that \emph{the performance bottleneck on the step level depends on the complexity of the edge calculation}.
 For GNNs with the high edge calculation complexity, the message function $\phi$ is the performance bottleneck.
@@ -212,7 +212,7 @@ All the top basic operators except for \texttt{mm} were related to the edge calc
 The \texttt{mm} operator was used in the vertex update function $\gamma$.
 
 \paragraph{GaAN}
-The top basic operator was \texttt{addmm}. 
+The top basic operator was \texttt{addmm}.
 The \texttt{addmm}, the matrix multiplication \texttt{mm} and the elementwise multiplication \texttt{mul} were used in both the vertex and the edge calculation, where the edge calculation is dominant.
 
 In general, the most time-consuming operator in GNN calculation is still the matrix multiplication \texttt{mm} and the elementwise multiplication \texttt{mul}, \emph{making GNN training suitable for GPU}.
@@ -232,8 +232,9 @@ The performance bottleneck in the edge calculation depends on the time complexit
 \end{itemize}
 
 \subsection{Memory Usage Analysis}
+\label{sec:memory_usage_analysis}
 
-During the GNN training, all data (including datasets and intermediate results) are stored in the on-chip memory of GPU. 
+During the GNN training, all data (including datasets and intermediate results) are stored in the on-chip memory of GPU.
 Compared with the main memory on the host side, the capacity of the GPU memory is very limited.
 \emph{The GPU memory capacity limits the scale of graphs that a GPU can train GNNs on}.
 For example, GaAN was unable to complete the training due to memory overflow exception on \texttt{cph} dataset.
@@ -336,100 +337,91 @@ Optimizing the memory usage of the edge calculation could significantly reduce t
 Fixing the GNN structure and the hyper-parameters, increasing the dimension of the input feature vectors could also reduce the memory expansion ratio.
 
 \subsection{Effects of Sampling Techniques on Performance}
+\label{sec:effects_of_sampling_techniques_on_performance}
 
-Without the sampling technique, GNNs are trained in a full batch manner.
-All the vertices and edges in the training set participate in the training.
-The full-batch training ensures the convergence, but the training time per epoch is long, showing the wall-clock convergence speed.
-Inspired by the mini-batch training in stochastic gradient descent, a series of GNN sampling techniques are proposed.
-The sampling technique decomposes the training of the full graph (i.e. epoch) into several batches, and
-each batch uses only part of the graph vertices and edges to participate training and performing gradient
-updates greatly reduces the training time of each batch, allowing multiple rounds of gradient descent to
-be performed within a fixed time, thereby accelerating convergence. The experiments in this section mainly
-analyze the impact of sampling techniques on training performance.
+With the sampling techniques, GNNs can be trained in a mini-batch manner.
+Each mini-batch updates the model parameters based on a small subgraph sampled from the original input graph.
+Thus, the training time per batch and the peak memory usage during the training should both decline significantly.
 
-In the current implementation of PyG, the GNN model parameters always reside on the GPU,
-and the dataset resides in the main memory. When processing each epoch, the CPU samples
-the graph dataset in the main memory and generates several batches,
-Each batch is a small-scale subgraph of the dataset. When training each batch,
-PyG copies the subgraph data corresponding to the batch to the GPU's memory,
-trains based on the subgraph and updates the model parameters according to the gradient.
-Based on the sampling technology and SGD optimization technology,
-the evaluation of the model parameters is performed every several epochs.
-The evaluation can be carried out on the CPU or on the GPU.
-Therefore, the statistical data in the experiments in this section does not include the evaluation phase.
-Neighbor Sampler and Cluster Sampler is selected in this section as they are two typical graph sampling techniques for analysis.
-
-\figurename~\ref{fig:exp_sampling_minibatch_graph_info} shows how the size of the subgraph sampled in the two sampling techniques varies with the batch size.
-For Neighbor Sampler, the relative batch size is equal to the number of vertices sampled in the last layer of GNN relative to the top of the full graph the proportion of vertices.
-For Cluster Sampler, the batch size is equal to the number of partitions sampled compared to the number of all partitions in the whole graph.
-\textbf{Neighbor Sampler is very sensitive to the increase in batch size. As the batch size increases,
-    the sampling subgraph The number of vertices/edges and the average degree both increase rapidly and tend to stabilize}.
-\textbf{Cluster Sampler is less sensitive to the increase in batch size, the number of vertices/average degree increases
-    linearly with the increase in batch size, and the number of edges is in the batch When the size is relatively small,
-    it also increases linearly.}
-
-It is worth noting that \textbf{the average degree of the subgraph sampled is much lower than the average degree of the whole graph,
-    especially when the relative batch size is low}. Taking Neighbor Sampler at a relative batch size of 6\% as an example,
-The average degree of the \textit{amp} dataset is 31.1, but the average degree of the sampled subgraph is only 5.8,
-which is much lower than the average degree of the full graph.
-The average degree of the subgraph sampled by the Cluster Sampler is lower, only 3.0.
-\figurename~\ref{fig:exp_sampling_minibatch_degrees_distribution} shows the comparison of the distribution of the sampled subgraph with the original graph.
-The vertex dregree distribution of subgraphs sampled by the two sampling techniques is lower than that of the original graph.
-The reason is that the degree distribution of vertex in the actual graph dataset follows a power-rate distribution and only a small number of vertices is very high,
-which improves the average degree. In the sampling process, because the sampling method will limit the neighborhood size of the vertex, thereby reducing the upper limit of the vertex degree,
-so that the average degree drops significantly. Combined with the experimental results in section 4.2, the decrease in the average degree of sampled subgraph will increase the time-consuming
-proportion of vertex calculation. For GGNN with high vertex calculation complexity, vertex calculation will replace edge calculation and become a performance bottleneck.
+In the implementation in PyG, the GNN model and the dataset resided on the GPU side.
+To process each epoch, PyG sampled the original dataset in the main memory and generated several batches.
+Each batch was a small subgraph of the dataset.
+To train on each batch, PyG sent the sampled subgraph to GPU, calculated the gradients in the subgraph and updated the model parameters directly on GPU.
+With the sampling techniques, the model parameters were updated by a stochastic gradient descent optimizer.
+It conducted the evaluation phase every several epoches (either on the CPU side or the GPU side) to determine whether to stop the training.
+The experiments focused on the training phase of each batch.
 
 \begin{figure}
     \centering
-    \subfloat[Neighbor Sampler]{\includegraphics[height=4cm]{figs/experiments/exp_sampling_minibatch_realtive_graph_info_graphsage_gcn.png}} \\
-    \subfloat[Cluster Sampler]{\includegraphics[height=4cm]{figs/experiments/exp_sampling_minibatch_realtive_graph_info_cluster_gcn.png}}
-    \caption{The size of the sampled subgraph changes with the batch size. Each batch size is sampled 50 times, and the error bar represents the standard deviation. The relative batch size is the ratio relative to the full graph.)}
+    \subfloat[Neighbor sampler]{\includegraphics[height=4cm]{figs/experiments/exp_sampling_minibatch_realtive_graph_info_graphsage_gcn.pdf}} \\
+    \subfloat[Cluster sampler]{\includegraphics[height=4cm]{figs/experiments/exp_sampling_minibatch_realtive_graph_info_cluster_gcn.pdf}}
+    \caption{Sizes of the sampled subgraphs under different batch sizes. Each batch size was sampled 50 times and the average value was reported. The error bar indicates the standard deviation. The batch size is relative to the full graph.}
     \label{fig:exp_sampling_minibatch_graph_info}
 \end{figure}
 
+\figurename~\ref{fig:exp_sampling_minibatch_graph_info} shows how the size of the sampled subgraph changed with the batch size.
+For the neighbor sampler, the relative batch size is the porportion of the sampled vertices of the last GNN layer in all vertices of the graph.
+For the cluster sampler, the relative batch size is the proportion of the sampled partitions to all partitions of the graph.
+The neighbor sampler was very sensitive to the batch size.
+As the batch size increased, the size of the sampled subgraph increased quickly and then stabalized.
+The cluster sampler was much less sensitive compared to the neighbor sampler.
+The number of vertices and the average degree of the sampled subgraphs increased linearly with the batch size.
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.7\columnwidth]{figs/experiments/exp_sampling_minibatch_degrees_distribution_amazon-photo.png}
-    \caption{Comparison of the vertex degree distribution of the sampled subgraph and the original graph. dataset: amp. Batch size = 512 (Neighbor Sampler) / 20 (Cluster Sampler)}
+    \includegraphics[width=0.4\columnwidth]{figs/experiments/exp_sampling_minibatch_degrees_distribution_amazon-photo.pdf}
+    \caption{Vertex degree distribution of the sampled subgraph (relative batch size: 6\%) and the original graph. Dataset:\texttt{amp}.}
     \label{fig:exp_sampling_minibatch_degrees_distribution}
 \end{figure}
 
-\figurename~\ref{fig:exp_sampling_batch_train_time} shows the change of the training time of each batch on the \textit{amc} and \textit{fli} datasets with the batch size after using the sampling technique.
-For the Neighbor Sampler, the time spent in the training phase is significantly reduced compared to full-batch training only when the batch size is very small.
-When the batch size is particularly small, the training time is significantly reduced. However, because the sampling itself has additional overhead,
-and there is also an overhead in transferring the sampled subgraph to the GPU, the training time of the entire batch may exceed the full graph.
-training is time-consuming. For Cluster Sampler, the sampled subgraph is smaller than Neighbor Sampler under the same relative batch size,
-which makes the effect of sampling technology more obvious. But when the relative batch size increases,
-the increment by additional cost of sampling technology is very obvious. When the relative batch size $\geq$ 25\%,
-the total time of each batch of the sampling technique even exceeds the time of the full graph training.
-Experiments show that \textbf{the implementation of sampling technology in PyG at this stage is very inefficient and the extra overhead is high}.
-When the batch size is slightly larger, the additional cost of sampling technology accounts for more than 50\% of the total training cost of the entire batch.
-\textbf{Sampling technology can reduce training time only on very small batches}.
+It is worth noting that the average degree of the sampled subgraph was \emph{much lower} than the average degree of the whole graph, especially when the relative batch size is low.
+Taking the neighbor sampler with the relative batch size of 6\% as an example, the average degree of the \texttt{amp} dataset was 31.1, but the average degree of the sampled subgraph was only 5.8.
+For the cluster sampler, it was even lower to 3.0.
+\figurename~\ref{fig:exp_sampling_minibatch_degrees_distribution} compares the degree distribution of the sampled subgraph with the original graph.
+The slopes of the curves were similar.
+It indicates that the sampled subgraphs still followed the power-law degree distribution.
+However, the numbers of vertices in the sampled subgraphs were much smaller than the original graph, significantly lowering the average degrees.
+According to the experimental results in Section~\ref{sec:training_time_breakdown}, if the average degree becomes lower, the proportion of the training time spent on vertex calculation will become higher, especially for GGNN.
 
 \begin{figure}
     \centering
-    \subfloat[Neighbor Sampler on amc]{\includegraphics[height=4cm]{figs/experiments/exp_sampling_relative_batch_size_train_time_stack_graphsage_amazon-computers.png}}
-    \subfloat[Neighbor Sampler on fli]{\includegraphics[height=4cm]{figs/experiments/exp_sampling_relative_batch_size_train_time_stack_graphsage_flickr.png}} \\
-    \subfloat[Cluster Sampler on amc]{\includegraphics[height=4cm]{figs/experiments/exp_sampling_relative_batch_size_train_time_stack_cluster_amazon-computers.png}}
-    \subfloat[Cluster Sampler on fli]{\includegraphics[height=4cm]{figs/experiments/exp_sampling_relative_batch_size_train_time_stack_cluster_flickr.png}}
-    \caption{The training time of each batch changes with the batch size. FULL means that the full graph participates in the training phase (excluding evaluation).}
+    \subfloat[Neighbor sampler on \texttt{amc}]{\includegraphics[height=5cm]{figs/experiments/exp_sampling_relative_batch_size_train_time_stack_graphsage_amazon-computers.pdf}}
+    \subfloat[Neighbor sampler on \texttt{fli}]{\includegraphics[height=5cm]{figs/experiments/exp_sampling_relative_batch_size_train_time_stack_graphsage_flickr.pdf}} \\
+    \subfloat[Cluster sampler on \texttt{amc}]{\includegraphics[height=5cm]{figs/experiments/exp_sampling_relative_batch_size_train_time_stack_cluster_amazon-computers.pdf}}
+    \subfloat[Cluster sampler on \texttt{fli}]{\includegraphics[height=5cm]{figs/experiments/exp_sampling_relative_batch_size_train_time_stack_cluster_flickr.pdf}}
+    \caption{Training time per batch breakdown. FULL means that the full graph participates in the training.}
     \label{fig:exp_sampling_batch_train_time}
 \end{figure}
 
-However, \textbf{the advantage of the sampling technique is that it can greatly reduce the peak memory usage overhead,
-    making large-scale graph neural network training possible}.
-\figurename~\ref{fig:exp_sampling_memory_usage} shows how the peak memory usage changes with the relative batch size during the training process after sampling technology is used.
-After sampling sampling technology, peak memory usage is greatly reduced and the decrease of Cluster Sampler is greater than that of Neighbor Sampler.
+To find out the performance bottleneck with the sampling techniques, we decomposed the training time per batch into three phases: \emph{sampling} on CPU, \emph{transfering} sampled subgraphs from CPU to GPU and \emph{training} with the subgraphs on GPU.
+\figurename~\ref{fig:exp_sampling_batch_train_time} shows the time breakdown of the four GNNs under different relative batch sizes.
+For the neighbor sampler, the sampling technique reduced the training time per batch only when the batch size was very small.
+When the batch became bigger, the sampling and the data transfering phases introduced noticeable overheads, even making the training time exceed the full-batch training.
+For the clustering sampler, the sampled subgraph was smaller than the neighbor sampler under the same relative batch size.
+The reduction in the training time was more obvious than the neighbor sampler.
+However, the overheads increased quickly as the relative batch size increased.
+The training time under the 25\% relative batch size already exceeded the time of full-batch training.
+The experimental results indicate that the implementation of the sampling techniques in PyG is inefficient.
+When the batch size was slightly big, more than 50\% of the time had been spent on sampling and data transfering.
+\emph{The sampling techniques are only efficient under small batch sizes.}
 
 \begin{figure}
     \centering
-    \subfloat[Neighbor Sampler on amc]{\includegraphics[height=4cm]{figs/experiments/exp_sampling_memory_usage_relative_batch_size_graphsage_amazon-computers_peak_memory.png}}
-    \subfloat[Neighbor Sampler on fli]{\includegraphics[height=4cm]{figs/experiments/exp_sampling_memory_usage_relative_batch_size_graphsage_flickr_peak_memory.png}} \\
-    \subfloat[Cluster Sampler on amc]{\includegraphics[height=4cm]{figs/experiments/exp_sampling_memory_usage_relative_batch_size_cluster_amazon-computers_peak_memory.png}}
-    \subfloat[Cluster Sampler on fli]{\includegraphics[height=4cm]{figs/experiments/exp_sampling_memory_usage_relative_batch_size_cluster_flickr_peak_memory.png}}
-    \caption{Change in peak memory usage with batch size. FULL indicates the case when the sampling technique is not used (excluding the evaluation stage).}
+    \subfloat[Neighbor sampler on \texttt{amc}]{\includegraphics[height=4cm]{figs/experiments/exp_sampling_memory_usage_relative_batch_size_graphsage_amazon-computers_peak_memory.pdf}}
+    \subfloat[Neighbor sampler on \texttt{fli}]{\includegraphics[height=4cm]{figs/experiments/exp_sampling_memory_usage_relative_batch_size_graphsage_flickr_peak_memory.pdf}} \\
+    \subfloat[Cluster sampler on \texttt{amc}]{\includegraphics[height=4cm]{figs/experiments/exp_sampling_memory_usage_relative_batch_size_cluster_amazon-computers_peak_memory.pdf}}
+    \subfloat[Cluster sampler on \texttt{fli}]{\includegraphics[height=4cm]{figs/experiments/exp_sampling_memory_usage_relative_batch_size_cluster_flickr_peak_memory.pdf}}
+    \caption{Peak memory usage under different batch sizes. FULL means the full graph participates in the training.}
     \label{fig:exp_sampling_memory_usage}
 \end{figure}
-\label{sec:effects_of_sampling_techniques_on_performance}
+
+The main advantage of the sampling technique is \emph{reducing the peak memory usage} during the training.
+\figurename~\ref{fig:exp_sampling_memory_usage} shows the memory usage under different batch sizes.
+The peak memory usage declined significantly even under big batch sizes.
+The sampling techniques make training GNNs on big graphs possible for GPU.
+
+\paragraph{Summary}
+With small batch size, the sampling techniques could significantly reduce the training time per batch and the peak memory usage during the training.
+The sampled subgraphs had lower average degrees than the whole graph.
+However, the current implementation of the sampling techniques was every inefficient under big batch sizes.
+The time spent on the sampling phase and the data transfering phase could even exceeded the training phase.
