@@ -212,8 +212,8 @@ All the top basic operators except for \texttt{mm} were related to the edge calc
 The \texttt{mm} operator was used in the vertex update function $\gamma$.
 
 \paragraph{GaAN}
-The top basic operator was \texttt{addmm}. 
-The \texttt{addmm}, the matrix multiplication \texttt{mm} and the elementwise multiplication \texttt{mul} were used in both the vertex and the edge calculation, where the edge calculation is dominant.
+The top basic operator was \texttt{bmm} used in the message function $\phi$. 
+The \texttt{addmm} operator and the \texttt{mm} operator were used in both the vertex and the edge calculation, where the edge calculation is dominant.
 
 In general, the most time-consuming operator in GNN calculation is still the matrix multiplication \texttt{mm} and the elementwise multiplication \texttt{mul}, \emph{making GNN training suitable for GPU}.
 Although the aggregate step in the edge calculation is relatively simple (like sum and mean), the related operators \texttt{scatter\_add} and \texttt{gather} still consumed a certain amount of the time.
