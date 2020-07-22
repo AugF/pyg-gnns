@@ -1,30 +1,38 @@
 \section{Related Work}
 
-In this section, we brefily review the graph neural network models survey (GNNs survey), 
-graph neural network system(GNN system) and GNNs performance bottleneck analysis work.
+\paragraph{Survey of GNNs}
+\cite{zhou2018_gnn_review,zhang2018_gnn_survey,comprehensive-survey-wu-2020} survey the existing graph neural network models and classify them from an algorithmic view.
+They summarize the parallels and differences between the architecture of different GNN models.
+The typical applications of GNNs are also briefly introduced.
+Those surveys focus on comparying the existing GNNs theoretically not empirically.
 
-\subsection{GNNs survey}
-Zhou et al \cite{zhou2018_gnn_review}, Zhang et al \cite{zhang2018_gnn_survey} and Wu et al \cite{comprehensive-survey-wu-2020} 
-surveyed existing graph neural works models in different categorizations and viewpoints and provided a comprehensive review about GNNs' model 
-architecture, principle and application. Dwived et al \cite{dwivedi2020_benchmark_of_gnn} discussed the performance of different GNN algorithms 
-under the graph dataset of different scenes, and gived the key operators of designing effective GNNs in different scenarios. 
-However, these efforts are focused on the GNN algorithm itself and accuracy, without a detailed analysis of memory usage and running time.
+\paragraph{Evaluation of GNNs}
+Shchur et al. \cite{shchur2018_pitfall_of_gnn} evaluate the accuracy of popular GNN models on the node classification task.
+Dwived et al. \cite{dwivedi2020_benchmark_of_gnn} further compare the accuracy of popular GNNs fairly in a controlled environment.
+Hu et al. \cite{hu2020_open_graph_benchmark} propose the open grpah benchmark that provides a group of datasets and a standard evaluation workflow.
+The benchmark makes the comparison between GNNs easily and fairly.
+Those model evaluation efforts focus on evaluating the accuracy of different GNNs.
+They provide insightful suggestions to improve the accuracy.
 
-\subsection{GNN system}
-PyG \cite{PyG}, DGL \cite{DGL} designed the graph neural network system based on the message-passing model. 
-PyG \cite{PyG} built upon PyTorch and obtained high data throught with sparse GPU accleration by providing dedicated CUDA kernels 
+From the efficiency aspect, Yan et al. \cite{yan2020_characterizing_gcn} compare the performance characteristics of graph convolutional networks, typical graph processing (like PageRank) and MLP-based neural network on GPU.
+They provide optimization guidelines for the software and the hardware sides.
+Zhang et al. \cite{zhang2020_analysis_neugraph} compare the architectural characteristics of the GNN inference on GPU under the unified SAGA-NN \cite{ma2019_neugraph} programming model,
+They find that GNN inference has no fixed performance bottleneck and all components deserves to optimize.
+These two efforts focus on the \emph{inference} phase of GNNs and they investigate the potential optimizations from an architectural view.
+In this work, our target is to find out the performance bottleneck in the training phase from a system view.
+We consider the performance bottleneck in both time and memory usage.
+We also evaluate the effects of the sampling techniques.
+Our work and \cite{yan2020_characterizing_gcn, zhang2020_analysis_neugraph} form a complementary study on the efficiency issue of GNNs.
+
+\paragraph{Libraries/Systems of GNNs}
+
+PyG \cite{PyG}, DGL \cite{DGL} designed the graph neural network system based on the message-passing model.
+PyG \cite{PyG} built upon PyTorch and obtained high data throught with sparse GPU accleration by providing dedicated CUDA kernels
 and mini-batch technologies. DGL \cite{DGL} supported a variety of computing backends (Tensorflow, MXNet, PyTorch) and leveraged
-fusion kernel techniques, which combine message function with update function to provide further performance improvements compared to PyG \cite{PyG}. 
+fusion kernel techniques, which combine message function with update function to provide further performance improvements compared to PyG \cite{PyG}.
 NeuGraph \cite{ma2019_neugraph} proposed a new programming model, SAGA-NN(Scatter-ApplyEdge-Gather-ApplyVertex with Neural Networks), and achieved excellent
 performance in a single machine with mutliple GPUs by using graph computation optimization such as data partitioning management, scheduling and parall mutli-gpu processing.
 AliGraph \cite{zhu2019_aligraph} targetd at Attributed Heterogeneous Graph data model, disassembed each layer of GNN into there basic operations: Sampling, Aggregate and Combine,
-and leveraged graph parition, spearate storage of attributes and the importance-base vertex caching strategy in storage layer. 
+and leveraged graph parition, spearate storage of attributes and the importance-base vertex caching strategy in storage layer.
 In general, various optimization techniques are used in these GNN systems' design, but whether these optimization techniques match the bottlenecks of GNN performance is a question
 worth studying.
-
-\subsection{GNNs performance bottleneck analysis work}
-Yan et al \cite{yan2020_analysis_gcns_gpu} compared the performance characteristics of GNN algorithms, Graph Processing and MLP-based Neural Network, provided guidelines in software optimizaton and hardware optimization.
-Zhang et \cite{zhang2020_analysis_neugraph} characterized the GNN computation at the inference stage based on SAGA-NN (Scatter-ApplyEdge-Gather-ApplyVertex with Neural Networks) programming model, 
-and found that GNN computation has no fixed performance bottlenecks, and believed that each part has the value of optimization. 
-Compared to their works, the classification angle of our work is unique, and neither of their works consider the graph scalabilty and the access of sampling technology,
-which coverred in this paper.

@@ -212,7 +212,7 @@ All the top basic operators except for \texttt{mm} were related to the edge calc
 The \texttt{mm} operator was used in the vertex update function $\gamma$.
 
 \paragraph{GaAN}
-The top basic operator was \texttt{bmm} used in the message function $\phi$. 
+The top basic operator was \texttt{bmm} used in the message function $\phi$.
 The \texttt{addmm} operator and the \texttt{mm} operator were used in both the vertex and the edge calculation, where the edge calculation is dominant.
 
 In general, the most time-consuming operator in GNN calculation is still the matrix multiplication \texttt{mm} and the elementwise multiplication \texttt{mul}, \emph{making GNN training suitable for GPU}.
@@ -420,8 +420,24 @@ The main advantage of the sampling technique is \emph{reducing the peak memory u
 The peak memory usage declined significantly even under big batch sizes.
 The sampling techniques make training GNNs on big graphs possible for GPU.
 
+\begin{figure}
+    \centering
+    \includegraphics[height=4cm]{figs/experiments/exp_small_graph_train_time.png}
+    \caption{Training time on small random graphs. Graphs were generated with the R-MAT generator with the average degree as X.}
+    \label{fig:exp_small_graph_train_time}
+\end{figure}
+
+The disadvantage of the sampling technique is wasting the GPU resources.
+As the sampling techniques are only effective under small batch sizes, the sampled subgraphs will be very small in those cases.
+They cannot make full use of the computing power of a GPU.
+To simulate the cases of training GNNs with small sampled subgraphs, we generated random graphs with few vertices and measured the training time per epoch in \figurename~\ref{fig:exp_small_graph_train_time}.
+As the number of vertices increased, the training time was nearly unchanged except for GaAN.
+The training time of GaAN only became larger then $|\mathcal{V}| \geq 8000$.
+
+
 \paragraph{Summary}
 With small batch size, the sampling techniques could significantly reduce the training time per batch and the peak memory usage during the training.
+However, small batch sizes could not make full use of the computing power of a GPU.
 The sampled subgraphs had lower average degrees than the whole graph.
 However, the current implementation of the sampling techniques was every inefficient under big batch sizes.
 The time spent on the sampling phase and the data transfering phase could even exceeded the training phase.
