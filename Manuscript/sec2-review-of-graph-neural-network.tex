@@ -108,7 +108,7 @@ For ChebNet, we report its GNN sub-layer in the tables.
 A ChebNet layer consists of $K$ GNN sub-layers and a summation layer:
 $\boldsymbol{H}^{l+1} = \sum_{k=1}^K{\boldsymbol{Z}^{(k)} \textcolor{blue}{\boldsymbol{W}^{(k)}}}$ with the GNN sub-layers $\boldsymbol{Z}^{(1)}=\boldsymbol{H}^l$, $\boldsymbol{Z}^{(2)}=\hat{\boldsymbol{L}}\boldsymbol{H}^l$, and $\boldsymbol{Z}^{(k)}=2\hat{\boldsymbol{L}}\boldsymbol{Z}^{(k-1)} - \boldsymbol{Z}^{(k-2)}$, where $\boldsymbol{H}^l$ is the matrix of output hidden feature vectors of the layer $l-1$.
 For GAT, a GAT layer consists of two sub-layers and it conducts part of the vertex calculation before the two sub-layers.
-For GaAN, a GaAN layer consists of four sub-layers: the first sub-layer calculates the summation $\boldsymbol{m}_{j, i, (k)}^{l,0}  = \exp(<\textcolor{blue}{FC_{\theta^{l, k}_{xa}}} (\boldsymbol{h}_j^l) , \textcolor{blue}{\boldsymbol{FC}_{\theta^{l,k}_{ya}}} (\boldsymbol{h}_i^l)>)$, and the other three layers calculate $\boldsymbol{m}^l_{j,i,1}$/$\boldsymbol{m}^l_{j,i,2}$/$\boldsymbol{m}^l_{j,i,3}$.
+For GaAN, a GaAN layer consists of four sub-layers: the first sub-layer calculates the summation $\boldsymbol{m}_{j, i, (k)}^{l,0}  = \exp((\textcolor{blue}{W^{l, k}_{xa}} \boldsymbol{h}_j^l + \textcolor{blue}{b^{l, k}_{xa}})^T (\textcolor{blue}{\boldsymbol{W}^{l, k}_{ya}} \boldsymbol{h}_i^l + \textcolor{blue}{\boldsymbol{b}^{l,k}_{ya}}))$, and the other three layers calculate $\boldsymbol{m}^l_{j,i,1}$/$\boldsymbol{m}^l_{j,i,2}$/$\boldsymbol{m}^l_{j,i,3}$.
 
 \begin{table}
 	\hspace{-5em}
@@ -188,12 +188,12 @@ For GaAN, a GaAN layer consists of four sub-layers: the first sub-layer calculat
 			\begin{scriptsize}
 				$\begin{aligned}[t]
 						 & \text{Sub-layer 0:} \\
-						 & \boldsymbol{m}_{j, i, (k)}^{l,0}  = \exp(<\textcolor{blue}{FC_{\theta^{l, k}_{xa}}} (\boldsymbol{h}_j^l), \textcolor{blue}{\boldsymbol{FC}_{\theta^{l,k}_{ya}}} (\boldsymbol{h}_i^l)>) \\
+						 & \boldsymbol{m}_{j, i, (k)}^{l,0}  = \exp((\textcolor{blue}{W^{l, k}_{xa}} \boldsymbol{h}_j^l + \textcolor{blue}{b^{l, k}_{xa}})^T (\textcolor{blue}{\boldsymbol{W}^{l, k}_{ya}} \boldsymbol{h}_i^l + \textcolor{blue}{\boldsymbol{b}^{l,k}_{ya}})) \\
 						 & \text{Sub-layer 1:} \\
-						 & \alpha^l_{j, i, (k)} = \frac {\exp(<\textcolor{blue}{FC_{\theta^{l, k}_{xa}}} (\boldsymbol{h}_j^l), \textcolor{blue}{\boldsymbol{FC}_{\theta^{l,k}_{ya}}} (\boldsymbol{h}_i^l)>)} {\hat{\boldsymbol{a}}^{l, 0}_{i, (k)}}\\
-						 & \boldsymbol{m}_{j, i}^{l, 1} = \parallel_{k=1}^K \alpha_{j, i, (k)} \textcolor{blue}{\boldsymbol{FC}^h_{\theta^l_v}} \hat{\boldsymbol{h}}_{j, (k)}^l \\                                                                                                                                                                                                                                                                                           
+						 & \alpha^l_{j, i, (k)} = \frac {\exp((\textcolor{blue}{W^{l, k}_{xa}} \boldsymbol{h}_j^l + \textcolor{blue}{b^{l, k}_{xa}})^T (\textcolor{blue}{\boldsymbol{W}^{l, k}_{ya}} \boldsymbol{h}_i^l + \textcolor{blue}{\boldsymbol{b}^{l,k}_{ya}}))} {\hat{\boldsymbol{a}}^{l, 0}_{i, (k)}}\\
+						 & \boldsymbol{m}_{j, i}^{l, 1} = \parallel_{k=1}^K \alpha_{j, i, (k)} LeakyReLU(\textcolor{blue}{\boldsymbol{W}^{l, k}_v} \boldsymbol{h}_j^l + \textcolor{blue}{b^{l, k}_v}) \\                                                                                                                                                                                                                                                                                           
 						 & \text{Sub-layer 2:} \\
-						 & \boldsymbol{m}_{j, i}^{l, 2} = \textcolor{blue}{\boldsymbol{FC}_{\theta^l_m}} \boldsymbol{h}_j^{l}  \\
+						 & \boldsymbol{m}_{j, i}^{l, 2} = \textcolor{blue}{\boldsymbol{W}^l_m} \boldsymbol{h}_j^{l} + \textcolor{blue}{\boldsymbol{b}^l_m} \\
 						 & \text{Sub-layer 3:} \\
 						 & \boldsymbol{m}_{j, i}^{l, 3} = \boldsymbol{h}_j^l
 					\end{aligned}$
@@ -205,10 +205,7 @@ For GaAN, a GaAN layer consists of four sub-layers: the first sub-layer calculat
 	\end{footnotesize}
 	\caption{Typical graph neural networks and their edge calculation functions.
 		$d_{in}$ and $d_{out}$ are dimensions of the input and output hidden feature vectors, respectively.
-		Blue variables are model parameters to learn. In GaAN, $FC^{\alpha}_{\theta}(x) = \alpha(\boldsymbol{W}\boldsymbol{x} + \boldsymbol{b})$, 
-		where $\theta=\{\boldsymbol{W}, \boldsymbol{b}\}$, $\theta$ with different subscripts mean different transformation parameters, we denote $h(\cdot)$
-		to be the $LeakyReLU$ for activation functions and $FC_{\theta}(x)$ means applying no activation function after the linear transform.$<\cdot,\cdot>$ means the dot
-		product between two vectors.
+		Blue variables are model parameters to learn. 
 	}
 	\label{tab:gnn_overview_edge}
 \end{table}
@@ -277,9 +274,9 @@ For GaAN, a GaAN layer consists of four sub-layers: the first sub-layer calculat
 				$\begin{aligned}[t]
 						& \text{Sub-layer 0:}\\
 						& \hat{\boldsymbol{a}}^{l,0}_{i,(k)} = \boldsymbol{s}^{l,0}_{i,(k)}\\
-						& \text{Sub-layer 1,2,3:}\\
-						& \boldsymbol{g}_i^l = \textcolor{blue}{\boldsymbol{FC}_{\theta^l_g}}(\boldsymbol{h}_i^{l} \parallel \boldsymbol{s}_{i}^{l, 2} \parallel \boldsymbol{s}_{i}^{l, 3}) \\
-						& \boldsymbol{h}_i^{l+1} = \textcolor{blue}{\boldsymbol{FC}_{\theta^l_o}} (\boldsymbol{h}_i^l \parallel (\boldsymbol{g}_{i}^l \odot \boldsymbol{s}_{i}^{l, 1}))
+						& \text{Sub-layer 1:}\\
+						& \boldsymbol{g}_i^l = \textcolor{blue}{\boldsymbol{W}^l_g}[\boldsymbol{h}_i^{l} \parallel \boldsymbol{s}_{i}^{l, 2} \parallel \boldsymbol{s}_{i}^{l, 3}] + \textcolor{blue}{\boldsymbol{b}^l_g} \\
+						& \boldsymbol{h}_i^{l+1} = \textcolor{blue}{\boldsymbol{W}^l_o} [\boldsymbol{h}_i^l \parallel (\boldsymbol{g}_{i}^l \odot \boldsymbol{s}_{i}^{l, 1})] + \textcolor{blue}{\boldsymbol{b}^l_o}
 					\end{aligned}$
 			\end{scriptsize}                                                                                                                                                                                   &
 			\makecell[r]{$O(max(K * d_v + d_{in}, 2 * d_{in} + d_m) * d_{out})$\\
@@ -291,9 +288,7 @@ For GaAN, a GaAN layer consists of four sub-layers: the first sub-layer calculat
 		$d_{in}$ and $d_{out}$ are dimensions of the input and output hidden feature vectors, respectively.
 		Blue variables are model parameters to learn.
 		In Neural FPs, $\textcolor{blue}{\boldsymbol{W}}^{l, |\mathcal{N}(i)|}$ is the weight matrix for vertices with degree $|\mathcal{N}(i)|$ at layer $l$. 
-		In GaAN, $FC^{\alpha}_{\theta}(x) = \alpha(\boldsymbol{W}\boldsymbol{x} + \boldsymbol{b})$, 
-		where $\theta=\{\boldsymbol{W}, \boldsymbol{b}\}$, $\theta$ with different subscripts mean different transformation parameters, we denote $h(\cdot)$
-		to be the $LeakyReLU$ for activation functions and $FC_{\theta}(x)$ means applying no activation function after the linear transform.}
+		}
 	\label{tab:gnn_overview_vertex}
 \end{table}
 
