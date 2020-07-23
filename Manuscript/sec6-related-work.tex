@@ -26,13 +26,13 @@ Our work and \cite{yan2020_characterizing_gcn, zhang2020_analysis_neugraph} form
 
 \paragraph{Libraries/Systems of GNNs}
 
-PyG \cite{PyG}, DGL \cite{DGL} designed the graph neural network system based on the message-passing model.
-PyG \cite{PyG} built upon PyTorch and obtained high data throught with sparse GPU accleration by providing dedicated CUDA kernels
-and mini-batch technologies. DGL \cite{DGL} supported a variety of computing backends (Tensorflow, MXNet, PyTorch) and leveraged
-fusion kernel techniques, which combine message function with update function to provide further performance improvements compared to PyG \cite{PyG}.
-NeuGraph \cite{ma2019_neugraph} proposed a new programming model, SAGA-NN(Scatter-ApplyEdge-Gather-ApplyVertex with Neural Networks), and achieved excellent
-performance in a single machine with mutliple GPUs by using graph computation optimization such as data partitioning management, scheduling and parall mutli-gpu processing.
-AliGraph \cite{zhu2019_aligraph} targetd at Attributed Heterogeneous Graph data model, disassembed each layer of GNN into there basic operations: Sampling, Aggregate and Combine,
-and leveraged graph parition, spearate storage of attributes and the importance-base vertex caching strategy in storage layer.
-In general, various optimization techniques are used in these GNN systems' design, but whether these optimization techniques match the bottlenecks of GNN performance is a question
-worth studying.
+PyG \cite{PyG} and DGL \cite{DGL} both adopt the message-passing model as the underlying programming model for GNNs and support training big datasets with the sampling techniques.
+PyG \cite{PyG} is built upon PyTorch and it uses optimized CUDA kernels for GNNs to achieve high performance.
+DGL \cite{DGL} provides a group of high level user APIs and supports training GNNs with a variety of backends (Tensorflow, MXNet and PyTorch) transparently.
+It also supports LSTM as the aggregation functions.
+NeuGraph \cite{ma2019_neugraph} proposes a new programming model \emph{SAGA-NN} for GNNs.
+It focuses on training big datasets efficiently without sampling.
+It partitions the dataset sophisticatedly, schedules the training tasks among multiple GPUs and swaps the data among GPUs and the host asynchronously.
+AliGraph \cite{zhu2019_aligraph} targets at training GNNs on big attributed heterogeneous graphs that are common in e-commerce platforms.
+The graphs are partitioned among multiple nodes in a cluster and AliGraph trains GNNs on the graphs in a distributed way with system optimizations.
+PGL \cite{pgl} is another graph learning framework from Baidu based on the PaddlePaddle platform.
