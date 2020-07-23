@@ -2,10 +2,10 @@
 
 In recent years, the graph neural network (GNN) is a hot research topic in the field of artificial intelligence.
 Many GNNs \cite{kipf2017_gcn, defferrad2016_chebnet, li2018_agcn,li2015_ggnn, hamilton2017_graphsage, huang2018_gat, zhang2018_gaan} are proposed.
-GNNs can learn the representation of vertices/edges in a graph from its topology and original feature vectors in an \emph{end-to-end} manner.
-The strong expressive power makes GNNs achieve impressive accuracy in node classification, link prediction and graph classification \cite{zhou2018_gnn_review, zhang2018_gnn_survey, comprehensive-survey-wu-2020}.
+GNN can learn the representation of vertices/edges in a graph from its topology and original feature vectors in an \emph{end-to-end} manner.
+The strong expressive power makes GNN achieve impressive accuracy in node classification, link prediction, and graph classification \cite{zhou2018_gnn_review, zhang2018_gnn_survey, comprehensive-survey-wu-2020}.
 
-To train GNNs easily, a series of graph neural network learning libraries/systems \cite{PyG, DGL, ma2019_neugraph, zhu2019_aligraph, PGL} are proposed.
+To train GNN easily, a series of graph neural network learning libraries/systems \cite{PyG, DGL, ma2019_neugraph, zhu2019_aligraph, PGL} are proposed.
 PyG \cite{PyG}, NeuGraph \cite{ma2019_neugraph}, PGL \cite{PGL} and DGL \cite{DGL} build upon the existing deep learning frameworks (PyG on PyTorch, NeuGraph on Tensorflow, PGL on PaddlePaddle, DGL on multiple backends).
 They provide users with a high-level programming model (message-passing for PyG/PGL/DGL and SAGA-NN for NeuGraph) to describe the structure of a GNN.
 They take advantage of the common tools provided by the frameworks like the automatic differentiation to simplify the development.
@@ -36,7 +36,7 @@ Our key findings and insights are summarized below.
           For GNNs with high edge calculation complexity, optimizations should focus on the implementation of the message function that is conducted on every edge during the edge calculation.
           For GNNs with low edge calculation complexity, optimizations should focus on the collect step and the aggregation step of the edge calculation.
           Overlapping the data accessing with the computation is a potential optimizing direction.
-    \item The high memory usage caused by the intermediate results of the edge calculation is the main factor that prevents us training big graphs on GPU.
+    \item The high memory usage caused by the intermediate results of the edge calculation is the main factor that prevents us from training big graphs on GPU.
     \item The sampling techniques can significantly reduce the training time and memory usage, but the implementation is still inefficient. The time spent on the sampling may exceed the time spent on the training under big batch sizes. How to make full use of the computing power of GPUs with the sampling techniques is another question to solve.
 \end{itemize}
 
