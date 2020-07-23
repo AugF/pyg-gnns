@@ -422,8 +422,8 @@ The sampling techniques make training GNNs on big graphs possible for GPU.
 
 \begin{figure}
     \centering
-    \includegraphics[height=4cm]{figs/experiments/exp_small_graph_train_time.pdf}
-    \caption{Training time on small random graphs. Graphs were generated with the R-MAT generator with the average degree as X.}
+    \includegraphics[height=5cm]{figs/experiments/exp_small_graph_train_time.pdf}
+    \caption{Training time per epoch on small random graphs. For each number of vertices, we generated 50 random R-MAT graphs with the average degree of 4.0 and reported the average training time per epoch (without the evaluation phase). The error bar indicates the standard deviation.}
     \label{fig:exp_small_graph_train_time}
 \end{figure}
 
@@ -431,8 +431,8 @@ The disadvantage of the sampling technique is wasting the GPU resources.
 As the sampling techniques are only effective under small batch sizes, the sampled subgraphs will be very small in those cases.
 They cannot make full use of the computing power of a GPU.
 To simulate the cases of training GNNs with small sampled subgraphs, we generated random graphs with few vertices and measured the training time per epoch in \figurename~\ref{fig:exp_small_graph_train_time}.
-As the number of vertices increased, the training time was nearly unchanged except for GaAN.
-The training time of GaAN only became larger then $|\mathcal{V}| \geq 8000$.
+As the number of vertices increased, the training time was almost unchanged except for GaAN.
+The training time of GaAN increased only with $|\mathcal{V}| \geq 4000$.
 
 
 \paragraph{Summary}
