@@ -20,7 +20,7 @@ Nevertheless, \cite{yan2020_characterizing_gcn} and \cite{zhang2020_analysis_neu
 To find out the performance bottleneck in the GNN training, we conduct experimental analysis in this work.
 We model the typical GNNs with the message-passing framework.
 Since we focus on the efficiency issue of GNN training instead of accuracy, we classify the typical GNNs into four quadrants according to their vertex and edge calculation time complexity.
-We pick GCN \cite{kipf2017_gcn}, GGNN \cite{li2015_ggnn}, GAT \cite{huang2018_gat} and GaAN \cite{zhang2018_gaan} as representative GNNs with different vertex/edge calculation complexities.
+We pick GCN \cite{kipf2017_gcn}, GGNN \cite{li2015_ggnn}, GAT \cite{huang2018_gat} and GaAN \cite{zhang2018_gaan} as representative GNNs with different edge/vertex calculation complexities.
 We implement them with PyG and evaluate their efficiency with six real-world datasets on GPU.
 We verify the correctness of the complexity analysis by measuring the effects of the hyper-parameters on the training time and memory usage.
 We find out the most time-consuming stage in GNN training by decomposing the training time per epoch from the layer level to the operator level.

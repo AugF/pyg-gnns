@@ -41,7 +41,7 @@ To further evaluate the effects of hyper-parameters, we measured the training ti
     \\
     \subfloat[GaAN\label{fig:exp_hyperparameter_on_vertex_edge_phase_time_gaan}]{\includegraphics[height=6cm]{figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gaan.pdf}}
 
-    \caption{Effects of hyper-parameters on the vertex/edge calculation time.}
+    \caption{Effects of hyper-parameters on the edge/vertex calculation time.}
     \label{fig:exp_hyperparameter_on_vertex_edge_phase_time}
 \end{figure}
 
@@ -124,11 +124,11 @@ In summary, \emph{the edge calculation is the most time-consuming stage in the G
     \subfloat[GGNN]{\includegraphics[height=4cm]{figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_ggnn.pdf}}\\
     \subfloat[GAT]{\includegraphics[height=4cm]{figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_gat.pdf}}
     \subfloat[GaAN]{\includegraphics[height=4cm]{figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_gaan.pdf}}
-    \caption{Effects of the average degree on the time proportion of the vertex/edge calculation. Graphs were generated with the R-MAT generator by fixing the number of vertices as 50,000. }
+    \caption{Effects of the average degree on the time proportion of the edge/vertex calculation. Graphs were generated with the R-MAT generator by fixing the number of vertices as 50,000. }
     \label{fig:exp_avg_degree_on_vertex_edge_cal_time}
 \end{figure}
 
-The experimental results also indicate that the average degree of the dataset affects the time-consuming proportion of the vertex/edge calculation.
+The experimental results also indicate that the average degree of the dataset affects the time-consuming proportion of the edge/vertex calculation.
 For GaAN, the time spent on the vertex calculation exceeded the edge calculation on the \texttt{pub} and \texttt{cam} datasets, because the average degrees of the two datasets were low, making $|\mathcal{E}|$ and $|\mathcal{V}|$ much closer.
 To evaluate the effects of the average degree, we used the R-MAT model to generate random graphs with 50k vertices and the average degrees ranging from 2 to 100.
 \figurename~\ref{fig:exp_avg_degree_on_vertex_edge_cal_time} shows the training time of the four GNNs under different average degrees.
@@ -304,7 +304,7 @@ For a GNN under the same hyper-parameters, \emph{the MER decreased as the dimens
     \label{fig:exp_memory_expansion_ratio_input_graph_number_of_edges}
 \end{figure}
 
-The average degree of the graph also affects MER by influencing the relative scale of the intermediate results from the vertex/edge calculation.
+The average degree of the graph also affects MER by influencing the relative scale of the intermediate results from the edge/vertex calculation.
 Fixing the number of vertices $|\mathcal{V}|$, we used the R-MAT generator to generate random graphs with different average degrees.
 \figurename~\ref{fig:exp_memory_expansion_ratio_input_graph_number_of_edges} shows how the memory usage changes according to the average degrees.
 As the average degree $\bar{d}$ increased, the number of edges $|\mathcal{E}|$ increased and the peak memory usage increased \emph{linearly} with $\bar{d}$.
