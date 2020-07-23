@@ -130,37 +130,37 @@ For GaAN, a GaAN layer consists of four sub-layers: the first sub-layer calculat
 			sum                                                                                                                       &
 			$\boldsymbol{m}_{j, i}^l = e_{j, i} \boldsymbol{h}_j^l$                                                                   &
 			$O(d_{in})$                                                                                                                 \\
-			AGCN                                                                                                                      &
+			AGCN \cite{li2018_agcn}                                                                                                                      &
 			Spectral                                                                                                                  &
 			sum                                                                                                                       &
 			$\boldsymbol{m}_{j, i}^l = \tilde{e}_{j, i}^l \boldsymbol{h}_j^l$                                                         &
 			$O(d_{in})$                                                                                                                 \\
-			GraphSAGE                                                                                                                 &
+			GraphSAGE \cite{hamilton2017_graphsage}                                                                                                               &
 			Non-spectral                                                                                                              &
 			mean/LSTM                                                                                                                 &
 			$\boldsymbol{m}_{j, i}^l =  \boldsymbol{h}_j^l$                                                                           &
 			$O(1)$                                                                                                                      \\
-			GraphSAGE-pool                                                                                                            &
+			GraphSAGE-pool \cite{hamilton2017_graphsage}                                                                                                        &
 			Non-spectral                                                                                                              &
 			max                                                                                                                       &
 			$\boldsymbol{m}_{j, i}^l =  \delta(\textcolor{blue}{\boldsymbol{W}^l_{pool}} \boldsymbol{h}_j^l + \textcolor{blue}{b}^l)$ &
 			$O(d_{in} * d_{out})$                                                                                                       \\
-			Neural FPs                                                                                                                &
+			Neural FPs  \cite{duvenaud2015_neural_fps}                                                                                                          &
 			Non-spectral                                                                                                              &
 			sum                                                                                                                       &
 			$\boldsymbol{m}_{j, i}^l = \boldsymbol{h}_j^l$                                                                            &
 			$O(1)$                                                                                                                      \\
-			SSE                                                                                                                       &
+			SSE \cite{han2018_sse}                                                                                                            &
 			Recurrent                                                                                                                 &
 			sum                                                                                                                       &
 			$\boldsymbol{m}_{j, i}^l = [\boldsymbol{x}_j \parallel \boldsymbol{h}_j^l]$                                               &
 			$O(f+d_{in})$                                                                                                               \\
-			\textbf{GGNN}                                                                                                             &
+			\textbf{GGNN}  \cite{li2015_ggnn}                                                                                                           &
 			Gated                                                                                                                     &
 			sum                                                                                                                       &
 			$\boldsymbol{m}_{j, i} = \textcolor{blue}{\boldsymbol{W}^l} \boldsymbol{h}_j^l$                                           &
 			$O(d_{in} * d_{out})$                                                                                                       \\
-			\textbf{GAT}                                                                                                              &
+			\textbf{GAT}   \cite{huang2018_gat}                                                                                                          &
 			Attention                                                                                                                 &
 			sum                                                                                                                       &
 			\begin{scriptsize}
@@ -182,7 +182,7 @@ For GaAN, a GaAN layer consists of four sub-layers: the first sub-layer calculat
              \end{aligned}
              $ 
              \\
-			\textbf{GaAN}                                                                                                             &
+			\textbf{GaAN}     \cite{zhang2018_gaan}                                                                                                        &
 			Attention                                                                                                                 &
 			sum,max,mean                                                                                                              &
 			\begin{scriptsize}
@@ -223,22 +223,22 @@ For GaAN, a GaAN layer consists of four sub-layers: the first sub-layer calculat
 			\textbf{GCN} \cite{kipf2017_gcn}                                                                                                                                                                                 &
 			$\boldsymbol{h}_i^{l+1} = \textcolor{blue}{\boldsymbol{W}}^l  \boldsymbol{s}_i^{l}$                                                                                                                              &
 			$O(d_{in} * d_{out})$                                                                                                                                                                                              \\
-			AGCN                                                                                                                                                                                                             &
+			AGCN   \cite{li2018_agcn}                                                                                                                                                                                                          &
 			$\boldsymbol{h}_i^{l+1} = \textcolor{blue}{\boldsymbol{W}}^l  \boldsymbol{s}_i^{l}$                                                                                                                              &
 			$O(d_{in} * d_{out})$                                                                                                                                                                                              \\
-			GraphSAGE                                                                                                                                                                                                        &
+			GraphSAGE  \cite{hamilton2017_graphsage}                                                                                                                                                                                                &
 			$\boldsymbol{h}_i^{l+1} =   \delta(\textcolor{blue}{\boldsymbol{W}}^l  [\boldsymbol{s}_i^{l} \parallel \boldsymbol{h}_i^l])$                                                                                     &
 			$O(d_{in} * d_{out})$                                                                                                                                                                                              \\
-			GraphSAGE-pool                                                                                                                                                                                                   &
+			GraphSAGE-pool   \cite{hamilton2017_graphsage}                                                                                                                                                                                                &
 			$\boldsymbol{h}_i^{l+1} = \boldsymbol{s}_i^l$                                                                                                                                                                    &
 			$O(1)$                                                                                                                                                                                                             \\
-			Neural FPs                                                                                                                                                                                                       &
+			Neural FPs        \cite{duvenaud2015_neural_fps}                                                                                                                                                                                               &
 			$\boldsymbol{h}_i^{l+1} = \delta(\textcolor{blue}{\boldsymbol{W}}^{l, |\mathcal{N}(i)|}  (\boldsymbol{h}_i^l + \boldsymbol{s}_i^{l}))$                                                                           &
 			$O(d_{in} * d_{out})$                                                                                                                                                                                              \\
-			SSE                                                                                                                                                                                                              &
+			SSE             \cite{han2018_sse}                                                                                                                                                                                                 &
 			$\boldsymbol{h}_i^{l+1} = (1 - \alpha)  \boldsymbol{h}_i^l +\alpha    \delta(\textcolor{blue}{\boldsymbol{W}}^l_1 \delta(\textcolor{blue}{\boldsymbol{W}}^l_2 [\boldsymbol{x}_i \parallel \boldsymbol{s}_i^l]))$ &
 			$O((f + d_{in}) * d_{out})$                                                                                                                                                                                        \\
-			\textbf{GGNN}                                                                                                                                                                                                    &
+			\textbf{GGNN}    \cite{li2015_ggnn}                                                                                                                                                                                                &
 			\begin{scriptsize}
 				$\begin{aligned}[t]
 						 & {\boldsymbol{z}}_i^l = \delta ( \textcolor{blue}{\boldsymbol{W}}^z \boldsymbol{s}_i^l + \textcolor{blue}{\boldsymbol{b}}^{sz} + \textcolor{blue}{\boldsymbol{U}}^z \boldsymbol{h}_i^{l} + \textcolor{blue}{\boldsymbol{b}}^{hz})                    \\
@@ -249,7 +249,7 @@ For GaAN, a GaAN layer consists of four sub-layers: the first sub-layer calculat
 			\end{scriptsize}
 			                                                                                                                                                                                                                 &
 			$O(d_{in} * d_{out})$                                                                                                                                                                                              \\
-			\textbf{GAT} &
+			\textbf{GAT} \cite{huang2018_gat} &
             \begin{scriptsize}
                 $\begin{aligned}[t]
                 & \text{Preprocessing:}\\
@@ -269,7 +269,7 @@ For GaAN, a GaAN layer consists of four sub-layers: the first sub-layer calculat
             \end{aligned}
              $
            \\
-			\textbf{GaAN}                                                                                                                                                                                                    &
+			\textbf{GaAN}  \cite{zhang2018_gaan}                                                                                                                                                                                                 &
 			\begin{scriptsize}
 				$\begin{aligned}[t]
 						& \text{Sub-layer 0:}\\
