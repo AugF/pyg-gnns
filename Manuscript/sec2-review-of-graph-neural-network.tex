@@ -274,7 +274,7 @@ For GaAN, a GaAN layer consists of four sub-layers: the first sub-layer calculat
 				$\begin{aligned}[t]
 						& \text{Sub-layer 0:}\\
 						& \hat{\boldsymbol{a}}^{l,0}_{i,(k)} = \boldsymbol{s}^{l,0}_{i,(k)}\\
-						& \text{Sub-layer 1:}\\
+						& \text{Sub-layer 1, 2, 3:}\\
 						& \boldsymbol{g}_i^l = \textcolor{blue}{\boldsymbol{W}^l_g}[\boldsymbol{h}_i^{l} \parallel \boldsymbol{s}_{i}^{l, 2} \parallel \boldsymbol{s}_{i}^{l, 3}] + \textcolor{blue}{\boldsymbol{b}^l_g} \\
 						& \boldsymbol{h}_i^{l+1} = \textcolor{blue}{\boldsymbol{W}^l_o} [\boldsymbol{h}_i^l \parallel (\boldsymbol{g}_{i}^l \odot \boldsymbol{s}_{i}^{l, 1})] + \textcolor{blue}{\boldsymbol{b}^l_o}
 					\end{aligned}$
