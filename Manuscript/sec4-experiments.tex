@@ -64,10 +64,10 @@ When it became high enough, the training time increased linearly.
 
 \begin{figure}
     \centering
-    \subfloat[GCN]{\includegraphics[height=3cm]{figs/experiments/exp_hyperparameter_on_memory_usage_gcn.png}}
-    \subfloat[GGNN]{\includegraphics[height=3cm]{figs/experiments/exp_hyperparameter_on_memory_usage_ggnn.png}}\\
-    \subfloat[GAT]{\includegraphics[height=3cm]{figs/experiments/exp_hyperparameter_on_memory_usage_gat.png}}\\
-    \subfloat[GaAN]{\includegraphics[height=3cm]{figs/experiments/exp_hyperparameter_on_memory_usage_gaan.png}}
+    \subfloat[GCN]{\includegraphics[height=3cm]{figs/experiments/exp_hyperparameter_on_memory_usage_gcn.pdf}}
+    \subfloat[GGNN]{\includegraphics[height=3cm]{figs/experiments/exp_hyperparameter_on_memory_usage_ggnn.pdf}}\\
+    \subfloat[GAT]{\includegraphics[height=3cm]{figs/experiments/exp_hyperparameter_on_memory_usage_gat.pdf}}\\
+    \subfloat[GaAN]{\includegraphics[height=3cm]{figs/experiments/exp_hyperparameter_on_memory_usage_gaan.pdf}}
     \caption{Effects of hyper-parameters on the peak GPU memory usage during the training, excluding the memory used by the dataset and the model parameters.}
     \label{fig:exp_hyperparameter_memory_usage}
 \end{figure}
@@ -120,10 +120,10 @@ In summary, \emph{the edge calculation is the most time-consuming stage in the G
 
 \begin{figure}
     \centering
-    \subfloat[GCN]{\includegraphics[height=4cm]{figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_gcn.png}}
-    \subfloat[GGNN]{\includegraphics[height=4cm]{figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_ggnn.png}}\\
-    \subfloat[GAT]{\includegraphics[height=4cm]{figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_gat.png}}
-    \subfloat[GaAN]{\includegraphics[height=4cm]{figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_gaan.png}}
+    \subfloat[GCN]{\includegraphics[height=4cm]{figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_gcn.pdf}}
+    \subfloat[GGNN]{\includegraphics[height=4cm]{figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_ggnn.pdf}}\\
+    \subfloat[GAT]{\includegraphics[height=4cm]{figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_gat.pdf}}
+    \subfloat[GaAN]{\includegraphics[height=4cm]{figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_gaan.pdf}}
     \caption{Effects of the average degree on the time proportion of the vertex/edge calculation. Graphs were generated with the R-MAT generator by fixing the number of vertices as 50,000. }
     \label{fig:exp_avg_degree_on_vertex_edge_cal_time}
 \end{figure}
@@ -160,10 +160,10 @@ The aggregated vectors $\boldsymbol{s}^l_i$ (after the update step) will be fed 
 
 \begin{figure}
     \centering
-    \subfloat[GCN]{\includegraphics[height=4cm]{figs/experiments/exp_edge_calc_decomposition_gcn.png}}
-    \subfloat[GGNN]{\includegraphics[height=4cm]{figs/experiments/exp_edge_calc_decomposition_ggnn.png}}\\
-    \subfloat[GAT]{\includegraphics[height=4cm]{figs/experiments/exp_edge_calc_decomposition_gat.png}}
-    \subfloat[GaAN]{\includegraphics[height=4cm]{figs/experiments/exp_edge_calc_decomposition_gaan.png}}
+    \subfloat[GCN]{\includegraphics[height=4cm]{figs/experiments/exp_edge_calc_decomposition_gcn.pdf}}
+    \subfloat[GGNN]{\includegraphics[height=4cm]{figs/experiments/exp_edge_calc_decomposition_ggnn.pdf}}\\
+    \subfloat[GAT]{\includegraphics[height=4cm]{figs/experiments/exp_edge_calc_decomposition_gat.pdf}}
+    \subfloat[GaAN]{\includegraphics[height=4cm]{figs/experiments/exp_edge_calc_decomposition_gaan.pdf}}
     \caption{Training time breakdown of the edge calculation stage (including both GNN layers).}
     \label{fig:exp_edge_calc_decomposition}
 \end{figure}
