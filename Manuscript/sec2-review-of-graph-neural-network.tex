@@ -28,7 +28,7 @@ A GNN layer consists of $n$ graph neurons, where $n$ is the number of vertices i
 Each graph neuron corresponds to a vertex in $\mathcal{G}$.
 In the first GNN layer (Layer 0), the graph neuron of the vertex $v_i$ collects input feature vectors of itself and the vertices $\boldsymbol{x}_j$ that are adjacent to $v_i$ in $\mathcal{G}$ (i.e., $v_j \in \mathcal{N}(v_i)$) from the input layer.
 After aggregating input feature vectors and applying the non-linear transformation, the graph neuron outputs a hidden feature vector $\boldsymbol{h}^1_i$ for $v_i$.
-Take the demo DNN in \figurename~\ref{fig:general_structure_of_gnn}(a) as the example.
+Take the demo GNN in \figurename~\ref{fig:general_structure_of_gnn}(a) as the example.
 Since $\mathcal{N}(v_3) = \{v_1, v_2, v_4, v_5, v_6\}$, the graph neuron of $v_1$ at layer 0 collects the feature vectors \{$\boldsymbol{x}_1$, $\boldsymbol{x}_2$, $\boldsymbol{x}_3$, $\boldsymbol{x}_4$, $\boldsymbol{x}_5$, $\boldsymbol{x}_6$\} from the input layer and outputs $\boldsymbol{h}^1_1$.
 Different GNNs mainly differ in the graph neurons that they use.
 We elaborate on their details later.
@@ -170,8 +170,8 @@ For GaAN, a GaAN layer consists of four sub-layers: the first sub-layer calculat
                          & \boldsymbol{m}^{l,0}_{j,i,(k)} = \exp(LeakyReLU(\textcolor{blue}{\boldsymbol{a}^T} [\hat{\boldsymbol{h}}^{l}_{i,(k)} \parallel \hat{\boldsymbol{h}}^{l}_{j, (k)}]))                                    \\
                          & \text{Sub-layer 1:}                                                                                                                                                                                    \\
                          & \alpha^l_{j, i, (k)} = \frac {\exp(LeakyReLU(\textcolor{blue}{\boldsymbol{a}^T} [\hat{\boldsymbol{h}}^{l}_{i,(k)} \parallel \hat{\boldsymbol{h}}^{l}_{j,(k)}] ))} {\hat{\boldsymbol{a}}^{l,0}_{i,(k)}} \\
-                         & \text{Multi-head concatenation}: \boldsymbol{m}_{j, i}^{l,1} = \parallel_{k=1}^K \delta(\alpha^l_{j, i, (k)} \hat{\boldsymbol{h}}^{l}_{j,(k)})                                                         \\
-                         & \text{Multi-head average}: \boldsymbol{m}_{j, i}^{l,1} = \frac{1}{K} \sum_{k=1}^K \delta(\alpha^l_{j, i, (k)} \hat{\boldsymbol{h}}^{l}_{j,(k)})
+                         & \text{Multi-head concatenation}: \boldsymbol{m}_{j, i}^{l,1} = \parallel_{k=1}^K \alpha^l_{j, i, (k)} \hat{\boldsymbol{h}}^{l}_{j,(k)}                                                         \\
+                         & \text{Multi-head average}: \boldsymbol{m}_{j, i}^{l,1} = \frac{1}{K} \sum_{k=1}^K \alpha^l_{j, i, (k)} \hat{\boldsymbol{h}}^{l}_{j,(k)}
                     \end{aligned}$
             \end{scriptsize}
                                                                                                                                       &
@@ -258,7 +258,7 @@ For GaAN, a GaAN layer consists of four sub-layers: the first sub-layer calculat
                          & \text{Sub-layer 0:}                                                                            \\
                          & \hat{\boldsymbol{a}}^{l,0}_{i,(k)} = \boldsymbol{s}^{l,0}_{i,(k)}                              \\
                          & \text{Sub-layer 1:}                                                                            \\
-                         & \boldsymbol{h}_i^{l+1} = \boldsymbol{s}_i^{l,1}
+                         & \boldsymbol{h}_i^{l+1} = \delta(\boldsymbol{s}_i^{l,1})
                     \end{aligned}
                 $
             \end{scriptsize}                                                                                                                                                                                   &
@@ -270,7 +270,7 @@ For GaAN, a GaAN layer consists of four sub-layers: the first sub-layer calculat
                 \end{aligned}
             $
             \\
-            \textbf{GaAN}  \cite{zhang2018_gaan}                                                                                                                                                                             &
+            \textbf{GaAN}  \cite{zhang2018_gaan}                                                                                                                                                               &
             \begin{scriptsize}
                 $\begin{aligned}[t]
                          & \text{Sub-layer 0:}                                                                                                                                                                            \\
