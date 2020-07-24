@@ -6,7 +6,7 @@ GNN can learn the representation of vertices/edges in a graph from its topology 
 The strong expressive power makes GNN achieve impressive accuracy in node classification, link prediction, and graph classification \cite{zhou2018_gnn_review, zhang2018_gnn_survey, comprehensive-survey-wu-2020}.
 
 To train GNN easily, a series of graph neural network learning libraries/systems \cite{PyG, DGL, ma2019_neugraph, zhu2019_aligraph, PGL} are proposed.
-PyG \cite{PyG}, NeuGraph \cite{ma2019_neugraph}, PGL \cite{PGL} and DGL \cite{DGL} build upon the existing deep learning frameworks (PyG on PyTorch, NeuGraph on Tensorflow, PGL on PaddlePaddle, DGL on multiple backends).
+PyG \cite{PyG}, NeuGraph \cite{ma2019_neugraph}, PGL \cite{PGL} and DGL \cite{DGL} build upon the existing deep learning frameworks (PyG on PyTorch, NeuGraph on TensorFlow, PGL on PaddlePaddle, DGL on multiple backends).
 They provide users with a high-level programming model (message-passing for PyG/PGL/DGL and SAGA-NN for NeuGraph) to describe the structure of a GNN.
 They take advantage of the common tools provided by the frameworks like the automatic differentiation to simplify the development.
 The GNN learning libraries/systems utilize specially optimized CUDA kernels (like kernel fusion \cite{DGL} \cite{ma2019_neugraph}) and other implementation techniques (like 2D graph partitioning \cite{ma2019_neugraph}) to improve the speed of GNN training.
