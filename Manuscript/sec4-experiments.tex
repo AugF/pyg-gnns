@@ -103,7 +103,7 @@ To find out which stage/step dominates the training time, we breakdown the train
 \figurename~\ref{fig:exp_vertex_edge_cal_proportion} decomposes the training time of a GNN on the layer level.
 The training time of each layer is the summation of the time in the forward, backward, and evaluation phases.
 In GCN, GAT, and GaAN, the time spent on layer 0 was much larger than layer 1.
-In those GNNs, the dimensions of the input/output feature vectors in the layer 0 were much larger than the dimensions in the layer 1.
+In those GNNs, the dimensions of the input/output feature vectors in layer 0 were much larger than the dimensions in layer 1.
 $d^0_{in}=dim(\boldsymbol{x})$, $d^0_{out}=d^1_{in}=64$ and $d^1_{out}=\#Class$ and $dim(\boldsymbol{x}) \gg \#Class$.
 For GaAN, since it required the dimensions of the input/output feature vectors must be the same, $d^0_{in}=d^0_{out}=d^1_{in}=d^1_{out}=64$ and the training time of both layers were close.
 
@@ -219,8 +219,8 @@ In general, the most time-consuming operator in GNN calculation is still the mat
 Although the aggregate step in the edge calculation is relatively simple (like sum and mean), the related operators \texttt{scatter\_add} and \texttt{gather} still consumed a certain amount of the time.
 They have to synchronize between hardware threads to avoid updating the same aggregated vector at the same time and they conducted non-regular memory access with the access pattern determined by the edge set dynamically.
 For GPU, they were less efficient than \texttt{mm}.
-The index-based selection \texttt{index\_select} operator from the collection step consumed around 10\% of time in all GNNs.
-Though GPUs have high on-chip memory bandwidth, improving the efficiency of \texttt{scatter\_add}/\texttt{gather}/\texttt{index\_select} (like overlapping them with $\phi$) can benifit the training of all kinds of GNNs.
+The index-based selection \texttt{index\_select} operator from the collection step consumed around 10\% of the time in all GNNs.
+Though GPUs have high on-chip memory bandwidth, improving the efficiency of \texttt{scatter\_add}/\texttt{gather}/\texttt{index\_select} (like overlapping them with $\phi$) can benefit the training of all kinds of GNNs.
 
 \paragraph{Summary}
 The GNN training is suitable for GPU.
