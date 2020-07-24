@@ -393,7 +393,7 @@ According to the experimental results in Section~\ref{sec:training_time_breakdow
     \label{fig:exp_sampling_batch_train_time}
 \end{figure}
 
-To find out the performance bottleneck with the sampling techniques, we decomposed the training time per batch into three phases: \emph{sampling} on CPU, \emph{transfering} sampled subgraphs from CPU to GPU and \emph{training} with the subgraphs on GPU.
+To find out the performance bottleneck with the sampling techniques, we decomposed the training time per batch into three phases: \emph{sampling} on CPU, \emph{transferring} sampled subgraphs from CPU to GPU and \emph{training} with the subgraphs on GPU.
 \figurename~\ref{fig:exp_sampling_batch_train_time} shows the time breakdown of the four GNNs under different relative batch sizes.
 For the neighbor sampler, the sampling technique reduced the training time per batch only when the batch size was very small.
 When the batch became bigger, the sampling and the data transferring phases introduced noticeable overheads, even making the training time exceed the full-batch training.
