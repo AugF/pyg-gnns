@@ -97,7 +97,7 @@ For every incident edge $(v_j, v_i)$ of $v_i$, $\phi$ receives the output hidden
 $\phi^l$ emits a message vector $\boldsymbol{m}^l_{j,i}$ for every edge $(v_j, v_i)$ at layer $l$, i.e., $\boldsymbol{m}^l_{j,i}=\phi^l(\boldsymbol{h}^l_i, \boldsymbol{h}^l_j, \boldsymbol{e}_{j,i})$.
 For $v_i$, the message vectors $\boldsymbol{m}^l_{x,j}$ of its adjacent edges ($v_x \in \mathcal{N}(v_i)$) are aggregated by the \emph{aggregation} function $\Sigma^l$ to produce an aggregated vector $\boldsymbol{s}^l_i$, i.e., $\boldsymbol{s}^l_i=\mathlarger{\Sigma}^l_{v_j \in \mathcal{N}(v_i)}\boldsymbol{m}^l_{j,i}$.
 $v_i$'s aggregated vector $\boldsymbol{s}^l_i$ and its hidden vector $\boldsymbol{h}^l_i$ from the previous GNN layer are fed into the \emph{vertex update} function $\gamma^l$ to calculate the output hidden vector $\boldsymbol{h}^{l+1}_i$ of the current layer $l$, i.e., $\boldsymbol{h}^{l+1}_i = \gamma^l(\boldsymbol{h}^l_i, \boldsymbol{s}^l_i)$
-The end-to-end training requires $\phi^l$ and $\gamma^l$ (like multi-layer perceptrons and GRU) and $\Sigma_l$ (like mean, sum, element-wise min/max) are \emph{differentiable} to make the whole GNN differentialble.
+The end-to-end training requires $\phi^l$ and $\gamma^l$ (like multi-layer perceptrons and GRU) and $\Sigma_l$ (like mean, sum, element-wise min/max) are \emph{differentiable} to make the whole GNN differentiable.
 
 Different GNNs adopt different kinds of graph neurons and have different definitions of the three functions.
 $\phi$ and $\Sigma$ are the \emph{edge calculation} functions.
