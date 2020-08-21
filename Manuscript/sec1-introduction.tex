@@ -1,0 +1,51 @@
+\section{Introduction}
+
+In recent years, the graph neural network (GNN) is a hot research topic in the field of artificial intelligence.
+Many GNNs \cite{kipf2017_gcn, defferrad2016_chebnet, li2018_agcn,li2015_ggnn, hamilton2017_graphsage, huang2018_gat, zhang2018_gaan} are proposed.
+GNN can learn the representation of vertices/edges in a graph from its topology and original feature vectors in an \emph{end-to-end} manner.
+The strong expressive power makes GNN achieve impressive accuracy in node classification, link prediction, and graph classification \cite{zhou2018_gnn_review, zhang2018_gnn_survey, comprehensive-survey-wu-2020}.
+
+To train GNN easily, a series of graph neural network learning libraries/systems \cite{PyG, DGL, ma2019_neugraph, zhu2019_aligraph, PGL} are proposed.
+PyG \cite{PyG}, NeuGraph \cite{ma2019_neugraph}, PGL \cite{PGL} and DGL \cite{DGL} build upon the existing deep learning frameworks (PyG on PyTorch, NeuGraph on TensorFlow, PGL on PaddlePaddle, DGL on multiple backends).
+They provide users with a high-level programming model (message-passing for PyG/PGL/DGL and SAGA-NN for NeuGraph) to describe the structure of a GNN.
+They take advantage of the common tools provided by the frameworks like the automatic differentiation to simplify the development.
+The GNN learning libraries/systems utilize specially optimized CUDA kernels (like kernel fusion \cite{DGL} \cite{ma2019_neugraph}) and other implementation techniques (like 2D graph partitioning \cite{ma2019_neugraph}) to improve the speed of GNN training.
+
+However, whether these optimizations solve the real performance bottleneck is still in doubt.
+Yan et al. \cite{yan2020_characterizing_gcn} and Zhang et al. \cite{zhang2020_analysis_neugraph} analyze the performance characteristics of the GNN \emph{inference} from the architectural view.
+They find that the GNN inference is more cache-friendly than the traditional graph analysis (like PageRank) and is suitable for GPU.
+They verify the effectiveness of the kernel fusion optimization in reducing the inference time.
+Nevertheless, \cite{yan2020_characterizing_gcn} and \cite{zhang2020_analysis_neugraph} focus on the inference phase and does not discuss the performance bottleneck in the training phase.
+
+To find out the performance bottleneck in the GNN training, we conduct experimental analysis in this work.
+We model the typical GNNs with the message-passing framework.
+Since we focus on the efficiency issue of GNN training instead of accuracy, we classify the typical GNNs into four quadrants according to their vertex and edge calculation time complexity.
+We pick GCN \cite{kipf2017_gcn}, GGNN \cite{li2015_ggnn}, GAT \cite{huang2018_gat} and GaAN \cite{zhang2018_gaan} as representative GNNs with different edge/vertex calculation complexities.
+We implement them with PyG and evaluate their efficiency with six real-world datasets on GPU.
+We verify the correctness of the complexity analysis by measuring the effects of the hyper-parameters on the training time and memory usage.
+We find out the most time-consuming stage in GNN training by decomposing the training time per epoch from the layer level to the operator level.
+We analyze the memory usage during the training to discover the main factor that limits the data scalability of GNN training on GPU.
+Finally, we evaluate whether the sampling techniques affect the performance bottleneck.
+Our key findings and insights are summarized below.
+
+\begin{itemize}
+    \item The training time and the memory usage of a GNN layer is mainly affected by the dimensions of the input/output hidden feature vectors.
+          The training time and memory usage increase \emph{linearly} with hyper-parameters.
+    \item The edge-related calculation is the performance bottleneck for most GNNs.
+          The majority of the training time is spent on it.
+          For GNNs with high edge calculation complexity, optimizations should focus on the implementation of the message function that is conducted on every edge during the edge calculation.
+          For GNNs with low edge calculation complexity, optimizations should focus on the collect step and the aggregation step of the edge calculation.
+          Overlapping the data accessing with the computation is a potential optimizing direction.
+    \item The high memory usage caused by the intermediate results of the edge calculation is the main factor that prevents us from training big graphs on GPU.
+    \item The sampling techniques can significantly reduce the training time and memory usage, but the implementation is still inefficient. The time spent on the sampling may exceed the time spent on the training under big batch sizes. How to make full use of the computing power of GPUs with the sampling techniques is another question to solve.
+\end{itemize}
+
+Based on the insights, we provide several potential optimization directions.
+We believe that our analysis can help the developers of the GNN libraries/systems have a better understanding of the characteristics of GNN training and propose more targeted optimizations.
+
+\paragraph{Outline}
+We briefly survey the typical GNNs in Section~\ref{sec:review_of_gnns}.
+We introduce our experimental setting and targets in Section~\ref{sec:experimental_design}.
+The experimental results are presented and analyzed in Section~\ref{sec:experiment_results}.
+We summarize the key findings and give out potential optimization directions in Section~\ref{sec:insights}.
+We introduce the related work in Section~\ref{sec:related_work} and finally conclude our work in Section~\ref{sec:conclusion}.

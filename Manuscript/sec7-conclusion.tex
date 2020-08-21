@@ -1,0 +1,18 @@
+\section{Conclusion}
+\label{sec:conclusion}
+
+In this work, we systematically study the performance bottleneck in graph neural network training.
+We model the existing GNNs with the message-passing framework.
+We classify the GNNs according to their edge and vertex calculation complexities to pick four typical GNNs to evaluate.
+The experimental results validate our complexity analysis.
+The training time and the memory usage increase linearly with the hyper-parameters of a GNN.
+To find out the performance bottleneck in time, we decompose the training time per epoch on different levels.
+The training time breakdown indicates that the edge calculation and its related basic operators are the performance bottleneck for most GNNs.
+Moreover, the intermediate results produced during the edge calculation cause high memory usage, limiting the data scalability.
+Adopting sampling techniques can reduce training time and memory usage significantly.
+However, the current implementation brings considerable sampling overheads.
+The small sampled graphs cannot make full use of the computing power of a GPU either.
+Our analysis indicates that the edge calculation should be the main target of optimizations.
+Reducing its memory usage and improving its efficiency can significantly improve the performance of GNN training.
+Based on the analysis, we propose several potential optimizations for the GNN learning frameworks.
+We believe that our analysis can help developers to have a better understanding of the characteristics of GNN computation.
