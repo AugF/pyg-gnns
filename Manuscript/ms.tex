@@ -19,21 +19,28 @@
 
 \begin{frontmatter}
 
-	\title{Analyzing Performance Bottleneck in Graph Neural Network Training: An Experimental View}
+	\title{Empirical Exploration of the Performance Bottleneck in Graph Neural Network Training}
     \author{Zhaokang Wang, Yunpan Wang, Chunfeng Yuan, Rong Gu$^*$, Yihua Huang \corref{correspondingauthor}}
     \cortext[correspondingauthor]{Corresponding authors with equal contribution}
     \ead{\{wangzhaokang, wangyp\}@smail.nju.edu.cn, \{cfyuan, gurong, yhuang\}@nju.edu.cn}
 	\address{State Key Laboratory for Novel Software Technology, \\Department of Computer Science and Technology, Nanjing University, \\Nanjing 210023, China}
 
 	\begin{abstract}
-        Graph neural network(GNN) has become a research hotspot in the field of artificial intelligence due to state-of-the-art performance achieved in many graph-related tasks. At the same time, various graph neural network systems have emerged one after another.
-        These systems have used their skills in implementation, but there are very few works to study the performance bottleneck on graph neural network training. In contrast to prior works that present characterization of GCNs and select GNNs cover GNN workloads,
-		we select typical algorithms by complexities of edge/vertex calculation. We analyze the performance bottleneck by breaking down training time, study the effects of hyper-parameters and sampling technologies, and find factors of memory usage. 
-		We finally put forward some key findings for GNN training and hope our work can help GNN system researchers.
+		The graph neural network (GNN) has become a research hotspot for its state-of-the-art performance in many graph analysis tasks.
+		Various graph neural network libraries have emerged.
+		They make the development of GNNs convenient, but their performance on large datasets is not satisfying.
+		In this work, we analyze the performance bottleneck in training GNN with GPUs empirically.
+		A GNN layer can be decomposed into two parts: the vertex and the edge calculation parts.
+		According to their computational complexity, we select four representative GNNs (GCN, GGNN, GAT, GaAN).
+		We breakdown their training time and memory usage, evaluate the effects of hyper-parameters, and assess the efficiency of the sampling techniques.  
+		The experimental evaluation indicates that the edge-related calculation is the performance bottleneck for most GNNs, dominating the training time and memory usage.
+		Future optimization can focus on it. 
+		The sampling techniques are essential for training big graphs on GPU, but their current implementations still have room for improvement.
+		Improving its efficiency is another potential optimization direction.
 	\end{abstract}
 
 	\begin{keyword}
-		graph neural network, performance bottleneck, deep learning, characterization
+		graph neural network, performance bottleneck analysis, empirical evaluation, machine learning system, GPU
 	\end{keyword}
 
 \end{frontmatter}
