@@ -48,12 +48,12 @@ The key findings and insights are summarized below.
 
 Based on the insights, we provide several potential optimization directions:
 \begin{itemize}
-      \item To reduce training time, optimizations should focus on improving the efficiency of the edge calculation. 
+      \item To reduce training time, \textbf{optimizations should focus on improving the efficiency of the edge calculation}. 
       One may consider developing optimized operators for the messaging step that is the major source of computing costs in the edge calculation.
        Fusing operators of the collection step, messaging function and the aggregation step together is another way to reduce the overheads in the edge calculation.
-      \item To reduce memory usage, optimizations should focus on reducing the intermediate results in the edge calculation. 
+      \item To reduce memory usage, \textbf{optimizations should focus on reducing the intermediate results in the edge calculation}. 
       One may consider adopting the checkpoint mechanism to cache less intermediate results during the forward phase and re-calculate the needed data on the fly during the backpropagation.
-      \item To improve the efficiency of the sampling techniques, one may consider overlapping the sampling on the CPU side with the training on the GPU side. 
+      \item To improve the efficiency of the sampling techniques, \textbf{one may consider overlapping the sampling on the CPU side with the training on the GPU side.} 
       Choosing a proper batch size automatically is another potential optimization.
 \end{itemize}
 We hope that our analysis can help the developers of the GNN libraries/systems have a better understanding of the characteristics of GNN training and propose more targeted optimizations.

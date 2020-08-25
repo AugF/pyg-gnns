@@ -15,7 +15,7 @@ The ranking of the training time is GaAN $\gg$ GAT $>$ GGNN $>$ GCN in all cases
 Since the real-world graphs have more edges than edges ($m > n$), the time complexity of the edge calculation stage affects more than the vertex calculation stage.
 The ranking is consistent with the time complexity analysis.
 
-\begin{figure}
+\begin{figure}[htb]
     \centering
     \subfloat[\texttt{pub}\label{fig:exp_absolute_training_time_pubmed}]{\includegraphics[height=4cm]{figs/experiments/exp_absolute_training_time_comparison_pubmed.pdf}}
     \subfloat[\texttt{aph}\label{fig:exp_absolute_training_time_amazon-photo}]{\includegraphics[height=4cm]{figs/experiments/exp_absolute_training_time_comparison_amazon-photo.pdf}}
@@ -29,7 +29,7 @@ The ranking is consistent with the time complexity analysis.
 
 To further evaluate the effects of the hyper-parameters, we measure the training time of each GNN with varying hyper-parameters in \figurename~\ref{fig:exp_hyperparameter_on_vertex_edge_phase_time}.
 
-\begin{figure}
+\begin{figure}[tbp]
     \centering
     \subfloat[GCN\label{fig:exp_hyperparameter_on_vertex_edge_phase_time_gcn}]{\includegraphics[height=3cm]{figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gcn.pdf}}
     %
@@ -62,7 +62,7 @@ We observe similar phenomena in GCN, GGNN, and GAT with low hyper-parameters.
 When the hyper-parameters is too low, the GNN training cannot make full use of the computing power of the GPU.
 When the hyper-parameter becomes high enough, the training time increases linearly, supporting the time complexity analysis.
 
-\begin{figure}
+\begin{figure}[tbp]
     \centering
     \subfloat[GCN]{\includegraphics[height=3cm]{figs/experiments/exp_hyperparameter_on_memory_usage_gcn.pdf}}
     \subfloat[GGNN]{\includegraphics[height=3cm]{figs/experiments/exp_hyperparameter_on_memory_usage_ggnn.pdf}}\\
@@ -89,7 +89,7 @@ To find out which stage/step dominates the training time, we decompose the train
 
 \subsubsection{Layer Level}
 
-\begin{figure}
+\begin{figure}[tbp]
     \centering
     \subfloat[GCN]{\includegraphics[height=4cm]{figs/experiments/exp_layer_time_proportion_gcn.pdf}}
     \subfloat[GGNN]{\includegraphics[height=4cm]{figs/experiments/exp_layer_time_proportion_ggnn.pdf}}\\
@@ -117,7 +117,7 @@ But the high time complexity of its vertex updating function $\gamma$ makes the 
 For GAT and GaAN, due to their high edge calculation complexity, the edge calculation stage is the absolutely dominant stage.
 In summary, \emph{the edge calculation stage is the most time-consuming stage in the GNN training}.
 
-\begin{figure}
+\begin{figure}[tbp]
     \centering
     \subfloat[GCN]{\includegraphics[height=4cm]{figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_gcn.pdf}}
     \subfloat[GGNN]{\includegraphics[height=4cm]{figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_ggnn.pdf}}\\
@@ -138,7 +138,7 @@ Therefore, \emph{improving the efficiency of the edge calculation stage is the k
 
 \subsubsection{Step Level in Edge Calculation}
 
-\begin{figure}
+\begin{figure}[tbp]
     \centering
     \includegraphics[width=1\columnwidth]{figs/illustration/steps_in_edge_calculation.pdf}
     \caption{Step decomposition of the edge calculation in the GNN layer $l$.}
@@ -157,7 +157,7 @@ The updating step is optional.
 It performs an additional transformation on the aggregated vectors (for example, adding bias in GCN).
 The aggregated vectors $\boldsymbol{s}^l_i$ (after the updating step) will be fed into the vertex updating function $\gamma$ as one of the input parameters.
 
-\begin{figure}
+\begin{figure}[tbp]
     \centering
     \subfloat[GCN]{\includegraphics[height=4cm]{figs/experiments/exp_edge_calc_decomposition_gcn.pdf}}
     \subfloat[GGNN]{\includegraphics[height=4cm]{figs/experiments/exp_edge_calc_decomposition_ggnn.pdf}}\\
@@ -184,7 +184,7 @@ Additionally, improving the efficiency of the collection step can benefit all GN
 The functions $\phi$, $\Sigma$ and $\gamma$ in the vertex and edge calculation are made up of a series of basic operators implemented on GPU, like the matrix multiplication \texttt{mm}, the elementwise multiplication \texttt{mul} and the index-based selection \texttt{index\_select}.
 \figurename~\ref{fig:exp_top_basic_ops} shows the five most time-consuming basic operators in each GNN, averaged over all the real-world graphs in \tablename~\ref{tab:dataset_overview}.
 
-\begin{figure}
+\begin{figure}[tbp]
     \centering
     \subfloat[GCN]{\includegraphics[height=4cm]{figs/experiments/exp_top_basic_ops_gcn.pdf}}
     \subfloat[GGNN]{\includegraphics[height=4cm]{figs/experiments/exp_top_basic_ops_ggnn.pdf}}\\
@@ -238,14 +238,14 @@ Compared with the main memory on the host side, the capacity of the GPU memory i
 \emph{The GPU memory capacity limits the scales of the graphs that a GPU can train GNNs on}.
 For example, GaAN is unable to train on \texttt{cph} dataset due to the out of memory exception.
 
-\begin{figure}
+\begin{figure}[tbp]
     \centering
     \includegraphics[height=5cm]{figs/experiments/exp_memory_usage_stage_amp.pdf}
     \caption{Memory usage of each phase. Dataset: \texttt{amp}.}
     \label{fig:exp_memory_usage_stage_amp}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[tbp]
     \centering
     \includegraphics[height=4.5cm]{figs/illustration/ggnn_vertex_func_computation_graph.pdf}
     \caption{Computation graph of the vertex updating function $\gamma$ of GGNN.}
@@ -266,7 +266,7 @@ By the end of the backward phase, the cached tensors are released.
 Since the evaluation phase does not need to calculate the gradients, it does not cache intermediate tensors.
 Its memory usage declines sharply.
 
-\begin{figure}
+\begin{figure}[tbp]
     \centering
     \includegraphics[height=5cm]{figs/experiments/exp_memory_expansion_ratio.pdf}
     \caption{Memory expansion ratios of typical GNNs.}
@@ -279,7 +279,7 @@ We define the \emph{memory expansion ratio} (MER) as the ratio of the peak memor
 GCN has the lowest MER (up to 15) while GaAN has the highest MER (up to 104).
 \emph{The high MER limits the data scalability of GNNs}, making GPUs unable to handle big graphs.
 
-\begin{figure}
+\begin{figure}[tbp]
     \centering
     \includegraphics[height=5cm]{figs/experiments/exp_memory_expansion_ratio_input_feature_dimension_com-amazon.pdf}
     \caption{Memory expansion ratio under different dimensions of the input feature vectors. Dataset: \texttt{cam}.}
@@ -295,7 +295,7 @@ The size may become comparable to the scales of the intermediate results,  makin
 To find out how the dimension affects the MER, we generated random input feature vectors with different dimensions for the \texttt{cam} dataset and measured the MER in \figurename~\ref{fig:exp_memory_expension_ratio_input_feature_dimension}.
 For a GNN under the same hyper-parameters, \emph{the MER decreases as the dimension of the input feature vectors increases}.
 
-\begin{figure}
+\begin{figure}[tbp]
     \centering
     \subfloat[Peak memory usage]{\includegraphics[height=4cm]{figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_edges_peak_memory.pdf}}
     \subfloat[Memory expansion ratio]{\includegraphics[height=4cm]{figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_edges_expansion_ratio.pdf}}
@@ -313,7 +313,7 @@ Except for GGNN, the MER of the other GNNs increases as $\bar{d}$ increases.
 As GGNN has high vertex calculation complexity, the MER related to the vertex calculation stage is much larger than the edge calculation stage.
 When the edge calculation stage dominates the memory usage, its MER becomes smaller.
 
-\begin{figure}
+\begin{figure}[tbp]
     \centering
     \subfloat[Peak memory usage]{\includegraphics[height=4cm]{figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_vertices_fixed_edge_peak_memory.pdf}}
     \subfloat[Memory expansion ratio]{\includegraphics[height=4cm]{figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_vertices_fixed_edge_expansion_ratio.pdf}}
@@ -350,7 +350,7 @@ With the sampling techniques, the model parameters are updated by a stochastic g
 PyG conducts the evaluation phase every several epochs (either on the CPU side or the GPU side) to determine whether to stop the training.
 In this section, the experiments focus on the training phase of each batch.
 
-\begin{figure}
+\begin{figure}[tbp]
     \centering
     \subfloat[Neighbor sampler]{\includegraphics[height=4cm]{figs/experiments/exp_sampling_minibatch_realtive_graph_info_graphsage_gcn.pdf}} \\
     \subfloat[Cluster sampler]{\includegraphics[height=4cm]{figs/experiments/exp_sampling_minibatch_realtive_graph_info_cluster_gcn.pdf}}
@@ -366,7 +366,7 @@ As the batch size increases, the size of the sampled subgraph first increases qu
 The cluster sampler is much less sensitive compared to the neighbor sampler.
 The number of vertices and the average degree of the sampled subgraphs increases linearly with the batch size.
 
-\begin{figure}
+\begin{figure}[tbp]
     \centering
     \includegraphics[width=0.4\columnwidth]{figs/experiments/exp_sampling_minibatch_degrees_distribution_amazon-photo.pdf}
     \caption{Vertex degree distribution of the sampled subgraph (relative batch size: 6\%) and the original graph. Dataset:\texttt{amp}.}
@@ -382,7 +382,7 @@ It indicates that the sampled subgraphs still follow the power-law degree distri
 However, there are much less vertices in the sampled subgraphs, significantly lowering the average degrees.
 According to the experimental results in Section~\ref{sec:training_time_breakdown}, if the average degree becomes lower, the proportion of the training time spent on the vertex calculation stage will become higher, especially for GGNN.
 
-\begin{figure}
+\begin{figure}[tbp]
     \centering
     \subfloat[Neighbor sampler on \texttt{amc}]{\includegraphics[height=5cm]{figs/experiments/exp_sampling_relative_batch_size_train_time_stack_graphsage_amazon-computers.pdf}}
     \subfloat[Neighbor sampler on \texttt{fli}]{\includegraphics[height=5cm]{figs/experiments/exp_sampling_relative_batch_size_train_time_stack_graphsage_flickr.pdf}} \\
@@ -404,7 +404,7 @@ The experimental results indicate that the current implementation of the samplin
 When the batch size is slightly big, more than 50\% of the time has been spent on sampling and data transferring.
 \emph{The sampling techniques are only efficient under small batch sizes.}
 
-\begin{figure}
+\begin{figure}[tbp]
     \centering
     \subfloat[Neighbor sampler on \texttt{amc}]{\includegraphics[height=4cm]{figs/experiments/exp_sampling_memory_usage_relative_batch_size_graphsage_amazon-computers_peak_memory.pdf}}
     \subfloat[Neighbor sampler on \texttt{fli}]{\includegraphics[height=4cm]{figs/experiments/exp_sampling_memory_usage_relative_batch_size_graphsage_flickr_peak_memory.pdf}} \\
@@ -419,7 +419,7 @@ The main advantage of the sampling technique is \emph{reducing the peak memory u
 The peak memory usage declines significantly even under big batch sizes.
 The sampling techniques make training GNNs on big graphs possible for GPUs.
 
-\begin{figure}
+\begin{figure}[tbp]
     \centering
     \includegraphics[height=5cm]{figs/experiments/exp_small_graph_train_time.pdf}
     \caption{Training time per epoch on small random graphs. For each number of vertices, we generated 50 random R-MAT graphs with the average degree of 4.0 and reported the average training time per epoch (without the evaluation phase). The error bar indicates the standard deviation.}
