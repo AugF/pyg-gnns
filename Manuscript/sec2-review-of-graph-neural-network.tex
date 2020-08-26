@@ -305,7 +305,7 @@ We classify the typical GNNs into four quadrants based on their edge/vertex comp
     \label{fig:gnn_complexity_quadrant}
 \end{figure}
 
-\textbf{GCN} \cite{kipf2017_gcn} (low vertex \& edge calculation complexity): Graph convolution network (GCN \cite{kipf2017_gcn}) introduces the first-order approximation of the spectral-based graph convolutions.
+\textbf{GCN} (low vertex \& edge calculation complexity): Graph convolution network (GCN \cite{kipf2017_gcn}) introduces the first-order approximation of the spectral-based graph convolutions.
 %By combining the advantages of both the spectral-based and the spatial-based convolution, it can learn the representation of the local topological structure and vertex features efficiently.
 It has only one parameter to learn at each layer, i.e. the weight matrix $\boldsymbol{W}^l$ in $\gamma$.
 A GCN graph neuron can be expressed as $\boldsymbol{h}^{l+1}_i = \boldsymbol{W}^l\sum_{v_j \in \mathcal{N}(v_i)}{e_{j,i}\boldsymbol{h}^l_j}$, where $e_{j,i}$ is the normalized weight of the edge $(v_j, v_i)$.
