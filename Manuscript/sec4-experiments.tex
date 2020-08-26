@@ -55,7 +55,7 @@ Thus, the computing costs of the GAT layer 0 and the GAT layer 1 increase linear
 \figurename~\ref{fig:exp_hyperparameter_on_vertex_edge_phase_time_gat} confirms the theoretical analysis.
 
 For GaAN, it is also based on the multi-head mechanism.
-Its time complexity is affected by $dim(\boldsymbol{h}^1)$ ($d^0_{out} = d^1_{in} = dim(\boldsymbol{h}^1)$), $d_a$, $d_v$, $d_m$and the number of heads $K$.
+Its time complexity is affected by $dim(\boldsymbol{h}^1)$ ($d^0_{out} = d^1_{in} = dim(\boldsymbol{h}^1)$), $d_a$, $d_v$, $d_m$ and the number of heads $K$.
 \figurename~\ref{fig:exp_hyperparameter_on_vertex_edge_phase_time_gaan} demonstrates that the training time increases linearly with the hyper-parameters, except for $dim(\boldsymbol{h}^1)$.
 As $dim(\boldsymbol{h}^1)$ increases, the training time increases first slightly and then linearly.
 We observe similar phenomena in GCN, GGNN, and GAT with low hyper-parameters.
