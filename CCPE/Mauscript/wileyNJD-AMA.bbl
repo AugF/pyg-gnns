@@ -47,7 +47,7 @@ Zhang J, Shi X, Xie J, Ma H, King I, Yeung D. GaAN: Gated Attention Networks
 
 \bibitem{zhou2018_gnn_review}
 Zhou J, Cui G, Zhang Z, et al. Graph Neural Networks: A Review of Methods and
-  Applications. https://arxiv.org/abs/1812.08434;  2018.
+  Applications. \url{https://arxiv.org/abs/1812.08434};  2018.
 
 \bibitem{zhang2018_gnn_survey}
 Zhang Z, Cui P, Zhu W. Deep Learning on Graphs: {A} Survey. {\it IEEE
@@ -65,11 +65,11 @@ Zhang Z, Cui P, Zhu W. Deep Learning on Graphs: {A} Survey. {\it IEEE
 
 \bibitem{PyG}
 Fey M, Lenssen JE. Fast Graph Representation Learning with PyTorch Geometric.
-  https://pytorch-geometric.readthedocs.io/;  2019.
+  \url{https://pytorch-geometric.readthedocs.io/};  2019.
 
 \bibitem{DGL}
 Wang M, Yu L, Zheng D, et al. Deep Graph Library: Towards Efficient and
-  Scalable Deep Learning on Graphs. https://www.dgl.ai/;  2019.
+  Scalable Deep Learning on Graphs. \url{https://www.dgl.ai/};  2019.
 
 \bibitem{ma2019_neugraph}
 Ma L, Yang Z, Miao Y, et al. NeuGraph: Parallel Deep Neural Network Computation
@@ -195,7 +195,7 @@ Yang J, Leskovec J. Defining and Evaluating Network Communities Based on
 
 \bibitem{chen2016_training_deep}
 Chen T, Xu B, Zhang C, Guestrin C. Training Deep Nets with Sublinear Memory
-  Cost.;  2016.
+  Cost. \url{https://arxiv.org/abs/1604.06174};  2016.
 
 \bibitem{dwivedi2020_benchmark_of_gnn}
 Dwivedi VP, Joshi CK, Laurent T, Bengio Y, Bresson X. Benchmarking Graph Neural
@@ -203,37 +203,6 @@ Dwivedi VP, Joshi CK, Laurent T, Bengio Y, Bresson X. Benchmarking Graph Neural
 
 \bibitem{hu2020_open_graph_benchmark}
 Hu W, Fey M, Zitnik M, et al. Open Graph Benchmark: Datasets for Machine
-  Learning on Graphs.;  2020.
-
-\bibitem{network-repository}
-Rossi RA, Ahmed NK. The Network Data Repository with Interactive Graph
-  Analytics and Visualization. In: Proceedings of the Twenty-Ninth {AAAI}
-  Conference on Artificial Intelligence, January 25-30, 2015, Austin, Texas,
-  {USA}. ; 2015\string: 4292--4293.
-
-\bibitem{bruna2013_spectral_gnn}
-Bruna J, Zaremba W, Szlam A, LeCun Y. Spectral Networks and Locally Connected
-  Networks on Graphs. In: 2nd International Conference on Learning
-  Representations, {ICLR} 2014, Banff, AB, Canada, April 14-16, 2014,
-  Conference Track Proceedings. ; 2014.
-
-\bibitem{gao2018_lsgcn}
-Gao H, Wang Z, Ji S. Large-Scale Learnable Graph Convolutional Networks. In:
-  Proceedings of the 24th {ACM} {SIGKDD} International Conference on Knowledge
-  Discovery {\&} Data Mining, {KDD} 2018, London, UK, August 19-23, 2018. ;
-  2018\string: 1416--1424
-
-\bibitem{zou2019_ldis}
-Zou D, Hu Z, Wang Y, Jiang S, Sun Y, Gu Q. Layer-Dependent Importance Sampling
-  for Training Deep and Large Graph Convolutional Networks. In: Advances in
-  Neural Information Processing Systems 32: Annual Conference on Neural
-  Information Processing Systems 2019, NeurIPS 2019, 8-14 December 2019,
-  Vancouver, BC, Canada. ; 2019\string: 11247--11256.
-
-\bibitem{errica2020_fair_comparison}
-Errica F, Podda M, Bacciu D, Micheli A. A Fair Comparison of Graph Neural
-  Networks for Graph Classification. In: 8th International Conference on
-  Learning Representations, {ICLR} 2020, Addis Ababa, Ethiopia, April 26-30,
-  2020. OpenReview.net; 2020.
+  Learning on Graphs. \url{https://arxiv.org/abs/2005.00687};  2020.
 
 \end{thebibliography}

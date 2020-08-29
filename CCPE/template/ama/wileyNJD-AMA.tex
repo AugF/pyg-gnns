@@ -1,0 +1,133 @@
+
+\documentclass[AMA,STIX1COL]{WileyNJD-v2}
+\usepackage{lineno,hyperref}
+\usepackage{amsmath, amsthm}
+\usepackage{relsize}
+\usepackage{booktabs}
+\usepackage{makecell}
+\usepackage{lscape}
+\usepackage{xcolor}
+\usepackage{subfig}
+\usepackage{float}
+
+\renewcommand{\thefootnote}{\fnsymbol{footnote}}
+
+\articletype{Article Type}%
+
+\received{}
+\revised{}
+\accepted{}
+        
+\raggedbottom
+
+\begin{document}
+
+\title{This is the sample article title}
+
+\author[1]{Author One*}
+\author[2,3]{Author Two}
+\author[3]{Author Three}
+
+\authormark{AUTHOR ONE \textsc{et al}}
+
+
+\address[1]{\orgdiv{Org Division}, \orgname{Org Name}, \orgaddress{\state{State name}, \country{Country name}}}
+\address[2]{\orgdiv{Org Division}, \orgname{Org Name}, \orgaddress{\state{State name}, \country{Country name}}}
+\address[3]{\orgdiv{Org Division}, \orgname{Org Name}, \orgaddress{\state{State name}, \country{Country name}}}
+
+\corres{*Corresponding author name, This is sample corresponding address. \email{authorone@gmail.com}}
+
+\presentaddress{This is sample for present address text this is sample for present address text}
+
+\abstract[Summary]{The graph neural network (GNN) has become a popular research area for its state-of-the-art performance in many graph analysis tasks.
+Recently, various graph neural network libraries have emerged.
+They make the development of GNNs convenient, but their performance on large datasets is not satisfying.
+In this work, we analyze the performance bottleneck in training GNN with GPUs empirically.
+A GNN layer can be decomposed into two parts: the vertex and the edge calculation parts.
+According to their computational complexity, we select four representative GNNs (GCN, GGNN, GAT, GaAN) for evaluation.
+We breakdown their training time and memory usage, evaluate the effects of hyper-parameters, and assess the efficiency of the sampling techniques.  
+The experimental evaluation indicates that the edge-related calculation is the performance bottleneck for most GNNs, dominating the training time and memory usage.
+Future optimization can focus on it. 
+The sampling techniques are essential for training big graphs on GPU, but their current implementations still have room for improvement.}
+
+\keywords{graph neural network, performance bottleneck analysis, empirical evaluation, machine learning system, GPU}
+
+\maketitle
+
+
+\section{Macros}
+
+This URL contains the LaTeX Class file for Software: Practice and Experience (SP\&E):
+\begin{verbatim}
+\url{https://onlinelibrary.wiley.com/page/journal/1097024x/homepage/la_tex_class_file.htm}
+\end{verbatim}
+Clicking on ``AMA-stix.zip'' downloads the file AMA-stix-1510051231000.zip from this URL:
+\begin{verbatim}
+\url{https://wol-prod-cdn.literatumonline.com/pb-assets/assets/1097024X/AMA-stix-1510051231000.zip}
+\end{verbatim}
+In file AMA-stix/ama/wileyNJD-AMA.tex, there is an example latex document for authors.
+I have edited this file to demonstrate problems with the latex macros in files WileyNJD-v2.cls and WileyNJD-AMA.bst, and used the following command to generate a PDF file.
+\begin{verbatim}
+pdflatex wileyNJD-AMA; bibtex wileyNJD-AMA; pdflatex wileyNJD-AMA; pdflatex wileyNJD-AMA;
+\end{verbatim}
+
+
+\section{First Problem}
+
+The header on this page is:
+\begin{quote}
+Received {\color{red}26 April 2016} | Revised {\color{red}6 June 2016} | Accepted {\color{red}6 June 2016}
+\end{quote}
+Authors do not know these dates, so they are likely to just leave the dates unchanged.
+It would be better to have a placeholder:
+\begin{quote}
+Received {\color{red}Added at production} | Revised {\color{red}Added at production} | Accepted {\color{red}Added at production}
+\end{quote}
+
+
+\section{Second Problem}
+
+SP\&E style use symbols for footnotes and numbers for bibliography citations.
+However, the latex macros generate numbers for footnotes rather than symbols number, which makes it impossible to tell the difference between a footnote and a citation.
+This is a footnote\footnote{Footnote} and this is a citation~\cite{book01}, and they both are numbered $^1$.
+Attempting to fix the problem by adding the following latex command results in an error.
+\begin{verbatim}
+\renewcommand{\thefootnote}{\fnsymbol{footnote}}
+\end{verbatim}
+
+
+\section{Third Problem}\label{section}
+
+The ``ref'' macro used to print label for section, figures and tables leaves an extra space after the label number for figures and tables but not sections.
+Figure~\ref{figure} has an extra space after the number, as does Table~\ref{table}, but Section~\ref{section} does not have an extra space.
+
+\begin{figure}
+\centering
+I'm a figure above the caption
+\caption{This is the sample figure caption}
+\label{figure}
+\end{figure}
+
+\begin{table}
+\caption{This is the sample table caption}
+\label{table}
+\centering
+I'm a table below the caption
+\end{table}
+
+
+\section{Fourth Problem}
+
+There are multiple problems in the WileyNJD-AMA.bst macros for formatting bibliographic entries.
+Specifically, fields within entries are missing, as is space between fields, possibly in an attempt to shorten the length of the bibliographic entries.
+
+Here is an exhaustive list of all fields for all bibliography entries.
+\begin{quote}
+article~\cite{article01}, book~\cite{book01}, booklet~\cite{booklet01}, inbook~\cite{inbook01}, incollection~\cite{incollection01}, inproceedings~\cite{inproceedings01}, manual~\cite{manual01}, mastersthesis~\cite{mastersthesis01}, misc~\cite{misc01}, phdthesis~\cite{phdthesis01}, proceedings~\cite{proceedings01}, techreport~\cite{techreport01}, unpublished~\cite{unpublished01}
+\end{quote}
+Looking at the references below, there are multiple fields missing from the bibliographic entries, there are spaces before periods, and there are fields run together, etc.
+
+\nocite{*}% Show all bib entries - both cited and uncited; comment this line to view only cited bib entries;
+\bibliography{wileyNJD-AMA}%
+
+\end{document}

@@ -1,0 +1,62 @@
+\begin{thebibliography}{10}
+\providecommand \doibase [0]{http://dx.doi.org/}%
+
+\bibitem{book01}
+surname f. {\it title}. volume of {\it series}.
+\newblock address: publisher.
+\newblock edition~ed. year.
+\newblock note.
+
+\bibitem{article01}
+surname f. title. {\it journal} year\string; volume(number)\string: pages.
+\newblock note.
+
+\bibitem{booklet01}
+surname f. title. howpublished:  address.  year.
+\newblock note.
+
+\bibitem{inbook01}
+surname f. {\it title}. volume of {\it series}. type chapter\string: pages;
+  address: publisher.
+\newblock edition~ed. year.
+\newblock note.
+
+\bibitem{incollection01}
+surname f. title. In:  surname f. \kern-2pt, ed. {\it booktitle}. volume of
+  {\it series}. address: publisher. edition~ed. year (pp. pages).
+\newblock note.
+
+\bibitem{inproceedings01}
+surname f. title. In:  surname f. \kern-2pt, ed. {\it title}. volume of {\it
+  series}. organization. publisher; year; address\string: pages.
+\newblock note.
+
+\bibitem{manual01}
+surname f. {\it title}. organization; address: edition~ed. year.
+\newblock note.
+
+\bibitem{mastersthesis01}
+surname f. title. type. school. address:   year.
+\newblock note.
+
+\bibitem{misc01}
+surname f. title. howpublished;  year.
+\newblock note.
+
+\bibitem{phdthesis01}
+surname f. {\it title}. type. school, address;  year.
+\newblock note.
+
+\bibitem{proceedings01}
+surname f. \kern-2pt, ed., {\it title}. volume of {\it series}(address);
+  organization, publisher:   year.
+\newblock note.
+
+\bibitem{techreport01}
+surname f. title. type number, institution; address:   year.
+\newblock note.
+
+\bibitem{unpublished01}
+surname f. title. note;  year.
+
+\end{thebibliography}
