@@ -3,35 +3,47 @@
 
 \bibitem{kipf2017_gcn}
 Kipf TN, Welling M. Semi-Supervised Classification with Graph Convolutional
-  Networks. In: OpenReview.net; 2017.
+  Networks. In: 5th International Conference on Learning Representations,
+  {ICLR} 2017, Toulon, France, April 24-26, 2017, Conference Track Proceedings.
+  OpenReview.net; 2017.
 
 \bibitem{defferrad2016_chebnet}
 Defferrard M, Bresson X, Vandergheynst P. Convolutional Neural Networks on
-  Graphs with Fast Localized Spectral Filtering. In:  Lee DD, Sugiyama M,
-  Luxburg vU, Guyon I, Garnett R. \kern-2pt, eds. {\it Advances in Neural
+  Graphs with Fast Localized Spectral Filtering. In: Advances in Neural
   Information Processing Systems 29: Annual Conference on Neural Information
-  Processing Systems 2016, December 5-10, 2016, Barcelona, Spain}; 2016\string:
-  3837--3845.
+  Processing Systems 2016, December 5-10, 2016, Barcelona, Spain. ;
+  2016\string: 3837--3845.
 
 \bibitem{li2018_agcn}
 Li R, Wang S, Zhu F, Huang J. Adaptive Graph Convolutional Neural Networks. In:
-  ; 2018\string: 3546--3553.
+  Proceedings of the Thirty-Second {AAAI} Conference on Artificial
+  Intelligence, (AAAI-18), the 30th innovative Applications of Artificial
+  Intelligence (IAAI-18), and the 8th {AAAI} Symposium on Educational Advances
+  in Artificial Intelligence (EAAI-18), New Orleans, Louisiana, USA, February
+  2-7, 2018. ; 2018\string: 3546--3553.
 
 \bibitem{li2015_ggnn}
 Li Y, Tarlow D, Brockschmidt M, Zemel RS. Gated Graph Sequence Neural Networks.
-  In: ; 2016.
+  In: 4th International Conference on Learning Representations, {ICLR} 2016,
+  San Juan, Puerto Rico, May 2-4, 2016, Conference Track Proceedings. ; 2016.
 
 \bibitem{hamilton2017_graphsage}
 Hamilton WL, Ying Z, Leskovec J. Inductive Representation Learning on Large
-  Graphs. In: ; 2017\string: 1024--1034.
+  Graphs. In: Advances in Neural Information Processing Systems 30: Annual
+  Conference on Neural Information Processing Systems 2017, 4-9 December 2017,
+  Long Beach, CA, {USA}. ; 2017\string: 1024--1034.
 
 \bibitem{huang2018_gat}
 Velickovic P, Cucurull G, Casanova A, Romero A, Li{\`{o}} P, Bengio Y. Graph
-  Attention Networks. In: ; 2018.
+  Attention Networks. In: 6th International Conference on Learning
+  Representations, {ICLR} 2018, Vancouver, BC, Canada, April 30 - May 3, 2018,
+  Conference Track Proceedings. ; 2018.
 
 \bibitem{zhang2018_gaan}
 Zhang J, Shi X, Xie J, Ma H, King I, Yeung D. GaAN: Gated Attention Networks
-  for Learning on Large and Spatiotemporal Graphs. In: ; 2018\string: 339--349.
+  for Learning on Large and Spatiotemporal Graphs. In: Proceedings of the
+  Thirty-Fourth Conference on Uncertainty in Artificial Intelligence, {UAI}
+  2018, Monterey, California, USA, August 6-10, 2018. ; 2018\string: 339--349.
 
 \bibitem{zhou2018_gnn_review}
 Zhou J, Cui G, Zhang Z, et al. Graph Neural Networks: A Review of Methods and
@@ -61,7 +73,8 @@ Wang M, Yu L, Zheng D, et al. Deep Graph Library: Towards Efficient and
 
 \bibitem{ma2019_neugraph}
 Ma L, Yang Z, Miao Y, et al. NeuGraph: Parallel Deep Neural Network Computation
-  on Large Graphs. In: ; 2019\string: 443--458.
+  on Large Graphs. In: 2019 {USENIX} Annual Technical Conference, {USENIX}
+  {ATC} 2019, Renton, WA, USA, July 10-12, 2019. ; 2019\string: 443--458.
 
 \bibitem{zhu2019_aligraph}
 Zhu R, Zhao K, Yang H, et al. AliGraph: {A} Comprehensive Graph Neural Network
@@ -84,64 +97,86 @@ Zhang Z, Leng J, Ma L, Miao Y, Li C, Guo M. Architectural Implications of Graph
 
 \bibitem{bryan2014_deepwalk}
 Perozzi B, Al{-}Rfou R, Skiena S. DeepWalk: online learning of social
-  representations. In: ; 2014\string: 701--710
+  representations. In: The 20th {ACM} {SIGKDD} International Conference on
+  Knowledge Discovery and Data Mining, {KDD} '14, New York, NY, {USA} - August
+  24 - 27, 2014. ; 2014\string: 701--710
 
 \bibitem{aditya2016_node2vec}
-Grover A, Leskovec J. node2vec: Scalable Feature Learning for Networks. In: ;
+Grover A, Leskovec J. node2vec: Scalable Feature Learning for Networks. In:
+  Proceedings of the 22nd {ACM} {SIGKDD} International Conference on Knowledge
+  Discovery and Data Mining, San Francisco, CA, USA, August 13-17, 2016. ;
   2016\string: 855--864
 
 \bibitem{gilmer_messgae_passing}
 Gilmer J, Schoenholz SS, Riley PF, Vinyals O, Dahl GE. Neural Message Passing
-  for Quantum Chemistry. In:  Precup D, Teh YW. \kern-2pt, eds. {\it
-  Proceedings of the 34th International Conference on Machine Learning}. 70 of
-  {\it Proceedings of Machine Learning Research}. PMLR; 2017; International
-  Convention Centre, Sydney, Australia\string: 1263--1272.
+  for Quantum Chemistry. In: . 70 of {\it Proceedings of Machine Learning
+  Research}. Proceedings of the 34th International Conference on Machine
+  Learning. PMLR; 2017; International Convention Centre, Sydney,
+  Australia\string: 1263--1272.
 
 \bibitem{duvenaud2015_neural_fps}
 Duvenaud D, Maclaurin D, Aguilera{-}Iparraguirre J, et al. Convolutional
-  Networks on Graphs for Learning Molecular Fingerprints. In: ; 2015\string:
-  2224--2232.
+  Networks on Graphs for Learning Molecular Fingerprints. In: Advances in
+  Neural Information Processing Systems 28: Annual Conference on Neural
+  Information Processing Systems 2015, December 7-12, 2015, Montreal, Quebec,
+  Canada. ; 2015\string: 2224--2232.
 
 \bibitem{han2018_sse}
 Dai H, Kozareva Z, Dai B, Smola AJ, Song L. Learning Steady-States of Iterative
-  Algorithms over Graphs. In: ; 2018\string: 1114--1122.
+  Algorithms over Graphs. In: Proceedings of the 35th International Conference
+  on Machine Learning, {ICML} 2018, Stockholmsm{\"{a}}ssan, Stockholm, Sweden,
+  July 10-15, 2018. ; 2018\string: 1114--1122.
 
 \bibitem{chiang2019_cluster_gcn}
 Chiang WL, Liu X, Si S, Li Y, Bengio S, Hsieh CJ. Cluster-GCN: An Efficient
   Algorithm for Training Deep and Large Graph Convolutional Networks. In:
-  {ACM}; 2019\string: 257–-266
+  Proceedings of the 25th ACM SIGKDD International Conference on Knowledge
+  Discovery \& Data Mining. {ACM}; 2019\string: 257–-266
 
 \bibitem{ying2018_pinsage}
 Ying R, He R, Chen K, Eksombatchai P, Hamilton WL, Leskovec J. Graph
-  Convolutional Neural Networks for Web-Scale Recommender Systems. In: ;
+  Convolutional Neural Networks for Web-Scale Recommender Systems. In:
+  Proceedings of the 24th {ACM} {SIGKDD} International Conference on Knowledge
+  Discovery {\&} Data Mining, {KDD} 2018, London, UK, August 19-23, 2018. ;
   2018\string: 974--983
 
 \bibitem{chen2018_fastgcn}
 Chen J, Ma T, Xiao C. FastGCN: Fast Learning with Graph Convolutional Networks
-  via Importance Sampling. In: ; 2018.
+  via Importance Sampling. In: 6th International Conference on Learning
+  Representations, {ICLR} 2018, Vancouver, BC, Canada, April 30 - May 3, 2018,
+  Conference Track Proceedings. ; 2018.
 
 \bibitem{chen2018_sgcn}
 Chen J, Zhu J, Song L. Stochastic Training of Graph Convolutional Networks with
-  Variance Reduction. In: ; 2018\string: 941--949.
+  Variance Reduction. In: Proceedings of the 35th International Conference on
+  Machine Learning, {ICML} 2018, Stockholmsm{\"{a}}ssan, Stockholm, Sweden,
+  July 10-15, 2018. ; 2018\string: 941--949.
 
 \bibitem{huang2018_adap}
 Huang W, Zhang T, Rong Y, Huang J. Adaptive Sampling Towards Fast Graph
-  Representation Learning. In: ; 2018\string: 4563--4572.
+  Representation Learning. In: Advances in Neural Information Processing
+  Systems 31: Annual Conference on Neural Information Processing Systems 2018,
+  NeurIPS 2018, 3-8 December 2018, Montr{\'{e}}al, Canada. ; 2018\string:
+  4563--4572.
 
 \bibitem{zeng2018_aesg}
 Zeng H, Zhou H, Srivastava A, Kannan R, Prasanna VK. Accurate, Efficient and
-  Scalable Graph Embedding. In: ; 2019\string: 462--471
+  Scalable Graph Embedding. In: 2019 {IEEE} International Parallel and
+  Distributed Processing Symposium, {IPDPS} 2019, Rio de Janeiro, Brazil, May
+  20-24, 2019. ; 2019\string: 462--471
 
 \bibitem{zeng2020_graphsaint}
 Zeng H, Zhou H, Srivastava A, Kannan R, Prasanna VK. GraphSAINT: Graph Sampling
-  Based Inductive Learning Method. In: OpenReview.net; 2020.
+  Based Inductive Learning Method. In: 8th International Conference on Learning
+  Representations, {ICLR} 2020, Addis Ababa, Ethiopia, April 26-30, 2020.
+  OpenReview.net; 2020.
 
 \bibitem{yang2016_revisiting_semisupervised}
 Yang Z, Cohen WW, Salakhutdinov R. Revisiting Semi-Supervised Learning with
-  Graph Embeddings. In:  Balcan M, Weinberger KQ. \kern-2pt, eds. {\it
-  Proceedings of the 33nd International Conference on Machine Learning, {ICML}
-  2016, New York City, NY, USA, June 19-24, 2016}. 48 of {\it {JMLR} Workshop
-  and Conference Proceedings}. JMLR.org; 2016\string: 40--48.
+  Graph Embeddings. In: . 48 of {\it {JMLR} Workshop and Conference
+  Proceedings}. Proceedings of the 33nd International Conference on Machine
+  Learning, {ICML} 2016, New York City, NY, USA, June 19-24, 2016. JMLR.org;
+  2016\string: 40--48.
 
 \bibitem{shchur2018_pitfall_of_gnn}
 Shchur O, Mumme M, Bojchevski A, G{\"{u}}nnemann S. Pitfalls of Graph Neural
@@ -149,13 +184,13 @@ Shchur O, Mumme M, Bojchevski A, G{\"{u}}nnemann S. Pitfalls of Graph Neural
 
 \bibitem{rmat-generator}
 Chakrabarti D, Zhan Y, Faloutsos C. R-MAT: A Recursive Model for Graph Mining.
-  In: \string: 442-446
+  In: Proceedings of the 2004 SIAM International Conference on Data Mining.
+  \string: 442-446
 
 \bibitem{yang2012_defining}
 Yang J, Leskovec J. Defining and Evaluating Network Communities Based on
-  Ground-Truth. In:  Zaki MJ, Siebes A, Yu JX, Goethals B, Webb GI, Wu X.
-  \kern-2pt, eds. {\it 12th {IEEE} International Conference on Data Mining,
-  {ICDM} 2012, Brussels, Belgium, December 10-13, 2012}{IEEE} Computer Society;
+  Ground-Truth. In: 12th {IEEE} International Conference on Data Mining, {ICDM}
+  2012, Brussels, Belgium, December 10-13, 2012. {IEEE} Computer Society;
   2012\string: 745--754
 
 \bibitem{chen2016_training_deep}
@@ -172,23 +207,33 @@ Hu W, Fey M, Zitnik M, et al. Open Graph Benchmark: Datasets for Machine
 
 \bibitem{network-repository}
 Rossi RA, Ahmed NK. The Network Data Repository with Interactive Graph
-  Analytics and Visualization. In: ; 2015\string: 4292--4293.
+  Analytics and Visualization. In: Proceedings of the Twenty-Ninth {AAAI}
+  Conference on Artificial Intelligence, January 25-30, 2015, Austin, Texas,
+  {USA}. ; 2015\string: 4292--4293.
 
 \bibitem{bruna2013_spectral_gnn}
 Bruna J, Zaremba W, Szlam A, LeCun Y. Spectral Networks and Locally Connected
-  Networks on Graphs. In: ; 2014.
+  Networks on Graphs. In: 2nd International Conference on Learning
+  Representations, {ICLR} 2014, Banff, AB, Canada, April 14-16, 2014,
+  Conference Track Proceedings. ; 2014.
 
 \bibitem{gao2018_lsgcn}
-Gao H, Wang Z, Ji S. Large-Scale Learnable Graph Convolutional Networks. In: ;
+Gao H, Wang Z, Ji S. Large-Scale Learnable Graph Convolutional Networks. In:
+  Proceedings of the 24th {ACM} {SIGKDD} International Conference on Knowledge
+  Discovery {\&} Data Mining, {KDD} 2018, London, UK, August 19-23, 2018. ;
   2018\string: 1416--1424
 
 \bibitem{zou2019_ldis}
 Zou D, Hu Z, Wang Y, Jiang S, Sun Y, Gu Q. Layer-Dependent Importance Sampling
-  for Training Deep and Large Graph Convolutional Networks. In: ; 2019\string:
-  11247--11256.
+  for Training Deep and Large Graph Convolutional Networks. In: Advances in
+  Neural Information Processing Systems 32: Annual Conference on Neural
+  Information Processing Systems 2019, NeurIPS 2019, 8-14 December 2019,
+  Vancouver, BC, Canada. ; 2019\string: 11247--11256.
 
 \bibitem{errica2020_fair_comparison}
 Errica F, Podda M, Bacciu D, Micheli A. A Fair Comparison of Graph Neural
-  Networks for Graph Classification. In: OpenReview.net; 2020.
+  Networks for Graph Classification. In: 8th International Conference on
+  Learning Representations, {ICLR} 2020, Addis Ababa, Ethiopia, April 26-30,
+  2020. OpenReview.net; 2020.
 
 \end{thebibliography}
