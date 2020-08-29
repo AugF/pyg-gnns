@@ -1,0 +1,39 @@
+\section{Related Work}
+\label{sec:related_work}
+
+\paragraph{Survey of GNNs}
+Zhou et al.\cite{zhou2018_gnn_review}, Zhang et al.\cite{zhang2018_gnn_survey} and Wu et al.\cite{comprehensive-survey-wu-2020} survey the existing graph neural networks and classify them from an algorithmic view.
+They summarize the similarities and differences between the architectures of different GNNs.
+The typical applications of GNNs are also briefly introduced.
+Those surveys focus on comparing the existing GNNs theoretically, not empirically.
+
+\paragraph{Evaluation of GNNs}
+Shchur et al. \cite{shchur2018_pitfall_of_gnn} evaluate the accuracy of popular GNNs on the node classification task.
+Dwived et al. \cite{dwivedi2020_benchmark_of_gnn} further compare the accuracy of popular GNNs fairly in a controlled environment.
+Hu et al. \cite{hu2020_open_graph_benchmark} propose the open graph benchmark that provides a standard datasets and a standard evaluation workflow.
+The benchmark makes comparisons between GNNs easily and fairly.
+Those model evaluation efforts focus on evaluating the accuracy of different GNNs.
+They provide insightful suggestions to improve accuracy.
+
+From the efficiency aspect, Yan et al. \cite{yan2020_characterizing_gcn} compare the performance characteristics of graph convolutional networks, typical graph processing kernels(like PageRank), and the MLP-based neural networks on GPU.
+They provide optimization guidelines for both the software and the hardware developers.
+Zhang et al. \cite{zhang2020_analysis_neugraph} analyze the architectural characteristics of the GNN inference on GPU under SAGA-NN \cite{ma2019_neugraph} model.
+They find that the GNN inference has no fixed performance bottleneck and all components deserve to optimize.
+These two efforts focus on the \emph{inference} phase of GNNs and they investigate the potential optimizations mainly from an architectural view.
+In this work, our target is to find out the performance bottleneck in the training phase from a system view.
+We consider the performance bottleneck in both time and memory usage.
+We also evaluate the effects of the sampling techniques.
+Our work and \cite{yan2020_characterizing_gcn, zhang2020_analysis_neugraph} form a complementary study on the efficiency issue of GNNs.
+
+\paragraph{Libraries/Systems of GNNs}
+
+PyG \cite{PyG} and DGL \cite{DGL} both adopt the message-passing model as the underlying programming model for GNNs and support training big datasets with the sampling techniques.
+PyG \cite{PyG} is built upon PyTorch and it uses optimized CUDA kernels for GNNs to achieve high performance.
+DGL \cite{DGL} provides a group of high-level user APIs and supports training GNNs with a variety of backends (TensorFlow, MXNet, and PyTorch) transparently.
+It also supports LSTM as the aggregation functions.
+NeuGraph \cite{ma2019_neugraph} proposes a new programming model \emph{SAGA-NN} for GNNs.
+It focuses on training big datasets efficiently without sampling.
+It partitions the dataset sophisticatedly, schedules the training tasks among multiple GPUs, and swaps the data among GPUs and the host asynchronously.
+AliGraph \cite{zhu2019_aligraph} targets at training GNNs on big attributed heterogeneous graphs that are common in e-commerce platforms.
+The graphs are partitioned among multiple nodes in a cluster and AliGraph trains GNNs on the graphs in a distributed way with system optimizations.
+PGL \cite{PGL} is another graph learning framework from Baidu based on the PaddlePaddle platform.

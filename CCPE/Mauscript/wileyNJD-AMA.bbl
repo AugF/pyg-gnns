@@ -1,0 +1,194 @@
+\begin{thebibliography}{10}
+\providecommand \doibase [0]{http://dx.doi.org/}%
+
+\bibitem{kipf2017_gcn}
+Kipf TN, Welling M. Semi-Supervised Classification with Graph Convolutional
+  Networks. In: OpenReview.net; 2017.
+
+\bibitem{defferrad2016_chebnet}
+Defferrard M, Bresson X, Vandergheynst P. Convolutional Neural Networks on
+  Graphs with Fast Localized Spectral Filtering. In:  Lee DD, Sugiyama M,
+  Luxburg vU, Guyon I, Garnett R. \kern-2pt, eds. {\it Advances in Neural
+  Information Processing Systems 29: Annual Conference on Neural Information
+  Processing Systems 2016, December 5-10, 2016, Barcelona, Spain}; 2016\string:
+  3837--3845.
+
+\bibitem{li2018_agcn}
+Li R, Wang S, Zhu F, Huang J. Adaptive Graph Convolutional Neural Networks. In:
+  ; 2018\string: 3546--3553.
+
+\bibitem{li2015_ggnn}
+Li Y, Tarlow D, Brockschmidt M, Zemel RS. Gated Graph Sequence Neural Networks.
+  In: ; 2016.
+
+\bibitem{hamilton2017_graphsage}
+Hamilton WL, Ying Z, Leskovec J. Inductive Representation Learning on Large
+  Graphs. In: ; 2017\string: 1024--1034.
+
+\bibitem{huang2018_gat}
+Velickovic P, Cucurull G, Casanova A, Romero A, Li{\`{o}} P, Bengio Y. Graph
+  Attention Networks. In: ; 2018.
+
+\bibitem{zhang2018_gaan}
+Zhang J, Shi X, Xie J, Ma H, King I, Yeung D. GaAN: Gated Attention Networks
+  for Learning on Large and Spatiotemporal Graphs. In: ; 2018\string: 339--349.
+
+\bibitem{zhou2018_gnn_review}
+Zhou J, Cui G, Zhang Z, et al. Graph Neural Networks: A Review of Methods and
+  Applications. https://arxiv.org/abs/1812.08434;  2018.
+
+\bibitem{zhang2018_gnn_survey}
+Zhang Z, Cui P, Zhu W. Deep Learning on Graphs: {A} Survey. {\it IEEE
+  Transactions on Knowledge and Data Engineering} 2020\string; (Early
+  Access)\string: 1--1.
+\newblock \href {\doibase 10.1109/TKDE.2020.2981333} {doi:
+  10.1109/TKDE.2020.2981333}
+
+\bibitem{comprehensive-survey-wu-2020}
+{Wu} Z, {Pan} S, {Chen} F, {Long} G, {Zhang} C, {Yu} PS. A Comprehensive Survey
+  on Graph Neural Networks. {\it IEEE Transactions on Neural Networks and
+  Learning Systems} 2020\string; (Early Access)\string: 1-21.
+\newblock \href {\doibase 10.1109/TNNLS.2020.2978386} {doi:
+  10.1109/TNNLS.2020.2978386}
+
+\bibitem{PyG}
+Fey M, Lenssen JE. Fast Graph Representation Learning with PyTorch Geometric.
+  https://pytorch-geometric.readthedocs.io/;  2019.
+
+\bibitem{DGL}
+Wang M, Yu L, Zheng D, et al. Deep Graph Library: Towards Efficient and
+  Scalable Deep Learning on Graphs. https://www.dgl.ai/;  2019.
+
+\bibitem{ma2019_neugraph}
+Ma L, Yang Z, Miao Y, et al. NeuGraph: Parallel Deep Neural Network Computation
+  on Large Graphs. In: ; 2019\string: 443--458.
+
+\bibitem{zhu2019_aligraph}
+Zhu R, Zhao K, Yang H, et al. AliGraph: {A} Comprehensive Graph Neural Network
+  Platform. {\it Proc. {VLDB} Endow.} 2019\string; 12(12)\string: 2094--2105.
+\newblock \href {\doibase 10.14778/3352063.3352127} {doi:
+  10.14778/3352063.3352127}
+
+\bibitem{PGL}
+Baidu . Paddle Graph Learning. \url{https://github.com/PaddlePaddle/PGL}; .
+
+\bibitem{yan2020_characterizing_gcn}
+{Yan} M, {Chen} Z, {Deng} L, et al. Characterizing and Understanding GCNs on
+  GPU. {\it IEEE Computer Architecture Letters} 2020\string; 19(1)\string:
+  22-25.
+
+\bibitem{zhang2020_analysis_neugraph}
+Zhang Z, Leng J, Ma L, Miao Y, Li C, Guo M. Architectural Implications of Graph
+  Neural Networks. {\it IEEE Computer Architecture Letters} 2020\string;
+  19(1)\string: 59--62.
+
+\bibitem{bryan2014_deepwalk}
+Perozzi B, Al{-}Rfou R, Skiena S. DeepWalk: online learning of social
+  representations. In: ; 2014\string: 701--710
+
+\bibitem{aditya2016_node2vec}
+Grover A, Leskovec J. node2vec: Scalable Feature Learning for Networks. In: ;
+  2016\string: 855--864
+
+\bibitem{gilmer_messgae_passing}
+Gilmer J, Schoenholz SS, Riley PF, Vinyals O, Dahl GE. Neural Message Passing
+  for Quantum Chemistry. In:  Precup D, Teh YW. \kern-2pt, eds. {\it
+  Proceedings of the 34th International Conference on Machine Learning}. 70 of
+  {\it Proceedings of Machine Learning Research}. PMLR; 2017; International
+  Convention Centre, Sydney, Australia\string: 1263--1272.
+
+\bibitem{duvenaud2015_neural_fps}
+Duvenaud D, Maclaurin D, Aguilera{-}Iparraguirre J, et al. Convolutional
+  Networks on Graphs for Learning Molecular Fingerprints. In: ; 2015\string:
+  2224--2232.
+
+\bibitem{han2018_sse}
+Dai H, Kozareva Z, Dai B, Smola AJ, Song L. Learning Steady-States of Iterative
+  Algorithms over Graphs. In: ; 2018\string: 1114--1122.
+
+\bibitem{chiang2019_cluster_gcn}
+Chiang WL, Liu X, Si S, Li Y, Bengio S, Hsieh CJ. Cluster-GCN: An Efficient
+  Algorithm for Training Deep and Large Graph Convolutional Networks. In:
+  {ACM}; 2019\string: 257–-266
+
+\bibitem{ying2018_pinsage}
+Ying R, He R, Chen K, Eksombatchai P, Hamilton WL, Leskovec J. Graph
+  Convolutional Neural Networks for Web-Scale Recommender Systems. In: ;
+  2018\string: 974--983
+
+\bibitem{chen2018_fastgcn}
+Chen J, Ma T, Xiao C. FastGCN: Fast Learning with Graph Convolutional Networks
+  via Importance Sampling. In: ; 2018.
+
+\bibitem{chen2018_sgcn}
+Chen J, Zhu J, Song L. Stochastic Training of Graph Convolutional Networks with
+  Variance Reduction. In: ; 2018\string: 941--949.
+
+\bibitem{huang2018_adap}
+Huang W, Zhang T, Rong Y, Huang J. Adaptive Sampling Towards Fast Graph
+  Representation Learning. In: ; 2018\string: 4563--4572.
+
+\bibitem{zeng2018_aesg}
+Zeng H, Zhou H, Srivastava A, Kannan R, Prasanna VK. Accurate, Efficient and
+  Scalable Graph Embedding. In: ; 2019\string: 462--471
+
+\bibitem{zeng2020_graphsaint}
+Zeng H, Zhou H, Srivastava A, Kannan R, Prasanna VK. GraphSAINT: Graph Sampling
+  Based Inductive Learning Method. In: OpenReview.net; 2020.
+
+\bibitem{yang2016_revisiting_semisupervised}
+Yang Z, Cohen WW, Salakhutdinov R. Revisiting Semi-Supervised Learning with
+  Graph Embeddings. In:  Balcan M, Weinberger KQ. \kern-2pt, eds. {\it
+  Proceedings of the 33nd International Conference on Machine Learning, {ICML}
+  2016, New York City, NY, USA, June 19-24, 2016}. 48 of {\it {JMLR} Workshop
+  and Conference Proceedings}. JMLR.org; 2016\string: 40--48.
+
+\bibitem{shchur2018_pitfall_of_gnn}
+Shchur O, Mumme M, Bojchevski A, G{\"{u}}nnemann S. Pitfalls of Graph Neural
+  Network Evaluation. {\it CoRR} 2018\string; abs/1811.05868.
+
+\bibitem{rmat-generator}
+Chakrabarti D, Zhan Y, Faloutsos C. R-MAT: A Recursive Model for Graph Mining.
+  In: \string: 442-446
+
+\bibitem{yang2012_defining}
+Yang J, Leskovec J. Defining and Evaluating Network Communities Based on
+  Ground-Truth. In:  Zaki MJ, Siebes A, Yu JX, Goethals B, Webb GI, Wu X.
+  \kern-2pt, eds. {\it 12th {IEEE} International Conference on Data Mining,
+  {ICDM} 2012, Brussels, Belgium, December 10-13, 2012}{IEEE} Computer Society;
+  2012\string: 745--754
+
+\bibitem{chen2016_training_deep}
+Chen T, Xu B, Zhang C, Guestrin C. Training Deep Nets with Sublinear Memory
+  Cost.;  2016.
+
+\bibitem{dwivedi2020_benchmark_of_gnn}
+Dwivedi VP, Joshi CK, Laurent T, Bengio Y, Bresson X. Benchmarking Graph Neural
+  Networks.;  2020.
+
+\bibitem{hu2020_open_graph_benchmark}
+Hu W, Fey M, Zitnik M, et al. Open Graph Benchmark: Datasets for Machine
+  Learning on Graphs.;  2020.
+
+\bibitem{network-repository}
+Rossi RA, Ahmed NK. The Network Data Repository with Interactive Graph
+  Analytics and Visualization. In: ; 2015\string: 4292--4293.
+
+\bibitem{bruna2013_spectral_gnn}
+Bruna J, Zaremba W, Szlam A, LeCun Y. Spectral Networks and Locally Connected
+  Networks on Graphs. In: ; 2014.
+
+\bibitem{gao2018_lsgcn}
+Gao H, Wang Z, Ji S. Large-Scale Learnable Graph Convolutional Networks. In: ;
+  2018\string: 1416--1424
+
+\bibitem{zou2019_ldis}
+Zou D, Hu Z, Wang Y, Jiang S, Sun Y, Gu Q. Layer-Dependent Importance Sampling
+  for Training Deep and Large Graph Convolutional Networks. In: ; 2019\string:
+  11247--11256.
+
+\bibitem{errica2020_fair_comparison}
+Errica F, Podda M, Bacciu D, Micheli A. A Fair Comparison of Graph Neural
+  Networks for Graph Classification. In: OpenReview.net; 2020.
+
+\end{thebibliography}
