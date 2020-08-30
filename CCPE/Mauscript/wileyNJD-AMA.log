@@ -1,13 +1,13 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018/W32TeX) (preloaded format=pdflatex 2019.3.1)  30 AUG 2020 13:12
+This is XeTeX, Version 3.14159265-2.6-0.99999 (TeX Live 2018/W32TeX) (preloaded format=xelatex 2019.3.1)  30 AUG 2020 13:20
 entering extended mode
  restricted \write18 enabled.
- file:line:error style messages enabled.
  %&-line parsing enabled.
-**c:/Users/hikk/Desktop/pyg-gnns/CCPE/Mauscript/wileyNJD-AMA.tex
-(c:/Users/hikk/Desktop/pyg-gnns/CCPE/Mauscript/wileyNJD-AMA.tex
+**wileyNJD-AMA.tex
+(./wileyNJD-AMA.tex
 LaTeX2e <2018-12-01>
-(c:/Users/hikk/Desktop/pyg-gnns/CCPE/Mauscript/WileyNJD-v2.cls
-Document Class: WileyNJD-v2 2017/06/23 v0.2 Standard LaTeX document class for Journal
+(./WileyNJD-v2.cls
+Document Class: WileyNJD-v2 2017/06/23 v0.2 Standard LaTeX document class for J
+ournal
 \job@temptoken=\toks14
 (c:/texlive/2018/texmf-dist/tex/latex/base/article.cls
 Document Class: article 2018/09/03 v1.4i Standard LaTeX document class
@@ -20,7 +20,8 @@ Already applied: [0000/00/00] Make \[ robust on input line 62.
 Applying: [2015/01/01] Make \] robust on input line 74.
 LaTeX Info: Redefining \] on input line 75.
 Already applied: [0000/00/00] Make \] robust on input line 83.
-) (c:/texlive/2018/texmf-dist/tex/latex/base/size10.clo
+)
+(c:/texlive/2018/texmf-dist/tex/latex/base/size10.clo
 File: size10.clo 2018/09/03 v1.4i Standard LaTeX file (size option)
 )
 \c@part=\count80
@@ -34,28 +35,36 @@ File: size10.clo 2018/09/03 v1.4i Standard LaTeX file (size option)
 \abovecaptionskip=\skip41
 \belowcaptionskip=\skip42
 \bibindent=\dimen103
-) (c:/texlive/2018/texmf-dist/tex/latex/etex-pkg/etex.sty
+)
+(c:/texlive/2018/texmf-dist/tex/latex/etex-pkg/etex.sty
 Package: etex 2016/08/01 v2.7 eTeX basic definition package (PEB,DPC)
 \et@xins=\count88
-) (c:/texlive/2018/texmf-dist/tex/latex/graphics/graphicx.sty
+)
+(c:/texlive/2018/texmf-dist/tex/latex/graphics/graphicx.sty
 Package: graphicx 2017/06/01 v1.1a Enhanced LaTeX Graphics (DPC,SPQR)
- (c:/texlive/2018/texmf-dist/tex/latex/graphics/keyval.sty
+
+(c:/texlive/2018/texmf-dist/tex/latex/graphics/keyval.sty
 Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
 \KV@toks@=\toks15
-) (c:/texlive/2018/texmf-dist/tex/latex/graphics/graphics.sty
+)
+(c:/texlive/2018/texmf-dist/tex/latex/graphics/graphics.sty
 Package: graphics 2017/06/25 v1.2c Standard LaTeX Graphics (DPC,SPQR)
- (c:/texlive/2018/texmf-dist/tex/latex/graphics/trig.sty
+
+(c:/texlive/2018/texmf-dist/tex/latex/graphics/trig.sty
 Package: trig 2016/01/03 v1.10 sin cos tan (DPC)
-) (c:/texlive/2018/texmf-dist/tex/latex/graphics-cfg/graphics.cfg
+)
+(c:/texlive/2018/texmf-dist/tex/latex/graphics-cfg/graphics.cfg
 File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
 )
-Package graphics Info: Driver file: pdftex.def on input line 99.
- (c:/texlive/2018/texmf-dist/tex/latex/graphics-def/pdftex.def
-File: pdftex.def 2018/01/08 v1.0l Graphics/color driver for pdftex
+Package graphics Info: Driver file: xetex.def on input line 99.
+
+(c:/texlive/2018/texmf-dist/tex/latex/graphics-def/xetex.def
+File: xetex.def 2017/06/24 v5.0h Graphics/color driver for xetex
 ))
 \Gin@req@height=\dimen104
 \Gin@req@width=\dimen105
-) (c:/texlive/2018/texmf-dist/tex/latex/tools/multicol.sty
+)
+(c:/texlive/2018/texmf-dist/tex/latex/tools/multicol.sty
 Package: multicol 2018/12/27 v1.8v multicolumn formatting (FMi)
 \c@tracingmulticols=\count89
 \mult@box=\box27
@@ -103,13 +112,15 @@ Package: multicol 2018/12/27 v1.8v multicolumn formatting (FMi)
 \mult@nat@firstbox=\box51
 \colbreak@box=\box52
 \mc@col@check@num=\count97
-) (c:/texlive/2018/texmf-dist/tex/latex/multirow/multirow.sty
+)
+(c:/texlive/2018/texmf-dist/tex/latex/multirow/multirow.sty
 Package: multirow 2019/01/01 v2.4 Span multiple rows of a table
 \multirow@colwidth=\skip45
 \multirow@cntb=\count98
 \multirow@dima=\skip46
 \bigstrutjot=\dimen115
-) (c:/texlive/2018/texmf-dist/tex/latex/sttools/cuted.sty
+)
+(c:/texlive/2018/texmf-dist/tex/latex/sttools/cuted.sty
 Package: cuted 2012/10/04 v1.5 Mixing onecolumn and twocolumn modes
 \At@ViperColsBreak=\toks16
 \v@aaa=\box53
@@ -123,16 +134,20 @@ Package: cuted 2012/10/04 v1.5 Mixing onecolumn and twocolumn modes
 \viper@penalty=\count99
 \hold@viper=\box57
 \ht@viper=\dimen116
-) (c:/texlive/2018/texmf-dist/tex/generic/oberdiek/ifpdf.sty
+)
+(c:/texlive/2018/texmf-dist/tex/generic/oberdiek/ifpdf.sty
 Package: ifpdf 2018/09/07 v3.3 Provides the ifpdf switch
-) (c:/texlive/2018/texmf-dist/tex/latex/url/url.sty
+)
+(c:/texlive/2018/texmf-dist/tex/latex/url/url.sty
 \Urlmuskip=\muskip10
 Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
-) (c:/texlive/2018/texmf-dist/tex/latex/changepage/changepage.sty
+)
+(c:/texlive/2018/texmf-dist/tex/latex/changepage/changepage.sty
 Package: changepage 2009/10/20 v1.0c check page and change page layout
 \c@cp@cntr=\count100
 \cp@tempcnt=\count101
-) (c:/texlive/2018/texmf-dist/tex/latex/tools/calc.sty
+)
+(c:/texlive/2018/texmf-dist/tex/latex/tools/calc.sty
 Package: calc 2017/05/25 v4.3 Infix arithmetic (KKT,FJ)
 \calc@Acount=\count102
 \calc@Bcount=\count103
@@ -144,14 +159,15 @@ LaTeX Info: Redefining \setlength on input line 80.
 LaTeX Info: Redefining \addtolength on input line 81.
 \calc@Ccount=\count104
 \calc@Cskip=\skip53
-) (c:/texlive/2018/texmf-dist/tex/latex/xcolor/xcolor.sty
+)
+(c:/texlive/2018/texmf-dist/tex/latex/xcolor/xcolor.sty
 Package: xcolor 2016/05/11 v2.12 LaTeX color extensions (UK)
- (c:/texlive/2018/texmf-dist/tex/latex/graphics-cfg/color.cfg
+
+(c:/texlive/2018/texmf-dist/tex/latex/graphics-cfg/color.cfg
 File: color.cfg 2016/01/02 v1.6 sample color configuration
 )
-Package xcolor Info: Driver file: pdftex.def on input line 225.
+Package xcolor Info: Driver file: xetex.def on input line 225.
 Package xcolor Info: Model `cmy' substituted by `cmy0' on input line 1348.
-Package xcolor Info: Model `hsb' substituted by `rgb' on input line 1352.
 Package xcolor Info: Model `RGB' extended on input line 1364.
 Package xcolor Info: Model `HTML' substituted by `rgb' on input line 1366.
 Package xcolor Info: Model `Hsb' substituted by `hsb' on input line 1367.
@@ -159,19 +175,23 @@ Package xcolor Info: Model `tHsb' substituted by `hsb' on input line 1368.
 Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1369.
 Package xcolor Info: Model `Gray' substituted by `gray' on input line 1370.
 Package xcolor Info: Model `wave' substituted by `hsb' on input line 1371.
-) (c:/texlive/2018/texmf-dist/tex/latex/float/float.sty
+)
+(c:/texlive/2018/texmf-dist/tex/latex/float/float.sty
 Package: float 2001/11/08 v1.3d Float enhancements (AL)
 \c@float@type=\count105
 \float@exts=\toks17
 \float@box=\box58
 \@float@everytoks=\toks18
 \@floatcapt=\box59
-) (c:/texlive/2018/texmf-dist/tex/latex/sttools/floatpag.sty
+)
+(c:/texlive/2018/texmf-dist/tex/latex/sttools/floatpag.sty
 Package: floatpag 2012/05/29 v1.1 Different pagestyles on float pages
 Package: floatpag 1999/04/29 FLOAT PAGESTYLE
-) (c:/texlive/2018/texmf-dist/tex/latex/dblfloatfix/dblfloatfix.sty
+)
+(c:/texlive/2018/texmf-dist/tex/latex/dblfloatfix/dblfloatfix.sty
 Package: dblfloatfix 2012/12/31 v1.0a (JAW)
- (c:/texlive/2018/texmf-dist/tex/latex/base/fixltx2e.sty
+
+(c:/texlive/2018/texmf-dist/tex/latex/base/fixltx2e.sty
 Package: fixltx2e 2016/12/29 v2.1a fixes to LaTeX (obsolete)
 Applying: [2015/01/01] Old fixltx2e package on input line 46.
 
@@ -186,7 +206,8 @@ Already applied: [0000/00/00] Old fixltx2e package on input line 53.
 \c@dblbotnumber=\count107
 ) (c:/texlive/2018/texmf-dist/tex/latex/graphics/rotating.sty
 Package: rotating 2016/08/11 v2.16d rotated objects in LaTeX
- (c:/texlive/2018/texmf-dist/tex/latex/base/ifthen.sty
+
+(c:/texlive/2018/texmf-dist/tex/latex/base/ifthen.sty
 Package: ifthen 2014/09/29 v1.1c Standard LaTeX ifthen package (DPC)
 )
 \c@r@tfl@t=\count108
@@ -194,7 +215,8 @@ Package: ifthen 2014/09/29 v1.1c Standard LaTeX ifthen package (DPC)
 \rotFPbot=\skip55
 \rot@float@box=\box60
 \rot@mess@toks=\toks19
-) (c:/texlive/2018/texmf-dist/tex/latex/tools/longtable.sty
+)
+(c:/texlive/2018/texmf-dist/tex/latex/tools/longtable.sty
 Package: longtable 2014/10/28 v4.11 Multi-page Table package (DPC)+ FMi change
 \LTleft=\skip56
 \LTright=\skip57
@@ -211,7 +233,8 @@ Package: longtable 2014/10/28 v4.11 Multi-page Table package (DPC)+ FMi change
 \c@LT@tables=\count112
 \c@LT@chunks=\count113
 \LT@p@ftn=\toks20
-) (c:/texlive/2018/texmf-dist/tex/generic/ulem/ulem.sty
+)
+(c:/texlive/2018/texmf-dist/tex/generic/ulem/ulem.sty
 \UL@box=\box65
 \UL@hyphenbox=\box66
 \UL@skip=\skip60
@@ -222,10 +245,12 @@ Package: longtable 2014/10/28 v4.11 Multi-page Table package (DPC)+ FMi change
 \ULC@box=\box67
 Package: ulem 2012/05/18
 \ULdepth=\dimen122
-) (c:/texlive/2018/texmf-dist/tex/latex/tools/enumerate.sty
+)
+(c:/texlive/2018/texmf-dist/tex/latex/tools/enumerate.sty
 Package: enumerate 2015/07/23 v3.00 enumerate extensions (DPC)
 \@enLab=\toks22
-) (c:/texlive/2018/texmf-dist/tex/latex/soul/soul.sty
+)
+(c:/texlive/2018/texmf-dist/tex/latex/soul/soul.sty
 Package: soul 2003/11/17 v2.4 letterspacing/underlining (mf)
 \SOUL@word=\toks23
 \SOUL@lasttoken=\toks24
@@ -236,9 +261,11 @@ Package: soul 2003/11/17 v2.4 letterspacing/underlining (mf)
 \SOUL@ttwidth=\dimen123
 \SOUL@uldp=\dimen124
 \SOUL@ulht=\dimen125
-) (c:/texlive/2018/texmf-dist/tex/latex/caption/caption.sty
+)
+(c:/texlive/2018/texmf-dist/tex/latex/caption/caption.sty
 Package: caption 2018/10/06 v3.3-154 Customizing captions (AR)
- (c:/texlive/2018/texmf-dist/tex/latex/caption/caption3.sty
+
+(c:/texlive/2018/texmf-dist/tex/latex/caption/caption3.sty
 Package: caption3 2018/09/12 v1.8c caption3 kernel (AR)
 Package caption3 Info: TeX engine: e-TeX on input line 64.
 \captionmargin=\dimen126
@@ -253,15 +280,20 @@ Package caption3 Info: TeX engine: e-TeX on input line 64.
 \c@ContinuedFloat=\count116
 Package caption Info: float package is loaded.
 Package caption Info: longtable package is loaded.
- (c:/texlive/2018/texmf-dist/tex/latex/caption/ltcaption.sty
+
+(c:/texlive/2018/texmf-dist/tex/latex/caption/ltcaption.sty
 Package: ltcaption 2018/08/26 v1.4-95 longtable captions (AR)
 )
 Package caption Info: rotating package is loaded.
-) (c:/texlive/2018/texmf-dist/tex/latex/hyperref/hyperref.sty
+)
+(c:/texlive/2018/texmf-dist/tex/latex/hyperref/hyperref.sty
 Package: hyperref 2018/11/30 v6.88e Hypertext links for LaTeX
- (c:/texlive/2018/texmf-dist/tex/generic/oberdiek/hobsub-hyperref.sty
+
+(c:/texlive/2018/texmf-dist/tex/generic/oberdiek/hobsub-hyperref.sty
 Package: hobsub-hyperref 2016/05/16 v1.14 Bundle oberdiek, subset hyperref (HO)
- (c:/texlive/2018/texmf-dist/tex/generic/oberdiek/hobsub-generic.sty
+
+
+(c:/texlive/2018/texmf-dist/tex/generic/oberdiek/hobsub-generic.sty
 Package: hobsub-generic 2016/05/16 v1.14 Bundle oberdiek, subset generic (HO)
 Package: hobsub 2016/05/16 v1.14 Construct package bundles (HO)
 Package: infwarerr 2016/05/16 v1.4 Providing info/warning/error messages (HO)
@@ -279,13 +311,16 @@ Package etexcmds Info: Could not find \expanded.
 (etexcmds)             In the latter case, load this package earlier.
 Package: kvsetkeys 2016/05/16 v1.17 Key value parser (HO)
 Package: kvdefinekeys 2016/05/16 v1.4 Define keys (HO)
-Package: pdftexcmds 2018/09/10 v0.29 Utility functions of pdfTeX for LuaTeX (HO)
+Package: pdftexcmds 2018/09/10 v0.29 Utility functions of pdfTeX for LuaTeX (HO
+)
 Package pdftexcmds Info: LuaTeX not detected.
+Package pdftexcmds Info: pdfTeX >= 1.30 not detected.
 Package pdftexcmds Info: \pdf@primitive is available.
 Package pdftexcmds Info: \pdf@ifprimitive is available.
-Package pdftexcmds Info: \pdfdraftmode found.
+Package pdftexcmds Info: \pdfdraftmode not found.
 Package: pdfescape 2016/05/16 v1.14 Implements pdfTeX's escape features (HO)
-Package: bigintcalc 2016/05/16 v1.4 Expandable calculations on big integers (HO)
+Package: bigintcalc 2016/05/16 v1.4 Expandable calculations on big integers (HO
+)
 Package: bitset 2016/05/16 v1.2 Handle bit-vector datatype (HO)
 Package: uniquecounter 2016/05/16 v1.3 Provide unlimited unique counter (HO)
 )
@@ -298,23 +333,26 @@ Package atveryend Info: \enddocument detected (standard20110627).
 Package: atbegshi 2016/06/09 v1.18 At begin shipout hook (HO)
 Package: refcount 2016/05/16 v3.5 Data extraction from label references (HO)
 Package: hycolor 2016/05/16 v1.8 Color options for hyperref/bookmark (HO)
-) (c:/texlive/2018/texmf-dist/tex/generic/ifxetex/ifxetex.sty
+)
+(c:/texlive/2018/texmf-dist/tex/generic/ifxetex/ifxetex.sty
 Package: ifxetex 2010/09/12 v0.6 Provides ifxetex conditional
-) (c:/texlive/2018/texmf-dist/tex/latex/oberdiek/auxhook.sty
+)
+(c:/texlive/2018/texmf-dist/tex/latex/oberdiek/auxhook.sty
 Package: auxhook 2016/05/16 v1.4 Hooks for auxiliary files (HO)
-) (c:/texlive/2018/texmf-dist/tex/latex/oberdiek/kvoptions.sty
+)
+(c:/texlive/2018/texmf-dist/tex/latex/oberdiek/kvoptions.sty
 Package: kvoptions 2016/05/16 v3.12 Key value format for package options (HO)
 )
 \@linkdim=\dimen133
 \Hy@linkcounter=\count117
 \Hy@pagecounter=\count118
- (c:/texlive/2018/texmf-dist/tex/latex/hyperref/pd1enc.def
+
+(c:/texlive/2018/texmf-dist/tex/latex/hyperref/pd1enc.def
 File: pd1enc.def 2018/11/30 v6.88e Hyperref: PDFDocEncoding definition (HO)
-Now handling font encoding PD1 ...
-... no UTF-8 mapping file for font encoding PD1
 )
 \Hy@SavedSpaceFactor=\count119
- (c:/texlive/2018/texmf-dist/tex/latex/latexconfig/hyperref.cfg
+
+(c:/texlive/2018/texmf-dist/tex/latex/latexconfig/hyperref.cfg
 File: hyperref.cfg 2002/06/06 v1.2 hyperref configuration of TeXLive
 )
 Package hyperref Info: Hyper figures OFF on input line 4519.
@@ -343,54 +381,76 @@ LaTeX Info: Redefining \pageref on input line 6454.
 \c@Item=\count123
 \c@Hfootnote=\count124
 )
-Package hyperref Info: Driver (autodetected): hpdftex.
- (c:/texlive/2018/texmf-dist/tex/latex/hyperref/hpdftex.def
-File: hpdftex.def 2018/11/30 v6.88e Hyperref driver for pdfTeX
-\Fld@listcount=\count125
-\c@bookmark@seq@number=\count126
- (c:/texlive/2018/texmf-dist/tex/latex/oberdiek/rerunfilecheck.sty
+Package hyperref Info: Driver (autodetected): hxetex.
+
+(c:/texlive/2018/texmf-dist/tex/latex/hyperref/hxetex.def
+File: hxetex.def 2018/11/30 v6.88e Hyperref driver for XeTeX
+
+(c:/texlive/2018/texmf-dist/tex/latex/hyperref/puenc.def
+File: puenc.def 2018/11/30 v6.88e Hyperref: PDF Unicode definition (HO)
+)
+(c:/texlive/2018/texmf-dist/tex/generic/oberdiek/stringenc.sty
+Package: stringenc 2016/05/16 v1.11 Convert strings between diff. encodings (HO
+)
+)
+\pdfm@box=\box68
+\c@Hy@AnnotLevel=\count125
+\HyField@AnnotCount=\count126
+\Fld@listcount=\count127
+\c@bookmark@seq@number=\count128
+
+(c:/texlive/2018/texmf-dist/tex/latex/oberdiek/rerunfilecheck.sty
 Package: rerunfilecheck 2016/05/16 v1.8 Rerun checks for auxiliary files (HO)
-Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 282.
+Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
+82.
 )
 \Hy@SectionHShift=\skip62
 )
 Package hyperref Info: Option `bookmarksopen' set `true' on input line 275.
- (c:/texlive/2018/texmf-dist/tex/latex/oberdiek/bookmark.sty
+
+(c:/texlive/2018/texmf-dist/tex/latex/oberdiek/bookmark.sty
 Package: bookmark 2016/05/17 v1.26 PDF bookmarks (HO)
- (c:/texlive/2018/texmf-dist/tex/latex/oberdiek/bkm-pdftex.def
-File: bkm-pdftex.def 2016/05/17 v1.26 bookmark driver for pdfTeX (HO)
-\BKM@id=\count127
-)) (c:/texlive/2018/texmf-dist/tex/latex/oberdiek/twoopt.sty
+
+(c:/texlive/2018/texmf-dist/tex/latex/oberdiek/bkm-dvipdfm.def
+File: bkm-dvipdfm.def 2016/05/17 v1.26 bookmark driver for dvipdfm (HO)
+\BKM@id=\count129
+))
+(c:/texlive/2018/texmf-dist/tex/latex/oberdiek/twoopt.sty
 Package: twoopt 2016/05/16 v1.6 Definitions with two optional arguments (HO)
-) (c:/texlive/2018/texmf-dist/tex/latex/footmisc/footmisc.sty
+)
+(c:/texlive/2018/texmf-dist/tex/latex/footmisc/footmisc.sty
 Package: footmisc 2011/06/06 v5.5b a miscellany of footnote facilities
 \FN@temptoken=\toks28
 \footnotemargin=\dimen137
-\c@pp@next@reset=\count128
+\c@pp@next@reset=\count130
 Package footmisc Info: Declaring symbol style bringhurst on input line 855.
 Package footmisc Info: Declaring symbol style chicago on input line 863.
 Package footmisc Info: Declaring symbol style wiley on input line 872.
 Package footmisc Info: Declaring symbol style lamport-robust on input line 883.
+
 Package footmisc Info: Declaring symbol style lamport* on input line 903.
-Package footmisc Info: Declaring symbol style lamport*-robust on input line 924.
-) (c:/texlive/2018/texmf-dist/tex/latex/tools/tabularx.sty
+Package footmisc Info: Declaring symbol style lamport*-robust on input line 924
+.
+)
+(c:/texlive/2018/texmf-dist/tex/latex/tools/tabularx.sty
 Package: tabularx 2016/02/03 v2.11b `tabularx' package (DPC)
- (c:/texlive/2018/texmf-dist/tex/latex/tools/array.sty
+
+(c:/texlive/2018/texmf-dist/tex/latex/tools/array.sty
 Package: array 2018/12/30 v2.4k Tabular extension package (FMi)
 \col@sep=\dimen138
-\ar@mcellbox=\box68
+\ar@mcellbox=\box69
 \extrarowheight=\dimen139
 \NC@list=\toks29
 \extratabsurround=\skip63
 \backup@length=\skip64
-\ar@cellbox=\box69
+\ar@cellbox=\box70
 )
 \TX@col@width=\dimen140
 \TX@old@table=\dimen141
 \TX@old@col=\dimen142
 \TX@target=\dimen143
 \TX@delta=\dimen144
-\TX@cols=\count129
+\TX@cols=\count131
 \TX@ftn=\toks30
 )
 \tfboxrule=\dimen145
@@ -401,25 +461,24 @@ Package: array 2018/12/30 v2.4k Tabular extension package (FMi)
 \FreePageSpace=\dimen150
 \ovsize=\dimen151
 \adjustskip=\skip65
-\BXbox=\box70
+\BXbox=\box71
 \xxptspaceamount=\skip66
 \BXboxoutbnewskip=\skip67
 \BXdim=\dimen152
-\BXgraybox=\box71
- (c:/texlive/2018/texmf-dist/tex/latex/varwidth/varwidth.sty
+\BXgraybox=\box72
+
+(c:/texlive/2018/texmf-dist/tex/latex/varwidth/varwidth.sty
 Package: varwidth 2009/03/30 ver 0.92;  Variable-width minipages
-\@vwid@box=\box72
-\sift@deathcycles=\count130
+\@vwid@box=\box73
+\sift@deathcycles=\count132
 \@vwid@loff=\dimen153
 \@vwid@roff=\dimen154
-) (c:/texlive/2018/texmf-dist/tex/latex/tools/dcolumn.sty
+)
+(c:/texlive/2018/texmf-dist/tex/latex/tools/dcolumn.sty
 Package: dcolumn 2014/10/28 v1.06 decimal alignment package (DPC)
-) (c:/texlive/2018/texmf-dist/tex/latex/stix/stix.sty
+)
+(c:/texlive/2018/texmf-dist/tex/latex/stix/stix.sty
 Package: stix 2018/04/17 v1.1.3-latex STIX fonts support package
-Now handling font encoding LS1 ...
-... no UTF-8 mapping file for font encoding LS1
-Now handling font encoding LS2 ...
-... no UTF-8 mapping file for font encoding LS2
 LaTeX Font Info:    Redeclaring symbol font `letters' on input line 76.
 LaTeX Font Info:    Encoding `OML' has changed to `LS1' for symbol font
 (Font)              `letters' in the math version `normal' on input line 76.
@@ -454,11 +513,13 @@ LaTeX Font Info:    Overwriting symbol font `symbols' in version `bold'
 \symintegrals=\mathgroup8
 LaTeX Font Info:    Redeclaring symbol font `largesymbols' on input line 84.
 LaTeX Font Info:    Encoding `OMX' has changed to `LS2' for symbol font
-(Font)              `largesymbols' in the math version `normal' on input line 84.
+(Font)              `largesymbols' in the math version `normal' on input line 8
+4.
 LaTeX Font Info:    Overwriting symbol font `largesymbols' in version `normal'
 (Font)                  OMX/cmex/m/n --> LS2/stixex/m/n on input line 84.
 LaTeX Font Info:    Encoding `OMX' has changed to `LS2' for symbol font
 (Font)              `largesymbols' in the math version `bold' on input line 84.
+
 LaTeX Font Info:    Overwriting symbol font `largesymbols' in version `bold'
 (Font)                  OMX/cmex/m/n --> LS2/stixex/m/n on input line 84.
 \symarrows1=\mathgroup9
@@ -472,6 +533,7 @@ LaTeX Font Info:    Overwriting symbol font `symbols' in version `bold'
 (Font)                  LS1/stixscr/m/n --> LS1/stixscr/b/n on input line 90.
 LaTeX Font Info:    Overwriting symbol font `symbols2' in version `bold'
 (Font)                  LS1/stixfrak/m/n --> LS1/stixfrak/b/n on input line 91.
+
 LaTeX Font Info:    Overwriting symbol font `symbols3' in version `bold'
 (Font)                  LS1/stixbb/m/n --> LS1/stixbb/b/n on input line 92.
 LaTeX Font Info:    Overwriting symbol font `symbols4' in version `bold'
@@ -493,11 +555,18 @@ LaTeX Font Info:    Redeclaring math alphabet \mathbf on input line 109.
 LaTeX Info: Redefining \vdots on input line 1518.
 LaTeX Info: Redefining \cdots on input line 1522.
 LaTeX Info: Redefining \not on input line 2144.
-) (c:/texlive/2018/texmf-dist/tex/latex/base/fontenc.sty
+)
+(c:/texlive/2018/texmf-dist/tex/latex/base/fontenc.sty
 Package: fontenc 2018/08/11 v2.0j Standard LaTeX package
- (c:/texlive/2018/texmf-dist/tex/latex/base/t1enc.def
+
+(c:/texlive/2018/texmf-dist/tex/latex/base/t1enc.def
 File: t1enc.def 2018/08/11 v2.0j Standard LaTeX file
 LaTeX Font Info:    Redeclaring font encoding T1 on input line 48.
+)
+LaTeX Font Info:    Try loading font information for T1+lmr on input line 105.
+
+(c:/texlive/2018/texmf-dist/tex/latex/lm/t1lmr.fd
+File: t1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
 ))
 \trimwidth=\skip68
 \trimheight=\skip69
@@ -511,11 +580,12 @@ LaTeX Font Info:    Redeclaring font encoding T1 on input line 48.
 \columnhsizevalue=\dimen155
 \abs@coli@hsize=\skip77
 \abs@colii@hsize=\skip78
- (c:/texlive/2018/texmf-dist/tex/latex/geometry/geometry.sty
+
+(c:/texlive/2018/texmf-dist/tex/latex/geometry/geometry.sty
 Package: geometry 2018/04/16 v5.8 Page Geometry
-\Gm@cnth=\count131
-\Gm@cntv=\count132
-\c@Gm@tempcnt=\count133
+\Gm@cnth=\count133
+\Gm@cntv=\count134
+\c@Gm@tempcnt=\count135
 \Gm@bindingoffset=\dimen156
 \Gm@wd@mp=\dimen157
 \Gm@odd@mp=\dimen158
@@ -528,18 +598,20 @@ Package: geometry 2018/04/16 v5.8 Page Geometry
 )
 \parindentvalue=\dimen164
 \pageheight=\dimen165
-\rulecount=\count134
+\rulecount=\count136
 \leftcolrulepos=\dimen166
 \rightcolrulepos=\dimen167
- (c:/texlive/2018/texmf-dist/tex/latex/eso-pic/showframe.sty
+
+(c:/texlive/2018/texmf-dist/tex/latex/eso-pic/showframe.sty
 Package: showframe 2011/02/24 v0.1i showframe (new impl., RN)
- (c:/texlive/2018/texmf-dist/tex/latex/eso-pic/eso-pic.sty
+
+(c:/texlive/2018/texmf-dist/tex/latex/eso-pic/eso-pic.sty
 Package: eso-pic 2018/04/12 v2.0h eso-pic (RN)
 ))
 \artopleftskipdim=\dimen168
 \@xmlpage=\write3
-\c@spagecounter=\count135
-\c@lpagecounter=\count136
+\c@spagecounter=\count137
+\c@lpagecounter=\count138
 LaTeX Info: Redefining \rm on input line 1297.
 LaTeX Info: Redefining \sf on input line 1298.
 LaTeX Info: Redefining \tt on input line 1299.
@@ -549,27 +621,27 @@ LaTeX Info: Redefining \sl on input line 1302.
 LaTeX Info: Redefining \sc on input line 1303.
 LaTeX Info: Redefining \cal on input line 1304.
 LaTeX Info: Redefining \mit on input line 1305.
-\aucount=\count137
-\corrauthcount=\count138
-\authfncnt=\count139
-\authfnTmpCnt=\count140
-\aufootnotemark=\box73
-\authmarkbox=\box74
-\c@affn=\count141
-\addcount=\count142
-\emailcount=\count143
-\punctcount=\count144
+\aucount=\count139
+\corrauthcount=\count140
+\authfncnt=\count141
+\authfnTmpCnt=\count142
+\aufootnotemark=\box74
+\authmarkbox=\box75
+\c@affn=\count143
+\addcount=\count144
+\emailcount=\count145
+\punctcount=\count146
 \foot@titlepage@raise@skip=\skip79
-\lastauthorcnt=\count145
-\fundinginfocount=\count146
-\commafundinginfocount=\count147
-\fundinginfotempcount=\count148
-\tempfundinginfocount=\count149
-\JELinfocount=\count150
-\commaJELinfocount=\count151
-\JELinfotempcount=\count152
-\tempJELinfocount=\count153
-\htftbox=\box75
+\lastauthorcnt=\count147
+\fundinginfocount=\count148
+\commafundinginfocount=\count149
+\fundinginfotempcount=\count150
+\tempfundinginfocount=\count151
+\JELinfocount=\count152
+\commaJELinfocount=\count153
+\JELinfotempcount=\count154
+\tempJELinfocount=\count155
+\htftbox=\box76
 \ovsize=\dimen169
 \oovsize=\dimen170
 \FreePageSpace=\dimen171
@@ -578,25 +650,26 @@ Normal \dimen register pool exhausted, switching to extended pool.
 \fadjskip=\skip80
 \adjustskip=\skip81
 \titleskip=\skip82
-\abs@boxa=\box76
-\abs@boxb=\box77
-\abs@boxc=\box78
+\abs@boxa=\box77
+\abs@boxb=\box78
+\abs@boxc=\box79
 \abs@dima=\dimen257
 \abs@dimb=\dimen258
 \abs@dimc=\dimen259
 \adjtitleskip=\skip83
-\c@chapter=\count154
+\c@chapter=\count156
 \secruleskip=\skip84
 \rhverticalsep=\skip85
- (c:/Users/hikk/Desktop/pyg-gnns/CCPE/Mauscript/NJDnatbib.sty
+ (./NJDnatbib.sty
 Package: NJDnatbib 2010/09/13 8.31b (PWD, AO)
 \bibhang=\skip86
 \bibsep=\skip87
 LaTeX Info: Redefining \cite on input line 700.
-\c@NAT@ctr=\count155
+\c@NAT@ctr=\count157
 )
-\c@scheme=\count156
- (c:/texlive/2018/texmf-dist/tex/latex/booktabs/booktabs.sty
+\c@scheme=\count158
+
+(c:/texlive/2018/texmf-dist/tex/latex/booktabs/booktabs.sty
 Package: booktabs 2016/04/27 v1.618033 publication quality tables
 \heavyrulewidth=\dimen260
 \lightrulewidth=\dimen261
@@ -608,54 +681,58 @@ Package: booktabs 2016/04/27 v1.618033 publication quality tables
 \cmidrulesep=\dimen267
 \cmidrulekern=\dimen268
 \defaultaddspace=\dimen269
-\@cmidla=\count157
-\@cmidlb=\count158
+\@cmidla=\count159
+\@cmidlb=\count160
 \@aboverulesep=\dimen270
 \@belowrulesep=\dimen271
-\@thisruleclass=\count159
-\@lastruleclass=\count160
+\@thisruleclass=\count161
+\@lastruleclass=\count162
 \@thisrulewidth=\dimen272
-) (c:/texlive/2018/texmf-dist/tex/latex/amsmath/amsmath.sty
+)
+(c:/texlive/2018/texmf-dist/tex/latex/amsmath/amsmath.sty
 Package: amsmath 2018/12/01 v2.17b AMS math features
 \@mathmargin=\skip88
 
 For additional information on amsmath, use the `?' option.
 (c:/texlive/2018/texmf-dist/tex/latex/amsmath/amstext.sty
 Package: amstext 2000/06/29 v2.01 AMS text
- (c:/texlive/2018/texmf-dist/tex/latex/amsmath/amsgen.sty
+
+(c:/texlive/2018/texmf-dist/tex/latex/amsmath/amsgen.sty
 File: amsgen.sty 1999/11/30 v2.0 generic functions
 \@emptytoks=\toks32
 \ex@=\dimen273
-)) (c:/texlive/2018/texmf-dist/tex/latex/amsmath/amsbsy.sty
+))
+(c:/texlive/2018/texmf-dist/tex/latex/amsmath/amsbsy.sty
 Package: amsbsy 1999/11/29 v1.2d Bold Symbols
 \pmbraise@=\dimen274
-) (c:/texlive/2018/texmf-dist/tex/latex/amsmath/amsopn.sty
+)
+(c:/texlive/2018/texmf-dist/tex/latex/amsmath/amsopn.sty
 Package: amsopn 2016/03/08 v2.02 operator names
 )
-\inf@bad=\count161
+\inf@bad=\count163
 LaTeX Info: Redefining \frac on input line 223.
-\uproot@=\count162
-\leftroot@=\count163
+\uproot@=\count164
+\leftroot@=\count165
 LaTeX Info: Redefining \overline on input line 385.
-\classnum@=\count164
-\DOTSCASE@=\count165
+\classnum@=\count166
+\DOTSCASE@=\count167
 LaTeX Info: Redefining \ldots on input line 482.
 LaTeX Info: Redefining \dots on input line 485.
-\Mathstrutbox@=\box79
-\strutbox@=\box80
+\Mathstrutbox@=\box80
+\strutbox@=\box81
 \big@size=\dimen275
 LaTeX Font Info:    Redeclaring font encoding OML on input line 729.
 LaTeX Font Info:    Redeclaring font encoding OMS on input line 730.
-\macc@depth=\count166
-\c@MaxMatrixCols=\count167
+\macc@depth=\count168
+\c@MaxMatrixCols=\count169
 \dotsspace@=\muskip11
-\c@parentequation=\count168
-\dspbrk@lvl=\count169
+\c@parentequation=\count170
+\dspbrk@lvl=\count171
 \tag@help=\toks33
-\row@=\count170
-\column@=\count171
 Normal \count register pool exhausted, switching to extended pool.
-\maxfields@=\count277
+\row@=\count277
+\column@=\count278
+\maxfields@=\count279
 \andhelp@=\toks34
 \eqnshift@=\dimen276
 \alignsep@=\dimen277
@@ -669,7 +746,8 @@ Normal \count register pool exhausted, switching to extended pool.
 \mathdisplay@stack=\toks36
 LaTeX Info: Redefining \[ on input line 2844.
 LaTeX Info: Redefining \] on input line 2845.
-) (c:/texlive/2018/texmf-dist/tex/latex/amscls/amsthm.sty
+)
+(c:/texlive/2018/texmf-dist/tex/latex/amscls/amsthm.sty
 Package: amsthm 2017/10/31 v2.20.4
 \thm@style=\toks37
 \thm@bodyfont=\toks38
@@ -681,159 +759,173 @@ Package: amsthm 2017/10/31 v2.20.4
 \thm@headsep=\skip93
 \dth@everypar=\toks42
 )
-\c@theorem=\count278
-\c@construction=\count279
-\c@estimate=\count280
-\c@lemma=\count281
-\c@corollary=\count282
-\c@result=\count283
-\c@algth=\count284
-\c@proposition=\count285
-\c@hypothesis=\count286
-\c@experiment=\count287
-\c@LWrule=\count288
-\c@procedure=\count289
-\c@assertion=\count290
-\c@axiom=\count291
-\c@conjecture=\count292
-\c@criterion=\count293
-\c@reduction=\count294
-\c@sublemma=\count295
-\c@case=\count296
-\c@remark=\count297
-\c@notation=\count298
-\c@answer=\count299
-\c@base=\count300
-\c@claim=\count301
-\c@ccomment=\count302
-\c@subproof=\count303
-\c@conclusion=\count304
-\c@observation=\count305
-\c@subcase=\count306
-\c@step=\count307
-\c@summary=\count308
-\c@definition=\count309
-\c@condition=\count310
-\c@property=\count311
-\c@problem=\count312
-\c@fact=\count313
-\c@assumption=\count314
-\c@eexample=\count315
-\c@model=\count316
-\c@affirmation=\count317
-\c@application=\count318
-\c@convention=\count319
-\c@discussion=\count320
-\c@exercise=\count321
-\c@question=\count322
-\c@scholium=\count323
-\c@terminology=\count324
-\c@printcitcnt=\count325
-\c@@pps=\count326
-\c@@ppsavesec=\count327
-\c@@ppsaveapp=\count328
- (c:/texlive/2018/texmf-dist/tex/latex/algorithms/algorithm.sty
-Package: algorithm 2009/08/24 v0.1 Document Style `algorithm' - floating environment
+\c@theorem=\count280
+\c@construction=\count281
+\c@estimate=\count282
+\c@lemma=\count283
+\c@corollary=\count284
+\c@result=\count285
+\c@algth=\count286
+\c@proposition=\count287
+\c@hypothesis=\count288
+\c@experiment=\count289
+\c@LWrule=\count290
+\c@procedure=\count291
+\c@assertion=\count292
+\c@axiom=\count293
+\c@conjecture=\count294
+\c@criterion=\count295
+\c@reduction=\count296
+\c@sublemma=\count297
+\c@case=\count298
+\c@remark=\count299
+\c@notation=\count300
+\c@answer=\count301
+\c@base=\count302
+\c@claim=\count303
+\c@ccomment=\count304
+\c@subproof=\count305
+\c@conclusion=\count306
+\c@observation=\count307
+\c@subcase=\count308
+\c@step=\count309
+\c@summary=\count310
+\c@definition=\count311
+\c@condition=\count312
+\c@property=\count313
+\c@problem=\count314
+\c@fact=\count315
+\c@assumption=\count316
+\c@eexample=\count317
+\c@model=\count318
+\c@affirmation=\count319
+\c@application=\count320
+\c@convention=\count321
+\c@discussion=\count322
+\c@exercise=\count323
+\c@question=\count324
+\c@scholium=\count325
+\c@terminology=\count326
+\c@printcitcnt=\count327
+\c@@pps=\count328
+\c@@ppsavesec=\count329
+\c@@ppsaveapp=\count330
+
+(c:/texlive/2018/texmf-dist/tex/latex/algorithms/algorithm.sty
+Invalid UTF-8 byte or sequence at line 11 replaced by U+FFFD.
+Package: algorithm 2009/08/24 v0.1 Document Style `algorithm' - floating enviro
+nment
 \@float@every@algorithm=\toks43
-\c@algorithm=\count329
-) (c:/texlive/2018/texmf-dist/tex/latex/algorithmicx/algorithmicx.sty
+\c@algorithm=\count331
+)
+(c:/texlive/2018/texmf-dist/tex/latex/algorithmicx/algorithmicx.sty
 Package: algorithmicx 2005/04/27 v1.2 Algorithmicx
 
 Document Style algorithmicx 1.2 - a greatly improved `algorithmic' style
-\c@ALG@line=\count330
-\c@ALG@rem=\count331
-\c@ALG@nested=\count332
+\c@ALG@line=\count332
+\c@ALG@rem=\count333
+\c@ALG@nested=\count334
 \ALG@tlm=\skip94
 \ALG@thistlm=\skip95
-\c@ALG@Lnr=\count333
-\c@ALG@blocknr=\count334
-\c@ALG@storecount=\count335
-\c@ALG@tmpcounter=\count336
+\c@ALG@Lnr=\count335
+\c@ALG@blocknr=\count336
+\c@ALG@storecount=\count337
+\c@ALG@tmpcounter=\count338
 \ALG@tmplength=\skip96
 ) (c:/texlive/2018/texmf-dist/tex/latex/algorithmicx/algpseudocode.sty
 Package: algpseudocode 
 
 Document Style - pseudocode environments for use with the `algorithmicx' style
 ) (c:/texlive/2018/texmf-dist/tex/latex/listings/listings.sty
-\lst@mode=\count337
-\lst@gtempboxa=\box81
+\lst@mode=\count339
+\lst@gtempboxa=\box82
 \lst@token=\toks44
-\lst@length=\count338
+\lst@length=\count340
 \lst@currlwidth=\dimen282
-\lst@column=\count339
-\lst@pos=\count340
+\lst@column=\count341
+\lst@pos=\count342
 \lst@lostspace=\dimen283
 \lst@width=\dimen284
-\lst@newlines=\count341
-\lst@lineno=\count342
+\lst@newlines=\count343
+\lst@lineno=\count344
 \lst@maxwidth=\dimen285
- (c:/texlive/2018/texmf-dist/tex/latex/listings/lstmisc.sty
+
+(c:/texlive/2018/texmf-dist/tex/latex/listings/lstmisc.sty
 File: lstmisc.sty 2018/09/02 1.7 (Carsten Heinz)
-\c@lstnumber=\count343
-\lst@skipnumbers=\count344
-\lst@framebox=\box82
-) (c:/texlive/2018/texmf-dist/tex/latex/listings/listings.cfg
+\c@lstnumber=\count345
+\lst@skipnumbers=\count346
+\lst@framebox=\box83
+)
+(c:/texlive/2018/texmf-dist/tex/latex/listings/listings.cfg
 File: listings.cfg 2018/09/02 1.7 listings configuration
 ))
 Package: listings 2018/09/02 1.7 (Carsten Heinz)
- (c:/texlive/2018/texmf-dist/tex/latex/base/alltt.sty
+
+(c:/texlive/2018/texmf-dist/tex/latex/base/alltt.sty
 Package: alltt 1997/06/16 v2.0g defines alltt environment
 )
-\jnlcitationbox=\box83
+\jnlcitationbox=\box84
 \jnlcithsize=\dimen286
- (c:/texlive/2018/texmf-dist/tex/latex/wrapfig/wrapfig.sty
+
+(c:/texlive/2018/texmf-dist/tex/latex/wrapfig/wrapfig.sty
 \wrapoverhang=\dimen287
 \WF@size=\dimen288
-\c@WF@wrappedlines=\count345
-\WF@box=\box84
+\c@WF@wrappedlines=\count347
+\WF@box=\box85
 \WF@everypar=\toks45
 Package: wrapfig 2003/01/31  v 3.6
 )
-\wraplines=\count346
-\@authorfigbox=\box85
+\wraplines=\count348
+\@authorfigbox=\box86
 \@authorfigboxdim=\skip97
 \biofigadjskip=\skip98
-) (c:/texlive/2018/texmf-dist/tex/latex/lineno/lineno.sty
+)
+(c:/texlive/2018/texmf-dist/tex/latex/lineno/lineno.sty
 Package: lineno 2005/11/02 line numbers on paragraphs v4.41
-\linenopenalty=\count347
+Invalid UTF-8 byte or sequence at line 296 replaced by U+FFFD.
+\linenopenalty=\count349
 \output=\toks46
-\linenoprevgraf=\count348
+\linenoprevgraf=\count350
 \linenumbersep=\dimen289
 \linenumberwidth=\dimen290
-\c@linenumber=\count349
-\c@pagewiselinenumber=\count350
-\c@LN@truepage=\count351
-\c@internallinenumber=\count352
-\c@internallinenumbers=\count353
+\c@linenumber=\count351
+\c@pagewiselinenumber=\count352
+\c@LN@truepage=\count353
+\c@internallinenumber=\count354
+\c@internallinenumbers=\count355
 \quotelinenumbersep=\dimen291
 \bframerule=\dimen292
 \bframesep=\dimen293
-\bframebox=\box86
+\bframebox=\box87
 LaTeX Info: Redefining \\ on input line 3056.
 )
 Package hyperref Info: Option `colorlinks' set `true' on input line 4.
- (c:/texlive/2018/texmf-dist/tex/latex/relsize/relsize.sty
+
+(c:/texlive/2018/texmf-dist/tex/latex/relsize/relsize.sty
 Package: relsize 2013/03/29 ver 4.1
-) (c:/texlive/2018/texmf-dist/tex/latex/makecell/makecell.sty
+)
+(c:/texlive/2018/texmf-dist/tex/latex/makecell/makecell.sty
 Package: makecell 2009/08/03 V0.1e Managing of Tab Column Heads and Cells
 \rotheadsize=\dimen294
-\c@nlinenum=\count354
+\c@nlinenum=\count356
 \TeXr@lab=\toks47
-) (c:/texlive/2018/texmf-dist/tex/latex/graphics/lscape.sty
+)
+(c:/texlive/2018/texmf-dist/tex/latex/graphics/lscape.sty
 Package: lscape 2000/10/22 v3.01 Landscape Pages (DPC)
-) (c:/texlive/2018/texmf-dist/tex/latex/subfig/subfig.sty
+)
+(c:/texlive/2018/texmf-dist/tex/latex/subfig/subfig.sty
 Package: subfig 2005/06/28 ver: 1.3 subfig package
-\c@KVtest=\count355
+\c@KVtest=\count357
 \sf@farskip=\skip99
 \sf@captopadj=\dimen295
 \sf@capskip=\skip100
 \sf@nearskip=\skip101
-\c@subfigure=\count356
-\c@subfigure@save=\count357
-\c@lofdepth=\count358
-\c@subtable=\count359
-\c@subtable@save=\count360
-\c@lotdepth=\count361
+\c@subfigure=\count358
+\c@subfigure@save=\count359
+\c@lofdepth=\count360
+\c@subtable=\count361
+\c@subtable@save=\count362
+\c@lotdepth=\count363
 \sf@top=\skip102
 \sf@bottom=\skip103
 )
@@ -841,7 +933,7 @@ Package: subfig 2005/06/28 ver: 1.3 subfig package
 LaTeX Warning: Unused global option(s):
     [AMA,STIX1COL].
 
-(c:/Users/hikk/Desktop/pyg-gnns/CCPE/Mauscript/wileyNJD-AMA.aux)
+(./wileyNJD-AMA.aux)
 \openout1 = `wileyNJD-AMA.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 24.
@@ -852,52 +944,36 @@ LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 24.
 LaTeX Font Info:    ... okay on input line 24.
 LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 24.
 LaTeX Font Info:    ... okay on input line 24.
+LaTeX Font Info:    Checking defaults for TU/lmr/m/n on input line 24.
+LaTeX Font Info:    ... okay on input line 24.
 LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 24.
 LaTeX Font Info:    ... okay on input line 24.
 LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 24.
 LaTeX Font Info:    ... okay on input line 24.
 LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 24.
 LaTeX Font Info:    ... okay on input line 24.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 24.
+LaTeX Font Info:    ... okay on input line 24.
 LaTeX Font Info:    Checking defaults for LS1/stix/m/n on input line 24.
 LaTeX Font Info:    Try loading font information for LS1+stix on input line 24.
+
  (c:/texlive/2018/texmf-dist/tex/latex/stix/ls1stix.fd
 File: ls1stix.fd 2015/04/17 v1.1.2-latex STIX LS1 font definitions
 )
 LaTeX Font Info:    ... okay on input line 24.
 LaTeX Font Info:    Checking defaults for LS2/stix/m/n on input line 24.
 LaTeX Font Info:    Try loading font information for LS2+stix on input line 24.
- (c:/texlive/2018/texmf-dist/tex/latex/stix/ls2stix.fd
+
+
+(c:/texlive/2018/texmf-dist/tex/latex/stix/ls2stix.fd
 File: ls2stix.fd 2015/04/17 v1.1.2-latex STIX LS2 font definitions
 )
 LaTeX Font Info:    ... okay on input line 24.
 LaTeX Font Info:    Try loading font information for T1+stix on input line 24.
- (c:/texlive/2018/texmf-dist/tex/latex/stix/t1stix.fd
+
+(c:/texlive/2018/texmf-dist/tex/latex/stix/t1stix.fd
 File: t1stix.fd 2015/04/17 v1.1.2-latex STIX T1 font definitions
-) (c:/texlive/2018/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
-[Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count362
-\scratchdimen=\dimen296
-\scratchbox=\box87
-\nofMPsegments=\count363
-\nofMParguments=\count364
-\everyMPshowfont=\toks48
-\MPscratchCnt=\count365
-\MPscratchDim=\dimen297
-\MPnumerator=\count366
-\makeMPintoPDFobject=\count367
-\everyMPtoPDFconversion=\toks49
-) (c:/texlive/2018/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
-Package: epstopdf-base 2016/05/15 v2.6 Base part for package epstopdf
- (c:/texlive/2018/texmf-dist/tex/latex/oberdiek/grfext.sty
-Package: grfext 2016/05/16 v1.2 Manage graphics extensions (HO)
 )
-Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 438.
-Package grfext Info: Graphics extension search list:
-(grfext)             [.pdf,.png,.jpg,.mps,.jpeg,.jbig2,.jb2,.PDF,.PNG,.JPG,.JPEG,.JBIG2,.JB2,.eps]
-(grfext)             \AppendGraphicsExtensions on input line 456.
- (c:/texlive/2018/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
-File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
-))
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: subfig package v1.3 is loaded.
 Package caption Info: hyperref package is loaded.
@@ -906,34 +982,389 @@ Package caption Info: wrapfig package is loaded.
 Package caption Info: End \AtBeginDocument code.
 \AtBeginShipoutBox=\box88
 Package hyperref Info: Link coloring ON on input line 24.
- (c:/texlive/2018/texmf-dist/tex/latex/hyperref/nameref.sty
+
+(c:/texlive/2018/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2016/05/21 v2.44 Cross-referencing by name of section
- (c:/texlive/2018/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
+
+(c:/texlive/2018/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
 Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
 )
-\c@section@level=\count368
+\c@section@level=\count364
 )
 LaTeX Info: Redefining \ref on input line 24.
 LaTeX Info: Redefining \pageref on input line 24.
 LaTeX Info: Redefining \nameref on input line 24.
 
-c:/Users/hikk/Desktop/pyg-gnns/CCPE/Mauscript/wileyNJD-AMA.tex:24: I can't write on file `wileyNJD-AMA.pdf'.
-(Press Enter to retry, or Control-Z to exit; default file extension is `.pdf')
-Please type another file name for output
-c:/Users/hikk/Desktop/pyg-gnns/CCPE/Mauscript/wileyNJD-AMA.tex:24: Emergency stop.
-<to be read again> 
-                   \edef 
-l.24 \begin{document}
-                     
-*** (job aborted, file error in nonstop mode)
+*geometry* driver: auto-detecting
+*geometry* detected driver: xetex
+*geometry* verbose mode - [ preamble ] result:
+* driver: xetex
+* paper: custom
+* layout: <same size as paper>
+* layoutoffset:(h,v)=(0.0pt,0.0pt)
+* hratio: 1:1
+* vratio: 1:1
+* modes: twoside 
+* h-part:(L,W,R)=(45.0pt, 507.50787pt, 45.0pt)
+* v-part:(T,H,B)=(57.5pt, 668.79605pt, 59.0pt)
+* \paperwidth=597.50787pt
+* \paperheight=785.29605pt
+* \textwidth=507.50787pt
+* \textheight=668.79605pt
+* \oddsidemargin=-27.26999pt
+* \evensidemargin=-27.26999pt
+* \topmargin=-46.76999pt
+* \headheight=21.0pt
+* \headsep=11.0pt
+* \topskip=6.0pt
+* \footskip=48.5pt
+* \marginparwidth=0.0pt
+* \marginparsep=0.0pt
+* \columnsep=0.0pt
+* \skip\footins=18.0pt plus 2.0pt minus 2.0pt
+* \hoffset=0.0pt
+* \voffset=0.0pt
+* \mag=1000
+* \@twocolumnfalse
+* \@twosidetrue
+* \@mparswitchtrue
+* \@reversemarginfalse
+* (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
- 
+\c@lstlisting=\count365
+LaTeX Font Info:    Font shape `T1/stix/bx/n' in size <9> not available
+(Font)              Font shape `T1/stix/b/n' tried instead on input line 49.
+LaTeX Font Info:    Font shape `T1/stix/bx/n' in size <18> not available
+(Font)              Font shape `T1/stix/b/n' tried instead on input line 49.
+(c:/texlive/2018/texmf-dist/tex/generic/oberdiek/se-ascii-print.def
+File: se-ascii-print.def 2016/05/16 v1.11 stringenc: Printable ASCII characters
+
+)
+LaTeX Font Info:    Font shape `T1/stix/bx/n' in size <8> not available
+(Font)              Font shape `T1/stix/b/n' tried instead on input line 49.
+LaTeX Font Info:    Font shape `T1/stix/bx/n' in size <10> not available
+(Font)              Font shape `T1/stix/b/n' tried instead on input line 49.
+
+Overfull \hbox (346.99213pt too wide) in paragraph at lines 49--49
+[][] | || []|[][] 
+ []
+
+LaTeX Font Info:    Calculating math sizes for size <10.03749> on input line 49
+.
+LaTeX Font Info:    Try loading font information for LS1+stixscr on input line 
+49.
+(c:/texlive/2018/texmf-dist/tex/latex/stix/ls1stixscr.fd
+File: ls1stixscr.fd 2015/04/17 v1.1.2-latex STIX script LS1 font definitions
+)
+LaTeX Font Info:    Try loading font information for LS2+stixex on input line 4
+9.
+
+(c:/texlive/2018/texmf-dist/tex/latex/stix/ls2stixex.fd
+File: ls2stixex.fd 2015/04/17 v1.1.2-latex STIX extentions LS2 font definitions
+
+)
+LaTeX Font Info:    Try loading font information for LS1+stixfrak on input line
+ 49.
+
+(c:/texlive/2018/texmf-dist/tex/latex/stix/ls1stixfrak.fd
+File: ls1stixfrak.fd 2015/04/17 v1.1.2-latex STIX fraktur LS1 font definitions
+)
+LaTeX Font Info:    Try loading font information for LS1+stixbb on input line 4
+9.
+
+(c:/texlive/2018/texmf-dist/tex/latex/stix/ls1stixbb.fd
+File: ls1stixbb.fd 2015/04/17 v1.1.2-latex STIX blackboard LS1 font definitions
+
+)
+LaTeX Font Info:    Try loading font information for LS2+stixcal on input line 
+49.
+
+(c:/texlive/2018/texmf-dist/tex/latex/stix/ls2stixcal.fd
+File: ls2stixcal.fd 2015/04/17 v1.1.2-latex STIX calligraphic LS2 font definiti
+ons
+)
+LaTeX Font Info:    Try loading font information for LS1+stixsf on input line 4
+9.
+
+(c:/texlive/2018/texmf-dist/tex/latex/stix/ls1stixsf.fd
+File: ls1stixsf.fd 2015/04/17 v1.1.2-latex STIX sans-serif LS1 font definitions
+
+)
+LaTeX Font Info:    Try loading font information for LS2+stixtt on input line 4
+9.
+
+(c:/texlive/2018/texmf-dist/tex/latex/stix/ls2stixtt.fd
+File: ls2stixtt.fd 2015/04/17 v1.1.2-latex STIX typewriter LS2 font definitions
+
+)
+(./sec1-introduction.tex
+Overfull \vbox (6.46347pt too high) has occurred while \output is active []
+
+
+[1
+
+\openout3 = `wileyNJD-AMA.pag'.
+
+]
+LaTeX Font Info:    Try loading font information for OMS+stix on input line 32.
+
+LaTeX Font Info:    No file OMSstix.fd. on input line 32.
+
+
+LaTeX Font Warning: Font shape `OMS/stix/m/n' undefined
+(Font)              using `OMS/cmsy/m/n' instead
+(Font)              for symbol `textbullet' on input line 32.
+
+LaTeX Font Info:    Font shape `T1/stix/bx/n' in size <10.03749> not available
+(Font)              Font shape `T1/stix/b/n' tried instead on input line 32.
+) (./sec2-review-of-graph-neural-network.tex
+LaTeX Font Info:    Font shape `T1/stix/bx/n' in size <7> not available
+(Font)              Font shape `T1/stix/b/n' tried instead on input line 10.
+ [2]
+LaTeX Font Info:    Font shape `T1/stix/bx/n' in size <12> not available
+(Font)              Font shape `T1/stix/b/n' tried instead on input line 11.
+File: figs/illustration/GNN_common_architecture.pdf Graphic file (type pdf)
+<use figs/illustration/GNN_common_architecture.pdf>
+ [3]
+LaTeX Font Info:    Calculating math sizes for size <7.0262> on input line 72.
+LaTeX Font Info:    Calculating math sizes for size <7.5> on input line 72.
+LaTeX Font Info:    Calculating math sizes for size <5.24997> on input line 72.
+
+File: figs/illustration/GNN_Unit.pdf Graphic file (type pdf)
+<use figs/illustration/GNN_Unit.pdf>
+ [4]
+LaTeX Font Info:    Font shape `T1/stix/bx/n' in size <7.5> not available
+(Font)              Font shape `T1/stix/b/n' tried instead on input line 123.
+
+Overfull \hbox (14.58292pt too wide) in paragraph at lines 162--171
+[]|$[][]$| 
+ []
+
+
+Overfull \hbox (4.76373pt too wide) in paragraph at lines 239--246
+[]|$[][]$| 
+ []
+
+File: figs/illustration/GNN_complexity_quadrant.pdf Graphic file (type pdf)
+<use figs/illustration/GNN_complexity_quadrant.pdf>
+[5] [6] [7]
+File: figs/illustration/layer_sampling.pdf Graphic file (type pdf)
+<use figs/illustration/layer_sampling.pdf>
+File: figs/illustration/graph_sampling.pdf Graphic file (type pdf)
+<use figs/illustration/graph_sampling.pdf>
+) (./sec3-experiment-design.tex
+LaTeX Font Info:    Try loading font information for T1+lmtt on input line 23.
+
+(c:/texlive/2018/texmf-dist/tex/latex/lm/t1lmtt.fd
+File: t1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
+) [8] [9])
+(./sec4-experiments.tex
+File: figs/experiments/exp_absolute_training_time_comparison_pubmed.pdf Graphic
+ file (type pdf)
+<use figs/experiments/exp_absolute_training_time_comparison_pubmed.pdf>
+File: figs/experiments/exp_absolute_training_time_comparison_amazon-photo.pdf G
+raphic file (type pdf)
+<use figs/experiments/exp_absolute_training_time_comparison_amazon-photo.pdf>
+File: figs/experiments/exp_absolute_training_time_comparison_coauthor-physics.p
+df Graphic file (type pdf)
+<use figs/experiments/exp_absolute_training_time_comparison_coauthor-physics.pd
+f>
+File: figs/experiments/exp_absolute_training_time_comparison_amazon-computers.p
+df Graphic file (type pdf)
+<use figs/experiments/exp_absolute_training_time_comparison_amazon-computers.pd
+f>
+File: figs/experiments/exp_absolute_training_time_comparison_flickr.pdf Graphic
+ file (type pdf)
+<use figs/experiments/exp_absolute_training_time_comparison_flickr.pdf>
+File: figs/experiments/exp_absolute_training_time_comparison_com-amazon.pdf Gra
+phic file (type pdf)
+<use figs/experiments/exp_absolute_training_time_comparison_com-amazon.pdf>
+File: figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gcn.pdf Gra
+phic file (type pdf)
+<use figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gcn.pdf>
+File: figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_ggnn.pdf Gr
+aphic file (type pdf)
+<use figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_ggnn.pdf>
+File: figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gat.pdf Gra
+phic file (type pdf)
+<use figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gat.pdf>
+File: figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gaan.pdf Gr
+aphic file (type pdf)
+<use figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gaan.pdf>
+ [10]
+File: figs/experiments/exp_hyperparameter_on_memory_usage_gcn.pdf Graphic file 
+(type pdf)
+<use figs/experiments/exp_hyperparameter_on_memory_usage_gcn.pdf>
+File: figs/experiments/exp_hyperparameter_on_memory_usage_ggnn.pdf Graphic file
+ (type pdf)
+<use figs/experiments/exp_hyperparameter_on_memory_usage_ggnn.pdf>
+File: figs/experiments/exp_hyperparameter_on_memory_usage_gat.pdf Graphic file 
+(type pdf)
+<use figs/experiments/exp_hyperparameter_on_memory_usage_gat.pdf>
+File: figs/experiments/exp_hyperparameter_on_memory_usage_gaan.pdf Graphic file
+ (type pdf)
+<use figs/experiments/exp_hyperparameter_on_memory_usage_gaan.pdf>
+File: figs/experiments/exp_layer_time_proportion_gcn.pdf Graphic file (type pdf
+)
+<use figs/experiments/exp_layer_time_proportion_gcn.pdf>
+File: figs/experiments/exp_layer_time_proportion_ggnn.pdf Graphic file (type pd
+f)
+<use figs/experiments/exp_layer_time_proportion_ggnn.pdf>
+File: figs/experiments/exp_layer_time_proportion_gat.pdf Graphic file (type pdf
+)
+<use figs/experiments/exp_layer_time_proportion_gat.pdf>
+File: figs/experiments/exp_layer_time_proportion_gaan.pdf Graphic file (type pd
+f)
+<use figs/experiments/exp_layer_time_proportion_gaan.pdf>
+ [11]
+File: figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_gcn.pdf Graphic f
+ile (type pdf)
+<use figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_gcn.pdf>
+File: figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_ggnn.pdf Graphic 
+file (type pdf)
+<use figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_ggnn.pdf>
+File: figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_gat.pdf Graphic f
+ile (type pdf)
+<use figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_gat.pdf>
+File: figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_gaan.pdf Graphic 
+file (type pdf)
+<use figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_gaan.pdf>
+ [12]
+File: figs/illustration/steps_in_edge_calculation.pdf Graphic file (type pdf)
+<use figs/illustration/steps_in_edge_calculation.pdf>
+File: figs/experiments/exp_edge_calc_decomposition_gcn.pdf Graphic file (type p
+df)
+<use figs/experiments/exp_edge_calc_decomposition_gcn.pdf>
+File: figs/experiments/exp_edge_calc_decomposition_ggnn.pdf Graphic file (type 
+pdf)
+<use figs/experiments/exp_edge_calc_decomposition_ggnn.pdf>
+File: figs/experiments/exp_edge_calc_decomposition_gat.pdf Graphic file (type p
+df)
+<use figs/experiments/exp_edge_calc_decomposition_gat.pdf>
+File: figs/experiments/exp_edge_calc_decomposition_gaan.pdf Graphic file (type 
+pdf)
+<use figs/experiments/exp_edge_calc_decomposition_gaan.pdf>
+ [13]
+File: figs/experiments/exp_top_basic_ops_gcn.pdf Graphic file (type pdf)
+<use figs/experiments/exp_top_basic_ops_gcn.pdf>
+File: figs/experiments/exp_top_basic_ops_ggnn.pdf Graphic file (type pdf)
+<use figs/experiments/exp_top_basic_ops_ggnn.pdf>
+File: figs/experiments/exp_top_basic_ops_gat.pdf Graphic file (type pdf)
+<use figs/experiments/exp_top_basic_ops_gat.pdf>
+File: figs/experiments/exp_top_basic_ops_gaan.pdf Graphic file (type pdf)
+<use figs/experiments/exp_top_basic_ops_gaan.pdf>
+ [14] [15]
+File: figs/experiments/exp_memory_usage_stage_amp.pdf Graphic file (type pdf)
+<use figs/experiments/exp_memory_usage_stage_amp.pdf>
+File: figs/illustration/ggnn_vertex_func_computation_graph.pdf Graphic file (ty
+pe pdf)
+<use figs/illustration/ggnn_vertex_func_computation_graph.pdf>
+ [16] [17]
+File: figs/experiments/exp_memory_expansion_ratio.pdf Graphic file (type pdf)
+<use figs/experiments/exp_memory_expansion_ratio.pdf>
+File: figs/experiments/exp_memory_expansion_ratio_input_feature_dimension_com-a
+mazon.pdf Graphic file (type pdf)
+<use figs/experiments/exp_memory_expansion_ratio_input_feature_dimension_com-am
+azon.pdf>
+File: figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_edges_p
+eak_memory.pdf Graphic file (type pdf)
+<use figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_edges_pe
+ak_memory.pdf>
+File: figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_edges_e
+xpansion_ratio.pdf Graphic file (type pdf)
+<use figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_edges_ex
+pansion_ratio.pdf>
+File: figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_vertice
+s_fixed_edge_peak_memory.pdf Graphic file (type pdf)
+<use figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_vertices
+_fixed_edge_peak_memory.pdf>
+File: figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_vertice
+s_fixed_edge_expansion_ratio.pdf Graphic file (type pdf)
+<use figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_vertices
+_fixed_edge_expansion_ratio.pdf>
+ [18] [19]
+File: figs/experiments/exp_sampling_minibatch_realtive_graph_info_graphsage_gcn
+.pdf Graphic file (type pdf)
+<use figs/experiments/exp_sampling_minibatch_realtive_graph_info_graphsage_gcn.
+pdf>
+File: figs/experiments/exp_sampling_minibatch_realtive_graph_info_cluster_gcn.p
+df Graphic file (type pdf)
+<use figs/experiments/exp_sampling_minibatch_realtive_graph_info_cluster_gcn.pd
+f>
+File: figs/experiments/exp_sampling_minibatch_degrees_distribution_amazon-photo
+.pdf Graphic file (type pdf)
+<use figs/experiments/exp_sampling_minibatch_degrees_distribution_amazon-photo.
+pdf>
+File: figs/experiments/exp_sampling_relative_batch_size_train_time_stack_graphs
+age_amazon-computers.pdf Graphic file (type pdf)
+<use figs/experiments/exp_sampling_relative_batch_size_train_time_stack_graphsa
+ge_amazon-computers.pdf>
+File: figs/experiments/exp_sampling_relative_batch_size_train_time_stack_graphs
+age_flickr.pdf Graphic file (type pdf)
+<use figs/experiments/exp_sampling_relative_batch_size_train_time_stack_graphsa
+ge_flickr.pdf>
+File: figs/experiments/exp_sampling_relative_batch_size_train_time_stack_cluste
+r_amazon-computers.pdf Graphic file (type pdf)
+<use figs/experiments/exp_sampling_relative_batch_size_train_time_stack_cluster
+_amazon-computers.pdf>
+File: figs/experiments/exp_sampling_relative_batch_size_train_time_stack_cluste
+r_flickr.pdf Graphic file (type pdf)
+<use figs/experiments/exp_sampling_relative_batch_size_train_time_stack_cluster
+_flickr.pdf>
+
+[20]
+File: figs/experiments/exp_sampling_memory_usage_relative_batch_size_graphsage_
+amazon-computers_peak_memory.pdf Graphic file (type pdf)
+<use figs/experiments/exp_sampling_memory_usage_relative_batch_size_graphsage_a
+mazon-computers_peak_memory.pdf>
+File: figs/experiments/exp_sampling_memory_usage_relative_batch_size_graphsage_
+flickr_peak_memory.pdf Graphic file (type pdf)
+<use figs/experiments/exp_sampling_memory_usage_relative_batch_size_graphsage_f
+lickr_peak_memory.pdf>
+File: figs/experiments/exp_sampling_memory_usage_relative_batch_size_cluster_am
+azon-computers_peak_memory.pdf Graphic file (type pdf)
+<use figs/experiments/exp_sampling_memory_usage_relative_batch_size_cluster_ama
+zon-computers_peak_memory.pdf>
+File: figs/experiments/exp_sampling_memory_usage_relative_batch_size_cluster_fl
+ickr_peak_memory.pdf Graphic file (type pdf)
+<use figs/experiments/exp_sampling_memory_usage_relative_batch_size_cluster_fli
+ckr_peak_memory.pdf>
+File: figs/experiments/exp_small_graph_train_time.pdf Graphic file (type pdf)
+<use figs/experiments/exp_small_graph_train_time.pdf>
+ [21]) (./sec5-insights.tex [22]
+LaTeX Font Info:    Font shape `T1/stix/bx/it' in size <10.03749> not available
+
+(Font)              Font shape `T1/stix/b/it' tried instead on input line 7.
+) (./sec6-related-work.tex [23])
+(./sec7-conclusion.tex) (./wileyNJD-AMA.bbl [24] [25]
+Missing character: There is no – in font t1-stixgeneral!
+ [26]
+Underfull \hbox (badness 1048) in paragraph at lines 182--184
+[]\T1/stix/m/n/10.03749 Shchur O, Mumme M, Bojchevski A, Gün-ne-mann S. Pit-fal
+ls of Graph Neu-ral Net-work Eval-u-a-tion. \T1/stix/m/it/10.03749 CoRR \T1/sti
+x/m/n/10.03749 2018;
+ []
+
+)
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 62.
+ [27]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 62.
+ (./wileyNJD-AMA.aux)
+Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 62.
+Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 62.
+
+
+LaTeX Font Warning: Some font shapes were not available, defaults substituted.
+
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 62.
+ ) 
 Here is how much of TeX's memory you used:
- 14722 strings out of 492616
- 204226 string characters out of 6132769
- 310280 words of memory out of 5000000
- 18399 multiletter control sequences out of 15000+600000
- 7594 words of font info for 18 fonts, out of 8000000 for 9000
- 1167 hyphenation exceptions out of 8191
- 43i,0n,40p,410b,217s stack positions out of 5000i,500n,10000p,200000b,80000s
-c:/Users/hikk/Desktop/pyg-gnns/CCPE/Mauscript/wileyNJD-AMA.tex:24:  ==> Fatal error occurred, no output PDF file produced!
+ 18513 strings out of 492933
+ 271178 string characters out of 6136538
+ 378024 words of memory out of 5000000
+ 22177 multiletter control sequences out of 15000+600000
+ 219451 words of font info for 317 fonts, out of 8000000 for 9000
+ 1374 hyphenation exceptions out of 8191
+ 43i,24n,49p,652b,545s stack positions out of 5000i,500n,10000p,200000b,80000s
+
+Output written on wileyNJD-AMA.pdf (27 pages).
