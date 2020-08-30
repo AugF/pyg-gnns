@@ -15,9 +15,9 @@ The benchmark makes comparisons between GNNs easily and fairly.
 Those model evaluation efforts focus on evaluating the accuracy of different GNNs.
 They provide insightful suggestions to improve accuracy.
 
-From the efficiency aspect, Yan et al. \cite{yan2020_characterizing_gcn} compare the performance characteristics of graph convolutional networks, typical graph processing kernels(like PageRank), and the MLP-based neural networks on GPU.
+From the efficiency aspect, Yan et al. \cite{yan2020_characterizing_gcn} compare the performance characteristics of graph convolutional networks, typical graph processing kernels(like PageRank), and the MLP-based neural networks on GPUs.
 They provide optimization guidelines for both the software and the hardware developers.
-Zhang et al. \cite{zhang2020_analysis_neugraph} analyze the architectural characteristics of the GNN inference on GPU under SAGA-NN \cite{ma2019_neugraph} model.
+Zhang et al. \cite{zhang2020_analysis_neugraph} analyze the architectural characteristics of the GNN inference on GPUs under SAGA-NN \cite{ma2019_neugraph} model.
 They find that the GNN inference has no fixed performance bottleneck and all components deserve to optimize.
 These two efforts focus on the \emph{inference} phase of GNNs and they investigate the potential optimizations mainly from an architectural view.
 In this work, our target is to find out the performance bottleneck in the training phase from a system view.
