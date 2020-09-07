@@ -79,7 +79,7 @@ As the hidden feature vectors $\boldsymbol{h}^1$ consume a small proportion of m
 \paragraph{Summary}
 
 The complexity analysis in \tablename~\ref{tab:gnn_overview_edge} and \tablename~\ref{tab:gnn_overview_vertex} is valid.
-Fixing other hyper-parameters, each hyper-parameter, itself affects the training time and the memory usage of a GNN Layer \textbf{in a linear way}.
+Fixing other hyper-parameters, each hyper-parameter itself affects the training time and the memory usage of a GNN Layer \textbf{in a linear way}.
 Algorithm engineers can adjust hyper-parameters according to the time complexity to avoid explosive growth in the training time and memory usage.
 
 \subsection{Training Time Breakdown}
@@ -91,10 +91,10 @@ To find out which stage/step dominates the training time, we decompose the train
 
 \begin{figure}[tbp]
     \centering
-    \subfloat[GCN]{\includegraphics[height=4cm]{figs/experiments/exp_layer_time_proportion_gcn.pdf}}
-    \subfloat[GGNN]{\includegraphics[height=4cm]{figs/experiments/exp_layer_time_proportion_ggnn.pdf}}\\
-    \subfloat[GAT]{\includegraphics[height=4cm]{figs/experiments/exp_layer_time_proportion_gat.pdf}}
-    \subfloat[GaAN]{\includegraphics[height=4cm]{figs/experiments/exp_layer_time_proportion_gaan.pdf}}
+    \subfloat[GCN]{\includegraphics[height=4.6cm]{figs/experiments/exp_layer_time_proportion_gcn.pdf}}
+    \subfloat[GGNN]{\includegraphics[height=4.6cm]{figs/experiments/exp_layer_time_proportion_ggnn.pdf}}\\
+    \subfloat[GAT]{\includegraphics[height=4.6cm]{figs/experiments/exp_layer_time_proportion_gat.pdf}}
+    \subfloat[GaAN]{\includegraphics[height=4.6cm]{figs/experiments/exp_layer_time_proportion_gaan.pdf}}
     \caption{Training time breakdown on the layer level. The training time of each layer includes the time spent on the forward, backward and evaluation phases. Each layer is further decomposed into the vertex and the edge calculation stages.}
     \label{fig:exp_vertex_edge_cal_proportion}
 \end{figure}

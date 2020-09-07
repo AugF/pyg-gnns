@@ -251,7 +251,6 @@ INPUT c:/Users/hikk/Desktop/pyg-gnns/CCPE/Mauscript/sec1-introduction.tex
 INPUT c:/Users/hikk/Desktop/pyg-gnns/CCPE/Mauscript/sec1-introduction.tex
 INPUT c:/texlive/2018/texmf-dist/fonts/tfm/public/stix/t1-stixgeneral-bold.tfm
 INPUT c:/texlive/2018/texmf-dist/fonts/tfm/public/stix/t1-stixgeneral.tfm
-INPUT c:/texlive/2018/texmf-dist/fonts/tfm/public/stix/t1-stixgeneral-bold.tfm
 INPUT c:/texlive/2018/texmf-dist/fonts/tfm/public/stix/t1-stixgeneral-italic.tfm
 INPUT c:/texlive/2018/texmf-dist/fonts/tfm/public/stix/t1-stixgeneral.tfm
 INPUT c:/texlive/2018/texmf-var/fonts/map/pdftex/updmap/pdftex.map
@@ -452,7 +451,6 @@ INPUT c:/texlive/2018/texmf-dist/fonts/tfm/public/stix/stix-mathsfit.tfm
 INPUT c:/texlive/2018/texmf-dist/fonts/tfm/public/stix/stix-mathtt.tfm
 INPUT c:/texlive/2018/texmf-dist/fonts/tfm/public/stix/stix-mathtt.tfm
 INPUT c:/texlive/2018/texmf-dist/fonts/tfm/public/stix/stix-mathtt.tfm
-INPUT c:/texlive/2018/texmf-dist/fonts/tfm/public/stix/t1-stixgeneral-bold.tfm
 INPUT c:/texlive/2018/texmf-dist/fonts/tfm/public/stix/t1-stixgeneral-bold.tfm
 INPUT c:/texlive/2018/texmf-dist/fonts/tfm/public/stix/t1-stixgeneral.tfm
 INPUT c:/texlive/2018/texmf-dist/fonts/tfm/public/stix/stix-mathrm.tfm
@@ -689,6 +687,8 @@ INPUT c:/Users/hikk/Desktop/pyg-gnns/CCPE/Mauscript/sec6-related-work.tex
 INPUT c:/Users/hikk/Desktop/pyg-gnns/CCPE/Mauscript/sec6-related-work.tex
 INPUT c:/Users/hikk/Desktop/pyg-gnns/CCPE/Mauscript/sec7-conclusion.tex
 INPUT c:/Users/hikk/Desktop/pyg-gnns/CCPE/Mauscript/sec7-conclusion.tex
+INPUT c:/Users/hikk/Desktop/pyg-gnns/CCPE/Mauscript/wileyNJD-AMA.bbl
+INPUT c:/Users/hikk/Desktop/pyg-gnns/CCPE/Mauscript/wileyNJD-AMA.bbl
 INPUT c:/Users/hikk/Desktop/pyg-gnns/CCPE/Mauscript/wileyNJD-AMA.aux
 INPUT c:/texlive/2018/texmf-dist/fonts/enc/dvips/stix/stix-t1.enc
 INPUT c:/texlive/2018/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc

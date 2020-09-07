@@ -64,7 +64,7 @@ We picked the hyper-parameters of GNNs according to their popularity in the orig
 We used the same set of hyper-parameters for all the datasets. 
 Some hyper-parameters like the dimensions of hidden feature vectors were common in the four GNNs and we set them to the same values.
 For GCN/GAT/GaAN, we set $\boldsymbol{h}^0_i = \boldsymbol{x}_i$, $dim(\boldsymbol{h}^1_i)=64$, and $dim(\boldsymbol{h}^2_i)=\#Classes$.
-For GAT, we set the hyper-parameters according to \cite{huang2018_gat}.
+For GAT, we set the hyper-parameters according to its paper\cite{huang2018_gat}.
 The first GAT layer had 8 heads with the dimension of each head $d^0_{head}=8$. The first GAT layer merged the heads by concatenating.
 The second GAT layer used a single head with the dimension $d^1_{head}=d^1_{out}=\#Classes$.
 For GGNN, since it uses extra MLP layers to transform the dimensions of the input/output feature vectors, we set $dim(\boldsymbol{h}^0_i) = dim(\boldsymbol{h}^1_i) = dim(\boldsymbol{h}^2_i) = 64$.
@@ -73,8 +73,8 @@ We used 8 heads in the both GaAN layers with $d_a=d_v=8$ and $d_m=64$.
 \paragraph{Sampling Techniques}
 
 We picked the neighbor sampler from GraphSAGE \cite{hamilton2017_graphsage} and the cluster sampler from ClusterGCN \cite{chiang2019_cluster_gcn} as the typical sampling techniques respectively.
-For the neighbor sampler, we set the neighborhood sample sizes as 25 for GNN Layer 1, and 10 for GNN Layer 0 and set the default batch size as 512 from \cite{hamilton2017_graphsage}.
-For the cluster sampler, we partitioned every input graph into 1500 partitions and used 20 partitions per batch according to \cite{chiang2019_cluster_gcn}.
+For the neighbor sampler, we set the neighborhood sample sizes as 25 for GNN Layer 1, and 10 for GNN Layer 0 and set the default batch size as 512 from its paper\cite{hamilton2017_graphsage}.
+For the cluster sampler, we partitioned every input graph into 1500 partitions and used 20 partitions per batch according to the parameters used in its paper\cite{chiang2019_cluster_gcn}.
 
 \subsection{Experimental Scheme}
 \label{sec:experimental_scheme}
