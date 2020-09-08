@@ -1,0 +1,65 @@
+\section{Introduction}
+In recent years, the graph neural network (GNN) becomes a hot research topic in the field of artificial intelligence.
+Many GNNs~\cite{kipf2017_gcn, defferrad2016_chebnet, li2018_agcn,li2015_ggnn, hamilton2017_graphsage, huang2018_gat, zhang2018_gaan} are proposed.
+They can learn the representation of vertices/edges in a graph from its topology and the original feature vectors in an \emph{end-to-end} manner.
+The powerful expression ability of GNNs makes them achieve good accuracy in many graph analysis tasks \cite{zhou2018_gnn_review, zhang2018_gnn_survey, comprehensive-survey-wu-2020}, like node classification, link prediction, and graph classification.
+
+To train GNNs easily, a series of GNN libraries/systems \cite{PyG, DGL, ma2019_neugraph, zhu2019_aligraph, PGL} are proposed.
+PyG \cite{PyG}, NeuGraph \cite{ma2019_neugraph}, PGL \cite{PGL} and DGL \cite{DGL} build upon the existing deep learning frameworks (PyG on PyTorch, NeuGraph on TensorFlow, PGL on PaddlePaddle, DGL on multiple backends).
+They provide users with a high-level programming models (the message-passing model for PyG/PGL/DGL and the SAGA-NN model for NeuGraph) to describe the structure of a GNN.
+They take advantage of the common tools provided by the underlying frameworks like the automatic differentiation to simplify the development.
+They utilize specially optimized CUDA kernels (like kernel fusion \cite{DGL} \cite{ma2019_neugraph}) and other implementation techniques (like 2D graph partitioning \cite{ma2019_neugraph}) to improve the speed of GNN training on GPUs.
+
+However, what is the real performance bottleneck in the GNN training is still in doubt.
+Yan et al. \cite{yan2020_characterizing_gcn} and Zhang et al. \cite{zhang2020_analysis_neugraph} experimentally analyze the architectural characteristics of the GNN \emph{inference}.
+They find that the GNN inference is more cache-friendly than the traditional graph analysis tasks(like PageRank) and is suitable for GPUs.
+They verify the effectiveness of the kernel fusion optimization in reducing the time of inference.
+Nevertheless, they only analyze the inference stage, ignoring the effects of the backpropagation during the training.
+
+To explore the essential performance bottleneck in the GNN training, we conduct a range of experimental analysis in deep in this work. 
+We focus on the efficiency bottleneck of GNN training instead of accuracy. 
+We model the GNNs with the message-passing framework that decomposes a GNN layer into two parts: the vertex calculation and the edge calculation.  
+According to the time complexity of the two parts, we classify the typical GNNs into four quadrants(\{high, low\} complexity $\times$ \{vertex, edge\} calculation).
+We choose GCN \cite{kipf2017_gcn}, GGNN \cite{li2015_ggnn}, GAT \cite{huang2018_gat} and GaAN \cite{zhang2018_gaan} as representative GNNs of the four quadrants.
+
+We implement them with PyG and evaluate their efficiency with six real-world datasets on a GPU.
+We identify the most time-consuming stage in the GNN training by decomposing the training time per epoch from the layer level to the operator level.
+We also analyze the memory usage during the training to discover the main factor that limits the data scalability of GNN training on GPUs. 
+Finally, we evaluate whether or not the sampling techniques affect the performance bottleneck. 
+The key findings and insights are summarized below.
+
+\begin{itemize}
+    \item \textbf{The training time and the memory usage of a GNN layer is mainly affected by the dimensions of the input/output hidden feature vectors.}
+    Fixing other hyper-parameters, the training time and the memory usage of a GNN layer increase linearly as the input/output dimensions.
+    \item \textbf{The edge-related calculation is the performance bottleneck for most GNNs.}
+    For GNNs with high edge calculation complexity, most of the training time is spent on conducting the messaging function for every edge. 
+    For GNNs with low edge calculation complexity, the message collection and aggregation consumes most of the training time.
+    \item \textbf{The high memory usage of the edge calculation is the main factor limiting the data scalability of GNN training.}
+    The edge calculation generates and caches many intermediate results. 
+    They are an order of magnitude larger than the dataset itself. 
+    As GPUs have limited on-chip memory, the high memory consumption prevents us from training big graphs on GNNs.
+    \item \textbf{The sampling techniques can significantly reduce training time and memory usage.}
+    They are essential for training big graphs on GPUs. 
+    However, the existing implementation is still inefficient. 
+    Under big batch sizes, the time spent on the sampling may exceed the time spent on the training. 
+    Under small batch sizes, the sampled graphs are also small, wasting the computing power of GPUs.
+\end{itemize}
+
+Based on the insights, we provide several potential optimization directions:
+\begin{itemize}
+      \item To reduce training time, \textbf{optimizations should focus on improving the efficiency of the edge calculation}. 
+      One may consider developing optimized operators for the messaging step that is the major source of computing costs in the edge calculation.
+       Fusing operators of the collection step, messaging function and the aggregation step together is another way to reduce the overheads in the edge calculation.
+      \item To reduce memory usage, \textbf{optimizations should focus on reducing the intermediate results in the edge calculation}. 
+      One may consider adopting the checkpoint mechanism to cache less intermediate results during the forward phase and re-calculate the needed data on the fly during the backpropagation.
+      \item To improve the efficiency of the sampling techniques, \textbf{one may consider overlapping the sampling on the CPU side with the training on the GPU side.} 
+      Choosing a proper batch size automatically is another potential optimization.
+\end{itemize}
+We hope that our analysis can help the developers of the GNN libraries/systems have a better understanding of the characteristics of GNN training and propose more targeted optimizations.
+
+\paragraph{Outline}
+We briefly survey the typical GNNs in Section~\ref{sec:review_of_gnns}.
+We introduce our experimental setting and targets in Section~\ref{sec:experimental_design}.
+The experimental results are presented and analyzed in Section~\ref{sec:experiment_results}.
+We summarize the key findings and give out potential optimization directions in Section~\ref{sec:insights}.
+We introduce the related work in Section~\ref{sec:related_work} and finally conclude our work in Section~\ref{sec:conclusion}.
