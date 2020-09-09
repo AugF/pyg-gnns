@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.14159265-2.6-0.99999 (TeX Live 2018/W32TeX) (preloaded format=xelatex 2019.3.1)  8 SEP 2020 17:14
+This is XeTeX, Version 3.14159265-2.6-0.99999 (TeX Live 2018/W32TeX) (preloaded format=xelatex 2019.3.1)  9 SEP 2020 22:56
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -580,8 +580,13 @@ Overfull \hbox (10.14577pt too wide) in paragraph at lines 162--171
  []
 
 
-Overfull \hbox (90.77605pt too wide) in paragraph at lines 111--204
- [][] 
+Overfull \hbox (44.88405pt too wide) in paragraph at lines 109--204
+[]   []
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 109--204
+
  []
 
 File: figs/illustration/GNN_complexity_quadrant.pdf Graphic file (type pdf)
