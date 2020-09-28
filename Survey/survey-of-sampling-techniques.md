@@ -46,6 +46,7 @@ Rex Ying∗ rexying@stanford.edu Jure
 ![](survey-of-sampling-techniques/GraphSAGE/table1.png)
 
 **运行时间, 图的影响**
+
 ![](survey-of-sampling-techniques/GraphSAGE/fig2.png)
 
 > 图A是训练时间的提升; 图B采样的sample size下精度和Batch Size的变化
