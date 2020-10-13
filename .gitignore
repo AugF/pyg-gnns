@@ -1,1 +1,3 @@
 *.vscode
+*dataset*
+*_pycache__*
