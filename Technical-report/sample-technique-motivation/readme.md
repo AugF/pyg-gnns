@@ -46,3 +46,16 @@
 | ogbn-products | 2,449,029 | 61,859,140 | 50.5 | 有 | 无 | Multi-class type | full, NS(NeigborSampling), Cluster, GraphSAINT |SAGE aggr |
 | ogbn-mag | 1,939,743 | 21,111,007 | 21.7 | 有 | 有 | Multi-class type | full, NS(NeigborSampling), Cluster, GraphSAINT | RGCN aggr |
 | ogbl-citation | 2,927,963 | 30,561,187 | 20.7| 有 | 无 | Link Prediction |  full, NS(NeigborSampling), Cluster, GraphSAINT | GCN aggr(缺NS) |
+
+### 实验环境
+
+Tesla T4 16GB * 2
+[参数Tesla T4 vs V100](https://blog.csdn.net/tony_vip/article/details/105658715)
+
+- [x] 代码审查
+- [x] 可执行测试
+    > ogdb-products和ogbl-citations下Full-batch内存不够
+- [ ] 正确性测试, 并记录训练参数
+- [ ] 参数收集, 划分比例为1%, 3%, 6%, 10%, 25%, 50%
+    - [ ] 收集Cluster-GCN的num_partitions
+    - [ ] 收集NS, GraphSAINT的Batch Size
