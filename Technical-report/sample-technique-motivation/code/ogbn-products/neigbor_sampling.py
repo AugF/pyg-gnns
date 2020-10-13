@@ -9,8 +9,8 @@ from ogb.nodeproppred import PygNodePropPredDataset, Evaluator
 from torch_geometric.data import NeighborSampler
 from torch_geometric.nn import SAGEConv
 
-root = osp.join(osp.dirname(osp.realpath(__file__)), '..', 'data', 'products')
-dataset = PygNodePropPredDataset('ogbn-products', root)
+# root = osp.join(osp.dirname(osp.realpath(__file__)), '..', 'data', 'products')
+dataset = PygNodePropPredDataset('ogbn-products')
 split_idx = dataset.get_idx_split()
 evaluator = Evaluator(name='ogbn-products')
 data = dataset[0]
