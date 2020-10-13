@@ -54,8 +54,18 @@ Tesla T4 16GB * 2
 
 - [x] 代码审查
 - [x] 可执行测试
-    > ogdb-products和ogbl-citations下Full-batch内存不够
+    > ogdb-products和ogbl-citations下Full-batch内存不够, 不能运行
 - [ ] 正确性测试, 并记录训练参数
-- [ ] 参数收集, 划分比例为1%, 3%, 6%, 10%, 25%, 50%
-    - [ ] 收集Cluster-GCN的num_partitions
-    - [ ] 收集NS, GraphSAINT的Batch Size
+- [x] 参数收集, 划分比例为1%, 3%, 6%, 10%, 25%, 50%
+    - [x] 收集Cluster-GCN的num_partitions, batch_size
+        - ogdn-products: 15000, 32
+        - ogbn-mag: 5000, 500
+        - ogbl-citation: 15000, 256
+    - [x] 收集GraphSAINT的Batch Size
+        - ogdn-products: 20000, test(4096)
+        - ogdn-mag: 20000
+        - ogbl-citation: 16*1024
+    - [x] 收集NS的Batch Size
+        - ogdn-products: 1024, test(4096)
+        - ogdn-mag: 1024
+- [ ] 设置参数，收集结果:(sample采样时间占总时间的比例，收敛轮数和收敛精度)
