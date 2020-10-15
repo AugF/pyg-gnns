@@ -66,25 +66,39 @@ def train(model, loader, optimizer, device):
 
     total_loss = total_examples = 0
     total_correct = total_examples = 0
-    for data in loader:
-        data = data.to(device)
-        if data.train_mask.sum() == 0:
-            continue
-        optimizer.zero_grad()
-        out = model(data.x, data.edge_index)[data.train_mask]
-        y = data.y.squeeze(1)[data.train_mask]
-        loss = F.nll_loss(out, y)
-        loss.backward()
-        optimizer.step()
+    
+    sampling_time, to_time, train_time = 0.0, 0.0, 0.0
+    loader_iter = iter(loader)
+    while True: 
+        try: 
+            t0 = time.time()
+            data = next(loader_iter)
+            t1 = time.time()
+            data = data.to(device)
+            t2 = time.time()
+            if data.train_mask.sum() == 0:
+                continue
+            optimizer.zero_grad()
+            out = model(data.x, data.edge_index)[data.train_mask]
+            y = data.y.squeeze(1)[data.train_mask]
+            loss = F.nll_loss(out, y)
+            loss.backward()
+            optimizer.step()
 
-        num_examples = data.train_mask.sum().item()
-        total_loss += loss.item() * num_examples
-        total_examples += num_examples
+            num_examples = data.train_mask.sum().item()
+            total_loss += loss.item() * num_examples
+            total_examples += num_examples
 
-        total_correct += out.argmax(dim=-1).eq(y).sum().item()
-        total_examples += y.size(0)
+            total_correct += out.argmax(dim=-1).eq(y).sum().item()
+            total_examples += y.size(0)
+            
+            train_time += time.time() - t2
+            to_time += t2 - t1
+            sampling_time += t1 - t0
+        except StopIteration:
+            break
 
-    return total_loss / total_examples, total_correct / total_examples
+    return total_loss / total_examples, total_correct / total_examples, sampling_time, to_time, train_time
 
 
 @torch.no_grad()
@@ -162,7 +176,7 @@ def main():
         model.reset_parameters()
         optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)
         for epoch in range(1, 1 + args.epochs):
-            loss, train_acc = train(model, loader, optimizer, device)
+            loss, train_acc, sampling_time, to_time, train_time = train(model, loader, optimizer, device)
             if epoch % args.log_steps == 0:
                 print(f'Run: {run + 1:02d}, '
                       f'Epoch: {epoch:02d}, '

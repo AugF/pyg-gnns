@@ -59,7 +59,7 @@ Tesla T4 16GB * 2
     - ogdb-products
         - cluster_gcn: valid91.75, Test78.33  epochs: 10*50
         - graph_saint: Vaild91.68, Test78.91  epochs: 10*20
-        - neighbor_sampling:  epochs: 10*3
+        - neighbor_sampling: Test0.7852 epochs: 10*3
     - ogdb-mag
         - cluster_gcn: Valid32.47, Test32.90, epochs: 10*30
         - graph_saint: Valid48.44, Test47.68, epochs: 10*30
@@ -90,3 +90,7 @@ Tesla T4 16GB * 2
         - ogdn-products: 1024, test(4096)
         - ogdn-mag: 1024
 - [ ] 设置参数，收集结果:(sample采样时间占总时间的比例，收敛轮数和收敛精度)
+    > 备注: 
+    > 1. 原本的模式没有进行改变，比如test的时机, 唯一发生改变的就是batch_size的大小
+    > 2. 计时方式同之前的实验一样, 与之前记录avg_batch时间不同，这里记录总时间；
+    > 3. 测量方式同之前的测量方式
