@@ -11,6 +11,9 @@ echo "cluster_gcn test..."
 for batch_size in ${cluster_sizes[@]}
 do
     echo "batch_size=${batch_size}"
+    if [ -f "cluster_gcn_${batch_size}.npy" ]; then 
+        continue
+    fi
     date
     python -u cluster_gcn.py --batch_size ${batch_size} --device 1 1>>"cluster_gcn_${batch_size}".log 2>&1
     date
@@ -20,6 +23,9 @@ echo "graph_saint test..."
 for batch_size in ${batch_sizes[@]}
 do
     echo "batch_size=${batch_size}"
+    if [ -f "graph_saint_${batch_size}.npy" ]; then 
+        continue
+    fi
     date
     python -u graph_saint.py --batch_size ${batch_size} --device 1 1>>"graph_saint_${batch_size}".log 2>&1
     date
@@ -29,6 +35,9 @@ echo "neighbor_sampling test..."
 for batch_size in ${batch_sizes[@]}
 do
     echo "batch_size=${batch_size}"
+    if [ -f "neighbor_sampling_${batch_size}.npy" ]; then 
+        continue
+    fi
     date
     python -u neighbor_sampling.py --batch_size ${batch_size} --device 1 1>>"neighbor_sampling_${batch_size}".log 2>&1
     date
