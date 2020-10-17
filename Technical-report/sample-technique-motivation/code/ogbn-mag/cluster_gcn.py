@@ -351,4 +351,4 @@ print(f'Avg_sampling_time: {avg_sampling_time}s, '
         f'Avg_train_time: {avg_train_time}s')
 
 logger.print_statistics()
-looger.save("cluster_gcn_" + str(args.batch_size))
+logger.save("cluster_gcn_" + str(args.batch_size))
