@@ -1,4 +1,5 @@
 import argparse
+import time
 
 import torch
 from tqdm import tqdm
@@ -38,8 +39,8 @@ class SAGE(torch.nn.Module):
         return torch.log_softmax(x, dim=-1)
 
     def inference(self, x_all, subgraph_loader, device):
-        pbar = tqdm(total=x_all.size(0) * len(self.convs))
-        pbar.set_description('Evaluating')
+        # pbar = tqdm(total=x_all.size(0) * len(self.convs))
+        # pbar.set_description('Evaluating')
 
         for i, conv in enumerate(self.convs):
             xs = []
@@ -52,11 +53,11 @@ class SAGE(torch.nn.Module):
                     x = F.relu(x)
                 xs.append(x.cpu())
 
-                pbar.update(batch_size)
+                # pbar.update(batch_size)
 
             x_all = torch.cat(xs, dim=0)
 
-        pbar.close()
+        # pbar.close()
 
         return x_all
 
@@ -65,7 +66,6 @@ def train(model, loader, optimizer, device):
     model.train()
 
     total_loss = total_examples = 0
-    total_correct = total_examples = 0
     
     sampling_time, to_time, train_time = 0.0, 0.0, 0.0
     loader_iter = iter(loader)
@@ -84,21 +84,18 @@ def train(model, loader, optimizer, device):
             loss = F.nll_loss(out, y)
             loss.backward()
             optimizer.step()
-
+        
             num_examples = data.train_mask.sum().item()
             total_loss += loss.item() * num_examples
-            total_examples += num_examples
+            total_examples += num_examples      
 
-            total_correct += out.argmax(dim=-1).eq(y).sum().item()
-            total_examples += y.size(0)
-            
             train_time += time.time() - t2
             to_time += t2 - t1
-            sampling_time += t1 - t0
+            sampling_time += t1 - t0      
         except StopIteration:
             break
 
-    return total_loss / total_examples, total_correct / total_examples, sampling_time, to_time, train_time
+    return total_loss / total_examples, sampling_time, to_time, train_time
 
 
 @torch.no_grad()
@@ -137,7 +134,7 @@ def main():
     parser.add_argument('--dropout', type=float, default=0.5)
     parser.add_argument('--batch_size', type=int, default=32)
     parser.add_argument('--lr', type=float, default=0.001)
-    parser.add_argument('--epochs', type=int, default=50)
+    parser.add_argument('--epochs', type=int, default=30)
     parser.add_argument('--eval_steps', type=int, default=5)
     parser.add_argument('--runs', type=int, default=10)
     args = parser.parse_args()
@@ -172,29 +169,44 @@ def main():
     evaluator = Evaluator(name='ogbn-products')
     logger = Logger(args.runs, args)
 
+    avg_sampling_time, avg_to_time, avg_train_time = 0.0, 0.0, 0.0
     for run in range(args.runs):
         model.reset_parameters()
         optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)
         for epoch in range(1, 1 + args.epochs):
-            loss, train_acc, sampling_time, to_time, train_time = train(model, loader, optimizer, device)
-            if epoch % args.log_steps == 0:
-                print(f'Run: {run + 1:02d}, '
-                      f'Epoch: {epoch:02d}, '
-                      f'Loss: {loss:.4f}, '
-                      f'Approx Train Acc: {train_acc:.4f}')
+            loss, sampling_time, to_time, train_time = train(model, loader, optimizer, device)
+            torch.cuda.empty_cache()
+            avg_sampling_time += sampling_time
+            avg_to_time += to_time
+            avg_train_time += train_time
+            # if epoch % args.log_steps == 0:
+            #     print(f'Run: {run + 1:02d}, '
+            #           f'Epoch: {epoch:02d}, '
+            #           f'Loss: {loss:.4f}, '
+            #           f'Approx Train Acc: {train_acc:.4f}')
 
-            if epoch > 19 and epoch % args.eval_steps == 0:
+            if epoch % 2 == 0:
                 result = test(model, data, evaluator, subgraph_loader, device)
                 logger.add_result(run, result)
                 train_acc, valid_acc, test_acc = result
                 print(f'Run: {run + 1:02d}, '
-                      f'Epoch: {epoch:02d}, '
-                      f'Train: {100 * train_acc:.2f}%, '
-                      f'Valid: {100 * valid_acc:.2f}% '
-                      f'Test: {100 * test_acc:.2f}%')
-
+                        f'Epoch: {epoch:02d}, '
+                        f'Loss: {loss:.4f}, '
+                        f'Train: {100 * train_acc:.2f}%, '
+                        f'Valid: {100 * valid_acc:.2f}% '
+                        f'Test: {100 * test_acc:.2f}%, ',
+                        f'Time: {sampling_time + to_time + train_time}s')
         logger.print_statistics(run)
+    
+    avg_sampling_time /= args.runs * args.epochs
+    avg_to_time /= args.runs * args.epochs
+    avg_train_time /= args.runs * args.epochs
+    print(f'Avg_sampling_time: {avg_sampling_time}s, '
+          f'Avg_to_time: {avg_to_time}s, ',
+          f'Avg_train_time: {avg_train_time}s')
+    
     logger.print_statistics()
+    logger.save("cluster_gcn_" + str(args.batch_size))
 
 
 if __name__ == "__main__":

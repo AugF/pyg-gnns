@@ -1,5 +1,6 @@
 from copy import copy
 import argparse
+import time
 from tqdm import tqdm
 
 import torch
@@ -19,6 +20,7 @@ parser = argparse.ArgumentParser(description='OGBN-MAG (Cluster-GCN)')
 parser.add_argument('--device', type=int, default=0)
 parser.add_argument('--num_layers', type=int, default=2)
 parser.add_argument('--hidden_channels', type=int, default=64)
+parser.add_argument('--batch_size', type=int, default=500)
 parser.add_argument('--dropout', type=float, default=0.5)
 parser.add_argument('--lr', type=float, default=0.005)
 parser.add_argument('--epochs', type=int, default=30)
@@ -81,7 +83,7 @@ print(homo_data)
 
 cluster_data = ClusterData(homo_data, num_parts=5000, recursive=True,
                            save_dir=dataset.processed_dir)
-train_loader = ClusterLoader(cluster_data, batch_size=500, shuffle=True,
+train_loader = ClusterLoader(cluster_data, batch_size=args.batch_size, shuffle=True,
                              num_workers=12)
 
 # Map informations to their canonical type.
@@ -253,29 +255,38 @@ x_dict = {k: v.to(device) for k, v in x_dict.items()}
 def train(epoch):
     model.train()
 
-    pbar = tqdm(total=node_type.size(0))
-    pbar.set_description(f'Epoch {epoch:02d}')
-
     total_loss = total_examples = 0
-    for data in train_loader:
-        data = data.to(device)
-        optimizer.zero_grad()
-        out = model(x_dict, data.edge_index, data.edge_attr, data.node_type,
-                    data.local_node_idx)
-        out = out[data.train_mask]
-        y = data.y[data.train_mask].squeeze()
-        loss = F.nll_loss(out, y)
-        loss.backward()
-        optimizer.step()
 
-        num_examples = data.train_mask.sum().item()
-        total_loss += loss.item() * num_examples
-        total_examples += num_examples
-        pbar.update(data.node_type.size(0))
+    sampling_time, to_time, train_time = 0.0, 0.0, 0.0
+    loader_iter = iter(train_loader)
+    
+    while True:
+        try:
+            t0 = time.time()
+            data = next(loader_iter)
+            t1 = time.time()
+            data = data.to(device)
+            t2 = time.time()
+            optimizer.zero_grad()
+            out = model(x_dict, data.edge_index, data.edge_attr, data.node_type,
+                        data.local_node_idx)
+            out = out[data.train_mask]
+            y = data.y[data.train_mask].squeeze()
+            loss = F.nll_loss(out, y)
+            loss.backward()
+            optimizer.step()
 
-    pbar.close()
+            num_examples = data.train_mask.sum().item()
+            total_loss += loss.item() * num_examples
+            total_examples += num_examples
+            
+            train_time += time.time() - t2
+            to_time += t2 - t1
+            sampling_time += t1 - t0   
+        except StopIteration:
+            break
 
-    return total_loss / total_examples
+    return total_loss / total_examples, sampling_time, to_time, train_time
 
 
 @torch.no_grad()
@@ -304,21 +315,38 @@ def test():
     return train_acc, valid_acc, test_acc
 
 
+avg_sampling_time, avg_to_time, avg_train_time = 0.0, 0.0, 0.0
+
 test()  # Test if inference on GPU succeeds.
 for run in range(args.runs):
     model.reset_parameters()
     optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)
     for epoch in range(1, 1 + args.epochs):
-        loss = train(epoch)
+        loss, sampling_time, to_time, train_time = train(model)
         torch.cuda.empty_cache()
-        result = test()
-        logger.add_result(run, result)
-        train_acc, valid_acc, test_acc = result
-        print(f'Run: {run + 1:02d}, '
-              f'Epoch: {epoch:02d}, '
-              f'Loss: {loss:.4f}, '
-              f'Train: {100 * train_acc:.2f}%, '
-              f'Valid: {100 * valid_acc:.2f}%, '
-              f'Test: {100 * test_acc:.2f}%')
+        avg_sampling_time += sampling_time
+        avg_to_time += to_time
+        avg_train_time += train_time
+        
+        if epoch % 2 == 0:
+            result = test()
+            logger.add_result(run, result)
+            train_acc, valid_acc, test_acc = result
+            print(f'Run: {run + 1:02d}, '
+                f'Epoch: {epoch:02d}, '
+                f'Loss: {loss:.4f}, '
+                f'Train: {100 * train_acc:.2f}%, '
+                f'Valid: {100 * valid_acc:.2f}%, '
+                f'Test: {100 * test_acc:.2f}%, '
+                f'Time: {sampling_time + to_time + train_time}s')
     logger.print_statistics(run)
+
+avg_sampling_time /= args.runs * args.epochs
+avg_to_time /= args.runs * args.epochs
+avg_train_time /= args.runs * args.epochs
+print(f'Avg_sampling_time: {avg_sampling_time}s, '
+        f'Avg_to_time: {avg_to_time}s, ',
+        f'Avg_train_time: {avg_train_time}s')
+
 logger.print_statistics()
+looger.save("cluster_gcn_" + str(args.batch_size))

@@ -2,3 +2,4 @@
 *dataset*
 *_pycache__*
 *.log
+*.npy

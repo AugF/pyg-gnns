@@ -1,5 +1,6 @@
 from copy import copy
 import argparse
+import time
 from tqdm import tqdm
 
 import torch
@@ -19,10 +20,10 @@ parser = argparse.ArgumentParser(description='OGBN-MAG (SAGE)')
 parser.add_argument('--device', type=int, default=0)
 parser.add_argument('--num_layers', type=int, default=2)
 parser.add_argument('--hidden_channels', type=int, default=64)
-parser.add_argument('--batch_size', type=int, default=)
+parser.add_argument('--batch_size', type=int, default=1024)
 parser.add_argument('--dropout', type=float, default=0.5)
 parser.add_argument('--lr', type=float, default=0.01)
-parser.add_argument('--epochs', type=int, default=3)
+parser.add_argument('--epochs', type=int, default=30)
 parser.add_argument('--runs', type=int, default=10)
 args = parser.parse_args()
 print(args)
@@ -265,28 +266,42 @@ y_global = y_global.to(device)
 def train(epoch):
     model.train()
 
-    pbar = tqdm(total=paper_train_idx.size(0))
-    pbar.set_description(f'Epoch {epoch:02d}')
+    # pbar = tqdm(total=paper_train_idx.size(0))
+    # pbar.set_description(f'Epoch {epoch:02d}')
 
     total_loss = 0
-    for batch_size, n_id, adjs in train_loader:
-        n_id = n_id.to(device)
-        adjs = [adj.to(device) for adj in adjs]
-        optimizer.zero_grad()
-        out = model(n_id, x_dict, adjs, edge_type, node_type, local_node_idx)
-        y = y_global[n_id][:batch_size].squeeze()
-        loss = F.nll_loss(out, y)
-        loss.backward()
-        optimizer.step()
+    
+    sampling_time, to_time, train_time = 0.0, 0.0, 0.0
+    loader_iter = iter(train_loader)
+     
+    while True:
+        try:
+            t0 = time.time()
+            batch_size, n_id, adjs = next(loader_iter)
+            t1 = time.time()
+            n_id = n_id.to(device)
+            adjs = [adj.to(device) for adj in adjs]
+            t2 = time.time()
+            
+            optimizer.zero_grad()
+            out = model(n_id, x_dict, adjs, edge_type, node_type, local_node_idx)
+            y = y_global[n_id][:batch_size].squeeze()
+            loss = F.nll_loss(out, y)
+            loss.backward()
+            optimizer.step()
 
-        total_loss += loss.item() * batch_size
-        pbar.update(batch_size)
-
-    pbar.close()
+            total_loss += loss.item() * batch_size
+            # pbar.update(batch_size)
+            train_time += time.time() - t2
+            to_time += t2 - t1
+            sampling_time += t1 - t0   
+        except StopIteration:
+            break
+    # pbar.close()
 
     loss = total_loss / paper_train_idx.size(0)
 
-    return loss
+    return loss, sampling_time, to_time, train_time
 
 
 @torch.no_grad()
@@ -314,21 +329,39 @@ def test():
 
     return train_acc, valid_acc, test_acc
 
+avg_sampling_time, avg_to_time, avg_train_time = 0.0, 0.0, 0.0
 
 test()  # Test if inference on GPU succeeds.
 for run in range(args.runs):
     model.reset_parameters()
     optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)
     for epoch in range(1, 1 + args.epochs):
-        loss = train(epoch)
-        result = test()
-        logger.add_result(run, result)
-        train_acc, valid_acc, test_acc = result
-        print(f'Run: {run + 1:02d}, '
-              f'Epoch: {epoch:02d}, '
-              f'Loss: {loss:.4f}, '
-              f'Train: {100 * train_acc:.2f}%, '
-              f'Valid: {100 * valid_acc:.2f}%, '
-              f'Test: {100 * test_acc:.2f}%')
+        loss, sampling_time, to_time, train_time = train(epoch)
+
+        torch.cuda.empty_cache()
+        avg_sampling_time += sampling_time
+        avg_to_time += to_time
+        avg_train_time += train_time
+        
+        if epoch % 2 == 0:
+            result = test()
+            logger.add_result(run, result)
+            train_acc, valid_acc, test_acc = result
+            print(f'Run: {run + 1:02d}, '
+                f'Epoch: {epoch:02d}, '
+                f'Loss: {loss:.4f}, '
+                f'Train: {100 * train_acc:.2f}%, '
+                f'Valid: {100 * valid_acc:.2f}%, '
+                f'Test: {100 * test_acc:.2f}%, '
+                f'Time: {sampling_time + to_time + train_time}s')
     logger.print_statistics(run)
+
+avg_sampling_time /= args.runs * args.epochs
+avg_to_time /= args.runs * args.epochs
+avg_train_time /= args.runs * args.epochs
+print(f'Avg_sampling_time: {avg_sampling_time}s, '
+        f'Avg_to_time: {avg_to_time}s, ',
+        f'Avg_train_time: {avg_train_time}s')
+    
 logger.print_statistics()
+logger.save("neigbor_sampling_" + str(args.batch_size))
