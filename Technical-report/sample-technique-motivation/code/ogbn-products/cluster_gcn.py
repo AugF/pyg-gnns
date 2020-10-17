@@ -174,6 +174,7 @@ def main():
         model.reset_parameters()
         optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)
         for epoch in range(1, 1 + args.epochs):
+            t0 = time.time()
             loss, sampling_time, to_time, train_time = train(model, loader, optimizer, device)
             torch.cuda.empty_cache()
             avg_sampling_time += sampling_time
@@ -195,7 +196,7 @@ def main():
                         f'Train: {100 * train_acc:.2f}%, '
                         f'Valid: {100 * valid_acc:.2f}% '
                         f'Test: {100 * test_acc:.2f}%, ',
-                        f'Time: {sampling_time + to_time + train_time}s')
+                        f'Time: {time.time() - t0}s')
         logger.print_statistics(run)
     
     avg_sampling_time /= args.runs * args.epochs

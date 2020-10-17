@@ -4,7 +4,7 @@ base_path="/home/wangzhaokang/wangyunpan/pyg-gnns/Technical-report/sample-techni
 cd "${base_path}/ogbn-products"
 echo "ogbn-products test..."
 
-cluster_sizes=(1500 3750 7500)
+cluster_sizes=(50 150 300 500 1250 2500)
 batch_sizes=(24490 73470 146941 244902 612257 1224514)
 
 echo "cluster_gcn test..."
