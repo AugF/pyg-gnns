@@ -90,6 +90,8 @@ train_loader = GraphSAINTRandomWalkSampler(homo_data,
                                            sample_coverage=0,
                                            save_dir=dataset.processed_dir)
 
+print("#batch (per epoch): ", len(train_loader))
+
 # Map informations to their canonical type.
 x_dict = {}
 for key, x in data.x_dict.items():

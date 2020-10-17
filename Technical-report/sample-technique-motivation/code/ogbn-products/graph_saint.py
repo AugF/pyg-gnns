@@ -181,6 +181,8 @@ def main():
                                          sample_coverage=0,
                                          save_dir=dataset.processed_dir)
 
+    print("#batch (per epoch): ", len(loader))
+
     model = SAGE(data.x.size(-1), args.hidden_channels, dataset.num_classes,
                  args.num_layers, args.dropout).to(device)
 

@@ -86,6 +86,7 @@ cluster_data = ClusterData(homo_data, num_parts=5000, recursive=True,
 train_loader = ClusterLoader(cluster_data, batch_size=args.batch_size, shuffle=True,
                              num_workers=12)
 
+print("#batch (per epoch): ", len(train_loader))
 # Map informations to their canonical type.
 x_dict = {}
 for key, x in data.x_dict.items():

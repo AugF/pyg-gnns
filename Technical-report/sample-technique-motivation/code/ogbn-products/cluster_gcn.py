@@ -159,6 +159,8 @@ def main():
     loader = ClusterLoader(cluster_data, batch_size=args.batch_size,
                            shuffle=True, num_workers=args.num_workers)
 
+    print("#batch (per epoch): ", len(loader))
+
     subgraph_loader = NeighborSampler(data.edge_index, sizes=[-1],
                                       batch_size=1024, shuffle=False,
                                       num_workers=args.num_workers)

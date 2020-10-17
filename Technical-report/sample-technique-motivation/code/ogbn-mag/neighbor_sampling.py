@@ -87,6 +87,7 @@ train_loader = NeighborSampler(edge_index, node_idx=paper_train_idx,
                                sizes=[25, 20], batch_size=args.batch_size, shuffle=True,
                                num_workers=12)
 
+print("#batch (per epoch): ", len(train_loader))
 
 class RGCNConv(MessagePassing):
     def __init__(self, in_channels, out_channels, num_node_types,
