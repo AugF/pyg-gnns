@@ -54,7 +54,7 @@ Tesla T4 16GB * 2
 
 - [x] 代码审查
 - [x] 可执行测试
-    > ogdb-products和ogbl-citations下Full-batch内存不够, 不能运行
+    > ogdb-products和ogbl-citations下Full-batch内存不够, 不能运行; ogbl-citation运行太耗时，先放弃跑该数据集
 - [x] 正确性测试, 并记录训练参数
     - ogdb-products
         - cluster_gcn: valid91.75, Test78.33  epochs: 10*50
@@ -97,6 +97,6 @@ Tesla T4 16GB * 2
     - [x] 编写代码，正确性测试
         > 目标指标：采样的耗时比列、收敛轮数和收敛精度: 采样的耗时比例是同等轮数下的平均(epoch)时间; 收敛轮数通过.npy的数据得到; 收敛精度是给定轮数下的最高精度
     - [x] 脚本及测试
-    - [ ] 收集结果，查看结果是否正确，以及重新收集
+    - [x] 收集结果，查看结果是否正确，以及重新收集
         > runs=10, epochs=20
     - [ ] 分析结果，对结果进行绘图
