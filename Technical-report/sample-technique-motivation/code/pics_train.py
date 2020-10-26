@@ -26,16 +26,16 @@ def handle(data, alg, para):
     if not os.path.exists(file):
         return
     x = np.load(file)
-    df = pd.DataFrame(x.reshape(-1, 3), columns=['train', 'val', 'test'])
+    df = pd.DataFrame(x[0], columns=['train', 'val', 'test'])
     fig, ax = plt.subplots()
     plt.ylim(0, 1)
     df.plot(ax=ax, kind='line')
     fig.savefig(alg + "_" + para + ".png")
     plt.close()
 
+
 for data in ['ogbn-mag', 'ogbn-products']:
     for alg in ['cluster_gcn', 'neighbor_sampling', 'graph_saint']:
-        # 一个数据集上，一个图上需要很多
         if alg == 'cluster_gcn':
             for para in batch_size[data][alg]:
                 handle(data, alg, para)
