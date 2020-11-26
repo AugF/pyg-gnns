@@ -13,7 +13,7 @@ then
 fi
 
 datasets=(amazon-photo pubmed amazon-computers coauthor-physics flickr com-amazon)
-models=(gat gaan)
+models=(gat)
 hds=(8 16 32 64 128 256)
 heads=(1 2 4 8 16)
 
