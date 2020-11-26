@@ -15,12 +15,13 @@ class GAT(Module):
     dropout, negative_slop set: https://github.com/Diego999/pyGAT/blob/master/train.py
     """
     def __init__(self, layers, n_features, n_classes, head_dims,
-                 heads, dropout=0.6, negative_slop=0.2, gpu=False, flag=False, sparse_flag=False):
+                 heads, dropout=0.6, negative_slop=0.2, gpu=False, device="cpu", flag=False, sparse_flag=False):
         super(GAT, self).__init__()
         self.n_features, self.n_classes = n_features, n_classes
         self.layers, self.head_dims, self.heads = layers, head_dims, heads
         self.dropout, self.negative_slop = dropout, negative_slop
         self.gpu = gpu
+        self.device = device
         self.flag = flag
         self.sparse_flag = sparse_flag
         
@@ -42,7 +43,7 @@ class GAT(Module):
         self.conv_out = GATConv(in_channels=heads * head_dims, out_channels=n_classes, heads=1, dropout=dropout)
 
     def forward(self, x, adjs):
-        device = torch.device('cuda' if self.gpu else 'cpu')
+        device = torch.device(self.device)
         
         if isinstance(adjs, list):
             for i, (edge_index, _, size) in enumerate(adjs):
@@ -68,7 +69,7 @@ class GAT(Module):
         return x
     
     def inference(self, x_all, subgraph_loader):
-        device = torch.device('cuda' if self.gpu else 'cpu')
+        device = torch.device(self.device)
         
         pbar = tqdm(total=x_all.size(0) * self.layers)
         pbar.set_description('Evaluating')

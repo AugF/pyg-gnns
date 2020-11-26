@@ -101,10 +101,31 @@ def generate_com_lj():
     get_role(raw_dir=raw_dir, nodes=nodes, tr=tr, va=va)
 
 
-if __name__ == '__main__':
-    names = ['amazon-computers', 'amazon-photo', 'coauthor-physics']
+def generate_com_amazon():
+    name = "com-amazon"
+    features, classes, tr, va = 32, 10, 0.50, 0.25
+    raw_dir = osp.join("/home/wangzhaokang/wangyunpan/gnns-project/datasets", "com-amazon", "raw")
+
+    print("get_adj_and_map...")
+    nodes, edges = get_adj_and_map(raw_dir=raw_dir,
+                                   name=name,
+                                   classes=classes)
+
+    print("nodes: ", nodes, "edges: ", edges)
+    print("get_feats...")
+    get_feats(raw_dir=raw_dir, nodes=nodes, features=features)
+    print("get role...")
+    get_role(raw_dir=raw_dir, nodes=nodes, tr=tr, va=va)
+
+
+def gen_role():
+    datasets = ['amazon-computers', 'amazon-photo', 'coauthor-physics']
     nodes = [13752, 7650, 34493]
-    for i, name in enumerate(names):
-        print(name)
-        raw_dir = "data/" + name + '/raw'
-        get_role(raw_dir=raw_dir, nodes=nodes[i], tr=0.70, va=0.15)
+    base_path = "/home/wangzhaokang/wangyunpan/gnns-project/datasets"
+    
+    for data, ns in zip(datasets, nodes):
+        raw_dir = base_path + "/" + data + "/raw"
+        get_role(raw_dir, ns, tr=0.50, va=0.25, seed=1)
+    
+if __name__ == '__main__':
+    gen_role()

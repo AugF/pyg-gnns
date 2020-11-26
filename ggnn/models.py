@@ -13,11 +13,12 @@ class GGNN(Module):
     """
     GGNN layer
     """
-    def __init__(self, layers, n_features, n_classes, hidden_dims, gpu=False, flag=False):
+    def __init__(self, layers, n_features, n_classes, hidden_dims, gpu=False, device="cpu", flag=False):
         super(GGNN, self).__init__()
         self.n_features, self.n_classes = n_features, n_classes
         self.layers, self.hidden_dims = layers, hidden_dims
         self.gpu = gpu
+        self.device = device
         self.flag = flag
 
         self.weight_in = Parameter(torch.Tensor(n_features, hidden_dims))
@@ -27,7 +28,7 @@ class GGNN(Module):
         glorot(self.weight_out)
 
     def forward(self, x, adjs):
-        device = torch.device('cuda' if self.gpu else 'cpu')
+        device = torch.device(self.device)
         nvtx_push(self.gpu, "input-transform")
         x = torch.matmul(x, self.weight_in)
         
@@ -42,7 +43,7 @@ class GGNN(Module):
         return x
 
     def inference(self, x_all, subgraph_loader):
-        device = torch.device('cuda' if self.gpu else 'cpu')
+        device = torch.device(self.device)
         pbar = tqdm(total=x_all.size(0) * self.layers)
         pbar.set_description('Evaluating')
 

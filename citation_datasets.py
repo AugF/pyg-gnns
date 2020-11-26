@@ -51,7 +51,7 @@ class Planetoid(InMemoryDataset):
             being saved to disk. (default: :obj:`None`)
     """
 
-    url = 'https://github.com/kimiyoung/planetoid/raw/master/data'
+    url = 'https://github.com/kimiyoung/planetoid/tree/master/data/'
 
     def __init__(self, root, name, split="public", num_train_per_class=20,
                  num_val=500, num_test=1000, transform=None,

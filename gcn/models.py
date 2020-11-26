@@ -15,13 +15,14 @@ class GCN(Module):
     GCN layer
     dropout set: https://github.com/tkipf/pygcn/blob/master/pygcn/train.py
     """
-    def __init__(self, layers, n_features, n_classes, hidden_dims, norm=None, dropout=0.5, gpu=False, flag=False, cluster_flag=False): # add adj
+    def __init__(self, layers, n_features, n_classes, hidden_dims, norm=None, dropout=0.5, gpu=False, device="cpu", flag=False, cluster_flag=False): # add adj
         super(GCN, self).__init__()
         self.n_features, self.n_classes = n_features, n_classes
         self.layers, self.hidden_dims = layers, hidden_dims
         self.dropout = dropout
         self.gpu = gpu
         self.flag = flag
+        self.device = device
 
         shapes = [n_features] + [hidden_dims] * (layers - 1) + [n_classes]
         self.convs = torch.nn.ModuleList(
@@ -41,7 +42,7 @@ class GCN(Module):
         :param edge_index:
         :return:
         """
-        device = torch.device('cuda' if self.gpu else 'cpu')
+        device = torch.device(self.device)
         
         if isinstance(adjs, list):
             for i, (edge_index, e_id, size) in enumerate(adjs):
@@ -69,7 +70,7 @@ class GCN(Module):
         return x
 
     def inference(self, x_all, subgraph_loader):
-        device = torch.device('cuda' if self.gpu else 'cpu')
+        device = torch.device(self.device)
         
         pbar = tqdm(total=x_all.size(0) * self.layers)
         pbar.set_description('Evaluating')

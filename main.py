@@ -33,6 +33,8 @@ parser.add_argument('--cpu', action='store_true', default=False, help='use cpu, 
 parser.add_argument('--device', type=str, default='cuda:0', help='[cpu, cuda:id]')
 parser.add_argument('--lr', type=float, default=0.01, help="adam's learning rate")
 parser.add_argument('--weight_decay', type=float, default=0.0005, help="adam's weight decay")
+parser.add_argument('--dropout', type=float, default=0.0005, help="dropout")
+parser.add_argument('--attention_dropout', type=float, default=0.0005, help="dropout for gaan attention")
 parser.add_argument('--no_record_shapes', action='store_false', default=True, help="nvtx or autograd's profile to record shape")
 parser.add_argument('--json_path', type=str, default='', help="json file path for memory")
 
@@ -60,12 +62,12 @@ data = dataset[0]
 
 # add train, val, test split
 if args.dataset in ['amazon-computers', 'amazon-photo', 'coauthor-physics']:
-    file_path = osp.join('/data/wangzhaokang/wangyunpan/data', args.dataset + "/raw/role.json")
+    file_path = osp.join('/home/wangzhaokang/wangyunpan/gnns-project/datasets', args.dataset + "/raw/role.json")
     data.train_mask, data.val_mask, data.test_mask = get_split_by_file(file_path, data.num_nodes)
 
 num_features = dataset.num_features
 if dataset_info[0] in small_datasets and len(dataset_info) > 1:
-    file_path = osp.join('/data/wangzhaokang/wangyunpan', "data/feats_x/" + '_'.join(dataset_info) + '_feats.npy')
+    file_path = osp.join('/home/wangzhaokang/wangyunpan/gnns-project/datasets', "data/feats_x/" + '_'.join(dataset_info) + '_feats.npy')
     if osp.exists(file_path):
         data.x = torch.from_numpy(np.load(file_path)).to(torch.float) # 因为这里是随机生成的，不考虑normal features
         num_features = data.x.size(1)
@@ -73,24 +75,26 @@ if dataset_info[0] in small_datasets and len(dataset_info) > 1:
 if args.x_sparse:
     data.x = data.x.to_sparse()
 
+device = torch.device(args.device if gpu else 'cpu')
+
 # 2. model
 if args.model == 'gcn':
     model = GCN(
         layers=args.layers,
         n_features=num_features, n_classes=dataset.num_classes,
-        hidden_dims=args.hidden_dims, gpu=gpu, flag=flag
+        hidden_dims=args.hidden_dims, gpu=gpu, flag=flag, device=device 
     )
 elif args.model == 'gat':
     model = GAT(
         layers=args.layers,
         n_features=num_features, n_classes=dataset.num_classes,
-        head_dims=args.head_dims, heads=args.heads, gpu=gpu, flag=flag, sparse_flag=args.x_sparse
+        head_dims=args.head_dims, heads=args.heads, gpu=gpu, flag=flag, sparse_flag=args.x_sparse, device=device
     )
 elif args.model == 'ggnn':
     model = GGNN(
         layers=args.layers,
         n_features=num_features, n_classes=dataset.num_classes,
-        hidden_dims=args.hidden_dims, gpu=gpu, flag=flag
+        hidden_dims=args.hidden_dims, gpu=gpu, flag=flag, device=device
     )
 elif args.model == 'gaan':
     model = GaAN(
@@ -98,12 +102,11 @@ elif args.model == 'gaan':
         n_features=num_features, n_classes=dataset.num_classes,
         hidden_dims=args.hidden_dims,
         heads=args.heads, d_v=args.d_v,
-        d_a=args.d_a, d_m=args.d_m, gpu=gpu, flag=flag
+        d_a=args.d_a, d_m=args.d_m, gpu=gpu, flag=flag, device=device
     )
 
 print(model)
 # set to gpu
-device = torch.device(args.device if gpu else 'cpu')
 model, data = model.to(device), data.to(device)
 
 optimizer = torch.optim.Adam(model.parameters(),
@@ -166,6 +169,7 @@ else:
         train(-1)
         log_memory(flag, device, 'eval_end')
         with torch.autograd.profiler.emit_nvtx(record_shapes=not args.no_record_shapes):
+            best_val_acc = test_acc = 0
             for epoch in range(args.epochs):
                 nvtx_push(gpu, "epochs" + str(epoch))
                 nvtx_push(gpu, "train")
@@ -173,14 +177,19 @@ else:
                 nvtx_pop(gpu)
                 nvtx_push(gpu, "eval")
                 log = 'Accuracy: Train: {:.4f}, Val: {:.4f}, Test: {:.4f}'
-                print(log.format(*test()))
+                accs = test()
+                print(log.format(*accs))
                 
+                if accs[1] > best_val_acc:
+                    best_val_acc = accs[1]
+                    test_acc = accs[2]
                 # add 
                 log_memory(flag, device, 'eval_end')
                 
                 nvtx_pop(gpu)
                 nvtx_pop(gpu)
-                
+            
+            print(f"Final Test: {test_acc:.4f}")
     if flag:
         from utils import df
         with open(args.json_path, "w") as f:

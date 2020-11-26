@@ -35,10 +35,10 @@ df = {}
 
 def get_dataset(name, normalize_features=False, transform=None): #
     if name in ["cora", "pubmed"]:
-        path = osp.join('/data/wangzhaokang/wangyunpan/data')
+        path = osp.join('/home/wangzhaokang/wangyunpan/gnns-project/datasets')
         dataset = Planetoid(path, name, split='full')
     else:
-        path = osp.join('/data/wangzhaokang/wangyunpan/data', name)
+        path = osp.join('/home/wangzhaokang/wangyunpan/gnns-project/datasets', name)
         if name in ["amazon-computers", "amazon-photo"]:
             dataset = Amazon(path, name[7:])
         elif name == "coauthor-physics":

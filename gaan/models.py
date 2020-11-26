@@ -15,13 +15,14 @@ class GaAN(Module):
     dropout, negative_slop set: GaAN: Gated attention networks for learning on large and spatiotemporal graphs 5.3
     """
     def __init__(self, layers, n_features, n_classes, hidden_dims,
-                 heads, d_v, d_a, d_m, dropout=0.1, negative_slop=0.1, gpu=False, flag=False):
+                 heads, d_v, d_a, d_m, dropout=0.1, negative_slop=0.1, gpu=False, device="cpu", flag=False):
         super(GaAN, self).__init__()
         self.n_features, self.n_classes = n_features, n_classes
         self.layers, self.hidden_dims, self.heads = layers, hidden_dims, heads
         self.dropout, self.negative_slop = dropout, negative_slop
         self.d_v, self.d_a, self.d_m = d_v, d_a, d_m
         self.gpu = gpu
+        self.device = device
         self.flag = flag
 
         shapes = [n_features] + [hidden_dims] * (layers - 1) + [n_classes]
@@ -34,7 +35,7 @@ class GaAN(Module):
         )
 
     def forward(self, x, adjs):
-        device = torch.device('cuda' if self.gpu else 'cpu')
+        device = torch.device(self.device)
         
         if isinstance(adjs, list):
             for i, (edge_index, _, size) in enumerate(adjs):
@@ -58,7 +59,7 @@ class GaAN(Module):
         return x
 
     def inference(self, x_all, subgraph_loader):
-        device = torch.device('cuda' if self.gpu else 'cpu')
+        device = torch.device(self.device)
         
         pbar = tqdm(total=x_all.size(0) * self.layers)
         pbar.set_description('Evaluating')
