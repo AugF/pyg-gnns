@@ -159,6 +159,12 @@ def log_memory(flag, device, label):
             df[label].append([res[i] for i in memory_labels])
 
 
+def get_parameter_number(net):
+    total_num = sum(p.numel() for p in net.parameters())
+    trainable_num = sum(p.numel() for p in net.parameters() if p.requires_grad)
+    return {'Total': total_num, 'Trainable': trainable_num}
+
+
 if __name__ == '__main__':
     datasets = ['amazon-photo', 'pubmed', 'amazon-computers', 'coauthor-physics', 'flickr', 'com-amazon']
     for data in datasets:
