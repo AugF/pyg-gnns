@@ -15,7 +15,7 @@ class GAT(Module):
     dropout, negative_slop set: https://github.com/Diego999/pyGAT/blob/master/train.py
     """
     def __init__(self, layers, n_features, n_classes, head_dims,
-                 heads, dropout=0.6, negative_slop=0.2, gpu=False, device="cpu", flag=False, sparse_flag=False):
+                 heads, dropout=0.6, attention_dropout=0.1, negative_slop=0.2, gpu=False, device="cpu", flag=False, sparse_flag=False):
         super(GAT, self).__init__()
         self.n_features, self.n_classes = n_features, n_classes
         self.layers, self.head_dims, self.heads = layers, head_dims, heads
@@ -34,7 +34,7 @@ class GAT(Module):
         self.convs = torch.nn.ModuleList(
             [
                 GATConv(in_channels=in_shapes[layer], out_channels=out_shapes[layer],
-                        heads=head_shape[layer], dropout=dropout, negative_slope=negative_slop,
+                        heads=head_shape[layer], dropout=attention_dropout, negative_slope=negative_slop,
                         gpu=gpu)
                 for layer in range(layers)
              ]
