@@ -11,14 +11,14 @@ from gaan.models import GaAN
 from ggnn.models import GGNN
 from gat.models import GAT
 from gcn.models import GCN
-from utils import get_dataset, get_split_by_file, nvtx_push, nvtx_pop, log_memory, small_datasets
+from utils import get_dataset, get_split_by_file, nvtx_push, nvtx_pop, log_memory, small_datasets, get_parameter_number
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--dataset', type=str, default='cora', help="dataset: [cora, flickr, com-amazon, reddit, com-lj,"
                                                                     "amazon-computers, amazon-photo, coauthor-physics, pubmed]")
 
 parser.add_argument('--model', type=str, default='gcn', help="gnn models: [gcn, ggnn, gat, gaan]")
-parser.add_argument('--epochs', type=int, default=50, help="epochs for training")
+parser.add_argument('--epochs', type=int, default=100000, help="epochs for training")
 parser.add_argument('--layers', type=int, default=2, help="layers for hidden layer")
 parser.add_argument('--hidden_dims', type=int, default=64, help="hidden layer output dims")
 parser.add_argument('--heads', type=int, default=8, help="gat or gaan model: heads")
@@ -35,6 +35,7 @@ parser.add_argument('--lr', type=float, default=0.01, help="adam's learning rate
 parser.add_argument('--weight_decay', type=float, default=0.0005, help="adam's weight decay")
 parser.add_argument('--dropout', type=float, default=0.0005, help="dropout")
 parser.add_argument('--attention_dropout', type=float, default=0.0005, help="dropout for gaan attention")
+parser.add_argument('--patience', type=int, default=50, help="for valid")
 parser.add_argument('--no_record_shapes', action='store_false', default=True, help="nvtx or autograd's profile to record shape")
 parser.add_argument('--json_path', type=str, default='', help="json file path for memory")
 
@@ -60,7 +61,7 @@ if dataset_info[0] in small_datasets and len(dataset_info) > 1:
 dataset = get_dataset(args.dataset, normalize_features=True)
 data = dataset[0]
 
-# add train, val, test split
+# add train, val, test split, 完全随机划分
 if args.dataset in ['amazon-computers', 'amazon-photo', 'coauthor-physics']:
     file_path = osp.join('/home/wangzhaokang/wangyunpan/gnns-project/datasets', args.dataset + "/raw/role.json")
     data.train_mask, data.val_mask, data.test_mask = get_split_by_file(file_path, data.num_nodes)
@@ -82,13 +83,14 @@ if args.model == 'gcn':
     model = GCN(
         layers=args.layers,
         n_features=num_features, n_classes=dataset.num_classes,
-        hidden_dims=args.hidden_dims, gpu=gpu, flag=flag, device=device 
+        hidden_dims=args.hidden_dims, gpu=gpu, flag=flag, device=device, dropout=args.dropout
     )
 elif args.model == 'gat':
     model = GAT(
         layers=args.layers,
         n_features=num_features, n_classes=dataset.num_classes,
-        head_dims=args.head_dims, heads=args.heads, gpu=gpu, flag=flag, sparse_flag=args.x_sparse, device=device
+        head_dims=args.head_dims, heads=args.heads, gpu=gpu, flag=flag,
+        sparse_flag=args.x_sparse, device=device, dropout=args.dropout, attention_dropout=args.attention_dropout
     )
 elif args.model == 'ggnn':
     model = GGNN(
@@ -102,10 +104,11 @@ elif args.model == 'gaan':
         n_features=num_features, n_classes=dataset.num_classes,
         hidden_dims=args.hidden_dims,
         heads=args.heads, d_v=args.d_v,
-        d_a=args.d_a, d_m=args.d_m, gpu=gpu, flag=flag, device=device
+        d_a=args.d_a, d_m=args.d_m, gpu=gpu, flag=flag, device=device, dropout=args.dropout
     )
 
 print(model)
+print(get_parameter_number(model))
 # set to gpu
 model, data = model.to(device), data.to(device)
 
@@ -139,55 +142,59 @@ def train(epoch):
 
     # add backward end
     log_memory(flag, device, 'backward_end')
-
-    log = 'Epoch: {:03d}, train_loss: {:.8f}, train_time: {:.4f}s'
-    t = time.time() - t
-    print(log.format(epoch, loss.data.item(), t))
-    return 
+    return loss, time.time() - t
 
 @torch.no_grad()
 def test():
     model.eval()
-    out = model(data.x, data.edge_index)
+    logits = F.log_softmax(model(data.x, data.edge_index), dim=1)
     log_memory(flag, device, 'other_start')    
-    nvtx_push(gpu, "other")
-    logits, accs = F.log_softmax(out, dim=1), []
-    for _, mask in data('train_mask', 'val_mask', 'test_mask'):
-        pred = logits[mask].max(1)[1]
-        acc = pred.eq(data.y[mask]).sum().item() / mask.sum().item()
-        accs.append(acc)
+
+    nvtx_push(gpu, "other")    
+    # 获取评价指标
+    val_loss = F.nll_loss(logits[data.val_mask], data.y[data.val_mask])
+    test_acc = logits[data.test_mask].max(1)[1].eq(data.y[data.test_mask]).sum().item() / data.test_mask.sum().item()
     nvtx_pop(gpu)
-    return accs
+    
+    return val_loss, test_acc
 
 if not gpu:
     for epoch in range(args.epochs + 1):
-        train(epoch)
-        log = 'Accuracy: Train: {:.4f}, Val: {:.4f}, Test: {:.4f}'
-        print(log.format(*test()))
+        loss, train_time = train(epoch)
+        val_loss, test_acc = test()
+        print(f"Epoch: {epoch}, Train time: {train_time:.4f}, Train Loss: {loss:.4f}, Val Loss: {val_loss:.4f}, Test Acc: {test_acc:.4f}")
 else:
     with torch.cuda.profiler.profile():
         train(-1)
         log_memory(flag, device, 'eval_end')
         with torch.autograd.profiler.emit_nvtx(record_shapes=not args.no_record_shapes):
-            best_val_acc = test_acc = 0
+            val_loss_min = np.inf
+            best_test_acc = 0
+            patience_step = 0
             for epoch in range(args.epochs):
                 nvtx_push(gpu, "epochs" + str(epoch))
                 nvtx_push(gpu, "train")
-                train(epoch)
+                loss, train_time = train(epoch)
                 nvtx_pop(gpu)
+                # print(f"Epoch: {epoch}, Loss: {loss}")
                 nvtx_push(gpu, "eval")
-                log = 'Accuracy: Train: {:.4f}, Val: {:.4f}, Test: {:.4f}'
-                accs = test()
-                print(log.format(*accs))
+                val_loss, test_acc = test()
+                print(f"Epoch: {epoch}, Train time: {train_time:.5f}, Train Loss: {loss:.4f}, Val Loss: {val_loss:.4f}, Test Acc: {test_acc:.4f}")
                 
-                if accs[1] > best_val_acc:
-                    best_val_acc = accs[1]
-                    test_acc = accs[2]
+                if val_loss <= val_loss_min:
+                    patience_step = 0
+                    val_loss_min = val_loss
+                    best_test_acc = test_acc
+                else:
+                    patience_step += 1
+                    
                 # add 
                 log_memory(flag, device, 'eval_end')
+                nvtx_pop(gpu)
+                nvtx_pop(gpu)
                 
-                nvtx_pop(gpu)
-                nvtx_pop(gpu)
+                if patience_step >= args.patience:
+                    break
             
             print(f"Final Test: {test_acc:.4f}")
     if flag:
