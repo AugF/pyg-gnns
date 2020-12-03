@@ -34,6 +34,10 @@ class GaAN(Module):
             ]
         )
 
+    def reset_parameters(self):
+        for conv in self.convs:
+            conv.reset_parameters()
+    
     def forward(self, x, adjs):
         device = torch.device(self.device)
         

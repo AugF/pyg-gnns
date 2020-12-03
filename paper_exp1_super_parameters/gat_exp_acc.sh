@@ -7,7 +7,7 @@ then
 fi
 
 
-datasets=(amazon-photo pubmed amazon-computers coauthor-physics flickr com-amazon)
+datasets=(amazon-photo pubmed amazon-computers coauthor-physics flickr)
 models=(gat)
 hds=(8 16 32 64 128 256)
 heads=(1 2 4 8 16)
@@ -23,7 +23,7 @@ do
             if [ -f "${dir_config}/config0_${model}_${data}_4_${hd}.log" ]; then # 断点续传
                 continue
             fi
-            python ../main.py --epochs 1000 --device cuda:1 --dataset ${data} --model ${model} --head_dims ${hd} --d_v ${hd} --d_a ${hd} --heads 4 1>"${dir_config}/config0_${model}_${data}_4_${hd}.log" 2>&1
+            python ../main.py --device cuda:1 --runs 2 --dataset ${data} --model ${model} --head_dims ${hd} --d_v ${hd} --d_a ${hd} --heads 4 1>"${dir_config}/config0_${model}_${data}_4_${hd}.log" 2>&1
         done
         for h in ${heads[@]}
         do
@@ -32,7 +32,7 @@ do
             if [ -f "${dir_config}/config0_${model}_${data}_${h}_32.log" ]; then # 断点续传
                 continue
             fi
-            python ../main.py --epochs 1000 --device cuda:1 --dataset ${data} --model ${model} --head_dims 32 --d_v 32 --d_a 32 --heads ${h} 1>"${dir_config}/config0_${model}_${data}_${h}_32.log" 2>&1
+            python ../main.py --device cuda:1 --runs 2 --dataset ${data} --model ${model} --head_dims 32 --d_v 32 --d_a 32 --heads ${h} 1>"${dir_config}/config0_${model}_${data}_${h}_32.log" 2>&1
         done
     done
 done

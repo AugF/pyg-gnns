@@ -7,7 +7,7 @@ then
 fi
 
 
-datasets=(amazon-photo pubmed amazon-computers coauthor-physics flickr com-amazon)
+datasets=(amazon-photo pubmed amazon-computers coauthor-physics flickr)
 models=(gaan)
 ds=(8 16 32 64 128 256)
 heads=(1 2 4 8 16)
@@ -25,7 +25,7 @@ do
             if [ -f "${dir_config}/config0_${model}_${data}_4_${hd}_64.log" ]; then # 断点续传
                 continue
             fi
-            python ../main.py --epochs 1000 --device cuda:0 --dataset ${data} --model ${model} --d_v ${hd} --d_a ${hd} --d_m ${hd} --heads 4 --hidden_dims 64 1>"${dir_config}/config0_${model}_${data}_4_${hd}_64.log" 2>&1
+            python ../main.py --device cuda:0 --runs 2 --dataset ${data} --model ${model} --d_v ${hd} --d_a ${hd} --d_m ${hd} --heads 4 --hidden_dims 64 1>"${dir_config}/config0_${model}_${data}_4_${hd}_64.log" 2>&1
         done
 
         # hidden_dims
@@ -36,7 +36,7 @@ do
             if [ -f "${dir_config}/config0_${model}_${data}_4_32_${hd}.log" ]; then # 断点续传
                 continue
             fi
-            python ../main.py --epochs 1000 --device cuda:0 --dataset ${data} --model ${model} --hidden_dims ${hd} --heads 4 --d_v 32 --d_a 32 --d_m 32 1>"${dir_config}/config0_${model}_${data}_4_32_${hd}.log" 2>&1
+            python ../main.py --device cuda:0 --runs 2 --dataset ${data} --model ${model} --hidden_dims ${hd} --heads 4 --d_v 32 --d_a 32 --d_m 32 1>"${dir_config}/config0_${model}_${data}_4_32_${hd}.log" 2>&1
         done
         
         # heads
@@ -47,7 +47,7 @@ do
             if [ -f "${dir_config}/config0_${model}_${data}_${h}_32_64.log" ]; then # 断点续传
                 continue
             fi
-            python ../main.py --epochs 1000 --device cuda:0 --dataset ${data} --model ${model} --d_m 32 --d_v 32 --d_a 32 --heads ${h} --hidden_dims 64 1>"${dir_config}/config0_${model}_${data}_${h}_32_64.log" 2>&1
+            python ../main.py --device cuda:0 --runs 2 --dataset ${data} --model ${model} --d_m 32 --d_v 32 --d_a 32 --heads ${h} --hidden_dims 64 1>"${dir_config}/config0_${model}_${data}_${h}_32_64.log" 2>&1
         done
     done
 done

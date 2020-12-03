@@ -23,10 +23,7 @@ class GAT(Module):
         self.gpu = gpu
         self.device = device
         self.flag = flag
-        self.sparse_flag = sparse_flag
-        
-        self.dropout = dropout
-        self.conv_in = GATConv(in_channels=n_features, out_channels=head_dims, heads=heads, dropout=dropout)
+        self.sparse_flag = sparse_flag        
 
         in_shapes = [n_features] + [head_dims * heads] * (layers - 1)
         out_shapes = [head_dims] * (layers - 1) + [n_classes]
@@ -35,13 +32,15 @@ class GAT(Module):
             [
                 GATConv(in_channels=in_shapes[layer], out_channels=out_shapes[layer],
                         heads=head_shape[layer], dropout=attention_dropout, negative_slope=negative_slop,
-                        gpu=gpu)
+                        gpu=gpu, concat=layer != layers - 1)
                 for layer in range(layers)
              ]
         )
 
-        self.conv_out = GATConv(in_channels=heads * head_dims, out_channels=n_classes, heads=1, dropout=dropout)
-
+    def reset_parameters(self):
+        for conv in self.convs:
+            conv.reset_parameters()
+        
     def forward(self, x, adjs):
         device = torch.device(self.device)
         

@@ -35,6 +35,10 @@ class GCN(Module):
             self.norm = norm.to('cuda')
         self.cluster_flag = cluster_flag
     
+    def reset_parameters(self):
+        for conv in self.convs:
+            conv.reset_parameters()
+            
     def forward(self, x, adjs):
         """
         修改意见：https://github.com/THUDM/cogdl/blob/master/cogdl/models/nn/pyg_gcn.py

@@ -23,10 +23,14 @@ class GGNN(Module):
 
         self.weight_in = Parameter(torch.Tensor(n_features, hidden_dims))
         self.weight_out = Parameter(torch.Tensor(hidden_dims, n_classes))
-        self.convs = GatedGraphConv(out_channels=hidden_dims, num_layers=layers, gpu=gpu, flag=flag)
+        self.convs = torch.nn.ModuleList([GatedGraphConv(out_channels=hidden_dims, num_layers=layers, gpu=gpu, flag=flag)])
         glorot(self.weight_in)
         glorot(self.weight_out)
 
+    def reset_parameters(self):
+        for conv in self.convs:
+            conv.reset_parameters()
+    
     def forward(self, x, adjs):
         device = torch.device(self.device)
         nvtx_push(self.gpu, "input-transform")
@@ -35,7 +39,7 @@ class GGNN(Module):
         nvtx_pop(self.gpu)
         log_memory(self.flag, device, "input-transform")
 
-        x = self.convs(x, adjs)
+        x = self.convs[0](x, adjs)
         nvtx_push(self.gpu, "output-transform")
         x = torch.matmul(x, self.weight_out)
         nvtx_pop(self.gpu)
@@ -49,7 +53,7 @@ class GGNN(Module):
 
         x_all = torch.matmul(x_all.to(device), self.weight_in) # 尽最大可能第键槽内存
         
-        x_all = self.convs.inference(x_all.cpu(), subgraph_loader, pbar)
+        x_all = self.convs[0].inference(x_all.cpu(), subgraph_loader, pbar)
         x_all = torch.matmul(x_all.to(device), self.weight_out)
         pbar.close()
 

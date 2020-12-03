@@ -1,6 +1,6 @@
 echo "run_gcn_ggnn"
-time
+date
 bash gcn_ggnn_exp_acc.sh
 echo "run_gat"
 bash gat_exp_acc.sh
-time
+date

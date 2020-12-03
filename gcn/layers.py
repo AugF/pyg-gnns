@@ -119,10 +119,9 @@ class GCNConv(MessagePassing):
                     norm = edge_weight
                 self.cached_result = edge_index, norm
             edge_index, norm = self.cached_result
-
+            
         out = self.propagate(edge_index, x=x, norm=norm) # edge cal
         nvtx_pop(self.gpu)
-        
         return out
 
     def message(self, x_j, norm):
