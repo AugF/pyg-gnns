@@ -1,3 +1,6 @@
+"""
+edited by wangyunpan@2020-12-3, for 超参数对精度的影响; Full-Batch训练
+"""
 import torch
 import torch.nn.functional as F
 import numpy as np
@@ -36,8 +39,8 @@ parser.add_argument('--cpu', action='store_true', default=False, help='use cpu, 
 parser.add_argument('--device', type=str, default='cuda:0', help='[cpu, cuda:id]')
 parser.add_argument('--lr', type=float, default=0.01, help="adam's learning rate")
 parser.add_argument('--weight_decay', type=float, default=0.001, help="adam's weight decay")
-parser.add_argument('--dropout', type=float, default=0.0, help="dropout")
-parser.add_argument('--attention_dropout', type=float, default=0.0005, help="dropout for gaan attention")
+parser.add_argument('--dropout', type=float, default=0.5, help="dropout")
+parser.add_argument('--attention_dropout', type=float, default=0.1, help="dropout for gaan attention")
 parser.add_argument('--no_record_shapes', action='store_false', default=True, help="nvtx or autograd's profile to record shape")
 parser.add_argument('--json_path', type=str, default='', help="json file path for memory")
 
@@ -68,6 +71,16 @@ if args.dataset in ['amazon-computers', 'amazon-photo', 'coauthor-physics']:
     file_path = osp.join('/home/wangzhaokang/wangyunpan/gnns-project/datasets', args.dataset + "/raw/role.json")
     data.train_mask, data.val_mask, data.test_mask = get_split_by_file(file_path, data.num_nodes)
 
+
+# change transductive to inductive
+# row, col = [], []
+# for i in range(data.edge_index.shape[1]):
+#     e = data.edge_index[:, i]
+#     if data.train_mask[e[0]] and data.train_mask[e[1]]:
+#         row.append(e[0])
+#         col.append(e[1])
+# data.edge_index = torch.tensor([row, col])
+
 num_features = dataset.num_features
 if dataset_info[0] in small_datasets and len(dataset_info) > 1:
     file_path = osp.join('/home/wangzhaokang/wangyunpan/gnns-project/datasets', "data/feats_x/" + '_'.join(dataset_info) + '_feats.npy')
@@ -85,7 +98,8 @@ if args.model == 'gcn':
     model = GCN(
         layers=args.layers,
         n_features=num_features, n_classes=dataset.num_classes,
-        hidden_dims=args.hidden_dims, gpu=gpu, flag=flag, device=device, dropout=args.dropout
+        hidden_dims=args.hidden_dims, gpu=gpu, flag=flag, device=device, 
+        dropout=args.dropout
     )
 elif args.model == 'gat':
     model = GAT(
