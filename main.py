@@ -38,9 +38,7 @@ parser.add_argument('--seed', type=int, default=1, help="random seed")
 parser.add_argument('--cpu', action='store_true', default=False, help='use cpu, not use gpu')
 parser.add_argument('--device', type=str, default='cuda:0', help='[cpu, cuda:id]')
 parser.add_argument('--lr', type=float, default=0.01, help="adam's learning rate")
-parser.add_argument('--weight_decay', type=float, default=0.001, help="adam's weight decay")
-parser.add_argument('--dropout', type=float, default=0.5, help="dropout")
-parser.add_argument('--attention_dropout', type=float, default=0.1, help="dropout for gaan attention")
+parser.add_argument('--weight_decay', type=float, default=0.0005, help="adam's weight decay")
 parser.add_argument('--no_record_shapes', action='store_false', default=True, help="nvtx or autograd's profile to record shape")
 parser.add_argument('--json_path', type=str, default='', help="json file path for memory")
 
@@ -98,15 +96,13 @@ if args.model == 'gcn':
     model = GCN(
         layers=args.layers,
         n_features=num_features, n_classes=dataset.num_classes,
-        hidden_dims=args.hidden_dims, gpu=gpu, flag=flag, device=device, 
-        dropout=args.dropout
+        hidden_dims=args.hidden_dims, gpu=gpu, flag=flag, device=device
     )
 elif args.model == 'gat':
     model = GAT(
         layers=args.layers,
         n_features=num_features, n_classes=dataset.num_classes,
-        head_dims=args.head_dims, heads=args.heads, gpu=gpu, flag=flag, sparse_flag=args.x_sparse, device=device,
-        dropout=args.dropout, attention_dropout=args.attention_dropout
+        head_dims=args.head_dims, heads=args.heads, gpu=gpu, flag=flag, sparse_flag=args.x_sparse, device=device
     )
 elif args.model == 'ggnn':
     model = GGNN(
@@ -120,7 +116,7 @@ elif args.model == 'gaan':
         n_features=num_features, n_classes=dataset.num_classes,
         hidden_dims=args.hidden_dims,
         heads=args.heads, d_v=args.d_v,
-        d_a=args.d_a, d_m=args.d_m, gpu=gpu, flag=flag, device=device, dropout=args.dropout
+        d_a=args.d_a, d_m=args.d_m, gpu=gpu, flag=flag, device=device
     )
 
 print(model)
