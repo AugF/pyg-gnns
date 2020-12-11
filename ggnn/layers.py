@@ -47,13 +47,14 @@ class GatedGraphConv(MessagePassing):
                  num_layers,
                  aggr='add',
                  bias=True,
-                 gpu=False, flag=False):
+                 gpu=False, flag=False, device=None):
         super(GatedGraphConv, self).__init__(aggr=aggr, gpu=gpu)
 
         self.out_channels = out_channels
         self.num_layers = num_layers
         self.gpu = gpu
         self.flag = flag
+        self.device = device
 
         self.weight = Param(Tensor(num_layers, out_channels, out_channels))
         self.rnn = torch.nn.GRUCell(out_channels, out_channels, bias=bias) # gru是共享权重的
@@ -107,8 +108,8 @@ class GatedGraphConv(MessagePassing):
         return h
     
 
-    def inference(self, x_all, subgraph_loader, pbar):
-        device = torch.device('cuda' if self.gpu else 'cpu')
+    def inference(self, x_all, subgraph_loader):
+        device = torch.device(self.device if self.gpu else 'cpu')
 
         # Compute representations of nodes layer by layer, using *all*
         # available edges. This leads to faster computation in contrast to
@@ -127,7 +128,7 @@ class GatedGraphConv(MessagePassing):
                 if i != self.num_layers - 1:
                     x = F.relu(x)
                 xs.append(x.cpu())
-                pbar.update(batch_size)
+                # pbar.update(batch_size)
 
             x_all = torch.cat(xs, dim=0)
 

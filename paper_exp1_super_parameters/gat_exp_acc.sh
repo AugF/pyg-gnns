@@ -9,31 +9,34 @@ fi
 
 datasets=(amazon-photo pubmed amazon-computers coauthor-physics flickr)
 models=(gat)
-hds=(8 16 32 64 128 256)
+hds=(1 2)
+# hds=(8 16 32 64 128 256)
 heads=(1 2 4 8 16)
 
 for data in ${datasets[@]}
 do
-    for model in ${models[@]}
+    # for model in ${models[@]}
+    model="gat"
+    for hd in ${hds[@]}
     do
-        for hd in ${hds[@]}
-        do
-            val="model=${model}, dataset=${data}, head_dims=${hd}, heads=4"
-            echo ${val}
-            if [ -f "${dir_config}/config0_${model}_${data}_4_${hd}.log" ]; then # 断点续传
-                continue
-            fi
-            python ../main.py --device cuda:1 --runs 2 --dataset ${data} --model ${model} --head_dims ${hd} --d_v ${hd} --d_a ${hd} --heads 4 1>"${dir_config}/config0_${model}_${data}_4_${hd}.log" 2>&1
-        done
+        # for hd in ${hds[@]}
+        # do
+        #     val="model=${model}, dataset=${data}, head_dims=${hd}, heads=4"
+        #     echo ${val}
+        #     if [ -f "${dir_config}/config0_${model}_${data}_4_${hd}.log" ]; then # 断点续传
+        #         continue
+        #     fi
+        #     python ../main.py --device cuda:1 --runs 2 --dataset ${data} --model ${model} --head_dims ${hd} --d_v ${hd} --d_a ${hd} --heads 4 1>"${dir_config}/config0_${model}_${data}_4_${hd}.log" 2>&1
+        # done
         for h in ${heads[@]}
         do
-            val="model=${model}, dataset=${data}, head_dims=32, heads=${h}"
+            val="model=${model}, dataset=${data}, head_dims=4, heads=${h}"
             echo ${val}
-            if [ -f "${dir_config}/config0_${model}_${data}_${h}_32.log" ]; then # 断点续传
+            if [ -f "${dir_config}/config0_${model}_${data}_${h}_${hd}.log" ]; then # 断点续传
                 continue
             fi
-            python ../main.py --device cuda:1 --runs 2 --dataset ${data} --model ${model} --head_dims 32 --d_v 32 --d_a 32 --heads ${h} 1>"${dir_config}/config0_${model}_${data}_${h}_32.log" 2>&1
+            python ../main.py --device cuda:1 --runs 2 --dataset ${data} --model ${model} --head_dims ${hd} --heads ${h} 1>"${dir_config}/config0_${model}_${data}_${h}_${hd}.log" 2>&1
         done
     done
 done
-d
+

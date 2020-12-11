@@ -65,8 +65,8 @@ class GaAN(Module):
     def inference(self, x_all, subgraph_loader):
         device = torch.device(self.device)
         
-        pbar = tqdm(total=x_all.size(0) * self.layers)
-        pbar.set_description('Evaluating')
+        # pbar = tqdm(total=x_all.size(0) * self.layers)
+        # pbar.set_description('Evaluating')
 
         # Compute representations of nodes layer by layer, using *all*
         # available edges. This leads to faster computation in contrast to
@@ -82,11 +82,11 @@ class GaAN(Module):
                     x = F.dropout(x, p=self.dropout, training=self.training)
                 xs.append(x.cpu())
 
-                pbar.update(batch_size)
+                # pbar.update(batch_size)
 
             x_all = torch.cat(xs, dim=0)
 
-        pbar.close()
+        # pbar.close()
 
         return x_all
     

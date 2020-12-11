@@ -13,7 +13,7 @@ class GGNN(Module):
     """
     GGNN layer
     """
-    def __init__(self, layers, n_features, n_classes, hidden_dims, gpu=False, device="cpu", flag=False):
+    def __init__(self, layers, n_features, n_classes, hidden_dims, gpu=False, device=None, flag=False):
         super(GGNN, self).__init__()
         self.n_features, self.n_classes = n_features, n_classes
         self.layers, self.hidden_dims = layers, hidden_dims
@@ -23,7 +23,7 @@ class GGNN(Module):
 
         self.weight_in = Parameter(torch.Tensor(n_features, hidden_dims))
         self.weight_out = Parameter(torch.Tensor(hidden_dims, n_classes))
-        self.convs = torch.nn.ModuleList([GatedGraphConv(out_channels=hidden_dims, num_layers=layers, gpu=gpu, flag=flag)])
+        self.convs = torch.nn.ModuleList([GatedGraphConv(out_channels=hidden_dims, num_layers=layers, gpu=gpu, flag=flag, device=device)])
         glorot(self.weight_in)
         glorot(self.weight_out)
 
@@ -48,14 +48,14 @@ class GGNN(Module):
 
     def inference(self, x_all, subgraph_loader):
         device = torch.device(self.device)
-        pbar = tqdm(total=x_all.size(0) * self.layers)
-        pbar.set_description('Evaluating')
+        # pbar = tqdm(total=x_all.size(0) * self.layers)
+        # pbar.set_description('Evaluating')
 
         x_all = torch.matmul(x_all.to(device), self.weight_in) # 尽最大可能第键槽内存
         
-        x_all = self.convs[0].inference(x_all.cpu(), subgraph_loader, pbar)
+        x_all = self.convs[0].inference(x_all.cpu(), subgraph_loader)
         x_all = torch.matmul(x_all.to(device), self.weight_out)
-        pbar.close()
+        # pbar.close()
 
         return x_all.cpu()
     

@@ -38,9 +38,12 @@ parser.add_argument('--cpu', action='store_true', default=False, help='use cpu, 
 parser.add_argument('--device', type=str, default='cuda:0', help='[cpu, cuda:id]')
 parser.add_argument('--lr', type=float, default=0.01, help="adam's learning rate")
 parser.add_argument('--weight_decay', type=float, default=0.0005, help="adam's weight decay")
+parser.add_argument('--no_record_shapes', action='store_false', default=True, help="nvtx or autograd's profile to record shape")
+parser.add_argument('--json_path', type=str, default='', help="json file path for memory")
 
 args = parser.parse_args()
 gpu = not args.cpu and torch.cuda.is_available()
+flag = not args.json_path == ''
 
 print(args)
 print(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())))

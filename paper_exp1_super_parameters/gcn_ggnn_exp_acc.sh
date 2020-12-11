@@ -9,7 +9,8 @@ fi
 
 datasets=(amazon-photo pubmed amazon-computers coauthor-physics flickr)
 models=(gcn ggnn)
-hds=(16 32 64 128 256 512 1024 2048)
+# hds=(16 32 64 128 256 512 1024 2048)
+hds=(1 2 4 8)
 
 for data in ${datasets[@]}
 do

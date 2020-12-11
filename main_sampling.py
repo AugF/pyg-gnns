@@ -222,9 +222,7 @@ def test():  # Inference should be performed on the full graph.
 if not gpu:
     for epoch in range(args.epochs):
         # train 训练过程
-        loss, sampling_time, other_time = train(epoch)
-        sampling_time += loader_time
-        print(f"sampling time: {sampling_time}, other time: {other_time}")
+        loss = train(epoch)
         # evaluation 评价阶段
         #train_acc, val_acc, test_acc = test()
         #print(f'Epoch: {epoch:02d}, Loss: {loss:.4f}, Train: {train_acc:.4f}, '
@@ -254,9 +252,3 @@ else:
                 losses.append(loss)
                 train_acces.append(train_acc)
                 test_acces.append(test_acc)
-            np.save(args.mode + "_epoch.npy", np.array([losses, train_acces, test_acces]))
-
-    if flag:
-        from utils import df
-        with open(args.json_path, "w") as f:
-            json.dump(df, f)

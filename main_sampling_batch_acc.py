@@ -90,21 +90,12 @@ subgraph_loader = NeighborSampler(data.edge_index, sizes=[-1], batch_size=1024,
 # 2.2 train_data
 loader_time = time.time()    
 if args.mode == 'cluster':
-    # inductive
-    row, col = [], []
-    for i in range(data.edge_index.shape[1]):
-        e = data.edge_index[:, i]
-        if data.train_mask[e[0]] and data.train_mask[e[1]]:
-            row.append(e[0])
-            col.append(e[1])
-    
-    data.edge_index = torch.tensor([row, col])
     cluster_data = ClusterData(data, num_parts=args.cluster_partitions, recursive=False,
                             save_dir=dataset.processed_dir)
     train_loader = ClusterLoader(cluster_data, batch_size=args.batch_partitions, shuffle=True,
                                 num_workers=args.num_workers)
 elif args.mode == 'graphsage':
-    train_loader = NeighborSampler(data.edge_index, node_idx=data.train_mask,
+    train_loader = NeighborSampler(data.edge_index, node_idx=None,
                                sizes=[25, 10], batch_size=args.batch_size, shuffle=True,
                                num_workers=args.num_workers) # inductive learning
 loader_time = time.time() - loader_time
@@ -140,7 +131,7 @@ elif args.model == 'gaan':
         d_a=args.d_a, d_m=args.d_m, gpu=gpu, flag=flag, device=device
     )
 
-model = model.to(device)
+model, data = model.to(device), data.to(device)
 
 def train(epoch, optimizer):
     model.train()
@@ -209,19 +200,17 @@ def train(epoch, optimizer):
     loss = total_loss / total_nodes
     return loss, sampling_time, to_time, train_time, cnt
 
-# not consider
-@torch.no_grad()
-def test():  # Inference should be performed on the full graph.
-    model.eval()
 
-    out = model.inference(data.x, subgraph_loader)
-    y_true = data.y.cpu()
-    y_pred = out.argmax(dim=-1)
+@torch.no_grad()
+def test():
+    model.eval()
+    out = model(data.x, data.edge_index)
     
-    accs = []
-    for mask in [data.train_mask, data.val_mask, data.test_mask]:
-        correct = y_pred[mask].eq(y_true[mask]).sum().item()
-        accs.append(correct / mask.sum().item())
+    logits, accs = F.log_softmax(out, dim=1), []
+    for _, mask in data('train_mask', 'val_mask', 'test_mask'):
+        pred = logits[mask].max(1)[1]
+        acc = pred.eq(data.y[mask]).sum().item() / mask.sum().item()
+        accs.append(acc)
     return accs
 
 
