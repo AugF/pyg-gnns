@@ -21,7 +21,7 @@ if not os.path.exists(dir_path):
 
 
 for mode in ['cluster', 'graphsage']:
-    for data in ['flickr', 'amazon-computers']:
+    for data in ['amazon-photo', 'pubmed', 'amazon-computers', 'coauthor-physics', 'flickr']:
         for alg in algs:
             if mode == 'cluster':
                 cmd = "python /home/wangzhaokang/wangyunpan/gnns-project/pyg-gnns/main_sampling_batch_stack.py --mode {} --model {} --data {} --epochs 50 --batch_partitions {} >>{} 2>&1"

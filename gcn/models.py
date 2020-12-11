@@ -15,7 +15,7 @@ class GCN(Module):
     GCN layer
     dropout set: https://github.com/tkipf/pygcn/blob/master/pygcn/train.py
     """
-    def __init__(self, layers, n_features, n_classes, hidden_dims, norm=None, dropout=0.5, gpu=False, device="cpu", flag=False, cluster_flag=False): # add adj
+    def __init__(self, layers, n_features, n_classes, hidden_dims, norm=None, dropout=0.5, gpu=False, device="cpu", flag=False, cluster_flag=False, cached_flag=True): # add adj
         super(GCN, self).__init__()
         self.n_features, self.n_classes = n_features, n_classes
         self.layers, self.hidden_dims = layers, hidden_dims
@@ -27,12 +27,12 @@ class GCN(Module):
         shapes = [n_features] + [hidden_dims] * (layers - 1) + [n_classes]
         self.convs = torch.nn.ModuleList(
             [
-                GCNConv(in_channels=shapes[layer], out_channels=shapes[layer + 1], gpu=gpu, cached=True)
+                GCNConv(in_channels=shapes[layer], out_channels=shapes[layer + 1], gpu=gpu, device=device, cached=cached_flag)
                 for layer in range(layers)
             ]
         )
         if norm is not None:
-            self.norm = norm.to('cuda')
+            self.norm = norm.to(device)
         self.cluster_flag = cluster_flag
     
     def reset_parameters(self):
@@ -75,9 +75,8 @@ class GCN(Module):
 
     def inference(self, x_all, subgraph_loader):
         device = torch.device(self.device)
-        
-        pbar = tqdm(total=x_all.size(0) * self.layers)
-        pbar.set_description('Evaluating')
+        # pbar = tqdm(total=x_all.size(0) * self.layers)
+        # pbar.set_description('Evaluating')
 
         # Compute representations of nodes layer by layer, using *all*
         # available edges. This leads to faster computation in contrast to
@@ -93,11 +92,11 @@ class GCN(Module):
                     x = F.dropout(x, p=self.dropout, training=self.training)
                 xs.append(x.cpu())
 
-                pbar.update(batch_size)
+                # pbar.update(batch_size)
 
             x_all = torch.cat(xs, dim=0)
 
-        pbar.close()
+        # pbar.close()
 
         return x_all
 

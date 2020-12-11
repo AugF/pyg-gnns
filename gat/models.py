@@ -15,7 +15,7 @@ class GAT(Module):
     dropout, negative_slop set: https://github.com/Diego999/pyGAT/blob/master/train.py
     """
     def __init__(self, layers, n_features, n_classes, head_dims,
-                 heads, dropout=0.6, attention_dropout=0.1, negative_slop=0.2, gpu=False, device="cpu", flag=False, sparse_flag=False):
+                 heads, dropout=0.6, attention_dropout=0.6, negative_slop=0.2, gpu=False, device="cpu", flag=False, sparse_flag=False):
         super(GAT, self).__init__()
         self.n_features, self.n_classes = n_features, n_classes
         self.layers, self.head_dims, self.heads = layers, head_dims, heads
@@ -70,8 +70,8 @@ class GAT(Module):
     def inference(self, x_all, subgraph_loader):
         device = torch.device(self.device)
         
-        pbar = tqdm(total=x_all.size(0) * self.layers)
-        pbar.set_description('Evaluating')
+        # pbar = tqdm(total=x_all.size(0) * self.layers)
+        # pbar.set_description('Evaluating')
 
         # Compute representations of nodes layer by layer, using *all*
         # available edges. This leads to faster computation in contrast to
@@ -88,11 +88,11 @@ class GAT(Module):
                     x = F.elu(x)
                 xs.append(x.cpu())
 
-                pbar.update(batch_size)
+                # pbar.update(batch_size)
 
             x_all = torch.cat(xs, dim=0)
 
-        pbar.close()
+        # pbar.close()
 
         return x_all
     
