@@ -25,23 +25,5 @@ dataset格式(N为边数, F为特征数， C为类别数）
 
 ### 2. Usage
 `
-python main.py --help   
-`
+`python main.py --help`
 
-一些修改：
-
-对于多标签分类问题
-
-1. yelp引入的关于多标签分类的问题
-
-- 单标签分类：F.log_softmax(x, 1)
-- 多标签分类：
-
-
-### 3. 一些问题的更新
-
-关于/data/wangzhaokang/wangyunpan目录被删除了
-关于gcn, ggnn, gat的最初实验结果被删除了
-
-
-    

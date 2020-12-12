@@ -9,7 +9,7 @@ fi
 
 # datasets=(amazon-photo pubmed amazon-computers coauthor-physics flickr com-amazon)
 datasets=(com-amazon)
-models=(gaan)
+models=(gcn ggnn gat gaan)
 fds=(16 32 64 128 256 512)
 
 for model in ${models[@]}
@@ -24,7 +24,7 @@ do
             fi
             val="configuration=0, model=${model}, dataset=${data}, dense_feat_dims=${fd}"
             echo ${val}
-            python -u ../main.py --dataset "${data}_${fd}" --model ${model} --json_path "${dir_config}/config0_${model}_${data}_${fd}.json"
+            python -u ../main_inference_memory.py --dataset "${data}_${fd}" --model ${model} --device cuda:1 --json_path "${dir_config}/config0_${model}_${data}_${fd}.json"
         done
     done
 done

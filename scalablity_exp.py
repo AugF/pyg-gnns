@@ -131,7 +131,7 @@ def gen_real_degrees_exp(seed=1):
         edges = nodes * ds
         print("nodes={}, edges={}".format(nodes, edges))
         graph = snap.GenRMat(nodes, edges, .6, .1, .15, Rnd)
-        raw_dir = "/data/wangzhaokang/wangyunpan/data/graph_50k_" + str(ds) + "/raw"
+        raw_dir = "/home/wangzhaokang/wangyunpan/gnns-project/datasets/graph_50k_" + str(ds) + "/raw"
         print(raw_dir)
         if not os.path.exists(raw_dir):
             os.makedirs(raw_dir)
@@ -145,7 +145,7 @@ def gen_real_degrees_exp(seed=1):
             edges_list.append((r, c))
             edges_list.append((c, r))
         
-        edges_list = set(edges_list)
+        edges_list = set(edges_list) # 保证真实的数据集，每条边应该只出现一次
         row = [i[0] for i in edges_list]
         col = [i[1] for i in edges_list]
         print(edges, len(row))
@@ -163,7 +163,7 @@ def gen_real_edges_memory(seed=1):
     for i, nodes in enumerate(ns):
         print("nodes={}, edges={}".format(nodes, edges))
         graph = snap.GenRMat(nodes, edges, .6, .1, .15, Rnd)
-        raw_dir = "/data/wangzhaokang/wangyunpan/data/graph_" + names[i] + "_500k/raw"
+        raw_dir = "/home/wangzhaokang/wangyunpan/gnns-project/datasets/graph_" + names[i] + "_500k/raw"
         print(raw_dir)
         if not os.path.exists(raw_dir):
             os.makedirs(raw_dir)
@@ -197,7 +197,7 @@ def gen_min_edges_graph(seed=1):
             edges = nodes * degrees
             print("nodes={}, edges={}".format(nodes, edges))
             graph = snap.GenRMat(nodes, edges, .6, .1, .15, Rnd)
-            raw_dir = "/data/wangzhaokang/wangyunpan/data/graph_" + names[i] + "_4_" + str(j) + "/raw"
+            raw_dir = "/home/wangzhaokang/wangyunpan/gnns-project/datasets/graph_" + names[i] + "_4_" + str(j) + "/raw"
             print(raw_dir)
             if not os.path.exists(raw_dir):
                 os.makedirs(raw_dir)
@@ -227,7 +227,7 @@ def gen_real_degrees_memory(seed=1):
     for d in degrees:
         edges = nodes * d
         graph = snap.GenRMat(nodes, edges, .6, .1, .15, Rnd)
-        raw_dir = "/data/wangzhaokang/wangyunpan/data/graph_10k_" + str(d) + "/raw"
+        raw_dir = "/home/wangzhaokang/wangyunpan/gnns-project/datasets/graph_10k_" + str(d) + "/raw"
         print(raw_dir)
         if not os.path.exists(raw_dir):
             os.makedirs(raw_dir)
@@ -249,7 +249,7 @@ def gen_real_degrees_memory(seed=1):
         np.savez(raw_dir + "/adj_full", data=f.data, indptr=f.indptr, indices=f.indices, shape=f.shape)
         gen_graph(raw_dir, nodes, edges)
 
-#gen_real_degrees_exp()
-#gen_real_edges_memory()
-#gen_real_degrees_memory()
-gen_min_edges_graph(seed=1)
+gen_real_degrees_exp()
+gen_real_edges_memory()
+gen_real_degrees_memory()
+# gen_min_edges_graph(seed=1)

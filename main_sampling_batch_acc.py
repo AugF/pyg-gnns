@@ -1,3 +1,6 @@
+"""
+Sampler背景下，精度与BatchSize变化的文件, 标准文件
+"""
 import torch
 import torch.nn.functional as F
 from torch.nn import ModuleList
@@ -97,7 +100,7 @@ if args.mode == 'cluster':
 elif args.mode == 'graphsage':
     train_loader = NeighborSampler(data.edge_index, node_idx=None,
                                sizes=[25, 10], batch_size=args.batch_size, shuffle=True,
-                               num_workers=args.num_workers) # inductive learning
+                               num_workers=args.num_workers) # transductive learning, 在此背景下
 loader_time = time.time() - loader_time
 
 # 3. set model

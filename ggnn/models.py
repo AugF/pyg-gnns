@@ -1,9 +1,9 @@
 import torch
+import time
 
 import torch.nn.functional as F
 from torch.nn import Parameter, Module
 from ggnn.layers import GatedGraphConv
-from tqdm import tqdm
 
 from inits import glorot
 from utils import nvtx_push, nvtx_pop, log_memory
@@ -13,17 +13,18 @@ class GGNN(Module):
     """
     GGNN layer
     """
-    def __init__(self, layers, n_features, n_classes, hidden_dims, gpu=False, device=None, flag=False):
+    def __init__(self, layers, n_features, n_classes, hidden_dims, gpu=False, device=None, flag=False, infer_flag=False):
         super(GGNN, self).__init__()
         self.n_features, self.n_classes = n_features, n_classes
         self.layers, self.hidden_dims = layers, hidden_dims
         self.gpu = gpu
         self.device = device
-        self.flag = flag
+        self.flag, self.infer_flag = flag, infer_flag
 
         self.weight_in = Parameter(torch.Tensor(n_features, hidden_dims))
         self.weight_out = Parameter(torch.Tensor(hidden_dims, n_classes))
-        self.convs = torch.nn.ModuleList([GatedGraphConv(out_channels=hidden_dims, num_layers=layers, gpu=gpu, flag=flag, device=device)])
+        self.convs = torch.nn.ModuleList([GatedGraphConv(out_channels=hidden_dims, num_layers=layers, gpu=gpu,
+                                                         flag=flag, infer_flag=infer_flag, device=device)])
         glorot(self.weight_in)
         glorot(self.weight_out)
 
@@ -48,15 +49,18 @@ class GGNN(Module):
 
     def inference(self, x_all, subgraph_loader):
         device = torch.device(self.device)
-        # pbar = tqdm(total=x_all.size(0) * self.layers)
-        # pbar.set_description('Evaluating')
 
+        t0 = time.time()
         x_all = torch.matmul(x_all.to(device), self.weight_in) # 尽最大可能第键槽内存
+        t1 = time.time()
+        log_memory(self.infer_flag, device, "input-transform")
         
         x_all = self.convs[0].inference(x_all.cpu(), subgraph_loader)
+        
+        t2 = time.time()
         x_all = torch.matmul(x_all.to(device), self.weight_out)
-        # pbar.close()
-
+        log_memory(self.infer_flag, device, "output-transform")
+        print(f"input-transform: {t1-t0}s, inference: {t2-t1}s, out_transform: {time.time()-t2}s")
         return x_all.cpu()
     
     def __repr__(self):

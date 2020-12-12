@@ -1,5 +1,5 @@
 """
-sampling_batch_acc_cum_fix_time:
+sampling_batch_acc_cum:
 采样的对比实验代码
 """
 import os
@@ -30,15 +30,7 @@ datasets_maps = {
     'com-amazon': 'cam'
 }
 
-fix_times = {
-    'pubmed': 1000,
-    'coauthor-physics': 1000,
-    'flickr': 1750,
-    'amazon-photo': 1000,
-    'amazon-computers': 1400
-}
-
-dir_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "batch_acc_cum_fix_time")
+dir_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "batch_acc_cum_fix_epoch")
 if not os.path.exists(dir_path):
     os.makedirs(dir_path)
 
@@ -54,27 +46,28 @@ for i, mode in enumerate(['cluster', 'graphsage']):
             elif alg == "gaan":
                 config_str = f"--heads {paras[0]} --d_v {paras[1]} --d_a {paras[1]} --d_m {paras[1]} --hidden_dims {paras[2]}"
             if mode == 'cluster':
-                cmd = "python -u /home/wangzhaokang/wangyunpan/gnns-project/pyg-gnns/main_sampling_batch_acc_cum_fix_time.py --epochs 10000 --mode {} --model {} --data {} --device cuda:{} --batch_partitions {} {} --fix_time {} >>{} 2>&1"
-                for cs in cluster_batchs[:-1]:
+                cmd = "python -u /home/wangzhaokang/wangyunpan/gnns-project/pyg-gnns/main_sampling_batch_acc_cum_fix_epoch.py --epochs 500 --mode {} --model {} --data {} --device cuda:{} --batch_partitions {} {} >>{} 2>&1"
+                for cs in cluster_batchs:
                     file_path = os.path.join(dir_path, '_'.join([mode, alg, data, str(cs)]) + '.log')
                     if os.path.exists(file_path):
                         continue
                     print(file_path)
-                    sh_commands.append(cmd.format(mode, alg, data, i, str(cs), config_str, fix_times[data], file_path))
+                    sh_commands.append(cmd.format(mode, alg, data, i, str(cs), config_str, file_path))
                 # full_log = os.path.join(dir_path, '_'.join([mode, alg, data, 'full']) + '.log')
                 # full_sh = f"python -u /home/wangzhaokang/wangyunpan/gnns-project/pyg-gnns/main_full_batch_acc_cum.py --runs 1 --epochs 1000 --mode {mode} --model {alg} --data {data} --device cuda:{i} {config_str} >>{full_log} 2>&1"
                 # sh_commands.append(full_sh)
             else:
-                cmd = "python -u /home/wangzhaokang/wangyunpan/gnns-project/pyg-gnns/main_sampling_batch_acc_cum_fix_time.py --epochs 10000 --mode {} --model {} --data {} --device cuda:{} --batch_size {} {} --fix_time {} >>{} 2>&1"
-                for gs in graphsage_batchs[data][:-1]:
+                cmd = "python -u /home/wangzhaokang/wangyunpan/gnns-project/pyg-gnns/main_sampling_batch_acc_cum_fix_epoch.py --epochs 500 --mode {} --model {} --data {} --device cuda:{} --batch_size {} {} >>{} 2>&1"
+                for gs in graphsage_batchs[data]:
                     file_path = os.path.join(dir_path, '_'.join([mode, alg, data, str(gs)]) + '.log')
                     if os.path.exists(file_path):
                         continue
                     print(file_path)
-                    sh_commands.append(cmd.format(mode, alg, data, i, str(gs), config_str, fix_times[data], file_path))
+                    sh_commands.append(cmd.format(mode, alg, data, i, str(gs), config_str, file_path))
                 # full_log = os.path.join(dir_path, '_'.join([mode, alg, data, 'full']) + '.log')
                 # full_sh = f"python -u /home/wangzhaokang/wangyunpan/gnns-project/pyg-gnns/main_full_batch_acc_cum.py --runs 1 --epochs 1000 --mode {mode} --model {alg} --data {data} --device cuda:{i} {config_str} >>{full_log} 2>&1"
                 # sh_commands.append(full_sh)
-    with open("batch_acc_cum_" + mode + "_fix_time.sh", "w") as f:
+                
+    with open("batch_acc_cum_" + mode + "_fix_epoch.sh", "w") as f:
         for sh in sh_commands:
             f.write(sh + '\n')

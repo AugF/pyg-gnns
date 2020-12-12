@@ -14,7 +14,7 @@ then
 fi
 
 datasets=(amazon-photo pubmed amazon-computers coauthor-physics flickr com-amazon)
-models=(gaan)
+models=(gcn ggnn gat gaan)
 
 for data in ${datasets[@]}
 do
@@ -25,7 +25,7 @@ do
         if [ -f "${dir_config}/config0_${model}_${data}.qdrep" ]; then # 断点续传
             continue
         fi
-        nsys profile -t cuda,osrt,nvtx -o "${dir_config}/config0_${model}_${data}" -w true python ../main.py --dataset ${data} --model ${model}
+        nsys profile -t cuda,osrt,nvtx -o "${dir_config}/config0_${model}_${data}" -w true python ../main_inference.py --dataset ${data} --model ${model}
         nsys-exporter -s "${dir_config}/config0_${model}_${data}.qdrep" "${dir_sqlite}/config0_${model}_${data}.sqlite"
     done
 done

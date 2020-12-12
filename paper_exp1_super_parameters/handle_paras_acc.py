@@ -56,6 +56,7 @@ def save_acc_to_csv(dir_work="early_stopping2"): # 将统计得到的acc结果�
                     if not os.path.exists(file_name):
                         df_hds[data].append(None)
                         continue   
+                    acc = None
                     with open(file_name) as f:
                         for line in f:
                             match_line = re.match("   Final Test: (.*) ± .*", line)
@@ -76,6 +77,7 @@ def save_acc_to_csv(dir_work="early_stopping2"): # 将统计得到的acc结果�
                     if not os.path.exists(file_name):
                         df_heads[data].append(None)
                         continue   
+                    acc = None
                     with open(file_name) as f:
                         for line in f:
                             match_line = re.match("   Final Test: (.*) ± .*", line)
@@ -97,6 +99,7 @@ def save_acc_to_csv(dir_work="early_stopping2"): # 将统计得到的acc结果�
                     if not os.path.exists(file_name):
                         df_hds[data].append(None)
                         continue   
+                    acc = None
                     with open(file_name) as f:
                         for line in f:
                             match_line = re.match("   Final Test: (.*) ± .*", line)
@@ -139,6 +142,7 @@ def save_acc_to_csv(dir_work="early_stopping2"): # 将统计得到的acc结果�
                     if not os.path.exists(file_name):
                         df_heads[data].append(None)
                         break
+                    acc = None
                     with open(file_name) as f:
                         for line in f:
                             match_line = re.match("   Final Test: (.*) ± .*", line)

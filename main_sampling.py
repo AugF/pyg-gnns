@@ -66,12 +66,12 @@ data = dataset[0]
 
 # add train, val, test split
 if args.dataset in ['amazon-computers', 'amazon-photo', 'coauthor-physics']:
-    file_path = osp.join("/data/wangzhaokang/wangyunpan", "data/" + args.dataset + "/raw/role.json")
+    file_path = osp.join("/home/wangzhaokang/wangyunpan/gnns-project/datasets", "data/" + args.dataset + "/raw/role.json")
     data.train_mask, data.val_mask, data.test_mask = get_split_by_file(file_path, data.num_nodes)
 
 num_features = dataset.num_features
 if dataset_info[0] in small_datasets and len(dataset_info) > 1:
-    file_path = osp.join("/data/wangzhaokang/wangyunpan", "data/feats_x/" + '_'.join(dataset_info) + '_feats.npy')
+    file_path = osp.join("/home/wangzhaokang/wangyunpan/gnns-project/datasets", "data/feats_x/" + '_'.join(dataset_info) + '_feats.npy')
     if osp.exists(file_path):
         data.x = torch.from_numpy(np.load(file_path)).to(torch.float) # 因为这里是随机生成的，不考虑normal features
         num_features = data.x.size(1)

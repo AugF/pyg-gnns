@@ -6,7 +6,7 @@ then
     mkdir -p $dir_config
 fi
 
-models=(gaan)
+models=(gcn ggnn gat gaan)
 degrees=(2 5 10 15 20 30 40 50 70)
 
 for model in ${models[@]}
@@ -19,6 +19,6 @@ do
         fi
         val="configuration=0, model=${model}, dataset=graph_10k_${ds}"
         echo ${val}
-        python ../main.py --dataset "graph_10k_${ds}" --model ${model} --json_path "${dir_config}/config0_${model}_graph_10k_${ds}.json"
+        python ../main_inference_memory.py --dataset "graph_10k_${ds}" --model ${model} --json_path "${dir_config}/config0_${model}_graph_10k_${ds}.json"
     done
 done

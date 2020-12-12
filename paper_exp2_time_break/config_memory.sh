@@ -8,7 +8,7 @@ then
 fi
 
 datasets=(amazon-photo pubmed amazon-computers coauthor-physics flickr com-amazon)
-models=(gaan)
+models=(gcn ggnn gat gaan)
 
 for data in ${datasets[@]}
 do
@@ -19,6 +19,6 @@ do
             continue
         fi
         echo ${val}
-        python ../main.py --dataset ${data} --model ${model} --json_path "${dir_config}/config0_${model}_${data}.json"
+        python ../main_inference.py --dataset ${data} --model ${model} --json_path "${dir_config}/config0_${model}_${data}.json"
     done
 done

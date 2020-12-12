@@ -1,12 +1,11 @@
 import torch
+import time
 import sys
 
 import torch.nn.functional as F
 from torch.nn import Module
 from gcn.layers import GCNConv
 from utils import gcn_cluster_norm
-from tqdm import tqdm
-
 
 from utils import nvtx_push, nvtx_pop, log_memory
 
@@ -15,13 +14,15 @@ class GCN(Module):
     GCN layer
     dropout set: https://github.com/tkipf/pygcn/blob/master/pygcn/train.py
     """
-    def __init__(self, layers, n_features, n_classes, hidden_dims, norm=None, dropout=0.5, gpu=False, device="cpu", flag=False, cluster_flag=False, cached_flag=True): # add adj
+    def __init__(self, layers, n_features, n_classes, hidden_dims, norm=None, dropout=0.5,
+                 gpu=False, device="cpu", flag=False, infer_flag=False, cluster_flag=False,
+                 cached_flag=True): # add adj
         super(GCN, self).__init__()
         self.n_features, self.n_classes = n_features, n_classes
         self.layers, self.hidden_dims = layers, hidden_dims
         self.dropout = dropout
         self.gpu = gpu
-        self.flag = flag
+        self.flag, self.infer_flag = flag, infer_flag
         self.device = device
 
         shapes = [n_features] + [hidden_dims] * (layers - 1) + [n_classes]
@@ -47,7 +48,6 @@ class GCN(Module):
         :return:
         """
         device = torch.device(self.device)
-        
         if isinstance(adjs, list):
             for i, (edge_index, e_id, size) in enumerate(adjs):
                 nvtx_push(self.gpu, "layer" + str(i))
@@ -75,29 +75,48 @@ class GCN(Module):
 
     def inference(self, x_all, subgraph_loader):
         device = torch.device(self.device)
-        # pbar = tqdm(total=x_all.size(0) * self.layers)
-        # pbar.set_description('Evaluating')
+        flag = self.infer_flag
+        
+        sampling_time, to_time, train_time, cat_time = 0.0, 0.0, 0.0, 0.0
+        total_batches = len(subgraph_loader)
 
-        # Compute representations of nodes layer by layer, using *all*
-        # available edges. This leads to faster computation in contrast to
-        # immediately computing the final representations of each batch.
+        log_memory(flag, device, 'inference start')       
         for i in range(self.layers):
+            log_memory(flag, device, f'layer{i} start')
+
             xs = []
-            for batch_size, n_id, adj in subgraph_loader:
-                edge_index, e_id, size = adj.to(device)
-                x = x_all[n_id].to(device)
-                x = self.convs[i](x, edge_index, size=size[1], norm=self.norm[e_id])
-                if i != self.layers - 1:
-                    x = F.relu(x)
-                    x = F.dropout(x, p=self.dropout, training=self.training)
-                xs.append(x.cpu())
+            loader_iter = iter(subgraph_loader)
+            while True:
+                try:
+                    et0 = time.time()      
+                    batch_size, n_id, adj = next(loader_iter)
+                    log_memory(flag, device, 'batch start')                    
+                    
+                    et1 = time.time()      
+                    edge_index, e_id, size = adj.to(device)
+                    x = x_all[n_id].to(device)
+                    log_memory(flag, device, 'to end') 
+                    
+                    et2 = time.time()
+                    x = self.convs[i](x, edge_index, size=size[1], norm=self.norm[e_id])
+                    if i != self.layers - 1:
+                        x = F.relu(x)
+                        x = F.dropout(x, p=self.dropout, training=self.training)
+                    xs.append(x.cpu())
+                    log_memory(flag, device, 'batch end') 
 
-                # pbar.update(batch_size)
-
+                    sampling_time += et1 - et0
+                    to_time += et2 - et1
+                    train_time += time.time() - et2
+                except StopIteration:
+                    break
+            
+            t0 = time.time()                    
             x_all = torch.cat(xs, dim=0)
+            cat_time += time.time() - t0
 
-        # pbar.close()
-
+        log_memory(flag, device, 'inference end') 
+        print(f"Evaluation: batches: {total_batches}, sampling time: {sampling_time}, to_time: {to_time}, train_time: {train_time}, cat_time: {cat_time}")
         return x_all
 
     def __repr__(self):

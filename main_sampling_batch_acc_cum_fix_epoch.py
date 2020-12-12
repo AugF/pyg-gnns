@@ -1,5 +1,5 @@
 """
-Sampler背景下，精度与BatchSize变化的文件, fix_time
+Sampler背景下，精度与BatchSize变化的文件, fix_epoch
 """
 import torch
 import torch.nn.functional as F
@@ -50,7 +50,7 @@ parser.add_argument('--batch_size', type=int, default=512, help='batch size')
 parser.add_argument('--batch_partitions', type=int, default=20, help='number of cluster partitions per batch')
 parser.add_argument('--cluster_partitions', type=int, default=1500, help='number of cluster partitions')
 parser.add_argument('--num_workers', type=int, default=40, help='number of Data Loader partitions')
-parser.add_argument('--fix_time', type=int, default=800, help='fix use time')
+
 args = parser.parse_args()
 gpu = not args.cpu and torch.cuda.is_available()
 flag = not args.json_path == ''
@@ -180,11 +180,7 @@ def train(optimizer, t0, bs_count, best_val_acc, test_acc):
                 if accs[1] > best_val_acc:
                     best_val_acc = accs[1]
                     test_acc = max(test_acc, accs[2])
-                cur_use_time = time.time() - t0
-                print(f"Batch: {bs_count:03d}, train_acc: {accs[0]:.8f}, val_acc: {accs[1]:.8f}, best_val_acc: {best_val_acc: .8f}, best_test_acc: {test_acc:.8f}, cur_use_time: {cur_use_time:.4f}s")
-            
-                if cur_use_time > args.fix_time:
-                    sys.exit(0)   
+                print(f"Batch: {bs_count:03d}, train_acc: {accs[0]:.8f}, val_acc: {accs[1]:.8f}, best_val_acc: {best_val_acc: .8f}, best_test_acc: {test_acc:.8f}, cur_use_time: {(time.time() - t0):.4f}s")
         except StopIteration:
             break
     return bs_count, best_val_acc, test_acc

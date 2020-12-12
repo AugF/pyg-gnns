@@ -1,6 +1,7 @@
 """
-超参数对精度的影响实验代码
+todo: 这里的device还有问题
 """
+# for batch full experiment
 import torch
 import torch.nn.functional as F
 import numpy as np
@@ -14,15 +15,13 @@ from gaan.models import GaAN
 from ggnn.models import GGNN
 from gat.models import GAT
 from gcn.models import GCN
-from sklearn.metrics import f1_score
 from utils import get_dataset, get_split_by_file, nvtx_push, nvtx_pop, log_memory, small_datasets
-from logger import Logger
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--dataset', type=str, default='cora', help="dataset: [cora, flickr, com-amazon, reddit, com-lj,"
                                                                     "amazon-computers, amazon-photo, coauthor-physics, pubmed]")
+
 parser.add_argument('--model', type=str, default='gcn', help="gnn models: [gcn, ggnn, gat, gaan]")
-parser.add_argument('--runs', type=int, default=1, help="total runs")
 parser.add_argument('--epochs', type=int, default=50, help="epochs for training")
 parser.add_argument('--layers', type=int, default=2, help="layers for hidden layer")
 parser.add_argument('--hidden_dims', type=int, default=64, help="hidden layer output dims")
@@ -64,23 +63,13 @@ dataset = get_dataset(args.dataset, normalize_features=True)
 data = dataset[0]
 
 # add train, val, test split
-if args.dataset in ['amazon-computers', 'amazon-photo', 'coauthor-physics']: 
-    file_path = osp.join('/home/wangzhaokang/wangyunpan/gnns-project/datasets', args.dataset + "/raw/role.json")
+if args.dataset in ['amazon-computers', 'amazon-photo', 'coauthor-physics']:
+    file_path = osp.join('/data/wangzhaokang/wangyunpan/data', args.dataset + "/raw/role.json")
     data.train_mask, data.val_mask, data.test_mask = get_split_by_file(file_path, data.num_nodes)
-
-
-# change transductive to inductive
-# row, col = [], []
-# for i in range(data.edge_index.shape[1]):
-#     e = data.edge_index[:, i]
-#     if data.train_mask[e[0]] and data.train_mask[e[1]]:
-#         row.append(e[0])
-#         col.append(e[1])
-# data.edge_index = torch.tensor([row, col])
 
 num_features = dataset.num_features
 if dataset_info[0] in small_datasets and len(dataset_info) > 1:
-    file_path = osp.join('/home/wangzhaokang/wangyunpan/gnns-project/datasets', "data/feats_x/" + '_'.join(dataset_info) + '_feats.npy')
+    file_path = osp.join('/data/wangzhaokang/wangyunpan', "data/feats_x/" + '_'.join(dataset_info) + '_feats.npy')
     if osp.exists(file_path):
         data.x = torch.from_numpy(np.load(file_path)).to(torch.float) # 因为这里是随机生成的，不考虑normal features
         num_features = data.x.size(1)
@@ -88,26 +77,25 @@ if dataset_info[0] in small_datasets and len(dataset_info) > 1:
 if args.x_sparse:
     data.x = data.x.to_sparse()
 
-device = torch.device(args.device if gpu else 'cpu')
-
+print("data", data.x.shape, data.edge_index.shape)
 # 2. model
 if args.model == 'gcn':
     model = GCN(
         layers=args.layers,
         n_features=num_features, n_classes=dataset.num_classes,
-        hidden_dims=args.hidden_dims, gpu=gpu, flag=flag, device=device
+        hidden_dims=args.hidden_dims, gpu=gpu, flag=flag
     )
 elif args.model == 'gat':
     model = GAT(
         layers=args.layers,
         n_features=num_features, n_classes=dataset.num_classes,
-        head_dims=args.head_dims, heads=args.heads, gpu=gpu, flag=flag, sparse_flag=args.x_sparse, device=device
+        head_dims=args.head_dims, heads=args.heads, gpu=gpu, flag=flag, sparse_flag=args.x_sparse
     )
 elif args.model == 'ggnn':
     model = GGNN(
         layers=args.layers,
         n_features=num_features, n_classes=dataset.num_classes,
-        hidden_dims=args.hidden_dims, gpu=gpu, flag=flag, device=device
+        hidden_dims=args.hidden_dims, gpu=gpu, flag=flag
     )
 elif args.model == 'gaan':
     model = GaAN(
@@ -115,14 +103,17 @@ elif args.model == 'gaan':
         n_features=num_features, n_classes=dataset.num_classes,
         hidden_dims=args.hidden_dims,
         heads=args.heads, d_v=args.d_v,
-        d_a=args.d_a, d_m=args.d_m, gpu=gpu, flag=flag, device=device
+        d_a=args.d_a, d_m=args.d_m, gpu=gpu, flag=flag
     )
 
 print(model)
 # set to gpu
+device = torch.device(args.device if gpu else 'cpu')
 model, data = model.to(device), data.to(device)
 
-log_memory(flag, device, 'data load')
+optimizer = torch.optim.Adam(model.parameters(),
+                             lr=args.lr,
+                             weight_decay=args.weight_decay)
 
 def train(epoch):
     t = time.time()
@@ -152,7 +143,7 @@ def train(epoch):
     log = 'Epoch: {:03d}, train_loss: {:.8f}, train_time: {:.4f}s'
     t = time.time() - t
     print(log.format(epoch, loss.data.item(), t))
-    return 
+    return t
 
 @torch.no_grad()
 def test():
@@ -160,8 +151,6 @@ def test():
     out = model(data.x, data.edge_index)
     log_memory(flag, device, 'other_start')    
     nvtx_push(gpu, "other")
-    
-    
     logits, accs = F.log_softmax(out, dim=1), []
     for _, mask in data('train_mask', 'val_mask', 'test_mask'):
         pred = logits[mask].max(1)[1]
@@ -170,41 +159,33 @@ def test():
     nvtx_pop(gpu)
     return accs
 
-
 if not gpu:
-    pass
+    for epoch in range(args.epochs + 1):
+        train(epoch)
+        log = 'Accuracy: Train: {:.4f}, Val: {:.4f}, Test: {:.4f}'
+        print(log.format(*test()))
 else:
     with torch.cuda.profiler.profile():
-        # train(-1)
+        train(-1)
         log_memory(flag, device, 'eval_end')
         with torch.autograd.profiler.emit_nvtx(record_shapes=not args.no_record_shapes):
-            logger = Logger(args.runs, args)
-            for run in range(args.runs):
-                model.reset_parameters()
-                optimizer = torch.optim.Adam([
-                    dict(params=model.convs[i].parameters(), weight_decay=args.weight_decay if i == 0 else 0)
-                    for i in range(1 if args.model == "ggnn" else args.layers)]
-                    , lr=args.lr)  # Only perform weight-decay on first convolution, 参考了pytorch_geometric中的gcn.py的例子: https://github.com/rusty1s/pytorch_geometric/blob/master/examples/gcn.py
-
-                for epoch in range(args.epochs):
-                    nvtx_push(gpu, "epochs" + str(epoch))
-                    
-                    nvtx_push(gpu, "train")
-                    train(epoch)
-                    nvtx_pop(gpu)
-                    
-                    nvtx_push(gpu, "eval")
-                    log = 'Epoch: {:03d}, Train: {:.8f}, Val: {:.8f}, Test: {:.8f}'
-                    accs = test()
-                    logger.add_result(run, accs)
-                    print(log.format(epoch, *accs))
-                    log_memory(flag, device, 'eval_end')
-                    nvtx_pop(gpu)
-                    
-                    nvtx_pop(gpu)
-                    
-                logger.print_statistics(run)
-            logger.print_statistics()
+            train_time = 0
+            for epoch in range(args.epochs):
+                nvtx_push(gpu, "epochs" + str(epoch))
+                nvtx_push(gpu, "train")
+                train_time += train(epoch)
+                nvtx_pop(gpu)
+                #nvtx_push(gpu, "eval")
+                #log = 'Accuracy: Train: {:.4f}, Val: {:.4f}, Test: {:.4f}'
+                #print(log.format(*test()))
+                
+                # add 
+                log_memory(flag, device, 'eval_end')
+                
+                #nvtx_pop(gpu)
+                nvtx_pop(gpu)
+            train_time /= args.epochs
+            print("train_time_per_epoch: ", train_time)
     if flag:
         from utils import df
         with open(args.json_path, "w") as f:

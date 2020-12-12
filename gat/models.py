@@ -1,4 +1,5 @@
 import torch
+import time
 
 import torch.nn.functional as F
 from torch.nn import Parameter, Module
@@ -15,14 +16,15 @@ class GAT(Module):
     dropout, negative_slop set: https://github.com/Diego999/pyGAT/blob/master/train.py
     """
     def __init__(self, layers, n_features, n_classes, head_dims,
-                 heads, dropout=0.6, attention_dropout=0.6, negative_slop=0.2, gpu=False, device="cpu", flag=False, sparse_flag=False):
+                 heads, dropout=0.6, attention_dropout=0.6, negative_slop=0.2,
+                 gpu=False, device="cpu", flag=False, infer_flag=False, sparse_flag=False):
         super(GAT, self).__init__()
         self.n_features, self.n_classes = n_features, n_classes
         self.layers, self.head_dims, self.heads = layers, head_dims, heads
         self.dropout, self.negative_slop = dropout, negative_slop
         self.gpu = gpu
         self.device = device
-        self.flag = flag
+        self.flag, self.infer_flag = flag, infer_flag
         self.sparse_flag = sparse_flag        
 
         in_shapes = [n_features] + [head_dims * heads] * (layers - 1)
@@ -69,31 +71,49 @@ class GAT(Module):
     
     def inference(self, x_all, subgraph_loader):
         device = torch.device(self.device)
+        flag = self.infer_flag
         
-        # pbar = tqdm(total=x_all.size(0) * self.layers)
-        # pbar.set_description('Evaluating')
+        sampling_time, to_time, train_time, cat_time = 0.0, 0.0, 0.0, 0.0
+        total_batches = len(subgraph_loader)
 
-        # Compute representations of nodes layer by layer, using *all*
-        # available edges. This leads to faster computation in contrast to
-        # immediately computing the final representations of each batch.
+        log_memory(flag, device, 'inference start')     
         for i in range(self.layers):
+            log_memory(flag, device, f'layer{i} start')
+
             xs = []
-            for batch_size, n_id, adj in subgraph_loader:
-                edge_index, _, size = adj.to(device)
-                x = x_all[n_id].to(device)
-                x = F.dropout(x, p=self.dropout, training=self.training)
-                # x_target = x[:size[1]]
-                x = self.convs[i]((x, x[:size[1]]), edge_index)
-                if i != self.layers - 1:
-                    x = F.elu(x)
-                xs.append(x.cpu())
-
-                # pbar.update(batch_size)
-
+            loader_iter = iter(subgraph_loader)
+            while True:
+                try:
+                    et0 = time.time()
+                    batch_size, n_id, adj = next(loader_iter)
+                    log_memory(flag, device, 'batch start')  
+                                   
+                    et1 = time.time()
+                    edge_index, _, size = adj.to(device)
+                    x = x_all[n_id].to(device)
+                    log_memory(flag, device, 'to end')
+                                       
+                    et2 = time.time()
+                    x = F.dropout(x, p=self.dropout, training=self.training)
+                    # x_target = x[:size[1]]
+                    x = self.convs[i]((x, x[:size[1]]), edge_index)
+                    if i != self.layers - 1:
+                        x = F.elu(x)
+                    xs.append(x.cpu())
+                    log_memory(flag, device, 'batch end')                    
+                    
+                    sampling_time += et1 - et0
+                    to_time += et2 - et1
+                    train_time += time.time() - et2
+                except StopIteration:
+                    break
+            
+            t0 = time.time()
             x_all = torch.cat(xs, dim=0)
-
-        # pbar.close()
-
+            cat_time += time.time() - t0
+            
+        log_memory(flag, device, 'inference end') 
+        print(f"Evaluation: batches: {total_batches}, sampling time: {sampling_time}, to_time: {to_time}, train_time: {train_time}, cat_time: {cat_time}")
         return x_all
     
     def __repr__(self):
