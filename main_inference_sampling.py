@@ -216,44 +216,42 @@ def train(epoch):
 @torch.no_grad()
 def test(epoch):  # Inference should be performed on the full graph.
     t0 = time.time()
-    log_memory(infer_flag, device, 'eval_start') 
     model.eval()
     out = model.inference(data.x, subgraph_loader)
-    
+
     y_true = data.y.cpu()
     y_pred = out.argmax(dim=-1)
     t1 = time.time()
-    log_memory(infer_flag, device, 'eval_other_start')    
 
     accs = []
     for mask in [data.train_mask, data.val_mask, data.test_mask]:
         correct = y_pred[mask].eq(y_true[mask]).sum().item()
         accs.append(correct / mask.sum().item())
-    log_memory(infer_flag, device, 'eval_other_end')  
+
     print(f"Epoch {epoch}, inference_time: {t1 - t0}s, other_time: {time.time() - t1}s")
     return accs
 
-
-train(-1)
-log_memory(flag, device, 'warmup end')
-
+cnt = len(subgraph_loader)
 for epoch in range(args.epochs):
     t0 = time.time()
     nvtx_push(gpu, "epochs" + str(epoch))
     
-    nvtx_push(gpu, "train")
-    train(epoch)
-    nvtx_pop(gpu)
+    # nvtx_push(gpu, "train")
+    # train(epoch)
+    # nvtx_pop(gpu)
     
     nvtx_push(gpu, "eval")
+    log_memory(flag, device, 'eval_start')
     log = 'Epoch: {:03d}, Train: {:.8f}, Val: {:.8f}, Test: {:.8f}, Use time: {:.8f}s'
     accs = test(epoch)
     print(log.format(epoch, *accs, time.time() - t0))
     log_memory(flag, device, 'eval_end')
     nvtx_pop(gpu)
-        
+    
     nvtx_pop(gpu)
 
+    if cnt * (epoch + 1) >= 50: # 超过50个Batch，结束
+        break
 
 if flag:
     from utils import df

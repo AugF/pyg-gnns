@@ -50,17 +50,13 @@ class GGNN(Module):
     def inference(self, x_all, subgraph_loader):
         device = torch.device(self.device)
 
-        t0 = time.time()
         x_all = torch.matmul(x_all.to(device), self.weight_in) # 尽最大可能第键槽内存
-        t1 = time.time()
         log_memory(self.infer_flag, device, "input-transform")
         
         x_all = self.convs[0].inference(x_all.cpu(), subgraph_loader)
         
-        t2 = time.time()
         x_all = torch.matmul(x_all.to(device), self.weight_out)
         log_memory(self.infer_flag, device, "output-transform")
-        print(f"input-transform: {t1-t0}s, inference: {t2-t1}s, out_transform: {time.time()-t2}s")
         return x_all.cpu()
     
     def __repr__(self):

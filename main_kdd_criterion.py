@@ -1,5 +1,5 @@
 """
-Full-Batch Inference阶段的空间性能瓶颈测量工具
+超参数对精度的影响实验代码
 """
 import torch
 import torch.nn.functional as F
@@ -16,12 +16,14 @@ from gat.models import GAT
 from gcn.models import GCN
 from sklearn.metrics import f1_score
 from utils import get_dataset, get_split_by_file, nvtx_push, nvtx_pop, log_memory, small_datasets
+from logger import Logger
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--dataset', type=str, default='cora', help="dataset: [cora, flickr, com-amazon, reddit, com-lj,"
                                                                     "amazon-computers, amazon-photo, coauthor-physics, pubmed]")
 parser.add_argument('--model', type=str, default='gcn', help="gnn models: [gcn, ggnn, gat, gaan]")
-parser.add_argument('--epochs', type=int, default=50, help="epochs for training")
+parser.add_argument('--epochs', type=int, default=100000, help="epochs for training")
+parser.add_argument('--patience_step', type=int, default=50, help="for KDDCriterion")
 parser.add_argument('--layers', type=int, default=2, help="layers for hidden layer")
 parser.add_argument('--hidden_dims', type=int, default=64, help="hidden layer output dims")
 parser.add_argument('--heads', type=int, default=8, help="gat or gaan model: heads")
@@ -46,20 +48,19 @@ flag = not args.json_path == ''
 print(args)
 print(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())))
 
+st = time.time()
 # 0. set manual seed
 np.random.seed(args.seed)
 torch.manual_seed(args.seed)
 if gpu:
     torch.cuda.manual_seed(args.seed)
 
-device = torch.device(args.device if gpu else 'cpu')
-
 # for feats experiment
 dataset_info = args.dataset.split('_')
 if dataset_info[0] in small_datasets and len(dataset_info) > 1:
     args.dataset = dataset_info[0]
 
-# 1. load data
+# 1. load epochs
 dataset = get_dataset(args.dataset, normalize_features=True)
 data = dataset[0]
 
@@ -78,6 +79,8 @@ if dataset_info[0] in small_datasets and len(dataset_info) > 1:
 if args.x_sparse:
     data.x = data.x.to_sparse()
 
+device = torch.device(args.device if gpu else 'cpu')
+
 # 2. model
 if args.model == 'gcn':
     model = GCN(
@@ -89,8 +92,7 @@ elif args.model == 'gat':
     model = GAT(
         layers=args.layers,
         n_features=num_features, n_classes=dataset.num_classes,
-        head_dims=args.head_dims, heads=args.heads, gpu=gpu, flag=flag,
-        sparse_flag=args.x_sparse, device=device
+        head_dims=args.head_dims, heads=args.heads, gpu=gpu, flag=flag, sparse_flag=args.x_sparse, device=device
     )
 elif args.model == 'ggnn':
     model = GGNN(
@@ -111,12 +113,13 @@ print(model)
 # set to gpu
 model, data = model.to(device), data.to(device)
 
-optimizer = torch.optim.Adam(model.parameters(),
-                             lr=args.lr,
-                             weight_decay=args.weight_decay)
- 
+optimizer = torch.optim.Adam([
+    dict(params=model.convs[i].parameters(), weight_decay=args.weight_decay if i == 0 else 0)
+    for i in range(1 if args.model == "ggnn" else args.layers)]
+    , lr=args.lr)  
+                
 log_memory(flag, device, 'data load')
-    
+
 def train(epoch):
     t = time.time()
 
@@ -151,31 +154,50 @@ def train(epoch):
 def test():
     model.eval()
     out = model(data.x, data.edge_index)
+    log_memory(flag, device, 'other_start')    
     nvtx_push(gpu, "other")
+    
+    val_loss = F.nll_loss(F.log_softmax(out, dim=1)[data.val_mask], data.y[data.val_mask])
+    
     logits, accs = F.log_softmax(out, dim=1), []
     for _, mask in data('train_mask', 'val_mask', 'test_mask'):
         pred = logits[mask].max(1)[1]
         acc = pred.eq(data.y[mask]).sum().item() / mask.sum().item()
         accs.append(acc)
     nvtx_pop(gpu)
-    return accs
+    return accs, val_loss
 
-
+val_loss_min = np.inf
+patience_step = 0
+final_test_acc = None
 for epoch in range(args.epochs):
     nvtx_push(gpu, "epochs" + str(epoch))
-    # nvtx_push(gpu, "train")
-    # train(epoch)
-    # nvtx_pop(gpu)
-    nvtx_push(gpu, "eval")
-    log_memory(flag, device, 'eval_start')
-    log = 'Accuracy: Train: {:.4f}, Val: {:.4f}, Test: {:.4f}'
-    print(log.format(*test()))
-    log_memory(flag, device, 'eval_end')
-    nvtx_pop(gpu)
+    
+    nvtx_push(gpu, "train")
+    train(epoch)
     nvtx_pop(gpu)
     
-                
+    nvtx_push(gpu, "eval")
+    accs, val_loss = test()
+    print(f'Epoch: {epoch:03d}, val_loss: {val_loss:.8f}, Train: {accs[0]:.8f}, Val: {accs[1]:.8f}, Test: {accs[2]:.8f}')
+    log_memory(flag, device, 'eval_end')
+    nvtx_pop(gpu)
+    
+    if val_loss <= val_loss_min :
+        patience_step = 0
+        val_loss_min = val_loss
+        final_test_acc = accs[2]
+    else:
+        patience_step += 1
+        if patience_step >= args.patience_step:
+            break
+    nvtx_pop(gpu)
+
+print(f"Final Test Acc: {final_test_acc}")
+                    
 if flag:
     from utils import df
     with open(args.json_path, "w") as f:
         json.dump(df, f)
+        
+print(f"use_time: {time.time() - st}s")

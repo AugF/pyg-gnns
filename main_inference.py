@@ -151,7 +151,6 @@ def train(epoch):
 def test():
     model.eval()
     out = model(data.x, data.edge_index)
-    log_memory(flag, device, 'other_start')    
     nvtx_push(gpu, "other")
     logits, accs = F.log_softmax(out, dim=1), []
     for _, mask in data('train_mask', 'val_mask', 'test_mask'):
@@ -168,14 +167,14 @@ if not gpu:
         print(log.format(*test()))
 else:
     with torch.cuda.profiler.profile():
-        train(-1)
-        log_memory(flag, device, 'eval_end')
+        test() 
         with torch.autograd.profiler.emit_nvtx(record_shapes=not args.no_record_shapes):
             for epoch in range(args.epochs):
                 nvtx_push(gpu, "epochs" + str(epoch))
-                nvtx_push(gpu, "train")
-                train(epoch)
-                nvtx_pop(gpu)
+                # nvtx_push(gpu, "train") 
+                # train(epoch)
+                # nvtx_pop(gpu)
+                
                 nvtx_push(gpu, "eval")
                 log = 'Accuracy: Train: {:.4f}, Val: {:.4f}, Test: {:.4f}'
                 print(log.format(*test()))

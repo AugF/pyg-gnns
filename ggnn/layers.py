@@ -114,7 +114,7 @@ class GatedGraphConv(MessagePassing):
         device = torch.device(self.device if self.gpu else 'cpu')
         flag = self.infer_flag
         
-        sampling_time, to_time, train_time, cat_time = 0.0, 0.0, 0.0, 0.0
+        sampling_time, to_time, train_time = 0.0, 0.0, 0.0
         total_batches = len(subgraph_loader)
         
         for i in range(self.num_layers):
@@ -149,13 +149,14 @@ class GatedGraphConv(MessagePassing):
                     train_time += time.time() - et2
                 except StopIteration:
                     break
-            
-            t0 = time.time()
             x_all = torch.cat(xs, dim=0)
-            cat_time += time.time() - t0
 
+        sampling_time /= total_batches
+        to_time /= total_batches
+        train_time /= total_batches
+        
         log_memory(flag, device, 'inference end') 
-        print(f"Evaluation: batches: {total_batches}, sampling time: {sampling_time}, to_time: {to_time}, train_time: {train_time}, cat_time: {cat_time}")
+        print(f"avg_batch_train_time: {train_time}, avg_batch_sampling_time:{sampling_time}, avg_batch_to_time: {to_time}")
         return x_all
     
     
