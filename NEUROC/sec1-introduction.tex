@@ -1,8 +1,9 @@
 \section{Introduction}
+
 In recent years, the graph neural network (GNN) becomes a hot research topic in the field of artificial intelligence.
 Many GNNs~\cite{kipf2017_gcn, defferrad2016_chebnet, li2018_agcn,li2015_ggnn, hamilton2017_graphsage, huang2018_gat, zhang2018_gaan} are proposed.
 They can learn the representation of vertices/edges in a graph from its topology and the original feature vectors in an \emph{end-to-end} manner.
-The powerful expression ability of GNNs makes them achieve good accuracy in many graph analysis tasks \cite{zhou2018_gnn_review, zhang2018_gnn_survey, comprehensive-survey-wu-2020}, like node classification, link prediction, and graph classification.
+The powerful expression ability makes GNNs achieve good accuracy in not only graph analytical tasks \cite{zhou2018_gnn_review, zhang2018_gnn_survey, comprehensive-survey-wu-2020} (like node classification and link prediction) but also computer vision tasks (like human-object interaction \cite{qi2018_learning_humanobject}, human parsing \cite{wang2020_hierarchical_human_parsing}, and video object segmentation \cite{wang2019_zeroshot_video}).
 
 To train GNNs easily, a series of GNN libraries/systems \cite{PyG, DGL, ma2019_neugraph, zhu2019_aligraph, PGL} are proposed.
 PyG \cite{PyG}, NeuGraph \cite{ma2019_neugraph}, PGL \cite{PGL} and DGL \cite{DGL} build upon the existing deep learning frameworks (PyG on PyTorch, NeuGraph on TensorFlow, PGL on PaddlePaddle, DGL on multiple backends).

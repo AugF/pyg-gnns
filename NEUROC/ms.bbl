@@ -68,6 +68,30 @@ Z.~{Wu}, S.~{Pan}, F.~{Chen}, G.~{Long}, C.~{Zhang}, P.~S. {Yu}, A
 \newblock \href {http://dx.doi.org/10.1109/TNNLS.2020.2978386}
   {\path{doi:10.1109/TNNLS.2020.2978386}}.
 
+\bibitem{qi2018_learning_humanobject}
+S.~Qi, W.~Wang, B.~Jia, J.~Shen, S.~Zhu, Learning human-object interactions by
+  graph parsing neural networks, in: V.~Ferrari, M.~Hebert, C.~Sminchisescu,
+  Y.~Weiss (Eds.), Computer Vision -- ECCV 2018, Vol. 11213 of Lecture Notes in
+  Computer Science, Springer, 2018, pp. 407--423.
+\newblock \href {http://dx.doi.org/10.1007/978-3-030-01240-3\_25}
+  {\path{doi:10.1007/978-3-030-01240-3\_25}}.
+
+\bibitem{wang2020_hierarchical_human_parsing}
+W.~Wang, H.~Zhu, J.~Dai, Y.~Pang, J.~Shen, L.~Shao, Hierarchical human parsing
+  with typed part-relation reasoning, in: Proceedings of the 2020 {IEEE/CVF}
+  Conference on Computer Vision and Pattern Recognition (CVPR), IEEE, 2020, pp.
+  8926--8936.
+\newblock \href {http://dx.doi.org/10.1109/CVPR42600.2020.00895}
+  {\path{doi:10.1109/CVPR42600.2020.00895}}.
+
+\bibitem{wang2019_zeroshot_video}
+W.~Wang, X.~Lu, J.~Shen, D.~J. Crandall, L.~Shao, Zero-shot video object
+  segmentation via attentive graph neural networks, in: Proceedings of the 2019
+  {IEEE/CVF} International Conference on Computer Vision (ICCV), IEEE, 2019,
+  pp. 9235--9244.
+\newblock \href {http://dx.doi.org/10.1109/ICCV.2019.00933}
+  {\path{doi:10.1109/ICCV.2019.00933}}.
+
 \bibitem{PyG}
 M.~Fey, J.~E. Lenssen, Fast graph representation learning with pytorch
   geometric, \url{https://pytorch-geometric.readthedocs.io/} (2019).

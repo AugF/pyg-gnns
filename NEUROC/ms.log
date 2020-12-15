@@ -1,372 +1,368 @@
-This is XeTeX, Version 3.14159265-2.6-0.99999 (TeX Live 2018/W32TeX) (preloaded format=xelatex 2019.3.1)  9 SEP 2020 22:56
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/Arch Linux) (preloaded format=pdflatex 2020.11.10)  15 DEC 2020 16:53
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
 **ms.tex
 (./ms.tex
-LaTeX2e <2018-12-01>
-(c:/texlive/2018/texmf-dist/tex/latex/elsarticle/elsarticle.cls
-Document Class: elsarticle 2019/01/14, 3.1: Elsevier Ltd
-\@bls=\dimen102
-(c:/texlive/2018/texmf-dist/tex/latex/base/article.cls
-Document Class: article 2018/09/03 v1.4i Standard LaTeX document class
-(c:/texlive/2018/texmf-dist/tex/latex/base/size10.clo
-File: size10.clo 2018/09/03 v1.4i Standard LaTeX file (size option)
+LaTeX2e <2020-02-02> patch level 5
+L3 programming layer <2020-06-03>
+(/usr/share/texmf-dist/tex/latex/elsarticle/elsarticle.cls
+Document Class: elsarticle 2019/02/25, 3.2: Elsevier Ltd
+\@bls=\dimen134
+(/usr/share/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2019/12/20 v1.4l Standard LaTeX document class
+(/usr/share/texmf-dist/tex/latex/base/size10.clo
+File: size10.clo 2019/12/20 v1.4l Standard LaTeX file (size option)
 )
-\c@part=\count80
-\c@section=\count81
-\c@subsection=\count82
-\c@subsubsection=\count83
-\c@paragraph=\count84
-\c@subparagraph=\count85
-\c@figure=\count86
-\c@table=\count87
-\abovecaptionskip=\skip41
-\belowcaptionskip=\skip42
-\bibindent=\dimen103
+\c@part=\count167
+\c@section=\count168
+\c@subsection=\count169
+\c@subsubsection=\count170
+\c@paragraph=\count171
+\c@subparagraph=\count172
+\c@figure=\count173
+\c@table=\count174
+\abovecaptionskip=\skip47
+\belowcaptionskip=\skip48
+\bibindent=\dimen135
 )
-(c:/texlive/2018/texmf-dist/tex/latex/graphics/graphicx.sty
-Package: graphicx 2017/06/01 v1.1a Enhanced LaTeX Graphics (DPC,SPQR)
+(/usr/share/texmf-dist/tex/latex/graphics/graphicx.sty
+Package: graphicx 2019/11/30 v1.2a Enhanced LaTeX Graphics (DPC,SPQR)
 
-(c:/texlive/2018/texmf-dist/tex/latex/graphics/keyval.sty
+(/usr/share/texmf-dist/tex/latex/graphics/keyval.sty
 Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
-\KV@toks@=\toks14
+\KV@toks@=\toks15
 )
-(c:/texlive/2018/texmf-dist/tex/latex/graphics/graphics.sty
-Package: graphics 2017/06/25 v1.2c Standard LaTeX Graphics (DPC,SPQR)
+(/usr/share/texmf-dist/tex/latex/graphics/graphics.sty
+Package: graphics 2019/11/30 v1.4a Standard LaTeX Graphics (DPC,SPQR)
 
-(c:/texlive/2018/texmf-dist/tex/latex/graphics/trig.sty
+(/usr/share/texmf-dist/tex/latex/graphics/trig.sty
 Package: trig 2016/01/03 v1.10 sin cos tan (DPC)
 )
-(c:/texlive/2018/texmf-dist/tex/latex/graphics-cfg/graphics.cfg
+(/usr/share/texmf-dist/tex/latex/graphics-cfg/graphics.cfg
 File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
 )
-Package graphics Info: Driver file: xetex.def on input line 99.
+Package graphics Info: Driver file: pdftex.def on input line 105.
 
-(c:/texlive/2018/texmf-dist/tex/latex/graphics-def/xetex.def
-File: xetex.def 2017/06/24 v5.0h Graphics/color driver for xetex
+(/usr/share/texmf-dist/tex/latex/graphics-def/pdftex.def
+File: pdftex.def 2018/01/08 v1.0l Graphics/color driver for pdftex
 ))
-\Gin@req@height=\dimen104
-\Gin@req@width=\dimen105
+\Gin@req@height=\dimen136
+\Gin@req@width=\dimen137
 )
-\c@tnote=\count88
-\c@fnote=\count89
-\c@cnote=\count90
-\c@ead=\count91
-\c@author=\count92
-\@eadauthor=\toks15
-\c@affn=\count93
-\absbox=\box27
-\keybox=\box28
-\Columnwidth=\dimen106
-\space@left=\dimen107
-\els@boxa=\box29
-\els@boxb=\box30
-\leftMargin=\dimen108
-\@enLab=\toks16
-\@sep=\skip43
-\@@sep=\skip44
+\c@tnote=\count175
+\c@fnote=\count176
+\c@cnote=\count177
+\c@ead=\count178
+\c@author=\count179
+\@eadauthor=\toks16
+\c@affn=\count180
+\absbox=\box45
+\elsarticlehighlightsbox=\box46
+\elsarticlegrabsbox=\box47
+\keybox=\box48
+\Columnwidth=\dimen138
+\space@left=\dimen139
+\els@boxa=\box49
+\els@boxb=\box50
+\leftMargin=\dimen140
+\@enLab=\toks17
+\@sep=\skip49
+\@@sep=\skip50
  (./ms.spl)
-(c:/texlive/2018/texmf-dist/tex/latex/natbib/natbib.sty
+(/usr/share/texmf-dist/tex/latex/natbib/natbib.sty
 Package: natbib 2010/09/13 8.31b (PWD, AO)
-\bibhang=\skip45
-\bibsep=\skip46
+\bibhang=\skip51
+\bibsep=\skip52
 LaTeX Info: Redefining \cite on input line 694.
-\c@NAT@ctr=\count94
+\c@NAT@ctr=\count181
 )
 \splwrite=\write3
-\openout3 = `ms.spl'.
+\appnamewidth=\dimen141
+)
+(/usr/share/texmf-dist/tex/latex/geometry/geometry.sty
+Package: geometry 2020/01/02 v5.9 Page Geometry
 
-\appnamewidth=\dimen109
-)
-(c:/texlive/2018/texmf-dist/tex/latex/geometry/geometry.sty
-Package: geometry 2018/04/16 v5.8 Page Geometry
+(/usr/share/texmf-dist/tex/generic/iftex/ifvtex.sty
+Package: ifvtex 2019/10/25 v1.7 ifvtex legacy package. Use iftex instead.
 
-(c:/texlive/2018/texmf-dist/tex/generic/oberdiek/ifpdf.sty
-Package: ifpdf 2018/09/07 v3.3 Provides the ifpdf switch
+(/usr/share/texmf-dist/tex/generic/iftex/iftex.sty
+Package: iftex 2020/03/06 v1.0d TeX engine tests
+))
+\Gm@cnth=\count182
+\Gm@cntv=\count183
+\c@Gm@tempcnt=\count184
+\Gm@bindingoffset=\dimen142
+\Gm@wd@mp=\dimen143
+\Gm@odd@mp=\dimen144
+\Gm@even@mp=\dimen145
+\Gm@layoutwidth=\dimen146
+\Gm@layoutheight=\dimen147
+\Gm@layouthoffset=\dimen148
+\Gm@layoutvoffset=\dimen149
+\Gm@dimlist=\toks18
 )
-(c:/texlive/2018/texmf-dist/tex/generic/oberdiek/ifvtex.sty
-Package: ifvtex 2016/05/16 v1.6 Detect VTeX and its facilities (HO)
-Package ifvtex Info: VTeX not detected.
-)
-(c:/texlive/2018/texmf-dist/tex/generic/ifxetex/ifxetex.sty
-Package: ifxetex 2010/09/12 v0.6 Provides ifxetex conditional
-)
-\Gm@cnth=\count95
-\Gm@cntv=\count96
-\c@Gm@tempcnt=\count97
-\Gm@bindingoffset=\dimen110
-\Gm@wd@mp=\dimen111
-\Gm@odd@mp=\dimen112
-\Gm@even@mp=\dimen113
-\Gm@layoutwidth=\dimen114
-\Gm@layoutheight=\dimen115
-\Gm@layouthoffset=\dimen116
-\Gm@layoutvoffset=\dimen117
-\Gm@dimlist=\toks17
-)
-(c:/texlive/2018/texmf-dist/tex/latex/lineno/lineno.sty
+(/usr/share/texmf-dist/tex/latex/lineno/lineno.sty
 Package: lineno 2005/11/02 line numbers on paragraphs v4.41
-Invalid UTF-8 byte or sequence at line 296 replaced by U+FFFD.
-\linenopenalty=\count98
-\output=\toks18
-\linenoprevgraf=\count99
-\linenumbersep=\dimen118
-\linenumberwidth=\dimen119
-\c@linenumber=\count100
-\c@pagewiselinenumber=\count101
-\c@LN@truepage=\count102
-\c@internallinenumber=\count103
-\c@internallinenumbers=\count104
-\quotelinenumbersep=\dimen120
-\bframerule=\dimen121
-\bframesep=\dimen122
-\bframebox=\box31
+\linenopenalty=\count185
+\output=\toks19
+\linenoprevgraf=\count186
+\linenumbersep=\dimen150
+\linenumberwidth=\dimen151
+\c@linenumber=\count187
+\c@pagewiselinenumber=\count188
+\c@LN@truepage=\count189
+\c@internallinenumber=\count190
+\c@internallinenumbers=\count191
+\quotelinenumbersep=\dimen152
+\bframerule=\dimen153
+\bframesep=\dimen154
+\bframebox=\box51
 LaTeX Info: Redefining \\ on input line 3056.
 )
-(c:/texlive/2018/texmf-dist/tex/latex/hyperref/hyperref.sty
-Package: hyperref 2018/11/30 v6.88e Hypertext links for LaTeX
+(/usr/share/texmf-dist/tex/latex/hyperref/hyperref.sty
+Package: hyperref 2020-05-15 v7.00e Hypertext links for LaTeX
 
-(c:/texlive/2018/texmf-dist/tex/generic/oberdiek/hobsub-hyperref.sty
-Package: hobsub-hyperref 2016/05/16 v1.14 Bundle oberdiek, subset hyperref (HO)
-
-
-(c:/texlive/2018/texmf-dist/tex/generic/oberdiek/hobsub-generic.sty
-Package: hobsub-generic 2016/05/16 v1.14 Bundle oberdiek, subset generic (HO)
-Package: hobsub 2016/05/16 v1.14 Construct package bundles (HO)
-Package: infwarerr 2016/05/16 v1.4 Providing info/warning/error messages (HO)
-Package: ltxcmds 2016/05/16 v1.23 LaTeX kernel commands for general use (HO)
-Package: ifluatex 2016/05/16 v1.4 Provides the ifluatex switch (HO)
-Package ifluatex Info: LuaTeX not detected.
-Package hobsub Info: Skipping package `ifvtex' (already loaded).
-Package: intcalc 2016/05/16 v1.2 Expandable calculations with integers (HO)
-Package hobsub Info: Skipping package `ifpdf' (already loaded).
-Package: etexcmds 2016/05/16 v1.6 Avoid name clashes with e-TeX commands (HO)
-Package etexcmds Info: Could not find \expanded.
-(etexcmds)             That can mean that you are not using pdfTeX 1.50 or
-(etexcmds)             that some package has redefined \expanded.
-(etexcmds)             In the latter case, load this package earlier.
-Package: kvsetkeys 2016/05/16 v1.17 Key value parser (HO)
-Package: kvdefinekeys 2016/05/16 v1.4 Define keys (HO)
-Package: pdftexcmds 2018/09/10 v0.29 Utility functions of pdfTeX for LuaTeX (HO
+(/usr/share/texmf-dist/tex/generic/ltxcmds/ltxcmds.sty
+Package: ltxcmds 2019/12/15 v1.24 LaTeX kernel commands for general use (HO)
 )
-Package pdftexcmds Info: LuaTeX not detected.
-Package pdftexcmds Info: pdfTeX >= 1.30 not detected.
+(/usr/share/texmf-dist/tex/latex/pdftexcmds/pdftexcmds.sty
+Package: pdftexcmds 2020-06-04 v0.32 Utility functions of pdfTeX for LuaTeX (HO
+)
+
+(/usr/share/texmf-dist/tex/generic/infwarerr/infwarerr.sty
+Package: infwarerr 2019/12/03 v1.5 Providing info/warning/error messages (HO)
+)
 Package pdftexcmds Info: \pdf@primitive is available.
 Package pdftexcmds Info: \pdf@ifprimitive is available.
-Package pdftexcmds Info: \pdfdraftmode not found.
-Package: pdfescape 2016/05/16 v1.14 Implements pdfTeX's escape features (HO)
-Package: bigintcalc 2016/05/16 v1.4 Expandable calculations on big integers (HO
+Package pdftexcmds Info: \pdfdraftmode found.
 )
-Package: bitset 2016/05/16 v1.2 Handle bit-vector datatype (HO)
-Package: uniquecounter 2016/05/16 v1.3 Provide unlimited unique counter (HO)
+(/usr/share/texmf-dist/tex/generic/kvsetkeys/kvsetkeys.sty
+Package: kvsetkeys 2019/12/15 v1.18 Key value parser (HO)
 )
-Package hobsub Info: Skipping package `hobsub' (already loaded).
-Package: letltxmacro 2016/05/16 v1.5 Let assignment for LaTeX macros (HO)
-Package: hopatch 2016/05/16 v1.3 Wrapper for package hooks (HO)
-Package: xcolor-patch 2016/05/16 xcolor patch
-Package: atveryend 2016/05/16 v1.9 Hooks at the very end of document (HO)
-Package atveryend Info: \enddocument detected (standard20110627).
-Package: atbegshi 2016/06/09 v1.18 At begin shipout hook (HO)
-Package: refcount 2016/05/16 v3.5 Data extraction from label references (HO)
-Package: hycolor 2016/05/16 v1.8 Color options for hyperref/bookmark (HO)
+(/usr/share/texmf-dist/tex/generic/kvdefinekeys/kvdefinekeys.sty
+Package: kvdefinekeys 2019-12-19 v1.6 Define keys (HO)
 )
-(c:/texlive/2018/texmf-dist/tex/latex/oberdiek/auxhook.sty
-Package: auxhook 2016/05/16 v1.4 Hooks for auxiliary files (HO)
+(/usr/share/texmf-dist/tex/generic/pdfescape/pdfescape.sty
+Package: pdfescape 2019/12/09 v1.15 Implements pdfTeX's escape features (HO)
 )
-(c:/texlive/2018/texmf-dist/tex/latex/oberdiek/kvoptions.sty
-Package: kvoptions 2016/05/16 v3.12 Key value format for package options (HO)
+(/usr/share/texmf-dist/tex/latex/hycolor/hycolor.sty
+Package: hycolor 2020-01-27 v1.10 Color options for hyperref/bookmark (HO)
 )
-\@linkdim=\dimen123
-\Hy@linkcounter=\count105
-\Hy@pagecounter=\count106
+(/usr/share/texmf-dist/tex/latex/letltxmacro/letltxmacro.sty
+Package: letltxmacro 2019/12/03 v1.6 Let assignment for LaTeX macros (HO)
+)
+(/usr/share/texmf-dist/tex/latex/auxhook/auxhook.sty
+Package: auxhook 2019-12-17 v1.6 Hooks for auxiliary files (HO)
+)
+(/usr/share/texmf-dist/tex/latex/kvoptions/kvoptions.sty
+Package: kvoptions 2019/11/29 v3.13 Key value format for package options (HO)
+)
+\@linkdim=\dimen155
+\Hy@linkcounter=\count192
+\Hy@pagecounter=\count193
 
-(c:/texlive/2018/texmf-dist/tex/latex/hyperref/pd1enc.def
-File: pd1enc.def 2018/11/30 v6.88e Hyperref: PDFDocEncoding definition (HO)
+(/usr/share/texmf-dist/tex/latex/hyperref/pd1enc.def
+File: pd1enc.def 2020-05-15 v7.00e Hyperref: PDFDocEncoding definition (HO)
+Now handling font encoding PD1 ...
+... no UTF-8 mapping file for font encoding PD1
 )
-\Hy@SavedSpaceFactor=\count107
-
-(c:/texlive/2018/texmf-dist/tex/latex/latexconfig/hyperref.cfg
-File: hyperref.cfg 2002/06/06 v1.2 hyperref configuration of TeXLive
+(/usr/share/texmf-dist/tex/generic/intcalc/intcalc.sty
+Package: intcalc 2019/12/15 v1.3 Expandable calculations with integers (HO)
 )
-Package hyperref Info: Hyper figures OFF on input line 4519.
-Package hyperref Info: Link nesting OFF on input line 4524.
-Package hyperref Info: Hyper index ON on input line 4527.
-Package hyperref Info: Plain pages OFF on input line 4534.
-Package hyperref Info: Backreferencing OFF on input line 4539.
+(/usr/share/texmf-dist/tex/generic/etexcmds/etexcmds.sty
+Package: etexcmds 2019/12/15 v1.7 Avoid name clashes with e-TeX commands (HO)
+)
+\Hy@SavedSpaceFactor=\count194
+Package hyperref Info: Hyper figures OFF on input line 4464.
+Package hyperref Info: Link nesting OFF on input line 4469.
+Package hyperref Info: Hyper index ON on input line 4472.
+Package hyperref Info: Plain pages OFF on input line 4479.
+Package hyperref Info: Backreferencing OFF on input line 4484.
 Package hyperref Info: Implicit mode ON; LaTeX internals redefined.
-Package hyperref Info: Bookmarks ON on input line 4772.
-\c@Hy@tempcnt=\count108
+Package hyperref Info: Bookmarks ON on input line 4717.
+\c@Hy@tempcnt=\count195
 
-(c:/texlive/2018/texmf-dist/tex/latex/url/url.sty
-\Urlmuskip=\muskip10
+(/usr/share/texmf-dist/tex/latex/url/url.sty
+\Urlmuskip=\muskip16
 Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
 )
-LaTeX Info: Redefining \url on input line 5125.
-\XeTeXLinkMargin=\dimen124
-\Fld@menulength=\count109
-\Field@Width=\dimen125
-\Fld@charsize=\dimen126
-Package hyperref Info: Hyper figures OFF on input line 6380.
-Package hyperref Info: Link nesting OFF on input line 6385.
-Package hyperref Info: Hyper index ON on input line 6388.
-Package hyperref Info: backreferencing OFF on input line 6395.
-Package hyperref Info: Link coloring OFF on input line 6400.
-Package hyperref Info: Link coloring with OCG OFF on input line 6405.
-Package hyperref Info: PDF/A mode OFF on input line 6410.
-LaTeX Info: Redefining \ref on input line 6450.
-LaTeX Info: Redefining \pageref on input line 6454.
-\Hy@abspage=\count110
-\c@Item=\count111
-\c@Hfootnote=\count112
-)
-Package hyperref Info: Driver (autodetected): hxetex.
+LaTeX Info: Redefining \url on input line 5076.
+\XeTeXLinkMargin=\dimen156
 
-(c:/texlive/2018/texmf-dist/tex/latex/hyperref/hxetex.def
-File: hxetex.def 2018/11/30 v6.88e Hyperref driver for XeTeX
+(/usr/share/texmf-dist/tex/generic/bitset/bitset.sty
+Package: bitset 2019/12/09 v1.3 Handle bit-vector datatype (HO)
 
-(c:/texlive/2018/texmf-dist/tex/latex/hyperref/puenc.def
-File: puenc.def 2018/11/30 v6.88e Hyperref: PDF Unicode definition (HO)
+(/usr/share/texmf-dist/tex/generic/bigintcalc/bigintcalc.sty
+Package: bigintcalc 2019/12/15 v1.5 Expandable calculations on big integers (HO
 )
-(c:/texlive/2018/texmf-dist/tex/generic/oberdiek/stringenc.sty
-Package: stringenc 2016/05/16 v1.11 Convert strings between diff. encodings (HO
-)
-)
-\pdfm@box=\box32
-\c@Hy@AnnotLevel=\count113
-\HyField@AnnotCount=\count114
-\Fld@listcount=\count115
-\c@bookmark@seq@number=\count116
+))
+\Fld@menulength=\count196
+\Field@Width=\dimen157
+\Fld@charsize=\dimen158
+Package hyperref Info: Hyper figures OFF on input line 6347.
+Package hyperref Info: Link nesting OFF on input line 6352.
+Package hyperref Info: Hyper index ON on input line 6355.
+Package hyperref Info: backreferencing OFF on input line 6362.
+Package hyperref Info: Link coloring OFF on input line 6367.
+Package hyperref Info: Link coloring with OCG OFF on input line 6372.
+Package hyperref Info: PDF/A mode OFF on input line 6377.
+LaTeX Info: Redefining \ref on input line 6417.
+LaTeX Info: Redefining \pageref on input line 6421.
 
-(c:/texlive/2018/texmf-dist/tex/latex/oberdiek/rerunfilecheck.sty
-Package: rerunfilecheck 2016/05/16 v1.8 Rerun checks for auxiliary files (HO)
+(/usr/share/texmf-dist/tex/generic/atbegshi/atbegshi.sty
+Package: atbegshi 2019/12/05 v1.19 At begin shipout hook (HO)
+)
+\Hy@abspage=\count197
+\c@Item=\count198
+\c@Hfootnote=\count199
+)
+Package hyperref Info: Driver (autodetected): hpdftex.
+
+(/usr/share/texmf-dist/tex/latex/hyperref/hpdftex.def
+File: hpdftex.def 2020-05-15 v7.00e Hyperref driver for pdfTeX
+
+(/usr/share/texmf-dist/tex/latex/atveryend/atveryend.sty
+Package: atveryend 2019-12-11 v1.11 Hooks at the very end of document (HO)
+Package atveryend Info: \enddocument detected (standard20110627).
+)
+\Fld@listcount=\count266
+\c@bookmark@seq@number=\count267
+
+(/usr/share/texmf-dist/tex/latex/rerunfilecheck/rerunfilecheck.sty
+Package: rerunfilecheck 2019/12/05 v1.9 Rerun checks for auxiliary files (HO)
+
+(/usr/share/texmf-dist/tex/generic/uniquecounter/uniquecounter.sty
+Package: uniquecounter 2019/12/15 v1.4 Provide unlimited unique counter (HO)
+)
 Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
-82.
+86.
 )
-\Hy@SectionHShift=\skip47
+\Hy@SectionHShift=\skip53
 )
-(c:/texlive/2018/texmf-dist/tex/latex/amsmath/amsmath.sty
-Package: amsmath 2018/12/01 v2.17b AMS math features
-\@mathmargin=\skip48
+(/usr/share/texmf-dist/tex/latex/amsmath/amsmath.sty
+Package: amsmath 2020/01/20 v2.17e AMS math features
+\@mathmargin=\skip54
 
 For additional information on amsmath, use the `?' option.
-(c:/texlive/2018/texmf-dist/tex/latex/amsmath/amstext.sty
+(/usr/share/texmf-dist/tex/latex/amsmath/amstext.sty
 Package: amstext 2000/06/29 v2.01 AMS text
 
-(c:/texlive/2018/texmf-dist/tex/latex/amsmath/amsgen.sty
+(/usr/share/texmf-dist/tex/latex/amsmath/amsgen.sty
 File: amsgen.sty 1999/11/30 v2.0 generic functions
-\@emptytoks=\toks19
-\ex@=\dimen127
+\@emptytoks=\toks20
+\ex@=\dimen159
 ))
-(c:/texlive/2018/texmf-dist/tex/latex/amsmath/amsbsy.sty
+(/usr/share/texmf-dist/tex/latex/amsmath/amsbsy.sty
 Package: amsbsy 1999/11/29 v1.2d Bold Symbols
-\pmbraise@=\dimen128
+\pmbraise@=\dimen160
 )
-(c:/texlive/2018/texmf-dist/tex/latex/amsmath/amsopn.sty
+(/usr/share/texmf-dist/tex/latex/amsmath/amsopn.sty
 Package: amsopn 2016/03/08 v2.02 operator names
 )
-\inf@bad=\count117
-LaTeX Info: Redefining \frac on input line 223.
-\uproot@=\count118
-\leftroot@=\count119
-LaTeX Info: Redefining \overline on input line 385.
-\classnum@=\count120
-\DOTSCASE@=\count121
-LaTeX Info: Redefining \ldots on input line 482.
-LaTeX Info: Redefining \dots on input line 485.
-LaTeX Info: Redefining \cdots on input line 606.
-\Mathstrutbox@=\box33
-\strutbox@=\box34
-\big@size=\dimen129
-LaTeX Font Info:    Redeclaring font encoding OML on input line 729.
-LaTeX Font Info:    Redeclaring font encoding OMS on input line 730.
-\macc@depth=\count122
-\c@MaxMatrixCols=\count123
-\dotsspace@=\muskip11
-\c@parentequation=\count124
-\dspbrk@lvl=\count125
-\tag@help=\toks20
-\row@=\count126
-\column@=\count127
-\maxfields@=\count128
-\andhelp@=\toks21
-\eqnshift@=\dimen130
-\alignsep@=\dimen131
-\tagshift@=\dimen132
-\tagwidth@=\dimen133
-\totwidth@=\dimen134
-\lineht@=\dimen135
-\@envbody=\toks22
-\multlinegap=\skip49
-\multlinetaggap=\skip50
-\mathdisplay@stack=\toks23
-LaTeX Info: Redefining \[ on input line 2844.
-LaTeX Info: Redefining \] on input line 2845.
+\inf@bad=\count268
+LaTeX Info: Redefining \frac on input line 227.
+\uproot@=\count269
+\leftroot@=\count270
+LaTeX Info: Redefining \overline on input line 389.
+\classnum@=\count271
+\DOTSCASE@=\count272
+LaTeX Info: Redefining \ldots on input line 486.
+LaTeX Info: Redefining \dots on input line 489.
+LaTeX Info: Redefining \cdots on input line 610.
+\Mathstrutbox@=\box52
+\strutbox@=\box53
+\big@size=\dimen161
+LaTeX Font Info:    Redeclaring font encoding OML on input line 733.
+LaTeX Font Info:    Redeclaring font encoding OMS on input line 734.
+\macc@depth=\count273
+\c@MaxMatrixCols=\count274
+\dotsspace@=\muskip17
+\c@parentequation=\count275
+\dspbrk@lvl=\count276
+\tag@help=\toks21
+\row@=\count277
+\column@=\count278
+\maxfields@=\count279
+\andhelp@=\toks22
+\eqnshift@=\dimen162
+\alignsep@=\dimen163
+\tagshift@=\dimen164
+\tagwidth@=\dimen165
+\totwidth@=\dimen166
+\lineht@=\dimen167
+\@envbody=\toks23
+\multlinegap=\skip55
+\multlinetaggap=\skip56
+\mathdisplay@stack=\toks24
+LaTeX Info: Redefining \[ on input line 2859.
+LaTeX Info: Redefining \] on input line 2860.
 )
-(c:/texlive/2018/texmf-dist/tex/latex/amscls/amsthm.sty
-Package: amsthm 2017/10/31 v2.20.4
-\thm@style=\toks24
-\thm@bodyfont=\toks25
-\thm@headfont=\toks26
-\thm@notefont=\toks27
-\thm@headpunct=\toks28
-\thm@preskip=\skip51
-\thm@postskip=\skip52
-\thm@headsep=\skip53
-\dth@everypar=\toks29
-LaTeX Info: Redefining \qed on input line 274.
+(/usr/share/texmf-dist/tex/latex/amscls/amsthm.sty
+Package: amsthm 2020/05/29 v2.20.6
+\thm@style=\toks25
+\thm@bodyfont=\toks26
+\thm@headfont=\toks27
+\thm@notefont=\toks28
+\thm@headpunct=\toks29
+\thm@preskip=\skip57
+\thm@postskip=\skip58
+\thm@headsep=\skip59
+\dth@everypar=\toks30
+LaTeX Info: Redefining \qed on input line 273.
 )
-(c:/texlive/2018/texmf-dist/tex/latex/relsize/relsize.sty
+(/usr/share/texmf-dist/tex/latex/relsize/relsize.sty
 Package: relsize 2013/03/29 ver 4.1
 )
-(c:/texlive/2018/texmf-dist/tex/latex/booktabs/booktabs.sty
-Package: booktabs 2016/04/27 v1.618033 publication quality tables
-\heavyrulewidth=\dimen136
-\lightrulewidth=\dimen137
-\cmidrulewidth=\dimen138
-\belowrulesep=\dimen139
-\belowbottomsep=\dimen140
-\aboverulesep=\dimen141
-\abovetopsep=\dimen142
-\cmidrulesep=\dimen143
-\cmidrulekern=\dimen144
-\defaultaddspace=\dimen145
-\@cmidla=\count129
-\@cmidlb=\count130
-\@aboverulesep=\dimen146
-\@belowrulesep=\dimen147
-\@thisruleclass=\count131
-\@lastruleclass=\count132
-\@thisrulewidth=\dimen148
+(/usr/share/texmf-dist/tex/latex/booktabs/booktabs.sty
+Package: booktabs 2020/01/12 v1.61803398 Publication quality tables
+\heavyrulewidth=\dimen168
+\lightrulewidth=\dimen169
+\cmidrulewidth=\dimen170
+\belowrulesep=\dimen171
+\belowbottomsep=\dimen172
+\aboverulesep=\dimen173
+\abovetopsep=\dimen174
+\cmidrulesep=\dimen175
+\cmidrulekern=\dimen176
+\defaultaddspace=\dimen177
+\@cmidla=\count280
+\@cmidlb=\count281
+\@aboverulesep=\dimen178
+\@belowrulesep=\dimen179
+\@thisruleclass=\count282
+\@lastruleclass=\count283
+\@thisrulewidth=\dimen180
 )
-(c:/texlive/2018/texmf-dist/tex/latex/makecell/makecell.sty
+(/usr/share/texmf-dist/tex/latex/makecell/makecell.sty
 Package: makecell 2009/08/03 V0.1e Managing of Tab Column Heads and Cells
 
-(c:/texlive/2018/texmf-dist/tex/latex/tools/array.sty
-Package: array 2018/12/30 v2.4k Tabular extension package (FMi)
-\col@sep=\dimen149
-\ar@mcellbox=\box35
-\extrarowheight=\dimen150
-\NC@list=\toks30
-\extratabsurround=\skip54
-\backup@length=\skip55
-\ar@cellbox=\box36
+(/usr/share/texmf-dist/tex/latex/tools/array.sty
+Package: array 2019/08/31 v2.4l Tabular extension package (FMi)
+\col@sep=\dimen181
+\ar@mcellbox=\box54
+\extrarowheight=\dimen182
+\NC@list=\toks31
+\extratabsurround=\skip60
+\backup@length=\skip61
+\ar@cellbox=\box55
 )
-\rotheadsize=\dimen151
-\c@nlinenum=\count133
-\TeXr@lab=\toks31
+\rotheadsize=\dimen183
+\c@nlinenum=\count284
+\TeXr@lab=\toks32
 )
-(c:/texlive/2018/texmf-dist/tex/latex/graphics/lscape.sty
+(/usr/share/texmf-dist/tex/latex/graphics/lscape.sty
 Package: lscape 2000/10/22 v3.01 Landscape Pages (DPC)
 )
-(c:/texlive/2018/texmf-dist/tex/latex/xcolor/xcolor.sty
+(/usr/share/texmf-dist/tex/latex/xcolor/xcolor.sty
 Package: xcolor 2016/05/11 v2.12 LaTeX color extensions (UK)
 
-(c:/texlive/2018/texmf-dist/tex/latex/graphics-cfg/color.cfg
+(/usr/share/texmf-dist/tex/latex/graphics-cfg/color.cfg
 File: color.cfg 2016/01/02 v1.6 sample color configuration
 )
-Package xcolor Info: Driver file: xetex.def on input line 225.
+Package xcolor Info: Driver file: pdftex.def on input line 225.
 Package xcolor Info: Model `cmy' substituted by `cmy0' on input line 1348.
+Package xcolor Info: Model `hsb' substituted by `rgb' on input line 1352.
 Package xcolor Info: Model `RGB' extended on input line 1364.
 Package xcolor Info: Model `HTML' substituted by `rgb' on input line 1366.
 Package xcolor Info: Model `Hsb' substituted by `hsb' on input line 1367.
@@ -375,74 +371,106 @@ Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1369.
 Package xcolor Info: Model `Gray' substituted by `gray' on input line 1370.
 Package xcolor Info: Model `wave' substituted by `hsb' on input line 1371.
 )
-(c:/texlive/2018/texmf-dist/tex/latex/subfig/subfig.sty
+(/usr/share/texmf-dist/tex/latex/subfig/subfig.sty
 Package: subfig 2005/06/28 ver: 1.3 subfig package
 
-(c:/texlive/2018/texmf-dist/tex/latex/caption/caption.sty
-Package: caption 2018/10/06 v3.3-154 Customizing captions (AR)
+(/usr/share/texmf-dist/tex/latex/caption/caption.sty
+Package: caption 2020/05/10 v3.4j Customizing captions (AR)
 
-(c:/texlive/2018/texmf-dist/tex/latex/caption/caption3.sty
-Package: caption3 2018/09/12 v1.8c caption3 kernel (AR)
-Package caption3 Info: TeX engine: e-TeX on input line 64.
-\captionmargin=\dimen152
-\captionmargin@=\dimen153
-\captionwidth=\dimen154
-\caption@tempdima=\dimen155
-\caption@indent=\dimen156
-\caption@parindent=\dimen157
-\caption@hangindent=\dimen158
+(/usr/share/texmf-dist/tex/latex/caption/caption3.sty
+Package: caption3 2020/05/10 v1.11 caption3 kernel (AR)
+Package caption3 Info: TeX engine: e-TeX on input line 61.
+\captionmargin=\dimen184
+\captionmargin@=\dimen185
+\captionwidth=\dimen186
+\caption@tempdima=\dimen187
+\caption@indent=\dimen188
+\caption@parindent=\dimen189
+\caption@hangindent=\dimen190
+Package caption Info: elsarticle document class detected.
 )
-\c@caption@flags=\count134
-\c@ContinuedFloat=\count135
+\c@caption@flags=\count285
+\c@continuedfloat=\count286
 Package caption Info: hyperref package is loaded.
 )
-\c@KVtest=\count136
-\sf@farskip=\skip56
-\sf@captopadj=\dimen159
-\sf@capskip=\skip57
-\sf@nearskip=\skip58
-\c@subfigure=\count137
-\c@subfigure@save=\count138
-\c@lofdepth=\count139
-\c@subtable=\count140
-\c@subtable@save=\count141
-\c@lotdepth=\count142
-\sf@top=\skip59
-\sf@bottom=\skip60
+\c@KVtest=\count287
+\sf@farskip=\skip62
+\sf@captopadj=\dimen191
+\sf@capskip=\skip63
+\sf@nearskip=\skip64
+\c@subfigure=\count288
+\c@subfigure@save=\count289
+\c@lofdepth=\count290
+\c@subtable=\count291
+\c@subtable@save=\count292
+\c@lotdepth=\count293
+\sf@top=\skip65
+\sf@bottom=\skip66
 )
-(c:/texlive/2018/texmf-dist/tex/latex/float/float.sty
+(/usr/share/texmf-dist/tex/latex/float/float.sty
 Package: float 2001/11/08 v1.3d Float enhancements (AL)
-\c@float@type=\count143
-\float@exts=\toks32
-\float@box=\box37
-\@float@everytoks=\toks33
-\@floatcapt=\box38
+\c@float@type=\count294
+\float@exts=\toks33
+\float@box=\box56
+\@float@everytoks=\toks34
+\@floatcapt=\box57
+)
+(/usr/share/texmf-dist/tex/latex/psnfss/times.sty
+Package: times 2020/03/25 PSNFSS-v9.3 (SPQR) 
+)
+(/usr/share/texmf-dist/tex/latex/l3backend/l3backend-pdfmode.def
+File: l3backend-pdfmode.def 2020-06-03 L3 backend support: PDF mode
+\l__kernel_color_stack_int=\count295
+\l__pdf_internal_box=\box58
 ) (./ms.aux)
-\openout1 = `ms.aux'.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Trying to load font information for OT1+ptm on input line 2
+0.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for TU/lmr/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
+(/usr/share/texmf-dist/tex/latex/psnfss/ot1ptm.fd
+File: ot1ptm.fd 2001/06/04 font definitions for OT1/ptm.
+)
+(/usr/share/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count296
+\scratchdimen=\dimen192
+\scratchbox=\box59
+\nofMPsegments=\count297
+\nofMParguments=\count298
+\everyMPshowfont=\toks35
+\MPscratchCnt=\count299
+\MPscratchDim=\dimen193
+\MPnumerator=\count300
+\makeMPintoPDFobject=\count301
+\everyMPtoPDFconversion=\toks36
+) (/usr/share/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
+Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
+Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
+85.
 
+(/usr/share/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
+File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
+e
+))
 *geometry* driver: auto-detecting
-*geometry* detected driver: xetex
+*geometry* detected driver: pdftex
 *geometry* verbose mode - [ preamble ] result:
-* driver: xetex
+* driver: pdftex
 * paper: <default>
 * layout: <same size as paper>
 * layoutoffset:(h,v)=(0.0pt,0.0pt)
@@ -473,114 +501,135 @@ LaTeX Font Info:    ... okay on input line 19.
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-\AtBeginShipoutBox=\box39
-Package hyperref Info: Link coloring OFF on input line 19.
-(c:/texlive/2018/texmf-dist/tex/latex/hyperref/nameref.sty
-Package: nameref 2016/05/21 v2.44 Cross-referencing by name of section
+\AtBeginShipoutBox=\box60
+Package hyperref Info: Link coloring OFF on input line 20.
+(/usr/share/texmf-dist/tex/latex/hyperref/nameref.sty
+Package: nameref 2019/09/16 v2.46 Cross-referencing by name of section
 
-(c:/texlive/2018/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
-Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
+(/usr/share/texmf-dist/tex/latex/refcount/refcount.sty
+Package: refcount 2019/12/15 v3.6 Data extraction from label references (HO)
 )
-\c@section@level=\count144
+(/usr/share/texmf-dist/tex/generic/gettitlestring/gettitlestring.sty
+Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 )
-LaTeX Info: Redefining \ref on input line 19.
-LaTeX Info: Redefining \pageref on input line 19.
-LaTeX Info: Redefining \nameref on input line 19.
- (./ms.out) (./ms.out)
+\c@section@level=\count302
+)
+LaTeX Info: Redefining \ref on input line 20.
+LaTeX Info: Redefining \pageref on input line 20.
+LaTeX Info: Redefining \nameref on input line 20.
+
+(./ms.out) (./ms.out)
 \@outlinefile=\write4
-\openout4 = `ms.out'.
-
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: subfig package v1.3 is loaded.
 Package caption Info: float package is loaded.
 Package caption Info: End \AtBeginDocument code.
-
-Overfull \hbox (5.58356pt too wide) in paragraph at lines 29--38
-\TU/lmr/m/n/10 mance in many graph analysis tasks. Recently, various graph neur
-al network libraries have emerged.They
- []
-
-(./sec1-introduction.tex
-(c:/texlive/2018/texmf-dist/tex/generic/oberdiek/se-ascii-print.def
-File: se-ascii-print.def 2016/05/16 v1.11 stringenc: Printable ASCII characters
-
+LaTeX Font Info:    Trying to load font information for OT1+pcr on input line 4
+5.
+ (/usr/share/texmf-dist/tex/latex/psnfss/ot1pcr.fd
+File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
 )
-Overfull \hbox (2.22pt too wide) has occurred while \output is active
+(./sec1-introduction.tex
+LaTeX Font Info:    Trying to load font information for OT1+phv on input line 1
+.
+ (/usr/share/texmf-dist/tex/latex/psnfss/ot1phv.fd
+File: ot1phv.fd 2020/03/25 scalable font definitions for OT1/phv.
+)
+Overfull \hbox (1.90002pt too wide) has occurred while \output is active
 [] 
  []
 
 
-Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 18.
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `math shift' on input line 19.
 
 
-Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `superscript' on input line 18.
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `superscript' on input line 19.
 
 
-Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 18.
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `math shift' on input line 19.
 
 
-Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\<def>-command' on input line 18.
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `\<def>-command' on input line 19.
 
 
-Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\cnotenum' on input line 18.
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `\cnotenum' on input line 19.
 
 
-Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\<def>-command' on input line 18.
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `\<def>-command' on input line 19.
 
 
-Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\@corref' on input line 18.
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `\@corref' on input line 19.
 
 
-Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 18.
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `math shift' on input line 19.
 
 
-Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `superscript' on input line 18.
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `superscript' on input line 19.
 
 
-Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 18.
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `math shift' on input line 19.
 
 
-Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\<def>-command' on input line 18.
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `\<def>-command' on input line 19.
 
 
-Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\cnotenum' on input line 18.
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `\cnotenum' on input line 19.
 
 
-Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\<def>-command' on input line 18.
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `\<def>-command' on input line 19.
 
 
-Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\@corref' on input line 18.
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `\@corref' on input line 19.
 
 [1
 
 
-]) (./sec2-review-of-graph-neural-network.tex [2]
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
+LaTeX Font Info:    Trying to load font information for OMS+ptm on input line 2
+3.
+
+(/usr/share/texmf-dist/tex/latex/psnfss/omsptm.fd
+File: omsptm.fd 
+)
+LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <10> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 23.
+LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 3
+3.
+
+(/usr/share/texmf-dist/tex/latex/psnfss/ts1ptm.fd
+File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
+))
+(./sec2-review-of-graph-neural-network.tex [2]
+<figs/illustration/GNN_common_architecture.pdf, id=161, 1139.21606pt x 518.8985
+6pt>
 File: figs/illustration/GNN_common_architecture.pdf Graphic file (type pdf)
 <use figs/illustration/GNN_common_architecture.pdf>
- [3]
+Package pdftex.def Info: figs/illustration/GNN_common_architecture.pdf  used on
+ input line 17.
+(pdftex.def)             Requested size: 443.57848pt x 202.04498pt.
+ [3 <./figs/illustration/GNN_common_architecture.pdf>]
+<figs/illustration/GNN_Unit.pdf, id=222, 510.94888pt x 486.85887pt>
 File: figs/illustration/GNN_Unit.pdf Graphic file (type pdf)
 <use figs/illustration/GNN_Unit.pdf>
- [4]
-Overfull \hbox (10.14577pt too wide) in paragraph at lines 162--171
-[]|$[][]$| 
- []
+Package pdftex.def Info: figs/illustration/GNN_Unit.pdf  used on input line 77.
 
-
-Overfull \hbox (44.88405pt too wide) in paragraph at lines 109--204
+(pdftex.def)             Requested size: 221.78923pt x 211.33617pt.
+ [4 <./figs/illustration/GNN_Unit.pdf>]
+Overfull \hbox (29.37132pt too wide) in paragraph at lines 109--204
 []   []
  []
 
@@ -589,237 +638,726 @@ Underfull \hbox (badness 10000) in paragraph at lines 109--204
 
  []
 
+<figs/illustration/GNN_complexity_quadrant.pdf, id=290, 435.54718pt x 232.9503p
+t>
 File: figs/illustration/GNN_complexity_quadrant.pdf Graphic file (type pdf)
 <use figs/illustration/GNN_complexity_quadrant.pdf>
-[5] [6] [7] [8]
+Package pdftex.def Info: figs/illustration/GNN_complexity_quadrant.pdf  used on
+ input line 304.
+(pdftex.def)             Requested size: 310.50357pt x 166.07477pt.
+[5 <./figs/illustration/GNN_complexity_quadrant.pdf>] [6] [7] [8]
+<figs/illustration/layer_sampling.pdf, id=356, 744.86276pt x 476.74109pt>
 File: figs/illustration/layer_sampling.pdf Graphic file (type pdf)
 <use figs/illustration/layer_sampling.pdf>
+Package pdftex.def Info: figs/illustration/layer_sampling.pdf  used on input li
+ne 373.
+(pdftex.def)             Requested size: 200.04726pt x 128.0374pt.
+<figs/illustration/graph_sampling.pdf, id=357, 1110.06712pt x 476.74109pt>
 File: figs/illustration/graph_sampling.pdf Graphic file (type pdf)
 <use figs/illustration/graph_sampling.pdf>
+Package pdftex.def Info: figs/illustration/graph_sampling.pdf  used on input li
+ne 375.
+(pdftex.def)             Requested size: 298.12993pt x 128.0374pt.
 
 Overfull \hbox (54.59871pt too wide) in paragraph at lines 373--376
  [][][][] 
  []
 
-) (./sec3-experiment-design.tex [9] [10]) (./sec4-experiments.tex
+) (./sec3-experiment-design.tex [9 <./figs/illustration/layer_sampling.pdf> <./
+figs/illustration/graph_sampling.pdf>] [10]) (./sec4-experiments.tex
+<figs/experiments/exp_absolute_training_time_comparison_pubmed.pdf, id=474, 462
+.52798pt x 346.89601pt>
 File: figs/experiments/exp_absolute_training_time_comparison_pubmed.pdf Graphic
  file (type pdf)
 <use figs/experiments/exp_absolute_training_time_comparison_pubmed.pdf>
+Package pdftex.def Info: figs/experiments/exp_absolute_training_time_comparison
+_pubmed.pdf  used on input line 20.
+(pdftex.def)             Requested size: 151.74544pt x 113.81102pt.
+<figs/experiments/exp_absolute_training_time_comparison_amazon-photo.pdf, id=47
+5, 462.52798pt x 346.89601pt>
 File: figs/experiments/exp_absolute_training_time_comparison_amazon-photo.pdf G
 raphic file (type pdf)
 <use figs/experiments/exp_absolute_training_time_comparison_amazon-photo.pdf>
+Package pdftex.def Info: figs/experiments/exp_absolute_training_time_comparison
+_amazon-photo.pdf  used on input line 21.
+(pdftex.def)             Requested size: 151.74544pt x 113.81102pt.
+<figs/experiments/exp_absolute_training_time_comparison_coauthor-physics.pdf, i
+d=476, 462.52798pt x 346.89601pt>
 File: figs/experiments/exp_absolute_training_time_comparison_coauthor-physics.p
 df Graphic file (type pdf)
 <use figs/experiments/exp_absolute_training_time_comparison_coauthor-physics.pd
 f>
+Package pdftex.def Info: figs/experiments/exp_absolute_training_time_comparison
+_coauthor-physics.pdf  used on input line 22.
+(pdftex.def)             Requested size: 151.74544pt x 113.81102pt.
 
-Overfull \hbox (11.65788pt too wide) in paragraph at lines 20--22
+Overfull \hbox (11.65784pt too wide) in paragraph at lines 20--22
  [][][][][][] 
  []
 
+<figs/experiments/exp_absolute_training_time_comparison_amazon-computers.pdf, i
+d=477, 462.52798pt x 346.89601pt>
 File: figs/experiments/exp_absolute_training_time_comparison_amazon-computers.p
 df Graphic file (type pdf)
 <use figs/experiments/exp_absolute_training_time_comparison_amazon-computers.pd
 f>
+Package pdftex.def Info: figs/experiments/exp_absolute_training_time_comparison
+_amazon-computers.pdf  used on input line 23.
+(pdftex.def)             Requested size: 151.74544pt x 113.81102pt.
+<figs/experiments/exp_absolute_training_time_comparison_flickr.pdf, id=478, 462
+.52798pt x 346.89601pt>
 File: figs/experiments/exp_absolute_training_time_comparison_flickr.pdf Graphic
  file (type pdf)
 <use figs/experiments/exp_absolute_training_time_comparison_flickr.pdf>
+Package pdftex.def Info: figs/experiments/exp_absolute_training_time_comparison
+_flickr.pdf  used on input line 24.
+(pdftex.def)             Requested size: 151.74544pt x 113.81102pt.
+<figs/experiments/exp_absolute_training_time_comparison_com-amazon.pdf, id=479,
+ 462.52798pt x 346.89601pt>
 File: figs/experiments/exp_absolute_training_time_comparison_com-amazon.pdf Gra
 phic file (type pdf)
 <use figs/experiments/exp_absolute_training_time_comparison_com-amazon.pdf>
+Package pdftex.def Info: figs/experiments/exp_absolute_training_time_comparison
+_com-amazon.pdf  used on input line 25.
+(pdftex.def)             Requested size: 151.74544pt x 113.81102pt.
 
-Overfull \hbox (11.65788pt too wide) in paragraph at lines 23--26
+Overfull \hbox (11.65784pt too wide) in paragraph at lines 23--26
  [][][][][][] 
  []
 
+<figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gcn.pdf, id=481,
+ 867.24pt x 346.89601pt>
 File: figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gcn.pdf Gra
 phic file (type pdf)
 <use figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gcn.pdf>
+Package pdftex.def Info: figs/experiments/exp_hyperparameter_on_vertex_edge_pha
+se_time_gcn.pdf  used on input line 34.
+(pdftex.def)             Requested size: 213.39536pt x 85.35826pt.
+<figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_ggnn.pdf, id=482
+, 867.24pt x 346.89601pt>
 File: figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_ggnn.pdf Gr
 aphic file (type pdf)
 <use figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_ggnn.pdf>
+Package pdftex.def Info: figs/experiments/exp_hyperparameter_on_vertex_edge_pha
+se_time_ggnn.pdf  used on input line 36.
+(pdftex.def)             Requested size: 213.39536pt x 85.35826pt.
+<figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gat.pdf, id=483,
+ 867.24pt x 693.792pt>
 File: figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gat.pdf Gra
 phic file (type pdf)
 <use figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gat.pdf>
+Package pdftex.def Info: figs/experiments/exp_hyperparameter_on_vertex_edge_pha
+se_time_gat.pdf  used on input line 38.
+(pdftex.def)             Requested size: 213.39536pt x 170.71652pt.
+<figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gaan.pdf, id=484
+, 1300.86pt x 693.792pt>
 File: figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gaan.pdf Gr
 aphic file (type pdf)
 <use figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gaan.pdf>
+Package pdftex.def Info: figs/experiments/exp_hyperparameter_on_vertex_edge_pha
+se_time_gaan.pdf  used on input line 40.
+(pdftex.def)             Requested size: 320.09303pt x 170.71652pt.
 [11]
+<figs/experiments/exp_hyperparameter_on_memory_usage_gcn.pdf, id=500, 462.52798
+pt x 346.89601pt>
 File: figs/experiments/exp_hyperparameter_on_memory_usage_gcn.pdf Graphic file 
 (type pdf)
 <use figs/experiments/exp_hyperparameter_on_memory_usage_gcn.pdf>
+Package pdftex.def Info: figs/experiments/exp_hyperparameter_on_memory_usage_gc
+n.pdf  used on input line 67.
+(pdftex.def)             Requested size: 113.81084pt x 85.35826pt.
+<figs/experiments/exp_hyperparameter_on_memory_usage_ggnn.pdf, id=501, 462.5279
+8pt x 346.89601pt>
 File: figs/experiments/exp_hyperparameter_on_memory_usage_ggnn.pdf Graphic file
  (type pdf)
 <use figs/experiments/exp_hyperparameter_on_memory_usage_ggnn.pdf>
+Package pdftex.def Info: figs/experiments/exp_hyperparameter_on_memory_usage_gg
+nn.pdf  used on input line 68.
+(pdftex.def)             Requested size: 113.81084pt x 85.35826pt.
+<figs/experiments/exp_hyperparameter_on_memory_usage_gat.pdf, id=502, 867.24pt 
+x 346.89601pt>
 File: figs/experiments/exp_hyperparameter_on_memory_usage_gat.pdf Graphic file 
 (type pdf)
 <use figs/experiments/exp_hyperparameter_on_memory_usage_gat.pdf>
+Package pdftex.def Info: figs/experiments/exp_hyperparameter_on_memory_usage_ga
+t.pdf  used on input line 69.
+(pdftex.def)             Requested size: 213.39536pt x 85.35826pt.
+<figs/experiments/exp_hyperparameter_on_memory_usage_gaan.pdf, id=503, 1300.86p
+t x 346.89601pt>
 File: figs/experiments/exp_hyperparameter_on_memory_usage_gaan.pdf Graphic file
  (type pdf)
 <use figs/experiments/exp_hyperparameter_on_memory_usage_gaan.pdf>
+Package pdftex.def Info: figs/experiments/exp_hyperparameter_on_memory_usage_ga
+an.pdf  used on input line 70.
+(pdftex.def)             Requested size: 320.09303pt x 85.35826pt.
+<figs/experiments/exp_layer_time_proportion_gcn.pdf, id=507, 664.88402pt x 361.
+35pt>
 File: figs/experiments/exp_layer_time_proportion_gcn.pdf Graphic file (type pdf
 )
 <use figs/experiments/exp_layer_time_proportion_gcn.pdf>
+Package pdftex.def Info: figs/experiments/exp_layer_time_proportion_gcn.pdf  us
+ed on input line 94.
+(pdftex.def)             Requested size: 240.81898pt x 130.88284pt.
+<figs/experiments/exp_layer_time_proportion_ggnn.pdf, id=508, 664.88402pt x 361
+.35pt>
 File: figs/experiments/exp_layer_time_proportion_ggnn.pdf Graphic file (type pd
 f)
 <use figs/experiments/exp_layer_time_proportion_ggnn.pdf>
+Package pdftex.def Info: figs/experiments/exp_layer_time_proportion_ggnn.pdf  u
+sed on input line 95.
+(pdftex.def)             Requested size: 240.81898pt x 130.88284pt.
 
-Overfull \hbox (38.05946pt too wide) in paragraph at lines 94--95
+Overfull \hbox (38.0595pt too wide) in paragraph at lines 94--95
  [][][][] 
  []
 
+<figs/experiments/exp_layer_time_proportion_gat.pdf, id=509, 664.88402pt x 361.
+35pt>
 File: figs/experiments/exp_layer_time_proportion_gat.pdf Graphic file (type pdf
 )
 <use figs/experiments/exp_layer_time_proportion_gat.pdf>
+Package pdftex.def Info: figs/experiments/exp_layer_time_proportion_gat.pdf  us
+ed on input line 96.
+(pdftex.def)             Requested size: 240.81898pt x 130.88284pt.
+<figs/experiments/exp_layer_time_proportion_gaan.pdf, id=510, 664.88402pt x 361
+.35pt>
 File: figs/experiments/exp_layer_time_proportion_gaan.pdf Graphic file (type pd
 f)
 <use figs/experiments/exp_layer_time_proportion_gaan.pdf>
+Package pdftex.def Info: figs/experiments/exp_layer_time_proportion_gaan.pdf  u
+sed on input line 97.
+(pdftex.def)             Requested size: 240.81898pt x 130.88284pt.
 
-Overfull \hbox (38.05946pt too wide) in paragraph at lines 96--98
+Overfull \hbox (38.0595pt too wide) in paragraph at lines 96--98
  [][][][] 
  []
 
-[12] [13] [14] [15]
+[12 <./figs/experiments/exp_absolute_training_time_comparison_pubmed.pdf> <./fi
+gs/experiments/exp_absolute_training_time_comparison_amazon-photo.pdf
+
+pdfTeX warning: pdflatex (file ./figs/experiments/exp_absolute_training_time_co
+mparison_amazon-photo.pdf): PDF inclusion: multiple pdfs with page group includ
+ed in a single page
+> <./figs/experiments/exp_absolute_training_time_comparison_coauthor-physics.pd
+f
+
+pdfTeX warning: pdflatex (file ./figs/experiments/exp_absolute_training_time_co
+mparison_coauthor-physics.pdf): PDF inclusion: multiple pdfs with page group in
+cluded in a single page
+> <./figs/experiments/exp_absolute_training_time_comparison_amazon-computers.pd
+f
+
+pdfTeX warning: pdflatex (file ./figs/experiments/exp_absolute_training_time_co
+mparison_amazon-computers.pdf): PDF inclusion: multiple pdfs with page group in
+cluded in a single page
+> <./figs/experiments/exp_absolute_training_time_comparison_flickr.pdf
+
+pdfTeX warning: pdflatex (file ./figs/experiments/exp_absolute_training_time_co
+mparison_flickr.pdf): PDF inclusion: multiple pdfs with page group included in 
+a single page
+> <./figs/experiments/exp_absolute_training_time_comparison_com-amazon.pdf
+
+pdfTeX warning: pdflatex (file ./figs/experiments/exp_absolute_training_time_co
+mparison_com-amazon.pdf): PDF inclusion: multiple pdfs with page group included
+ in a single page
+>] [13 <./figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gcn.pdf
+> <./figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_ggnn.pdf
+
+pdfTeX warning: pdflatex (file ./figs/experiments/exp_hyperparameter_on_vertex_
+edge_phase_time_ggnn.pdf): PDF inclusion: multiple pdfs with page group include
+d in a single page
+> <./figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gat.pdf
+
+pdfTeX warning: pdflatex (file ./figs/experiments/exp_hyperparameter_on_vertex_
+edge_phase_time_gat.pdf): PDF inclusion: multiple pdfs with page group included
+ in a single page
+> <./figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gaan.pdf
+
+pdfTeX warning: pdflatex (file ./figs/experiments/exp_hyperparameter_on_vertex_
+edge_phase_time_gaan.pdf): PDF inclusion: multiple pdfs with page group include
+d in a single page
+>] [14 <./figs/experiments/exp_hyperparameter_on_memory_usage_gcn.pdf> <./figs/
+experiments/exp_hyperparameter_on_memory_usage_ggnn.pdf
+
+pdfTeX warning: pdflatex (file ./figs/experiments/exp_hyperparameter_on_memory_
+usage_ggnn.pdf): PDF inclusion: multiple pdfs with page group included in a sin
+gle page
+> <./figs/experiments/exp_hyperparameter_on_memory_usage_gat.pdf
+
+pdfTeX warning: pdflatex (file ./figs/experiments/exp_hyperparameter_on_memory_
+usage_gat.pdf): PDF inclusion: multiple pdfs with page group included in a sing
+le page
+> <./figs/experiments/exp_hyperparameter_on_memory_usage_gaan.pdf
+
+pdfTeX warning: pdflatex (file ./figs/experiments/exp_hyperparameter_on_memory_
+usage_gaan.pdf): PDF inclusion: multiple pdfs with page group included in a sin
+gle page
+>] [15 <./figs/experiments/exp_layer_time_proportion_gcn.pdf> <./figs/experimen
+ts/exp_layer_time_proportion_ggnn.pdf
+
+pdfTeX warning: pdflatex (file ./figs/experiments/exp_layer_time_proportion_ggn
+n.pdf): PDF inclusion: multiple pdfs with page group included in a single page
+> <./figs/experiments/exp_layer_time_proportion_gat.pdf
+
+pdfTeX warning: pdflatex (file ./figs/experiments/exp_layer_time_proportion_gat
+.pdf): PDF inclusion: multiple pdfs with page group included in a single page
+> <./figs/experiments/exp_layer_time_proportion_gaan.pdf
+
+pdfTeX warning: pdflatex (file ./figs/experiments/exp_layer_time_proportion_gaa
+n.pdf): PDF inclusion: multiple pdfs with page group included in a single page
+>]
+<figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_gcn.pdf, id=1505, 505.
+89pt x 346.89601pt>
 File: figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_gcn.pdf Graphic f
 ile (type pdf)
 <use figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_gcn.pdf>
+Package pdftex.def Info: figs/experiments/exp_avg_degree_on_vertex_edge_cal_tim
+e_gcn.pdf  used on input line 122.
+(pdftex.def)             Requested size: 165.97157pt x 113.81102pt.
+<figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_ggnn.pdf, id=1506, 505
+.89pt x 346.89601pt>
 File: figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_ggnn.pdf Graphic 
 file (type pdf)
 <use figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_ggnn.pdf>
+Package pdftex.def Info: figs/experiments/exp_avg_degree_on_vertex_edge_cal_tim
+e_ggnn.pdf  used on input line 123.
+(pdftex.def)             Requested size: 165.97157pt x 113.81102pt.
+<figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_gat.pdf, id=1507, 505.
+89pt x 346.89601pt>
 File: figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_gat.pdf Graphic f
 ile (type pdf)
 <use figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_gat.pdf>
+Package pdftex.def Info: figs/experiments/exp_avg_degree_on_vertex_edge_cal_tim
+e_gat.pdf  used on input line 124.
+(pdftex.def)             Requested size: 165.97157pt x 113.81102pt.
+<figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_gaan.pdf, id=1508, 505
+.89pt x 346.89601pt>
 File: figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_gaan.pdf Graphic 
 file (type pdf)
 <use figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_gaan.pdf>
+Package pdftex.def Info: figs/experiments/exp_avg_degree_on_vertex_edge_cal_tim
+e_gaan.pdf  used on input line 125.
+(pdftex.def)             Requested size: 165.97157pt x 113.81102pt.
+<figs/illustration/steps_in_edge_calculation.pdf, id=1510, 1347.11276pt x 272.9
+3968pt>
 File: figs/illustration/steps_in_edge_calculation.pdf Graphic file (type pdf)
 <use figs/illustration/steps_in_edge_calculation.pdf>
- [16]
+Package pdftex.def Info: figs/illustration/steps_in_edge_calculation.pdf  used 
+on input line 143.
+(pdftex.def)             Requested size: 443.57848pt x 89.87462pt.
+ [16 <./figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_gcn.pdf> <./fig
+s/experiments/exp_avg_degree_on_vertex_edge_cal_time_ggnn.pdf
+
+pdfTeX warning: pdflatex (file ./figs/experiments/exp_avg_degree_on_vertex_edge
+_cal_time_ggnn.pdf): PDF inclusion: multiple pdfs with page group included in a
+ single page
+> <./figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_gat.pdf
+
+pdfTeX warning: pdflatex (file ./figs/experiments/exp_avg_degree_on_vertex_edge
+_cal_time_gat.pdf): PDF inclusion: multiple pdfs with page group included in a 
+single page
+> <./figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_gaan.pdf
+
+pdfTeX warning: pdflatex (file ./figs/experiments/exp_avg_degree_on_vertex_edge
+_cal_time_gaan.pdf): PDF inclusion: multiple pdfs with page group included in a
+ single page
+>]
+<figs/experiments/exp_edge_calc_decomposition_gcn.pdf, id=1717, 664.88402pt x 3
+61.35pt>
 File: figs/experiments/exp_edge_calc_decomposition_gcn.pdf Graphic file (type p
 df)
 <use figs/experiments/exp_edge_calc_decomposition_gcn.pdf>
+Package pdftex.def Info: figs/experiments/exp_edge_calc_decomposition_gcn.pdf  
+used on input line 162.
+(pdftex.def)             Requested size: 209.40913pt x 113.81102pt.
+<figs/experiments/exp_edge_calc_decomposition_ggnn.pdf, id=1718, 664.88402pt x 
+361.35pt>
 File: figs/experiments/exp_edge_calc_decomposition_ggnn.pdf Graphic file (type 
 pdf)
 <use figs/experiments/exp_edge_calc_decomposition_ggnn.pdf>
+Package pdftex.def Info: figs/experiments/exp_edge_calc_decomposition_ggnn.pdf 
+ used on input line 163.
+(pdftex.def)             Requested size: 209.40913pt x 113.81102pt.
+<figs/experiments/exp_edge_calc_decomposition_gat.pdf, id=1719, 664.88402pt x 3
+61.35pt>
 File: figs/experiments/exp_edge_calc_decomposition_gat.pdf Graphic file (type p
 df)
 <use figs/experiments/exp_edge_calc_decomposition_gat.pdf>
+Package pdftex.def Info: figs/experiments/exp_edge_calc_decomposition_gat.pdf  
+used on input line 164.
+(pdftex.def)             Requested size: 209.40913pt x 113.81102pt.
+<figs/experiments/exp_edge_calc_decomposition_gaan.pdf, id=1720, 664.88402pt x 
+361.35pt>
 File: figs/experiments/exp_edge_calc_decomposition_gaan.pdf Graphic file (type 
 pdf)
 <use figs/experiments/exp_edge_calc_decomposition_gaan.pdf>
- [17]
+Package pdftex.def Info: figs/experiments/exp_edge_calc_decomposition_gaan.pdf 
+ used on input line 165.
+(pdftex.def)             Requested size: 209.40913pt x 113.81102pt.
+ [17 <./figs/illustration/steps_in_edge_calculation.pdf> <./figs/experiments/ex
+p_edge_calc_decomposition_gcn.pdf> <./figs/experiments/exp_edge_calc_decomposit
+ion_ggnn.pdf
+
+pdfTeX warning: pdflatex (file ./figs/experiments/exp_edge_calc_decomposition_g
+gnn.pdf): PDF inclusion: multiple pdfs with page group included in a single pag
+e
+> <./figs/experiments/exp_edge_calc_decomposition_gat.pdf
+
+pdfTeX warning: pdflatex (file ./figs/experiments/exp_edge_calc_decomposition_g
+at.pdf): PDF inclusion: multiple pdfs with page group included in a single page
+
+> <./figs/experiments/exp_edge_calc_decomposition_gaan.pdf
+
+pdfTeX warning: pdflatex (file ./figs/experiments/exp_edge_calc_decomposition_g
+aan.pdf): PDF inclusion: multiple pdfs with page group included in a single pag
+e
+>]
+<figs/experiments/exp_top_basic_ops_gcn.pdf, id=1946, 462.52798pt x 346.89601pt
+>
 File: figs/experiments/exp_top_basic_ops_gcn.pdf Graphic file (type pdf)
 <use figs/experiments/exp_top_basic_ops_gcn.pdf>
+Package pdftex.def Info: figs/experiments/exp_top_basic_ops_gcn.pdf  used on in
+put line 189.
+(pdftex.def)             Requested size: 151.74544pt x 113.81102pt.
+<figs/experiments/exp_top_basic_ops_ggnn.pdf, id=1947, 462.52798pt x 346.89601p
+t>
 File: figs/experiments/exp_top_basic_ops_ggnn.pdf Graphic file (type pdf)
 <use figs/experiments/exp_top_basic_ops_ggnn.pdf>
+Package pdftex.def Info: figs/experiments/exp_top_basic_ops_ggnn.pdf  used on i
+nput line 190.
+(pdftex.def)             Requested size: 151.74544pt x 113.81102pt.
+<figs/experiments/exp_top_basic_ops_gat.pdf, id=1948, 462.52798pt x 346.89601pt
+>
 File: figs/experiments/exp_top_basic_ops_gat.pdf Graphic file (type pdf)
 <use figs/experiments/exp_top_basic_ops_gat.pdf>
+Package pdftex.def Info: figs/experiments/exp_top_basic_ops_gat.pdf  used on in
+put line 191.
+(pdftex.def)             Requested size: 151.74544pt x 113.81102pt.
+<figs/experiments/exp_top_basic_ops_gaan.pdf, id=1949, 462.52798pt x 346.89601p
+t>
 File: figs/experiments/exp_top_basic_ops_gaan.pdf Graphic file (type pdf)
 <use figs/experiments/exp_top_basic_ops_gaan.pdf>
- [18]
+Package pdftex.def Info: figs/experiments/exp_top_basic_ops_gaan.pdf  used on i
+nput line 192.
+(pdftex.def)             Requested size: 151.74544pt x 113.81102pt.
+ [18 <./figs/experiments/exp_top_basic_ops_gcn.pdf> <./figs/experiments/exp_top
+_basic_ops_ggnn.pdf
+
+pdfTeX warning: pdflatex (file ./figs/experiments/exp_top_basic_ops_ggnn.pdf): 
+PDF inclusion: multiple pdfs with page group included in a single page
+> <./figs/experiments/exp_top_basic_ops_gat.pdf
+
+pdfTeX warning: pdflatex (file ./figs/experiments/exp_top_basic_ops_gat.pdf): P
+DF inclusion: multiple pdfs with page group included in a single page
+> <./figs/experiments/exp_top_basic_ops_gaan.pdf
+
+pdfTeX warning: pdflatex (file ./figs/experiments/exp_top_basic_ops_gaan.pdf): 
+PDF inclusion: multiple pdfs with page group included in a single page
+>]
+<figs/experiments/exp_memory_usage_stage_amp.pdf, id=2109, 462.52798pt x 346.89
+601pt>
 File: figs/experiments/exp_memory_usage_stage_amp.pdf Graphic file (type pdf)
 <use figs/experiments/exp_memory_usage_stage_amp.pdf>
+Package pdftex.def Info: figs/experiments/exp_memory_usage_stage_amp.pdf  used 
+on input line 243.
+(pdftex.def)             Requested size: 189.68709pt x 142.26378pt.
+<figs/illustration/ggnn_vertex_func_computation_graph.pdf, id=2110, 778.82968pt
+ x 470.7186pt>
 File: figs/illustration/ggnn_vertex_func_computation_graph.pdf Graphic file (ty
 pe pdf)
 <use figs/illustration/ggnn_vertex_func_computation_graph.pdf>
- [19]
+Package pdftex.def Info: figs/illustration/ggnn_vertex_func_computation_graph.p
+df  used on input line 250.
+(pdftex.def)             Requested size: 211.84361pt x 128.0374pt.
+ [19 <./figs/experiments/exp_memory_usage_stage_amp.pdf> <./figs/illustration/g
+gnn_vertex_func_computation_graph.pdf>]
+<figs/experiments/exp_memory_expansion_ratio.pdf, id=2186, 462.52798pt x 346.89
+601pt>
 File: figs/experiments/exp_memory_expansion_ratio.pdf Graphic file (type pdf)
 <use figs/experiments/exp_memory_expansion_ratio.pdf>
+Package pdftex.def Info: figs/experiments/exp_memory_expansion_ratio.pdf  used 
+on input line 271.
+(pdftex.def)             Requested size: 189.68709pt x 142.26378pt.
+<figs/experiments/exp_memory_expansion_ratio_input_feature_dimension_com-amazon
+.pdf, id=2188, 462.52798pt x 346.89601pt>
 File: figs/experiments/exp_memory_expansion_ratio_input_feature_dimension_com-a
 mazon.pdf Graphic file (type pdf)
 <use figs/experiments/exp_memory_expansion_ratio_input_feature_dimension_com-am
 azon.pdf>
+Package pdftex.def Info: figs/experiments/exp_memory_expansion_ratio_input_feat
+ure_dimension_com-amazon.pdf  used on input line 284.
+(pdftex.def)             Requested size: 189.68709pt x 142.26378pt.
+<figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_edges_peak_m
+emory.pdf, id=2191, 462.52798pt x 346.89601pt>
 File: figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_edges_p
 eak_memory.pdf Graphic file (type pdf)
 <use figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_edges_pe
 ak_memory.pdf>
+Package pdftex.def Info: figs/experiments/exp_memory_expansion_ratio_input_grap
+h_number_of_edges_peak_memory.pdf  used on input line 300.
+(pdftex.def)             Requested size: 151.74544pt x 113.81102pt.
+<figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_edges_expans
+ion_ratio.pdf, id=2192, 462.52798pt x 346.89601pt>
 File: figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_edges_e
 xpansion_ratio.pdf Graphic file (type pdf)
 <use figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_edges_ex
 pansion_ratio.pdf>
- [20] [21]
+Package pdftex.def Info: figs/experiments/exp_memory_expansion_ratio_input_grap
+h_number_of_edges_expansion_ratio.pdf  used on input line 301.
+(pdftex.def)             Requested size: 151.74544pt x 113.81102pt.
+<figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_vertices_fix
+ed_edge_peak_memory.pdf, id=2194, 462.52798pt x 346.89601pt>
 File: figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_vertice
 s_fixed_edge_peak_memory.pdf Graphic file (type pdf)
 <use figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_vertices
 _fixed_edge_peak_memory.pdf>
+Package pdftex.def Info: figs/experiments/exp_memory_expansion_ratio_input_grap
+h_number_of_vertices_fixed_edge_peak_memory.pdf  used on input line 318.
+(pdftex.def)             Requested size: 151.74544pt x 113.81102pt.
+<figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_vertices_fix
+ed_edge_expansion_ratio.pdf, id=2195, 462.52798pt x 346.89601pt>
 File: figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_vertice
 s_fixed_edge_expansion_ratio.pdf Graphic file (type pdf)
 <use figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_vertices
 _fixed_edge_expansion_ratio.pdf>
+Package pdftex.def Info: figs/experiments/exp_memory_expansion_ratio_input_grap
+h_number_of_vertices_fixed_edge_expansion_ratio.pdf  used on input line 319.
+(pdftex.def)             Requested size: 151.74544pt x 113.81102pt.
+ [20 <./figs/experiments/exp_memory_expansion_ratio.pdf> <./figs/experiments/ex
+p_memory_expansion_ratio_input_feature_dimension_com-amazon.pdf
+
+pdfTeX warning: pdflatex (file ./figs/experiments/exp_memory_expansion_ratio_in
+put_feature_dimension_com-amazon.pdf): PDF inclusion: multiple pdfs with page g
+roup included in a single page
+>] [21 <./figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_edg
+es_peak_memory.pdf> <./figs/experiments/exp_memory_expansion_ratio_input_graph_
+number_of_edges_expansion_ratio.pdf
+
+pdfTeX warning: pdflatex (file ./figs/experiments/exp_memory_expansion_ratio_in
+put_graph_number_of_edges_expansion_ratio.pdf): PDF inclusion: multiple pdfs wi
+th page group included in a single page
+> <./figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_vertices
+_fixed_edge_peak_memory.pdf
+
+pdfTeX warning: pdflatex (file ./figs/experiments/exp_memory_expansion_ratio_in
+put_graph_number_of_vertices_fixed_edge_peak_memory.pdf): PDF inclusion: multip
+le pdfs with page group included in a single page
+> <./figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_vertices
+_fixed_edge_expansion_ratio.pdf
+
+pdfTeX warning: pdflatex (file ./figs/experiments/exp_memory_expansion_ratio_in
+put_graph_number_of_vertices_fixed_edge_expansion_ratio.pdf): PDF inclusion: mu
+ltiple pdfs with page group included in a single page
+>]
+<figs/experiments/exp_sampling_minibatch_realtive_graph_info_graphsage_gcn.pdf,
+ id=2449, 1300.86pt x 346.89601pt>
 File: figs/experiments/exp_sampling_minibatch_realtive_graph_info_graphsage_gcn
 .pdf Graphic file (type pdf)
 <use figs/experiments/exp_sampling_minibatch_realtive_graph_info_graphsage_gcn.
 pdf>
+Package pdftex.def Info: figs/experiments/exp_sampling_minibatch_realtive_graph
+_info_graphsage_gcn.pdf  used on input line 355.
+(pdftex.def)             Requested size: 426.78409pt x 113.81102pt.
+<figs/experiments/exp_sampling_minibatch_realtive_graph_info_cluster_gcn.pdf, i
+d=2450, 1300.86pt x 346.89601pt>
 File: figs/experiments/exp_sampling_minibatch_realtive_graph_info_cluster_gcn.p
 df Graphic file (type pdf)
 <use figs/experiments/exp_sampling_minibatch_realtive_graph_info_cluster_gcn.pd
 f>
+Package pdftex.def Info: figs/experiments/exp_sampling_minibatch_realtive_graph
+_info_cluster_gcn.pdf  used on input line 356.
+(pdftex.def)             Requested size: 426.78409pt x 113.81102pt.
+ [22 <./figs/experiments/exp_sampling_minibatch_realtive_graph_info_graphsage_g
+cn.pdf> <./figs/experiments/exp_sampling_minibatch_realtive_graph_info_cluster_
+gcn.pdf
+
+pdfTeX warning: pdflatex (file ./figs/experiments/exp_sampling_minibatch_realti
+ve_graph_info_cluster_gcn.pdf): PDF inclusion: multiple pdfs with page group in
+cluded in a single page
+>]
+<figs/experiments/exp_sampling_minibatch_degrees_distribution_amazon-photo.pdf,
+ id=2587, 462.52798pt x 346.89601pt>
 File: figs/experiments/exp_sampling_minibatch_degrees_distribution_amazon-photo
 .pdf Graphic file (type pdf)
 <use figs/experiments/exp_sampling_minibatch_degrees_distribution_amazon-photo.
 pdf>
- [22] [23]
+Package pdftex.def Info: figs/experiments/exp_sampling_minibatch_degrees_distri
+bution_amazon-photo.pdf  used on input line 371.
+(pdftex.def)             Requested size: 177.42868pt x 133.07104pt.
+<figs/experiments/exp_sampling_relative_batch_size_train_time_stack_graphsage_a
+mazon-computers.pdf, id=2590, 462.52798pt x 346.89601pt>
 File: figs/experiments/exp_sampling_relative_batch_size_train_time_stack_graphs
 age_amazon-computers.pdf Graphic file (type pdf)
 <use figs/experiments/exp_sampling_relative_batch_size_train_time_stack_graphsa
 ge_amazon-computers.pdf>
+Package pdftex.def Info: figs/experiments/exp_sampling_relative_batch_size_trai
+n_time_stack_graphsage_amazon-computers.pdf  used on input line 387.
+(pdftex.def)             Requested size: 189.68709pt x 142.26378pt.
+<figs/experiments/exp_sampling_relative_batch_size_train_time_stack_graphsage_f
+lickr.pdf, id=2591, 462.52798pt x 346.89601pt>
 File: figs/experiments/exp_sampling_relative_batch_size_train_time_stack_graphs
 age_flickr.pdf Graphic file (type pdf)
 <use figs/experiments/exp_sampling_relative_batch_size_train_time_stack_graphsa
 ge_flickr.pdf>
+Package pdftex.def Info: figs/experiments/exp_sampling_relative_batch_size_trai
+n_time_stack_graphsage_flickr.pdf  used on input line 388.
+(pdftex.def)             Requested size: 189.68709pt x 142.26378pt.
+<figs/experiments/exp_sampling_relative_batch_size_train_time_stack_cluster_ama
+zon-computers.pdf, id=2592, 462.52798pt x 346.89601pt>
 File: figs/experiments/exp_sampling_relative_batch_size_train_time_stack_cluste
 r_amazon-computers.pdf Graphic file (type pdf)
 <use figs/experiments/exp_sampling_relative_batch_size_train_time_stack_cluster
 _amazon-computers.pdf>
+Package pdftex.def Info: figs/experiments/exp_sampling_relative_batch_size_trai
+n_time_stack_cluster_amazon-computers.pdf  used on input line 389.
+(pdftex.def)             Requested size: 189.68709pt x 142.26378pt.
+<figs/experiments/exp_sampling_relative_batch_size_train_time_stack_cluster_fli
+ckr.pdf, id=2593, 462.52798pt x 346.89601pt>
 File: figs/experiments/exp_sampling_relative_batch_size_train_time_stack_cluste
 r_flickr.pdf Graphic file (type pdf)
 <use figs/experiments/exp_sampling_relative_batch_size_train_time_stack_cluster
 _flickr.pdf>
- [24]
+Package pdftex.def Info: figs/experiments/exp_sampling_relative_batch_size_trai
+n_time_stack_cluster_flickr.pdf  used on input line 390.
+(pdftex.def)             Requested size: 189.68709pt x 142.26378pt.
+<figs/experiments/exp_sampling_memory_usage_relative_batch_size_graphsage_amazo
+n-computers_peak_memory.pdf, id=2595, 462.52798pt x 346.89601pt>
 File: figs/experiments/exp_sampling_memory_usage_relative_batch_size_graphsage_
 amazon-computers_peak_memory.pdf Graphic file (type pdf)
 <use figs/experiments/exp_sampling_memory_usage_relative_batch_size_graphsage_a
 mazon-computers_peak_memory.pdf>
+Package pdftex.def Info: figs/experiments/exp_sampling_memory_usage_relative_ba
+tch_size_graphsage_amazon-computers_peak_memory.pdf  used on input line 409.
+(pdftex.def)             Requested size: 151.74544pt x 113.81102pt.
+<figs/experiments/exp_sampling_memory_usage_relative_batch_size_graphsage_flick
+r_peak_memory.pdf, id=2596, 462.52798pt x 346.89601pt>
 File: figs/experiments/exp_sampling_memory_usage_relative_batch_size_graphsage_
 flickr_peak_memory.pdf Graphic file (type pdf)
 <use figs/experiments/exp_sampling_memory_usage_relative_batch_size_graphsage_f
 lickr_peak_memory.pdf>
+Package pdftex.def Info: figs/experiments/exp_sampling_memory_usage_relative_ba
+tch_size_graphsage_flickr_peak_memory.pdf  used on input line 410.
+(pdftex.def)             Requested size: 151.74544pt x 113.81102pt.
+<figs/experiments/exp_sampling_memory_usage_relative_batch_size_cluster_amazon-
+computers_peak_memory.pdf, id=2597, 462.52798pt x 346.89601pt>
 File: figs/experiments/exp_sampling_memory_usage_relative_batch_size_cluster_am
 azon-computers_peak_memory.pdf Graphic file (type pdf)
 <use figs/experiments/exp_sampling_memory_usage_relative_batch_size_cluster_ama
 zon-computers_peak_memory.pdf>
+Package pdftex.def Info: figs/experiments/exp_sampling_memory_usage_relative_ba
+tch_size_cluster_amazon-computers_peak_memory.pdf  used on input line 411.
+(pdftex.def)             Requested size: 151.74544pt x 113.81102pt.
+<figs/experiments/exp_sampling_memory_usage_relative_batch_size_cluster_flickr_
+peak_memory.pdf, id=2598, 462.52798pt x 346.89601pt>
 File: figs/experiments/exp_sampling_memory_usage_relative_batch_size_cluster_fl
 ickr_peak_memory.pdf Graphic file (type pdf)
 <use figs/experiments/exp_sampling_memory_usage_relative_batch_size_cluster_fli
 ckr_peak_memory.pdf>
+Package pdftex.def Info: figs/experiments/exp_sampling_memory_usage_relative_ba
+tch_size_cluster_flickr_peak_memory.pdf  used on input line 412.
+(pdftex.def)             Requested size: 151.74544pt x 113.81102pt.
+<figs/experiments/exp_small_graph_train_time.pdf, id=2600, 462.52798pt x 346.89
+601pt>
 File: figs/experiments/exp_small_graph_train_time.pdf Graphic file (type pdf)
 <use figs/experiments/exp_small_graph_train_time.pdf>
-)
-(./sec5-insights.tex [25] [26]) (./sec6-related-work.tex)
-(./sec7-conclusion.tex [27])
-Overfull \hbox (9.53041pt too wide) in paragraph at lines 21--55
-[]\TU/lmr/m/n/10 This work is funded in part by National Key R&D Program of Chi
-na [grant number 2019YFC1711000];
+Package pdftex.def Info: figs/experiments/exp_small_graph_train_time.pdf  used 
+on input line 424.
+(pdftex.def)             Requested size: 189.68709pt x 142.26378pt.
+) (./sec5-insights.tex [23 <./figs/experiments/exp_sampling_minibatch_degrees_d
+istribution_amazon-photo.pdf>] [24 <./figs/experiments/exp_sampling_relative_ba
+tch_size_train_time_stack_graphsage_amazon-computers.pdf> <./figs/experiments/e
+xp_sampling_relative_batch_size_train_time_stack_graphsage_flickr.pdf
+
+pdfTeX warning: pdflatex (file ./figs/experiments/exp_sampling_relative_batch_s
+ize_train_time_stack_graphsage_flickr.pdf): PDF inclusion: multiple pdfs with p
+age group included in a single page
+> <./figs/experiments/exp_sampling_relative_batch_size_train_time_stack_cluster
+_amazon-computers.pdf
+
+pdfTeX warning: pdflatex (file ./figs/experiments/exp_sampling_relative_batch_s
+ize_train_time_stack_cluster_amazon-computers.pdf): PDF inclusion: multiple pdf
+s with page group included in a single page
+> <./figs/experiments/exp_sampling_relative_batch_size_train_time_stack_cluster
+_flickr.pdf
+
+pdfTeX warning: pdflatex (file ./figs/experiments/exp_sampling_relative_batch_s
+ize_train_time_stack_cluster_flickr.pdf): PDF inclusion: multiple pdfs with pag
+e group included in a single page
+>] [25 <./figs/experiments/exp_sampling_memory_usage_relative_batch_size_graphs
+age_amazon-computers_peak_memory.pdf> <./figs/experiments/exp_sampling_memory_u
+sage_relative_batch_size_graphsage_flickr_peak_memory.pdf
+
+pdfTeX warning: pdflatex (file ./figs/experiments/exp_sampling_memory_usage_rel
+ative_batch_size_graphsage_flickr_peak_memory.pdf): PDF inclusion: multiple pdf
+s with page group included in a single page
+> <./figs/experiments/exp_sampling_memory_usage_relative_batch_size_cluster_ama
+zon-computers_peak_memory.pdf
+
+pdfTeX warning: pdflatex (file ./figs/experiments/exp_sampling_memory_usage_rel
+ative_batch_size_cluster_amazon-computers_peak_memory.pdf): PDF inclusion: mult
+iple pdfs with page group included in a single page
+> <./figs/experiments/exp_sampling_memory_usage_relative_batch_size_cluster_fli
+ckr_peak_memory.pdf
+
+pdfTeX warning: pdflatex (file ./figs/experiments/exp_sampling_memory_usage_rel
+ative_batch_size_cluster_flickr_peak_memory.pdf): PDF inclusion: multiple pdfs 
+with page group included in a single page
+> <./figs/experiments/exp_small_graph_train_time.pdf
+
+pdfTeX warning: pdflatex (file ./figs/experiments/exp_small_graph_train_time.pd
+f): PDF inclusion: multiple pdfs with page group included in a single page
+>]) (./sec6-related-work.tex [26]) (./sec7-conclusion.tex) (./ms.bbl [27]
+Underfull \hbox (badness 1400) in paragraph at lines 96--99
+[]\OT1/ptm/m/n/10 M. Fey, J. E. Lenssen, Fast graph rep-re-sen-ta-tion learn-in
+g with py-torch ge-o-met-ric, []$\OT1/pcr/m/n/10 https : / /
  []
 
-(./ms.bbl [28] [29])
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 59.
+[28] [29])
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 60.
  [30]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 59.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 60.
  (./ms.aux)
-Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 59.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 59.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 60.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 60.
 Package rerunfilecheck Info: File `ms.out' has not changed.
-(rerunfilecheck)             Checksum: F397ABE77975156AE9AA341C2EC940A4.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 59.
+(rerunfilecheck)             Checksum: B333C18FD6FF13F11AA59BC19C6E0536;1382.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 60.
  ) 
 Here is how much of TeX's memory you used:
- 12412 strings out of 492933
- 189066 string characters out of 6136538
- 308512 words of memory out of 5000000
- 16242 multiletter control sequences out of 15000+600000
- 12582 words of font info for 58 fonts, out of 8000000 for 9000
- 1348 hyphenation exceptions out of 8191
- 44i,24n,49p,634b,538s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 10173 strings out of 480478
+ 171419 string characters out of 5905958
+ 464298 words of memory out of 5000000
+ 25730 multiletter control sequences out of 15000+600000
+ 559471 words of font info for 80 fonts, out of 8000000 for 9000
+ 1141 hyphenation exceptions out of 8191
+ 47i,24n,52p,634b,554s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/share/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texmf-dist/fon
+ts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texmf-dist/fonts/type1/publi
+c/amsfonts/cm/cmbx7.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/c
+mex10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmex7.pfb>
+</usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/te
+xmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/share/texmf-dist/fonts/
+type1/public/amsfonts/cm/cmmi6.pfb></usr/share/texmf-dist/fonts/type1/public/am
+sfonts/cm/cmmi7.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8
+.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmib10.pfb></usr/sh
+are/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmmib7.pfb></usr/share/texmf
+-dist/fonts/type1/public/amsfonts/cmextra/cmmib8.pfb></usr/share/texmf-dist/fon
+ts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texmf-dist/fonts/type1/public
+/amsfonts/cm/cmr12.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cm
+r5.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/sha
+re/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texmf-dist/fo
+nts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texmf-dist/fonts/type1/public
+/amsfonts/cm/cmsy10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/c
+msy6.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/
+share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texmf-dis
+t/fonts/type1/urw/courier/ucrr8a.pfb></usr/share/texmf-dist/fonts/type1/urw/hel
+vetic/uhvr8a.pfb></usr/share/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/
+share/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/share/texmf-dist/fonts/
+type1/urw/times/utmri8a.pfb>
+Output written on ms.pdf (30 pages, 2694333 bytes).
+PDF statistics:
+ 3366 PDF objects out of 3580 (max. 8388607)
+ 1097 compressed objects within 11 object streams
+ 190 named destinations out of 1000 (max. 500000)
+ 441 words of extra memory for PDF output out of 10000 (max. 10000000)
 
-Output written on ms.pdf (30 pages).

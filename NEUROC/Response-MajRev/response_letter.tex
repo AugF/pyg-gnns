@@ -1,0 +1,101 @@
+% LaTeX rebuttal letter example. 
+% 
+% Copyright 2019 Friedemann Zenke, fzenke.net
+%
+% Based on examples by Dirk Eddelbuettel, Fran and others from 
+% https://tex.stackexchange.com/questions/2317/latex-style-or-macro-for-detailed-response-to-referee-report
+% 
+% Licensed under cc by-sa 3.0 with attribution required.
+
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{lipsum} % to generate some filler text
+\usepackage{fullpage}
+\usepackage{times}
+
+% import Eq and Section references from the main manuscript where needed
+% \usepackage{xr}
+% \externaldocument{manuscript}
+
+% package needed for optional arguments
+\usepackage{xifthen}
+% define counters for reviewers and their points
+\newcounter{reviewer}
+\setcounter{reviewer}{0}
+\newcounter{point}[reviewer]
+\setcounter{point}{0}
+
+% This refines the format of how the reviewer/point reference will appear.
+\renewcommand{\thepoint}{P\,\thereviewer.\arabic{point}} 
+
+% command declarations for reviewer points and our responses
+\newcommand{\reviewersection}{\stepcounter{reviewer} \bigskip \hrule
+                  \section*{Reviewer \thereviewer}}
+
+\newenvironment{point}
+   {\refstepcounter{point} \bigskip \noindent {\textbf{Reviewer~Point~\thepoint} } ---\ \begin{sf}}
+   {\end{sf} \par}
+
+\newcommand{\shortpoint}[1]{\refstepcounter{point}  \bigskip \noindent 
+	{\textbf{Reviewer~Point~\thepoint} } ---\begin{sf} ~#1 \end{sf}\par}
+
+\newenvironment{reply}
+   {\medskip \noindent \textbf{Reply}:\  }
+   {\medskip}
+
+\newcommand{\shortreply}[2][]{\medskip \noindent \textbf{Reply}:\  #2
+	\ifthenelse{\equal{#1}{}}{}{ \hfill \footnotesize (#1)}%
+	\medskip}
+
+\begin{document}
+
+\section*{Response to the reviewers}
+% General intro text goes here
+We thank the reviewers for their critical assessment of our work. 
+In the following we address their concerns point by point. 
+
+% Let's start point-by-point with Reviewer 1
+\reviewersection
+
+% Point one description 
+\begin{point}
+	There are lots of symbols in this paper. Some symbols are reused and confusing, such as s denotes sub-layers or edge features.
+\end{point}
+
+% Our reply
+\begin{reply}
+	TODO
+\end{reply}
+
+\begin{point}
+    Some typical applications of GNNs should be included, such as video object segmentation [ref1], human-object interaction [ref2] and human-parsing [ref3].[1] Zero-shot video object segmentation via attentive graph neural networks,iccv 2019 [2] Learning human-object interactions by graph parsing neural networks, eccv 2018. [3] Hierarchical human parsing with typed part-relation reasoning, cvpr 2020.
+\end{point}
+
+\begin{reply}
+	Thank you for pointing out our shortcomings. Computer vision is indeed another important application area of graph neural networks. We have added the mentioned references in the INTRODUCTION section in the revised manuscript. We quote the related sentence below:
+    \begin{quote}
+         The powerful expression ability makes GNNs achieve good accuracy in not only graph analytical tasks [8, 9, 10] (like node classification and link prediction) but also computer vision tasks (like human-object interaction [11], human parsing [12], and video object segmentation [13]).
+        
+    \end{quote}
+\end{reply}
+
+\subsection*{Minor}
+
+% Use the short-hand macros for one-liners.
+\shortpoint{ Typo in line xy. }
+\shortreply{ Fixed.}
+
+% Begin a new reviewer section
+\reviewersection
+
+\begin{point}
+	This is the first point of Reviewer \thereviewer. With some more words foo
+	bar foo bar ...
+\end{point}
+
+\begin{reply}
+	Our reply to it with reference to one of our points above using the \LaTeX's 
+	label/ref system (see also \ref{pt:foo}).
+\end{reply}
+
+\end{document}
