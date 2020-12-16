@@ -3,3 +3,4 @@
 *_pycache__*
 *.log
 *.npy
+*.gz

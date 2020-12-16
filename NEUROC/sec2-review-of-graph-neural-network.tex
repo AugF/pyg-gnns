@@ -1,12 +1,46 @@
+% !TEX root=ms.tex
 \section{Review of Graph Neural Networks}
 \label{sec:review_of_gnns}
 
 In this section, we formally define the graph neural networks and briefly survey typical graph neural networks.
-We denote a simple graph $\mathcal{G}$ as $\mathcal{G}=(\mathcal{V}, \mathcal{E})$, where $\mathcal{V}$ and $\mathcal{E}$ are the vertex set and the edge set of $\mathcal{G}$, respectively.
-Let $n=|\mathcal{V}|$ and $m=|\mathcal{E}|$ as the number of vertices/edges.
-We use $v_i$ $(0 \leq i < n)$ to denote a vertex and $e_{i,j}=(v_i, v_j)$ to denote the edge pointing from $v_i$ to $v_j$.
+We denote a simple \emph{undirected} graph $\mathcal{G}$ as $\mathcal{G}=(\mathcal{V}, \mathcal{E})$, where $\mathcal{V}$ and $\mathcal{E}$ are the vertex set and the edge set of $\mathcal{G}$, respectively.
+%Let $n=|\mathcal{V}|$ and $m=|\mathcal{E}|$ as the number of vertices/edges.
+We use $v_i$ $(0 \leq i < |\mathcal{V}|)$ to denote a vertex and $e_{i,j}=(v_i, v_j)$ to denote the edge pointing from $v_i$ to $v_j$.
 The adjacency set of $v_i$ is $\mathcal{N}(v_i)=\{v|(v_i, v) \in \mathcal{E}\}$.
 We denote a \emph{vector} with a bold lower case letter like $\boldsymbol{x}$ and a \emph{matri}x with a bold upper case letter like $\boldsymbol{X}$.
+Table~\ref{tab:notations} summarizes the common symbols used throughout this work.
+
+\begin{table}[h]
+    \caption{Notations}
+    \label{tab:notations}
+    \centering
+    \small
+    \begin{tabular}{p{3em}lp{35em}}
+        \toprule
+       Category & Symbol & Meaning \\
+        \midrule
+        \multirow[c]{4}{3em}{Graph Structure}& $\mathcal{G}=(\mathcal{V}, \mathcal{E})$ & The simple undirected input graph with the vertex set $\mathcal{V}$ and the edge set $\mathcal{E}$. \\
+        & $v_i$ & The $i$-th vertex of the input graph. \\
+        & $e_{i,j}$ & The edge pointing from $v_i$ to $v_j$ of the input graph. \\
+        & $\mathcal{N}(v_i)$ & The adjacency set of $v_i$ in the input graph. \\ \midrule
+        \multirow[c]{6}{3em}{GNN Definition}& $L$ & The number of GNN layers. \\
+        & $\phi^l$ & The messaging function of the GNN layer $l$. \\
+        & $\Sigma^l$ & The aggregation function of the GNN layer $l$. \\
+        & $\gamma^l$ & The vertex updating function of the GNN layer $l$. \\ 
+        & $\phi^{l,k}$/$\Sigma^{l,k}$/$\gamma^{l,k}$ & The messaging/aggregation/updating function of the $k$-th sub-layer of the GNN layer  $l$.\\
+        & $\textcolor{blue}{\boldsymbol{W}^l, \boldsymbol{W}^{(k)}/\boldsymbol{b}, \boldsymbol{a}}$ & The matrices/vectors represented by the blue characters are the weight matrices/vectors that need to be learned in the GNN. \\  \midrule
+        \multirow[c]{8}{3em}{Vectors}& $\boldsymbol{v}_i$ & The input feature vector of the vertex $v_i$. \\
+        & $\boldsymbol{e}_{i,j}$ & The input feature vector of the edge $e_{i,j}$.  \\
+        & $\boldsymbol{h}_i^{l}$ &  The {input} hidden vector of the graph neuron corresponding to $v_i$ in the GNN layer $l$. \\
+        & $\boldsymbol{h}_i^{l+1}$ &  The {output} hidden vector of the graph neuron corresponding to $v_i$ in the GNN layer $l$.\\
+        & $\boldsymbol{m}_{i,j}^l$ & The message vector of the edge $e_{i,j}$ outputted by $\phi^l$ of the GNN layer $l$. \\
+        & $\boldsymbol{s}_{i}^l$ & The aggregated vector of the vertex $v_i$ outputted by $\Sigma^l$ of the GNN layer $l$. \\
+        & $\boldsymbol{m}_{i,j}^{l,k}$/$\boldsymbol{s}_{i}^{l,k}$ & The message/aggregated vector of the vertex $v_i$ outputted by $\phi^{l,k}$/$\Sigma^{l,k}$ of the $k$-th sub-layer of the GNN layer $l$. \\
+        & $d_{in}$, $d_{out}$ &  The dimensions of the input/output hidden vectors of a graph neuron. \\
+        \bottomrule
+        
+    \end{tabular}
+\end{table}
 
 \subsection{Structure of Graph Neural Networks}
 

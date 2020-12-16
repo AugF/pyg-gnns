@@ -1,3 +1,4 @@
+% !TEX program=pdflatex
 % LaTeX rebuttal letter example. 
 % 
 % Copyright 2019 Friedemann Zenke, fzenke.net
@@ -7,11 +8,12 @@
 % 
 % Licensed under cc by-sa 3.0 with attribution required.
 
-\documentclass[11pt]{article}
+\documentclass[12pt]{article}
 \usepackage[utf8]{inputenc}
 \usepackage{lipsum} % to generate some filler text
 \usepackage{fullpage}
 \usepackage{times}
+\usepackage{amsmath, amsthm}
 
 % import Eq and Section references from the main manuscript where needed
 % \usepackage{xr}
@@ -64,7 +66,33 @@ In the following we address their concerns point by point.
 
 % Our reply
 \begin{reply}
-	TODO
+    We apologize for the confusing use of symbols.
+    %
+    To clarify the symbol usage, we have checked the full text of the manuscript and unified the usage of symbols.
+    %
+    We have avoided the problem of repeated use of symbols, so that each symbol only represents one meaning after the revision.
+    %
+    We summarize the frequently-used symbols in Table 1 in the revised manuscript.
+    %
+    We quote the table below:
+    %%%%% TODO, Paste Table 1 %%%%.
+    
+    In the revised manuscript, $\boldsymbol{e}_{i,j}$ represents the input feature vector of the edge $e_{i,j}$.
+    %
+    It is the same for all GNN layers.
+    %
+    $\boldsymbol{s}$ represents aggregated vectors outputted by the aggregation function $\Sigma$ in graph neurons.
+    %
+    $\boldsymbol{s}^l_i$ represents the aggregated vector of the graph neuron corresponding to the vertex $v_i$ in the GNN layer $l$.
+    %
+    If the GNN layer $l$ has sub-layers, $\boldsymbol{s}^{l,k}_i$ represents the aggregated vector corresponding to $v_i$ in the $k$-th sub-layer.
+    
+    To clarify the concept of sub-layers in a GNN layer, we have added the following description in Section 2.2 ``Graph Neuron and Message-passing Model'' in the revised manuscript:
+    %%%%% TODO %%%%%%%%
+    
+
+    
+    
 \end{reply}
 
 \begin{point}
