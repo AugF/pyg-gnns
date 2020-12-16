@@ -1,6 +1,3 @@
-"""
-Sample-based Inference阶段的时间性能瓶颈和空间性能瓶颈测量文件
-"""
 import torch
 import torch.nn.functional as F
 from torch.nn import ModuleList
@@ -18,7 +15,6 @@ from gaan.models import GaAN
 from ggnn.models import GGNN
 from gat.models import GAT
 from gcn.models import GCN
-from logger import Logger
 
 from utils import get_dataset, gcn_norm, normalize, get_split_by_file, nvtx_push, nvtx_pop, log_memory, small_datasets
 
@@ -27,7 +23,8 @@ parser.add_argument('--dataset', type=str, default='cora', help="dataset: [cora,
                                                                     "amazon-computers, amazon-photo, coauthor-physics, pubmed]")
 
 parser.add_argument('--model', type=str, default='gcn', help="gnn models: [gcn, ggnn, gat, gaan]")
-parser.add_argument('--epochs', type=int, default=11, help="epochs for training")
+parser.add_argument('--epochs', type=int, default=100000, help="epochs for training")
+parser.add_argument('--patience_step', type=int, default=50, help="patience_step for training")
 parser.add_argument('--layers', type=int, default=2, help="layers for hidden layer")
 parser.add_argument('--hidden_dims', type=int, default=64, help="hidden layer output dims")
 parser.add_argument('--heads', type=int, default=8, help="gat or gaan model: heads")
@@ -44,7 +41,6 @@ parser.add_argument('--lr', type=float, default=0.01, help="adam's learning rate
 parser.add_argument('--weight_decay', type=float, default=0.0005, help="adam's weight decay")
 parser.add_argument('--no_record_shapes', action='store_false', default=True, help="nvtx or autograd's profile to record shape")
 parser.add_argument('--json_path', type=str, default='', help="json file path for memory")
-parser.add_argument('--infer_json_path', type=str, default='', help="inference stage: json file path for memory")
 parser.add_argument('--mode', type=str, default='cluster', help='sampling: [cluster, graphsage]')
 parser.add_argument('--batch_size', type=int, default=512, help='batch size')
 parser.add_argument('--batch_partitions', type=int, default=20, help='number of cluster partitions per batch')
@@ -53,10 +49,7 @@ parser.add_argument('--num_workers', type=int, default=40, help='number of Data 
 args = parser.parse_args()
 gpu = not args.cpu and torch.cuda.is_available()
 flag = not args.json_path == ''
-infer_flag = not args.infer_json_path == ''
-
 print(args)
-st = time.time()
 
 # 0. set manual seed
 np.random.seed(args.seed)
@@ -92,17 +85,17 @@ subgraph_loader = NeighborSampler(data.edge_index, sizes=[-1], batch_size=1024,
                                   shuffle=False, num_workers=args.num_workers)
 
 # 2.2 train_data
-# loader_time = time.time()    
-# if args.mode == 'cluster':
-#     cluster_data = ClusterData(data, num_parts=args.cluster_partitions, recursive=False,
-#                             save_dir=dataset.processed_dir)
-#     train_loader = ClusterLoader(cluster_data, batch_size=args.batch_partitions, shuffle=True,
-#                                 num_workers=args.num_workers)
-# elif args.mode == 'graphsage':
-#     train_loader = NeighborSampler(data.edge_index, node_idx=None,
-#                                sizes=[25, 10], batch_size=args.batch_size, shuffle=True,
-#                                num_workers=args.num_workers) # transductive learning, 在此背景下
-# loader_time = time.time() - loader_time
+loader_time = time.time()    
+if args.mode == 'cluster':
+    cluster_data = ClusterData(data, num_parts=args.cluster_partitions, recursive=False,
+                            save_dir=dataset.processed_dir)
+    train_loader = ClusterLoader(cluster_data, batch_size=args.batch_partitions, shuffle=True,
+                                num_workers=args.num_workers)
+elif args.mode == 'graphsage':
+    train_loader = NeighborSampler(data.edge_index, node_idx=None,
+                               sizes=[25, 10], batch_size=args.batch_size, shuffle=True,
+                               num_workers=args.num_workers) # transductive learning, 在此背景下
+loader_time = time.time() - loader_time
 
 # 3. set model
 if args.model == 'gcn':
@@ -111,22 +104,20 @@ if args.model == 'gcn':
     model = GCN(
         layers=args.layers,
         n_features=num_features, n_classes=dataset.num_classes,
-        hidden_dims=args.hidden_dims, gpu=gpu, flag=flag, infer_flag=infer_flag,
+        hidden_dims=args.hidden_dims, gpu=gpu, flag=flag, 
         device=device, cached_flag=False, norm=norm
     )
 elif args.model == 'gat':
     model = GAT(
         layers=args.layers,
         n_features=num_features, n_classes=dataset.num_classes,
-        head_dims=args.head_dims, heads=args.heads, gpu=gpu,
-        flag=flag, infer_flag=infer_flag, sparse_flag=args.x_sparse, device=device,
+        head_dims=args.head_dims, heads=args.heads, gpu=gpu, flag=flag, sparse_flag=args.x_sparse, device=device,
     )
 elif args.model == 'ggnn':
     model = GGNN(
         layers=args.layers,
         n_features=num_features, n_classes=dataset.num_classes,
-        hidden_dims=args.hidden_dims, gpu=gpu, flag=flag,
-        infer_flag=infer_flag, device=device
+        hidden_dims=args.hidden_dims, gpu=gpu, flag=flag, device=device
     )
 elif args.model == 'gaan':
     model = GaAN(
@@ -134,44 +125,26 @@ elif args.model == 'gaan':
         n_features=num_features, n_classes=dataset.num_classes,
         hidden_dims=args.hidden_dims,
         heads=args.heads, d_v=args.d_v,
-        d_a=args.d_a, d_m=args.d_m, gpu=gpu,
-        flag=flag, infer_flag=infer_flag, device=device
+        d_a=args.d_a, d_m=args.d_m, gpu=gpu, flag=flag, device=device
     )
 
 model, data = model.to(device), data.to(device)
-
 optimizer = torch.optim.Adam([
     dict(params=model.convs[i].parameters(), weight_decay=args.weight_decay if i == 0 else 0)
     for i in range(1 if args.model == "ggnn" else args.layers)]
-    , lr=args.lr)  # Only perform weight-decay on first convolution, 参考了pytorch_geometric中的gcn.py的例子: https://github.com/rusty1s/pytorch_geometric/blob/master/examples/gcn.py
-
-log_memory(infer_flag, device, 'data load')
-
-def train(epoch):
+    , lr=args.lr)
+                
+def train():
     model.train()
-    
     total_nodes = int(data.train_mask.sum())
-
     total_loss = 0
 
-    sampling_time, to_time, train_time = 0.0, 0.0, 0.0
-
     train_iter = iter(train_loader)
-    cnt = 0
     while True:
         try:
-            t0 = time.time()
-            batch = next(train_iter)
-            t1 = time.time()
-            sampling_time += t1 - t0
-            nvtx_push(gpu, "batch" + str(cnt))
-            log_memory(flag, device, 'forward_start')
-            nvtx_push(gpu, "forward")
-            
+            batch = next(train_iter)            
             if args.mode == "cluster":
                 batch = batch.to(device)
-                t2 = time.time()
-                to_time += t2 - t1
                 optimizer.zero_grad()
                 out = model(batch.x, batch.edge_index)
                 if args.dataset in ['yelp', 'amazon']:
@@ -187,80 +160,52 @@ def train(epoch):
                     y = data.y[n_id[:batch_size], :].to(device)
                 else:
                     y = data.y[n_id[:batch_size]].to(device)
-                t2 = time.time()
-                to_time += t2 - t1
                 optimizer.zero_grad()            
                 out = model(data.x[n_id].to(device), adjs)
                 if args.dataset in ['yelp', 'amazon']:
                     loss = torch.nn.BCEWithLogitsLoss()(out, y)
                 else:
                     loss = F.nll_loss(out.log_softmax(dim=-1), y)
-            nvtx_pop(gpu)
-            
-            log_memory(flag, device, 'forward_end')
-            nvtx_push(gpu, "backward")
+                                
             loss.backward()
             optimizer.step()
-            nvtx_pop(gpu)
             
-            log_memory(flag, device, 'backward_end')
             total_loss += loss.item() * batch_size            
-            nvtx_pop(gpu)
-            train_time += time.time() - t2 # 
-            cnt += 1      
         except StopIteration:
             break
 
     loss = total_loss / total_nodes
-    return loss, sampling_time, to_time, train_time, cnt
+    return loss
 
 
 @torch.no_grad()
-def test(epoch):  # Inference should be performed on the full graph.
-    t0 = time.time()
+def test():
     model.eval()
-    out = model.inference(data.x, subgraph_loader)
-
-    y_true = data.y.cpu()
-    y_pred = out.argmax(dim=-1)
-    t1 = time.time()
+    out = model(data.x, data.edge_index)
     
-    log_memory(infer_flag, device, 'other_start')
-    accs = []
-    for mask in [data.train_mask, data.val_mask, data.test_mask]:
-        correct = y_pred[mask].eq(y_true[mask]).sum().item()
-        accs.append(correct / mask.sum().item())
+    val_loss = F.nll_loss(F.log_softmax(out, dim=1)[data.val_mask], data.y[data.val_mask])
+    
+    logits, accs = F.log_softmax(out, dim=1), []
+    for _, mask in data('train_mask', 'val_mask', 'test_mask'):
+        pred = logits[mask].max(1)[1]
+        acc = pred.eq(data.y[mask]).sum().item() / mask.sum().item()
+        accs.append(acc)
+    return accs, val_loss
 
-    print(f"Epoch {epoch}, inference_time: {t1 - t0}s, other_time: {time.time() - t1}s")
-    return accs
-
-cnt = len(subgraph_loader)
+val_loss_min = np.inf
+patience_step = 0
+best_test_acc = None
+t0 = time.time()
 for epoch in range(args.epochs):
-    t0 = time.time()
-    nvtx_push(gpu, "epochs" + str(epoch))
+    loss = train()
     
-    # nvtx_push(gpu, "train")
-    # train(epoch)
-    # nvtx_pop(gpu)
-    
-    nvtx_push(gpu, "eval")
-    log_memory(infer_flag, device, 'eval_start')
-    log = 'Epoch: {:03d}, Train: {:.8f}, Val: {:.8f}, Test: {:.8f}, Use time: {:.8f}s'
-    accs = test(epoch)
-    print(log.format(epoch, *accs, time.time() - t0))
-    log_memory(infer_flag, device, 'eval_end')
-    nvtx_pop(gpu)
-    
-    nvtx_pop(gpu)
-
-
-if flag:
-    from utils import df
-    with open(args.json_path, "w") as f:
-        json.dump(df, f)
-
-if infer_flag:
-    from utils import df
-    with open(args.infer_json_path, "w") as f:
-        json.dump(df, f)
-print(f"use_time: {time.time() - st}s")
+    accs, val_loss = test()
+    if val_loss <= val_loss_min :
+        patience_step = 0
+        val_loss_min = val_loss
+        best_test_acc = accs[2]
+    else:
+        patience_step += 1
+        if patience_step >= args.patience_step:
+            break
+    print(f"Epoch: {epoch:03d}, train_loss: {loss:.8f}, val_loss: {val_loss:.8f}, Train: {accs[0]:.8f}, Val: {accs[1]:.8f}, Test: {accs[2]:.8f}, best_test_acc: {best_test_acc:.8f}, cur_time: {time.time()-t0:.8f}s")

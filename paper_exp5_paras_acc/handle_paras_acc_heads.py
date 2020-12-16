@@ -13,10 +13,10 @@ models = ["gcn", "ggnn", "gat", "gaan"]
 gat_heads = ["1", "2", "4", "8", "16"]
 
 def save_acc_to_csv(): # 将统计得到的acc结果保存在csv文件中 
-    if not os.path.exists("acc_res"):
-        os.makedirs("acc_res")
+    dir_config = "dir_gat_heads_exp"
+    if not os.path.exists(dir_config):
+        os.makedirs(dir_config)
     model = "gat"
-    dir_config = "dir_gat_acc"
     
     for hd in ["1", "2", "4"]:
         # heads

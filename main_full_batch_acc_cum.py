@@ -158,6 +158,7 @@ for run in range(args.runs):
 
     es_count = best_val_acc = test_acc = 0
     t0 = time.time()
+    patient_step = 0
     for epoch in range(args.epochs):
         train(epoch)
         es_count += 1
@@ -165,6 +166,11 @@ for run in range(args.runs):
             accs = test()
             if accs[1] > best_val_acc:
                 best_val_acc = accs[1]
-                test_acc = max(test_acc, accs[2])
+                test_acc = accs[2]
+                patient_step = 0
+            else:
+                patient_step += 1
             print(f"Batch: {es_count:03d}, train_acc: {accs[0]:.8f}, val_acc: {accs[1]:.8f}, best_val_acc: {best_val_acc: .8f}, best_test_acc: {test_acc:.8f}, cur_use_time: {(time.time() - t0):.4f}s")
+        if patient_step >= 50:
+            break
   

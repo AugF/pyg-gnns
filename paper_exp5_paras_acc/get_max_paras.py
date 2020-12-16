@@ -36,9 +36,9 @@ def save_acc_to_csv(dir_work="early_stopping2"): # 将统计得到的acc结果�
                     acc = None                    
                     with open(file_name) as f:
                         for line in f:
-                            match_line = re.match("   Final Test: (.*) ± .*", line)
+                            match_line = re.match("Final Test Acc: (.*)", line)
                             if match_line:
-                                acc = int(float(match_line.group(1)) * 100) / 10000
+                                acc = format(float(match_line.group(1)), ".5f")
                                 break
                     df_hds[data].append(acc)
             df = pd.DataFrame(df_hds, index=gcn_ggnn_hds)
@@ -55,12 +55,13 @@ def save_acc_to_csv(dir_work="early_stopping2"): # 将统计得到的acc结果�
                     if not os.path.exists(file_name):
                         df_hds[data].append(None)
                         continue   
+                    print(file_name)
                     acc = None
                     with open(file_name) as f:
                         for line in f:
-                            match_line = re.match("   Final Test: (.*) ± .*", line)
+                            match_line = re.match("Final Test Acc: (.*)", line)
                             if match_line:
-                                acc = int(float(match_line.group(1)) * 100) / 10000
+                                acc = format(float(match_line.group(1)), ".5f")
                                 break
                     df_hds[data].append(acc)
             df = pd.DataFrame(df_hds, index=gat_hds)
@@ -76,12 +77,13 @@ def save_acc_to_csv(dir_work="early_stopping2"): # 将统计得到的acc结果�
                     if not os.path.exists(file_name):
                         df_heads[data].append(None)
                         continue   
+                    print(file_name)
                     acc = None
                     with open(file_name) as f:
                         for line in f:
-                            match_line = re.match("   Final Test: (.*) ± .*", line)
+                            match_line = re.match("Final Test Acc: (.*)", line)
                             if match_line:
-                                acc = int(float(match_line.group(1)) * 100) / 10000
+                                acc = format(float(match_line.group(1)), ".5f")
                                 break
                     df_heads[data].append(acc)
             df = pd.DataFrame(df_heads, index=gat_heads)
@@ -90,6 +92,7 @@ def save_acc_to_csv(dir_work="early_stopping2"): # 将统计得到的acc结果�
         elif model == "gaan":
             dir_config = "dir_gaan_acc"
             # hds
+            print("gaan hds")
             df_hds = {}
             for data in datasets:
                 df_hds[data] = []
@@ -98,12 +101,13 @@ def save_acc_to_csv(dir_work="early_stopping2"): # 将统计得到的acc结果�
                     if not os.path.exists(file_name):
                         df_hds[data].append(None)
                         continue   
+                    print(file_name)
                     acc = None
                     with open(file_name) as f:
                         for line in f:
-                            match_line = re.match("   Final Test: (.*) ± .*", line)
+                            match_line = re.match("Final Test Acc: (.*)", line)
                             if match_line:
-                                acc = int(float(match_line.group(1)) * 100) / 10000
+                                acc = format(float(match_line.group(1)), ".5f")
                                 break
                     df_hds[data].append(acc)
             df = pd.DataFrame(df_hds, index=gaan_hds)
@@ -111,20 +115,23 @@ def save_acc_to_csv(dir_work="early_stopping2"): # 将统计得到的acc结果�
             df.to_csv(f"{dir_work}/acc_res/{model}_hds.csv")
             
             # ds
+            print("gaan ds")
             df_ds = {}
             for data in datasets:
+                print("ds", model, data, gaan_ds)
                 df_ds[data] = []
                 for d in gaan_ds:
                     file_name = f"{dir_work}/{dir_config}/config0_{model}_{data}_4_{d}_64.log"
                     if not os.path.exists(file_name):
                         df_ds[data].append(None)
-                        break
+                        continue
+                    print(file_name)
                     acc = None
                     with open(file_name) as f:
                         for line in f:
-                            match_line = re.match("   Final Test: (.*) ± .*", line)
+                            match_line = re.match("Final Test Acc: (.*)", line)
                             if match_line:
-                                acc = int(float(match_line.group(1)) * 100) / 10000
+                                acc = format(float(match_line.group(1)), ".5f")
                                 break
                     df_ds[data].append(acc)
                 
@@ -133,6 +140,7 @@ def save_acc_to_csv(dir_work="early_stopping2"): # 将统计得到的acc结果�
             df.to_csv(f"{dir_work}/acc_res/{model}_ds.csv")
                 
             # heads
+            print("gaan heads")
             df_heads = {}
             for data in datasets:
                 df_heads[data] = []
@@ -141,12 +149,13 @@ def save_acc_to_csv(dir_work="early_stopping2"): # 将统计得到的acc结果�
                     if not os.path.exists(file_name):
                         df_heads[data].append(None)
                         break
+                    print(file_name)
                     acc = None
                     with open(file_name) as f:
                         for line in f:
-                            match_line = re.match("   Final Test: (.*) ± .*", line)
+                            match_line = re.match("Final Test Acc: (.*)", line)
                             if match_line:
-                                acc = int(float(match_line.group(1)) * 100) / 10000 # 精度汇报，报告截断后的数
+                                acc = format(float(match_line.group(1)), ".5f")
                                 break
                     df_heads[data].append(acc)
             df = pd.DataFrame(df_heads, index=gaan_heads)
@@ -269,9 +278,8 @@ def get_alg_contrast(dir_in="early_stopping2/acc_res", dir_out="early_stopping2/
     pd.DataFrame(acc_maxv, index=datasets_map[:-1]).to_csv(dir_out + "/max_acc.csv")
     print(acc_maxv)
     
-save_acc_to_csv("early_stopping2")
-os.chdir("/home/wangzhaokang/wangyunpan/gnns-project/pyg-gnns/paper_exp5_paras_acc")
-pics_gcn_ggnn(dir_in="early_stopping2/acc_res", dir_out="early_stopping2/acc_res")
-pics_gat(dir_in="early_stopping2/acc_res", dir_out="early_stopping2/acc_res")
-pics_gaan(dir_in="early_stopping2/acc_res", dir_out="early_stopping2/acc_res")
-get_alg_contrast()
+save_acc_to_csv("./")
+pics_gcn_ggnn(dir_in="acc_res", dir_out="acc_res")
+pics_gat(dir_in="acc_res", dir_out="acc_res")
+pics_gaan(dir_in="acc_res", dir_out="acc_res")
+get_alg_contrast(dir_in="acc_res", dir_out="acc_res")

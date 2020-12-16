@@ -19,6 +19,6 @@ do
         fi
         val="configuration=0, model=${model}, dataset=graph_10k_${ds}"
         echo ${val}
-        python ../main_inference_memory.py --dataset "graph_10k_${ds}" --model ${model} --json_path "${dir_config}/config0_${model}_graph_10k_${ds}.json"
+        python ../main_inference_memory.py --device cuda:0 --dataset "graph_10k_${ds}" --model ${model} --json_path "${dir_config}/config0_${model}_graph_10k_${ds}.json"
     done
 done

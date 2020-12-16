@@ -19,6 +19,6 @@ do
             continue
         fi
         echo ${val}
-        python ../main_inference.py --dataset ${data} --model ${model} --json_path "${dir_config}/config0_${model}_${data}.json"
+        python ../main_inference_memory.py --device cuda:0 --dataset ${data} --model ${model} --json_path "${dir_config}/config0_${model}_${data}.json"
     done
 done

@@ -32,12 +32,13 @@ datasets_maps = {
 
 xticklabels = ['1%', '3%', '6%', '10%', '25%', '50%', 'FULL']
 
-dir_in = "batch_acc_cum_fix_time"
+dir_in = "log_fix_time"
+dir_out = "res_convergence_validation"
 
 for data in datasets:
     for model in models:
-        if not os.path.exists(f"acc_fig/{model}/{data}"):
-            os.makedirs(f"acc_fig/{model}/{data}")
+        if not os.path.exists(f"{dir_out}/{model}/{data}"):
+            os.makedirs(f"{dir_out}/{model}/{data}")
         for mode in modes:
             print(data, model, mode)
             # 将数据存储到csv文件
@@ -95,4 +96,4 @@ for data in datasets:
                     ax.legend()
                     fig.tight_layout() 
                     fig_path = '_'.join([mode, model, data, str(cs)]) + '_graphsage.png'
-                    fig.savefig(f"acc_fig/{model}/{data}/{fig_path}")
+                    fig.savefig(f"{dir_out}/{model}/{data}/{fig_path}")

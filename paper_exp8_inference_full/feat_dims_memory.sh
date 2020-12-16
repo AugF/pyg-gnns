@@ -7,7 +7,6 @@ then
 fi
 
 
-# datasets=(amazon-photo pubmed amazon-computers coauthor-physics flickr com-amazon)
 datasets=(com-amazon)
 models=(gcn ggnn gat gaan)
 fds=(16 32 64 128 256 512)
