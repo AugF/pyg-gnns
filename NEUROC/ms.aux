@@ -52,12 +52,14 @@
 \citation{aditya2016_node2vec}
 \@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Structure of a typical graph neural network. (a) Demo GNN, (b) Demo graph. The target application is the node classification. The demo GNN has two GNN layers.\relax }}{4}{figure.caption.3}\protected@file@percent }
 \newlabel{fig:general_structure_of_gnn}{{1}{4}{Structure of a typical graph neural network. (a) Demo GNN, (b) Demo graph. The target application is the node classification. The demo GNN has two GNN layers.\relax }{figure.caption.3}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Graph Neuron and Message-passing Model}{4}{subsection.2.2}\protected@file@percent }
 \citation{gilmer_messgae_passing}
 \citation{PyG}
 \citation{DGL}
 \citation{huang2018_gat}
 \citation{zhang2018_gaan}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Graph Neuron and Message-passing Model}{5}{subsection.2.2}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Graph neuron of $v_3$ in the GNN layer $l$ with the demo graph $\mathcal  {G}$ in Figure~\ref  {fig:general_structure_of_gnn}b. $\phi ^l$/$\Sigma ^l$/$\gamma ^l$ are the messaging/aggregation/updating functions in the message-passing model, respecitvely.\relax }}{5}{figure.caption.4}\protected@file@percent }
+\newlabel{fig:graph_neuron_structure}{{2}{5}{Graph neuron of $v_3$ in the GNN layer $l$ with the demo graph $\mathcal {G}$ in \figurename ~\ref {fig:general_structure_of_gnn}b. $\phi ^l$/$\Sigma ^l$/$\gamma ^l$ are the messaging/aggregation/updating functions in the message-passing model, respecitvely.\relax }{figure.caption.4}{}}
 \citation{defferrad2016_chebnet}
 \citation{kipf2017_gcn}
 \citation{li2018_agcn}
@@ -68,8 +70,6 @@
 \citation{li2015_ggnn}
 \citation{huang2018_gat}
 \citation{zhang2018_gaan}
-\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Graph neuron of $v_3$ in the GNN layer $l$ with the demo graph $\mathcal  {G}$ in Figure~\ref  {fig:general_structure_of_gnn}b. $\phi ^l$/$\Sigma ^l$/$\gamma ^l$ are the messaging/aggregation/updating functions in the message-passing model, respecitvely.\relax }}{5}{figure.caption.4}\protected@file@percent }
-\newlabel{fig:graph_neuron_structure}{{2}{5}{Graph neuron of $v_3$ in the GNN layer $l$ with the demo graph $\mathcal {G}$ in \figurename ~\ref {fig:general_structure_of_gnn}b. $\phi ^l$/$\Sigma ^l$/$\gamma ^l$ are the messaging/aggregation/updating functions in the message-passing model, respecitvely.\relax }{figure.caption.4}{}}
 \citation{defferrad2016_chebnet}
 \citation{kipf2017_gcn}
 \citation{li2018_agcn}
@@ -90,12 +90,12 @@
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {2.3.1}GCN (Low Vertex \& Low Edge Complexity)}{7}{subsubsection.2.3.1}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {2.3.2}GGNN (High Vertex \& Low Edge Complexity)}{7}{subsubsection.2.3.2}\protected@file@percent }
 \citation{huang2018_gat}
-\citation{zhang2018_gaan}
-\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Complexity quadrants of typical GNNs. We compare the complexity according to the number of sub-layers, the Big-O notation and the number of parameters to train.\relax }}{8}{figure.caption.7}\protected@file@percent }
-\newlabel{fig:gnn_complexity_quadrant}{{3}{8}{Complexity quadrants of typical GNNs. We compare the complexity according to the number of sub-layers, the Big-O notation and the number of parameters to train.\relax }{figure.caption.7}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Complexity quadrants of typical GNNs. We compare the complexity according to the number of sub-layers, the Big-O notation, and the number of parameters to train.\relax }}{8}{figure.caption.7}\protected@file@percent }
+\newlabel{fig:gnn_complexity_quadrant}{{3}{8}{Complexity quadrants of typical GNNs. We compare the complexity according to the number of sub-layers, the Big-O notation, and the number of parameters to train.\relax }{figure.caption.7}{}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {2.3.3}GAT (Low Vertex \& High Edge Complexity)}{8}{subsubsection.2.3.3}\protected@file@percent }
 \newlabel{eq:GAT-sub-layer-1}{{2}{8}{GAT (Low Vertex \& High Edge Complexity)}{equation.2.2}{}}
 \newlabel{eq:GAT-sub-layer-2}{{3}{8}{GAT (Low Vertex \& High Edge Complexity)}{equation.2.3}{}}
+\citation{zhang2018_gaan}
 \citation{chiang2019_cluster_gcn}
 \citation{hamilton2017_graphsage,ying2018_pinsage,chen2018_fastgcn,chen2018_sgcn,huang2018_adap}
 \citation{hamilton2017_graphsage}
@@ -129,8 +129,8 @@
 \citation{chiang2019_cluster_gcn}
 \citation{hamilton2017_graphsage}
 \citation{chiang2019_cluster_gcn}
-\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces Dataset overview. $\bar  {d}$ represents the average vertex degree. $dim(\boldsymbol  {x})$ is the dimension of the input feature vector.\relax }}{10}{table.caption.11}\protected@file@percent }
-\newlabel{tab:dataset_overview}{{4}{10}{Dataset overview. $\bar {d}$ represents the average vertex degree. $dim(\boldsymbol {x})$ is the dimension of the input feature vector.\relax }{table.caption.11}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces Dataset overview. $\bar  {d}$ represents the average vertex degree. $dim(\boldsymbol  {v})$ is the dimension of the input feature vector.\relax }}{10}{table.caption.11}\protected@file@percent }
+\newlabel{tab:dataset_overview}{{4}{10}{Dataset overview. $\bar {d}$ represents the average vertex degree. $dim(\boldsymbol {v})$ is the dimension of the input feature vector.\relax }{table.caption.11}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Experimental Setting}{10}{subsection.3.1}\protected@file@percent }
 \newlabel{sec:experimental_env}{{3.1}{10}{Experimental Setting}{subsection.3.1}{}}
 \@writefile{toc}{\contentsline {paragraph}{Experimental Environment}{10}{section*.9}\protected@file@percent }

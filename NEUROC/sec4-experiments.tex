@@ -12,7 +12,7 @@ If we increase one of the hyper-parameters and fix the others, the training time
 
 To verify the time complexity analysis in \tablename~\ref{tab:gnn_overview_edge} and \tablename~\ref{tab:gnn_overview_vertex}, we first compare the training time of the four GNNs on the real-world datasets in \ref{tab:dataset_overview}.
 The ranking of the training time is GaAN $\gg$ GAT $>$ GGNN $>$ GCN in all cases.
-Since the real-world graphs have more edges than edges ($m > n$), the time complexity of the edge calculation stage affects more than the vertex calculation stage.
+Since the real-world graphs have more edges than edges ($|\mathcal{E}| > |\mathcal{V}|$), the time complexity of the edge calculation stage affects more than the vertex calculation stage.
 The ranking is consistent with the time complexity analysis.
 
 \begin{figure}[htb]
@@ -44,23 +44,25 @@ To further evaluate the effects of the hyper-parameters, we measure the training
 \end{figure}
 
 
-Since $dim(\boldsymbol{h^0})$ and $dim{\boldsymbol{h^1}}$ are determined by the dataset with $dim(\boldsymbol{h}^0=dim(\boldsymbol{x}))$ and $dim(\boldsymbol{h}^2)=\#Classes$,
-for GCN and GGNN, the only modifiable hyper-parameter is the hidden dimension $dim(\boldsymbol{h}^1)$ with $dim(\boldsymbol{h}^1) = d^0_{out} = d^1_{in}$.
-According to the time complexity analysis, if we fix other hyper-parameters but only increase $dim(\boldsymbol{h}^1)$, the computing costs of the GNN layer 0 and the GNN layer 1 both increase linearly with $dim(\boldsymbol{h}^1)$, causing the training time of the whole GNN also increasing linearly. 
-\figurename~\ref{fig:exp_hyperparameter_on_vertex_edge_phase_time_gcn} and \figurename~\ref{fig:exp_hyperparameter_on_vertex_edge_phase_time_ggnn} show that the training time of GCN and GGNN increased linearly with $dim(\boldsymbol{h}^1)$ when $dim(\boldsymbol{h}^1)$ is big, consistent with the time complexity analysis.
+$dim(\MyVec{h^0})$ and $dim(\MyVec{h}^1)$ are solely determined by the dataset with $d^0_{in} = dim(\MyVec{h}^0_x) = dim(\MyVec{v_x})$ and $d^1_{out} = dim(\boldsymbol{h}^2_x)=\#Class$.
+%
+For GCN and GGNN, the only modifiable hyper-parameter is the dimension of the hidden vectors $dim(\boldsymbol{h}^1_x)$ that are both the output hidden vectors for the GNN layer 0 and the input hidden vector for the GNN layer 1.
+%
+According to the time complexity analysis, if we fix other hyper-parameters but only increase $dim(\boldsymbol{h}^1_x)$, the computational costs of the GNN layer 0 and the GNN layer 1 both increase linearly with $dim(\boldsymbol{h}^1_x)$, causing the training time of the whole GNN also increasing linearly. 
+\figurename~\ref{fig:exp_hyperparameter_on_vertex_edge_phase_time_gcn} and \figurename~\ref{fig:exp_hyperparameter_on_vertex_edge_phase_time_ggnn} show that the training time of GCN and GGNN increased linearly with $dim(\boldsymbol{h}^1_x)$ when $dim(\boldsymbol{h}^1_x)$ is big, consistent with the time complexity analysis.
 
 For GAT, we modify the number of heads $K$ and the dimension of each head $d_{head}$ in the GAT layer 0.
-The dimension of the hidden feature vector is determined correspondingly as $d^0_{out} = d^1_{in} = dim(\boldsymbol{h}^1) = K d_{head}$.
-Thus, the computing costs of the GAT layer 0 and the GAT layer 1 increase linearly with K and $d_{head}$ separately. 
+The dimension of the hidden vectors $dim(\MyVec{h}^1_x)$ is determined as $dim(\boldsymbol{h}^1_x) = K d_{head}$.
+Thus, the computational costs of the GAT layer 0 and the GAT layer 1 should increase linearly with $K$ and $d_{head}$, separately. 
 \figurename~\ref{fig:exp_hyperparameter_on_vertex_edge_phase_time_gat} confirms the theoretical analysis.
 
 For GaAN, it is also based on the multi-head mechanism.
-Its time complexity is affected by $dim(\boldsymbol{h}^1)$ ($d^0_{out} = d^1_{in} = dim(\boldsymbol{h}^1)$), $d_a$, $d_v$, $d_m$ and the number of heads $K$.
-\figurename~\ref{fig:exp_hyperparameter_on_vertex_edge_phase_time_gaan} demonstrates that the training time increases linearly with the hyper-parameters, except for $dim(\boldsymbol{h}^1)$.
-As $dim(\boldsymbol{h}^1)$ increases, the training time increases first slightly and then linearly.
-We observe similar phenomena in GCN, GGNN, and GAT with low hyper-parameters.
-When the hyper-parameters is too low, the GNN training cannot make full use of the computing power of the GPU.
-When the hyper-parameter becomes high enough, the training time increases linearly, supporting the time complexity analysis.
+Its time complexity is affected by $dim(\boldsymbol{h}^1_x)$ ($d^0_{out} = d^1_{in} = dim(\boldsymbol{h}^1_x)$), $d_a$, $d_v$, $d_m$, and the number of heads $K$.
+\figurename~\ref{fig:exp_hyperparameter_on_vertex_edge_phase_time_gaan} demonstrates that the training time increases linearly with the hyper-parameters, except for $dim(\boldsymbol{h}^1_x)$.
+As $dim(\boldsymbol{h}^1_x)$ increases, the training time increases first slightly and then linearly.
+We observe similar phenomena in GCN, GGNN, and GAT with low hyper-parameter values.
+When the values of hyper-parameters are too low, the GNN training cannot make full use of the computing power of the GPU.
+When the values of hyper-parameters become high enough, the training time increases linearly, supporting the time complexity analysis.
 
 \begin{figure}[tbp]
     \centering
@@ -73,8 +75,8 @@ When the hyper-parameter becomes high enough, the training time increases linear
 \end{figure}
 
 We further measured the effects of the hyper-parameters on the peak GPU memory usage in \figurename~\ref{fig:exp_hyperparameter_memory_usage}.
-The memory usage also increases linearly as the hyper-parameters increase for all GNNs, except for GaAN on $dim(\boldsymbol{h}^1)$.
-As the hidden feature vectors $\boldsymbol{h}^1$ consume a small proportion of memory in GaAN, the growth in the memory usage is not noticeable until $dim(\boldsymbol{h}^1)$ is large enough.
+The memory usage also increases linearly as the hyper-parameters increase for all GNNs, except for GaAN on $dim(\boldsymbol{h}^1_x)$.
+As the hidden vectors $\boldsymbol{h}^1_x$ consume a small proportion of memory in GaAN, the growth in the memory usage is not noticeable until $dim(\boldsymbol{h}^1_x)$ is large enough.
 
 \paragraph{Summary}
 
@@ -103,7 +105,7 @@ To find out which stage/step dominates the training time, we decompose the train
 The training time of each layer is the summation of the time in the forward, backward, and evaluation phases.
 In GCN, GAT, and GaAN, the time spent on the layer 0 is much larger than the layer 1.
 In those GNNs, the dimensions of the input/output feature vectors in the layer 0 are much larger than the dimensions in the layer 1.
-$d^0_{in}=dim(\boldsymbol{x})$, $d^0_{out}=d^1_{in}=64$ and $d^1_{out}=\#Class$ and $dim(\boldsymbol{x}) \gg \#Class$.
+$d^0_{in}=dim(\boldsymbol{v}_x)$, $d^0_{out}=d^1_{in}=64$ and $d^1_{out}=\#Class$ and $dim(\boldsymbol{v}_x) \gg \#Class$.
 For GaAN, since it requires the dimensions of the input/output feature vectors must be the same, the hyper-parameter are $d^0_{in}=d^0_{out}=d^1_{in}=d^1_{out}=64$ and the training time of both layers is close.
 
 Each GNN layer can be further divided into the vertex and the edge calculation stages.
@@ -146,7 +148,7 @@ Therefore, \emph{improving the efficiency of the edge calculation stage is the k
 \end{figure}
 
 In the implementation of PyG, the edge calculation stage can be decomposed into four steps: collection, messaging, aggregation, and updating, as shown in \figurename~\ref{fig:steps_in_edge_calculation}.
-The edge index is a matrix with $M$ rows and 2 columns that holds the edge set of the graph, where $M=|\mathcal{E}|$.
+The edge index is a matrix with $|\mathcal{E}|$ rows and 2 columns that holds the edge set of the graph.
 The two columns of the matrix store the source vertex and the target vertex of each edge, respectively.
 The collection step copies the vertex feature vectors from the previous layer $\boldsymbol{h}_i^l$ to the ends of each edge
 in the edge index, to form the parameters tensor $[\boldsymbol{h}^l_i, \boldsymbol{h}^l_{j}, \boldsymbol{e}^l_{i,j}]$ of the messaging function $\phi$.
