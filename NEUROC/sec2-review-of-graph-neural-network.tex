@@ -3,12 +3,18 @@
 \label{sec:review_of_gnns}
 
 In this section, we formally define the graph neural networks and briefly survey typical graph neural networks.
+%
 We denote a simple \emph{undirected} graph $\mathcal{G}$ as $\mathcal{G}=(\mathcal{V}, \mathcal{E})$, where $\mathcal{V}$ and $\mathcal{E}$ are the vertex set and the edge set of $\mathcal{G}$, respectively.
-%Let $n=|\mathcal{V}|$ and $m=|\mathcal{E}|$ as the number of vertices/edges.
-We use $v_i$ $(0 \leq i < |\mathcal{V}|)$ to denote a vertex and $e_{i,j}=(v_i, v_j)$ to denote the edge pointing from $v_i$ to $v_j$.
-The adjacency set of $v_i$ is $\mathcal{N}(v_i)=\{v|(v_i, v) \in \mathcal{E}\}$.
-We denote a \emph{vector} with a bold lower case letter like $\boldsymbol{x}$ and a \emph{matri}x with a bold upper case letter like $\boldsymbol{X}$.
+%
+We use $v_x$ $(0 \leq x < |\mathcal{V}|)$ to denote a vertex and $e_{x,y}=(v_x, v_y)$ to denote the edge pointing from $v_x$ to $v_y$.
+%
+The adjacency set of $v_x$ is $\mathcal{N}(v_x)=\{v|(v_x, v) \in \mathcal{E}\}$.
+%
+We denote a \emph{vector} with a bold lower case letter like $\boldsymbol{h}$ and a \emph{matri}x with a bold upper case letter like $\boldsymbol{W}$.
+%
 Table~\ref{tab:notations} summarizes the common symbols used throughout this work.
+%
+We use blue characters $\Param{\MyVec{w}}$/$\Param{\MyMat{W}}$ to denote weight vectors/matrices that are model parameters to train in a GNN.
 
 \begin{table}[h]
     \caption{Notations}
@@ -20,22 +26,23 @@ Table~\ref{tab:notations} summarizes the common symbols used throughout this wor
        Category & Symbol & Meaning \\
         \midrule
         \multirow[c]{4}{3em}{Graph Structure}& $\mathcal{G}=(\mathcal{V}, \mathcal{E})$ & The simple undirected input graph with the vertex set $\mathcal{V}$ and the edge set $\mathcal{E}$. \\
-        & $v_i$ & The $i$-th vertex of the input graph. \\
-        & $e_{i,j}$ & The edge pointing from $v_i$ to $v_j$ of the input graph. \\
-        & $\mathcal{N}(v_i)$ & The adjacency set of $v_i$ in the input graph. \\ \midrule
+        & $v_x$ & The $x$-th vertex of the input graph. \\
+        & $e_{x,y}$ & The edge pointing from $v_x$ to $v_y$ of the input graph. \\
+        & $\mathcal{N}(v_x)$ & The adjacency set of $v_x$ in the input graph. \\ \midrule
         \multirow[c]{6}{3em}{GNN Definition}& $L$ & The number of GNN layers. \\
+        & $K$ & The number of heads in a GNN layer. \\
         & $\phi^l$ & The messaging function of the GNN layer $l$. \\
         & $\Sigma^l$ & The aggregation function of the GNN layer $l$. \\
         & $\gamma^l$ & The vertex updating function of the GNN layer $l$. \\ 
-        & $\phi^{l,k}$/$\Sigma^{l,k}$/$\gamma^{l,k}$ & The messaging/aggregation/updating function of the $k$-th sub-layer of the GNN layer  $l$.\\
+        & $\phi^{l,i}$/$\Sigma^{l,i}$/$\gamma^{l,i}$ & The messaging/aggregation/updating function of the $i$-th sub-layer of the GNN layer  $l$.\\
         & $\textcolor{blue}{\boldsymbol{W}^l, \boldsymbol{W}^{(k)}/\boldsymbol{b}, \boldsymbol{a}}$ & The matrices/vectors represented by the blue characters are the weight matrices/vectors that need to be learned in the GNN. \\  \midrule
-        \multirow[c]{8}{3em}{Vectors}& $\boldsymbol{v}_i$ & The input feature vector of the vertex $v_i$. \\
-        & $\boldsymbol{e}_{i,j}$ & The input feature vector of the edge $e_{i,j}$.  \\
-        & $\boldsymbol{h}_i^{l}$ &  The {input} hidden vector of the graph neuron corresponding to $v_i$ in the GNN layer $l$. \\
-        & $\boldsymbol{h}_i^{l+1}$ &  The {output} hidden vector of the graph neuron corresponding to $v_i$ in the GNN layer $l$.\\
-        & $\boldsymbol{m}_{i,j}^l$ & The message vector of the edge $e_{i,j}$ outputted by $\phi^l$ of the GNN layer $l$. \\
-        & $\boldsymbol{s}_{i}^l$ & The aggregated vector of the vertex $v_i$ outputted by $\Sigma^l$ of the GNN layer $l$. \\
-        & $\boldsymbol{m}_{i,j}^{l,k}$/$\boldsymbol{s}_{i}^{l,k}$ & The message/aggregated vector of the vertex $v_i$ outputted by $\phi^{l,k}$/$\Sigma^{l,k}$ of the $k$-th sub-layer of the GNN layer $l$. \\
+        \multirow[c]{8}{3em}{Vectors}& $\boldsymbol{v}_x$ & The feature vector of the vertex $v_x$. \\
+        & $\boldsymbol{e}_{x,y}$ & The feature vector of the edge $e_{x,y}$.  \\
+        & $\boldsymbol{h}_x^{l}$ &  The {input} hidden vector of the graph neuron corresponding to $v_x$ in the GNN layer $l$. \\
+        & $\boldsymbol{h}_x^{l+1}$ &  The {output} hidden vector of the graph neuron corresponding to $v_x$ in the GNN layer $l$.\\
+        & $\boldsymbol{m}_{x,y}^l$ & The message vector of the edge $e_{x,y}$ outputted by $\phi^l$ of the GNN layer $l$. \\
+        & $\boldsymbol{s}_{x}^l$ & The aggregated vector of the vertex $v_x$ outputted by $\Sigma^l$ of the GNN layer $l$. \\
+        & $\boldsymbol{h}_{x}^{l,i}$/$\boldsymbol{m}_{x,y}^{l,i}$/$\boldsymbol{s}_{x}^{l,i}$ & The hidden/message/aggregated vector of the vertex $v_x$ outputted by $\gamma^{l,i}$/$\phi^{l,i}$/$\Sigma^{l,i}$ of the $i$-th sub-layer of the GNN layer $l$. \\
         & $d_{in}$, $d_{out}$ &  The dimensions of the input/output hidden vectors of a graph neuron. \\
         \bottomrule
         
@@ -46,148 +53,245 @@ Table~\ref{tab:notations} summarizes the common symbols used throughout this wor
 
 As illustrated in \figurename~\ref{fig:general_structure_of_gnn}, a typical GNN can be decomposed into three parts: an input layer + several GNN layers + a prediction layer.
 
-\begin{figure}
+\begin{figure}[h]
     \centering
-    \includegraphics[width=1\columnwidth]{figs/illustration/GNN_common_architecture.pdf}
+    \includegraphics[width=0.95\columnwidth]{figs/illustration/GNN_common_architecture.pdf}
     \caption{Structure of a typical graph neural network. (a) Demo GNN, (b) Demo graph. The target application is the node classification. The demo GNN has two GNN layers.}
     \label{fig:general_structure_of_gnn}
 \end{figure}
 
-A GNN receives a graph $\mathcal{G}$ as the input.
-Every vertex $v_i$ in $\mathcal{G}$ is attached with a feature vector $\boldsymbol{x}_i$ to describe the properties of the vertex.
-The edges of $\mathcal{G}$ may also be attached with feature vectors $\boldsymbol{e}_{i,j}$
-The input layer of a GNN receives feature vectors from all vertices and passes them to GNN layers.
+In the inpug layer, A GNN receives a graph $\mathcal{G}$ as the input.
+%
+Every vertex $v_x$ in $\mathcal{G}$ is attached with a feature vector $\boldsymbol{v}_x$ to describe the properties of the vertex.
+%
+Every edge $e_{x,y}$ of $\mathcal{G}$ may also be attached with a feature vector $\boldsymbol{e}_{x,y}$.
+%
+The input layer of a GNN receives feature vectors from all vertices and passes the feature vectors to the first GNN layer (i.e. GNN layer 0).
 
-A GNN layer consists of $n$ graph neurons, where $n$ is the number of vertices in $\mathcal{G}$.
+A GNN usually consists of more than one GNN layers.
+%
+Each GNN layer consists of $|\mathcal{V}|$ graph neurons, where $|\mathcal{V}|$ is the number of vertices in $\mathcal{G}$.
+%
 Each graph neuron corresponds to a vertex in $\mathcal{G}$.
-In the first GNN layer (Layer 0), the graph neuron of the vertex $v_i$ collects input feature vectors of itself and the vertices $\boldsymbol{x}_j$ that are adjacent to $v_i$ in $\mathcal{G}$ (i.e., $v_j \in \mathcal{N}(v_i)$) from the input layer.
-The graph neuron aggregates input feature vectors, apply non-linear transformation, and outputs a hidden feature vector $\boldsymbol{h}^1_i$ for $v_i$.
-Take the demo GNN in \figurename~\ref{fig:general_structure_of_gnn}(a) as the example.
-Since $\mathcal{N}(v_3) = \{v_1, v_2, v_4, v_5, v_6\}$, the graph neuron of $v_3$ at the GNN layer 0 collects the feature vectors \{$\boldsymbol{x}_1$, $\boldsymbol{x}_2$, $\boldsymbol{x}_3$, $\boldsymbol{x}_4$, $\boldsymbol{x}_5$, $\boldsymbol{x}_6$\} from the input layer and outputs $\boldsymbol{h}^1_3$.
+%
 Different GNNs mainly differ in the graph neurons that they use.
-We elaborate on their details later.
+%
+We elaborate on details of graph neurons later.
+%
+GNN layers are \emph{sparsely} connected with the input layer and other GNN layers.
+%
+\begin{itemize}
+    \item In the first GNN layer (layer 0), a graph neuron collects feature vectors from the input layer.
+    %
+    For the graph neuron corresponding to the vertex $v_x$, it collects the feature vector $\boldsymbol{v}_x$ and the feature vectors $\boldsymbol{v}_y$ of the vertices $v_y$ that are adjacent to $v_x$ (i.e.  $v_y \in \mathcal{N}(v_x)$).
+    %
+    The graph neuron aggregates input feature vectors, apply non-linear transformation, and outputs a hidden vector $\boldsymbol{h}^1_x$ for $v_x$.
+    %
+    Take the demo GNN in \figurename~\ref{fig:general_structure_of_gnn}(a) as the example.
+    %
+    Since $\mathcal{N}(v_3) = \{v_1, v_2, v_4, v_5, v_6\}$, the graph neuron of $v_3$ at the GNN layer 0 collects the input feature vectors \{$\boldsymbol{v}_1$, $\boldsymbol{v}_2$, $\boldsymbol{v}_3$, $\boldsymbol{v}_4$, $\boldsymbol{v}_5$, $\boldsymbol{v}_6$\} from the input layer and outputs $\boldsymbol{h}^1_3$.
+    %
+    The connections between the first GNN layer and the input layer  are determined by the topology of $\mathcal{G}$.
+    %
+    The graph neuron of $v_x$ in the first GNN layer is connected with the input unit of $v_y$  in the input layer only if there is an edge $e_{x,y}$ between $v_x$ and $v_y$ in $\mathcal{G}$.
+    %
+    Since most real-world graphs are very \emph{sparse} (i.e. $|\mathcal{E}| \ll |\mathcal{V}|^2$), the connections between the first GNN layer and the input layer are also sparse, different from the traditional neural networks.
+    
+    \item In the next GNN layer (layer 1), the graph neuron corresponding to $v_x$ collects the hidden vector of itself $\boldsymbol{h}^1_x$ and its adjacent vertices ($\boldsymbol{h}^1_y$ with $v_y \in \mathcal{N}(v_x)$) from the \emph{previous} GNN layer.
+    %
+    Thus, the connections between the first and the second GNN layers are also determined by the topology of $\mathcal{G}$.
+    %
+    Based on the collected hidden vectors, the graph neuron in the layer 1 outputs a new hidden vector $\boldsymbol{h}^2_x$ for $v_x$.
+   
+    \item   A GNN allows stacking more GNN layers to support deeper graph analysis.
+    %
+    Assume there are $L$ GNN layers in total.
+    %
+    The last GNN layer (layer $L-1$) outputs a hidden vector $\boldsymbol{h}^{L}_x$ for every vertex $v_x$.
+    %
+    $\boldsymbol{h}^L_x$ is an embedding vector that encodes the knowledge learned from the input layer and all the previous GNN layers.
+    %
+    Since $\boldsymbol{h}^L_x$ is affected by $v_x$ and the vertices in the $L$-hop neighborhood of $v_x$, analyzing a graph with more GNN layers means analyzing each vertex with a \emph{wider} scope.
+    %
+    The hidden vectors $\boldsymbol{h}^L_x$ of the last GNN layer are fed to the prediction layer to generate the output for the whole GNN.
+\end{itemize}
 
-Different from the traditional neural networks that layers are fully connected, the layers are sparsely connected in GNNs. 
-The connection between the input layer and the first GNN layer is determined by the topology of $\mathcal{G}$.
-Two graph neurons are connected only if their corresponding vertices have an edge between them in $\mathcal{G}$.
-Most real-world graphs are very \emph{sparse}, i.e. $|\mathcal{E}| \ll |\mathcal{V}|^2$.
-
-In the next GNN layer (GNN Layer 1), the graph neuron of $v_i$ collects the hidden feature vectors of itself $\boldsymbol{h}^1_i$ and its neighbors ($\boldsymbol{h}^1_j$ with $v_j \in \mathcal{N}(v_i)$) from the \emph{previous} GNN layer.
-Based on the collected hidden vectors, the graph neuron in Layer 1 outputs a new hidden feature vector $\boldsymbol{h}^2_i$ for $v_i$.
-A GNN allows stacking more GNN layers to support deeper graph analysis.
-Assume there are $L$ GNN layers in traditional.
-The last GNN layer (GNN Layer $L-1$) outputs a hidden feature vector $\boldsymbol{h}^{L}_i$ for every vertex $v_i$.
-As an embedding vector, $\boldsymbol{h}^L_i$ encodes the knowledge learned from the input layer and all the previous GNN layers.
-Since $\boldsymbol{h}^L_i$ is affected by $v_i$ and the vertices in the $L$-hop neighborhood of $v_i$, analyzing a graph with a \emph{deeper} GNN means analyzing each vertex with a \emph{wider} scope.
-
-The hidden feature vectors $\boldsymbol{h}^L_i$ of the last GNN layer are fed to the prediction layer to generate the output of the whole GNN.
 The prediction layer is a standard neural network.
+%
 The structure of the prediction layer depends on the prediction task of the GNN.
+%
 Take the node classification task in \figurename~\ref{fig:general_structure_of_gnn} as the example.
+%
 The node classification predicts a label for every vertex in $\mathcal{G}$.
-In this case, the prediction layer can be a simple softmax layer with $\boldsymbol{h}^L_i$ as the input and a vector of probabilities as the output.
-If the prediction task is edge prediction, the hidden feature vectors of two vertices are concatenated and fed into a softmax layer.
+%
+In this case, the prediction layer can be a simple softmax layer with $\boldsymbol{h}^L_x$ as the input and a vector of probabilities as the output.
+%
+If the prediction task is the edge prediction, the hidden vectors of two vertices are concatenated and fed into a softmax layer.
+%
 If we need to predict a label for the whole graph, a pooling (max/mean/...) layer is added to generate an embedding vector for the whole graph and the embedding vector is used to produce the final prediction.
 
-Supporting end-to-end training is a prominent advantage of GNN, compared with traditional graph-based machine learning methods.
-The traditional methods need to construct feature vectors manually or from the embedding methods like DeepWalk \cite{bryan2014_deepwalk} and node2vec \cite{aditya2016_node2vec}.
-The feature vector generation is independent from the downstream prediction task. 
-Thus, the vectors have to be adjusted for every prediction task individually.
-In GNNs, the gradients are propagated from the prediction layer back to the previous GNN layers layer by layer. 
+Supporting end-to-end training is a prominent advantage of GNNs, compared with traditional graph-based machine learning methods.
+The traditional methods need to construct input feature vectors for vertices and edges manually or use embedding methods like DeepWalk \cite{bryan2014_deepwalk} and node2vec \cite{aditya2016_node2vec}.
+The feature vector generation is independent from the model training.
+Therefore, generated feature vectors may not be suitable for downstream prediction tasks.
+In GNNs, gradients are propagated from the prediction layer back to GNN layers layer by layer. 
 The model parameters in the GNN layers are updated based on the feedbacks from the downstream prediction task. 
-In a fully parameterized way, the GNN automatically extracts an embedding vector for each vertex from its $L$-hop neighborhood, tuned according to the specific prediction task.
+In a fully parameterized way, a GNN can automatically extract an embedding vector for each vertex from its $L$-hop neighborhood, tuned according to the specific prediction task.
 
 \subsection{Graph Neuron and Message-passing Model}
 
 Graph neurons are building blocks of a GNN.
+%
 A GNN layer consists of $|\mathcal{V}|$ graph neurons.
+%
 Each vertex corresponds to a graph neuron.
-A graph neuron as shown in \figurename~\ref{fig:graph_neuron_structure} is a small neural network.
-The graph neuron of $v_i$ at layer $l$ receives hidden feature vectors $\boldsymbol{h}^l_j$ from the graph neurons of $v_i$ and its neighbors ($v_j \in \{v_i\} \cup \mathcal{N}(v_i)$) at the previous GNN layer \footnote{For the GNN layer 0, graph neurons receive input feature vectors, i.e., $\boldsymbol{h}^0_i=\boldsymbol{x}_i$}.
-The graph neuron aggregates the received hidden feature vectors, applies non-linear transformations, and outputs a new hidden feature vector $\boldsymbol{h}_i^{l+1}$.
+%
+A graph neuron is a small neural network.
+%
+For the graph neuron corresponding to $v_x$ at the layer $l$, it receives the hidden vector of itself $\boldsymbol{h}^l_x$ and the hidden vectors of its adjacent vertices $\boldsymbol{h}^l_y$ with $v_y \in \mathcal{N}(v_x)$ from the previous GNN layer\footnote{For the GNN layer 0, graph neurons receive input feature vectors, i.e., $\boldsymbol{h}^0_i=\boldsymbol{v}_i$}.
+%
+The graph neuron of $v_x$ aggregates the received hidden vectors, applies non-linear transformations, and outputs a new hidden vector $\boldsymbol{h}_x^{l+1}$.
 
-\begin{figure}
+We follow the message-passing model \cite{gilmer_messgae_passing} to formally define a graph neuron.
+%
+The message-passing model is widely used in the cutting-edge GNN libraries like PyG \cite{PyG} and DGL \cite{DGL}.
+%
+\figurename~\ref{fig:graph_neuron_structure} shows the internal structure of a graph neuron in the message-passing model.
+%
+A graph neuron at the layer $l$ are made of three \emph{differentiable} functions: the messaging function $\phi^l$, the aggregation function $\Sigma^l$, and the updating function $\gamma^l$.
+
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.5\columnwidth]{figs/illustration/GNN_Unit.pdf}
-    \caption{Graph neuron of $v_3$ at the GNN layer $l$ with the graph $\mathcal{G}$ in \figurename~\ref{fig:general_structure_of_gnn}b. $\phi$/$\Sigma$/$\gamma$ are the messaging/aggregation/vertex updating functions in the message-passing model, respecitvely.}
+    \caption{Graph neuron of $v_3$ in the GNN layer $l$ with the demo graph $\mathcal{G}$ in \figurename~\ref{fig:general_structure_of_gnn}b. $\phi^l$/$\Sigma^l$/$\gamma^l$ are the messaging/aggregation/updating functions in the message-passing model, respecitvely.}
     \label{fig:graph_neuron_structure}
 \end{figure}
 
-We follow the message-passing model \cite{gilmer_messgae_passing} to formally define a graph neuron.
-The message-passing model is widely used in the cutting-edge GNN libraries like PyTorch Geometric (PyG) \cite{PyG} and Deep Graph Library (DGL) \cite{DGL}.
-\figurename~\ref{fig:graph_neuron_structure} shows the structure of a graph neuron in the message-passing model.
-Graph neurons at layer $l$ are made of three \emph{differentiable} functions: $\phi^l$, $\Sigma^l$ and $\gamma^l$.
-The graph neuron calculates the output hidden vector $\boldsymbol{h}^{l+1}_i$ by
-$$
-    \boldsymbol{h}^{l+1}_i = \gamma^l(\boldsymbol{h}^l_i, \mathlarger{\Sigma}^l_{v_j \in \mathcal{N}(v_i)}{\phi^l(\boldsymbol{h}^l_i, \boldsymbol{h}^l_j,   \boldsymbol{e}_{j,i})}).
-$$
+The graph neuron of $v_x$ calculates the output hidden vector $\boldsymbol{h}^{l+1}_x$ with the three functions in three steps:
+%
+\begin{enumerate}
+    %
+    \item  For every adjacent edge $(v_y, v_x)$ of $v_x$ ($v_y \in \mathcal{N}(v_x)$), the messaging function $\phi^l$ receives the output hidden vectors $\boldsymbol{h}^l_x$ and $\boldsymbol{h}^l_y$ from the previous GNN layer and the edge feature vector $\boldsymbol{e}_{y,x}$ (and other feature vectors associated with $v_x$/$v_y$ if necessary) as the input.
+    %
+    $\phi^l$ emits a \emph{message vector} $\boldsymbol{m}^l_{y,x}$ for every edge $(v_y, v_x)$ at the layer $l$, i.e. $\boldsymbol{m}^l_{y,x} = \phi^l(\boldsymbol{h}^l_y, \boldsymbol{h}^l_x, \boldsymbol{e}_{y,x}, \dots)$;
+    %
+    \item The aggregation function $\Sigma^l$ then aggregates the message vectors $\boldsymbol{m}^l_{y,x}$ of the adjacent edges ($v_y \in \mathcal{N}(v_x)$) to produce an \emph{aggregated vector} $\boldsymbol{s}^l_x$, i.e. $\boldsymbol{s}^l_{x} = \sum^l_{v_y \in \mathcal{N}(v_x)}{\boldsymbol{m}^l_{y,x}}$;
+    %
+    \item The updating function $\gamma^l$ calculates the {hidden vector} of this layer $\boldsymbol{h}^{l+1}_x$ based on the hidden vector from the previous layer $\MyVec{h}^l_x$ and the aggregated vector $\MyVec{s}^l_x$ (and other feature vectors associated with $v_x$ if necessary), i.e. $\boldsymbol{h}^{l+1}_x = \gamma^l(\boldsymbol{h}^l_x, \boldsymbol{s}^l_x, \dots)$.
+\end{enumerate}
 
-$\phi^l$ is the \emph{messaging} function.
-For every incident edge $(v_j, v_i)$ of $v_i$, $\phi$ receives the output hidden feature vectors $\boldsymbol{h}^l_i$ and $\boldsymbol{h}^l_j$ from the previous GNN layer and the edge feature vector $\boldsymbol{e}_{j,i}$ as the input.
-$\phi^l$ emits a message vector $\boldsymbol{m}^l_{j,i}$ for every edge $(v_j, v_i)$ at layer $l$, i.e., $\boldsymbol{m}^l_{j,i}=\phi^l(\boldsymbol{h}^l_i, \boldsymbol{h}^l_j, \boldsymbol{e}_{j,i})$.
-For every $v_i$, the message vectors $\boldsymbol{m}^l_{j,i}$ of its adjacent edges ($v_j \in \mathcal{N}(v_i)$) are aggregated by the \emph{aggregation} function $\Sigma^l$ to produce an aggregated vector $\boldsymbol{s}^l_i$, i.e., $\boldsymbol{s}^l_i=\mathlarger{\Sigma}^l_{v_j \in \mathcal{N}(v_i)}\boldsymbol{m}^l_{j,i}$.
-$v_i$'s aggregated vector $\boldsymbol{s}^l_i$ and its hidden vector $\boldsymbol{h}^l_i$ from the previous GNN layer are fed into the \emph{vertex updating} function $\gamma^l$ to calculate the output hidden vector $\boldsymbol{h}^{l+1}_i$ of the current layer $l$, i.e., $\boldsymbol{h}^{l+1}_i = \gamma^l(\boldsymbol{h}^l_i, \boldsymbol{s}^l_i)$
-The end-to-end training requires $\phi^l$ and $\gamma^l$ (like multi-layer perceptrons and GRU) and $\Sigma_l$ (like mean, sum, element-wise min/max) are \emph{differentiable} to make the whole GNN differentiable.
+Briefly, the behaviour of a graph neuron under the message-passing model can be defined as  
+
+\begin{equation}
+      \MyVec{h}^{l+1}_x = \gamma^l(\MyVec{h}^l_x, \mathlarger{\Sigma}^l_{v_y \in \MyVec{N}(v_x)}{\phi^l(\MyVec{h}^l_y, \MyVec{h}^l_x,   \MyVec{e}_{y,x}, \dots)}, \dots).
+\end{equation}
+
+%The three functions are small neural networks and parameterized with trainable weight vectors or matrices.
+The end-to-end training requires $\phi^l$ and $\gamma^l$ (like multi-layer perceptrons and GRUs) and $\Sigma^l$ (like mean, sum, element-wise min/max) are \emph{differentiable} to make the whole GNN differentiable.
 
 Different GNNs have different definitions of the three functions.
-We regard $\phi$ and $\Sigma$ as the \emph{edge calculation} functions, since they are conducted over every edge in $\mathcal{G}$.
+%
+We regard $\phi$ and $\Sigma$ as \emph{edge calculation} functions, since they are conducted over every edge in $\mathcal{G}$.
+%
 We regard $\gamma$ as the \emph{vertex calculation} function, as it is conducted over every vertex in $\mathcal{G}$.
-\tablename~\ref{tab:gnn_overview_edge} and \tablename~\ref{tab:gnn_overview_vertex} list the edge functions and the vertex functions of typical GNNs, respectively.
-For ChebNet, we report its GNN sub-layer in the tables.
-A ChebNet layer consists of $K$ GNN sub-layers and a summation layer:
-$\boldsymbol{H}^{l+1} = \sum_{k=1}^K{\boldsymbol{Z}^{(k)} \textcolor{blue}{\boldsymbol{W}^{(k)}}}$ with the GNN sub-layers $\boldsymbol{Z}^{(1)}=\boldsymbol{H}^l$, $\boldsymbol{Z}^{(2)}=\hat{\boldsymbol{L}}\boldsymbol{H}^l$, and $\boldsymbol{Z}^{(k)}=2\hat{\boldsymbol{L}}\boldsymbol{Z}^{(k-1)} - \boldsymbol{Z}^{(k-2)}$, where $\boldsymbol{H}^l$ is the matrix of output hidden feature vectors of the layer $l-1$.
-For GAT, a GAT layer consists of two sub-layers and it conducts part of the vertex calculation before the two sub-layers.
-For GaAN, a GaAN layer consists of four sub-layers: the first sub-layer calculates the summation $\boldsymbol{m}_{j, i, (k)}^{l,0}  = \exp((\textcolor{blue}{W^{l, k}_{xa}} \boldsymbol{h}_j^l + \textcolor{blue}{b^{l, k}_{xa}})^T (\textcolor{blue}{\boldsymbol{W}^{l, k}_{ya}} \boldsymbol{h}_i^l + \textcolor{blue}{\boldsymbol{b}^{l,k}_{ya}}))$, and the other three sub-layers calculate $\boldsymbol{m}^l_{j,i,1}$/$\boldsymbol{m}^l_{j,i,2}$/$\boldsymbol{m}^l_{j,i,3}$.
+%
+\tablename~\ref{tab:gnn_overview_edge} and \tablename~\ref{tab:gnn_overview_vertex} list the edge calculation functions and the vertex calculation functions of typical GNNs, respectively.
 
-\begin{table}
-    \hspace{-5em}
+It is noteworthy that some complex GNNs like GAT, GaAN and ChebNet require more than one message passing phase in each GNN layer.
+%
+We regard every message passing phase in a GNN layer as a \emph{sub-layer}.
+%
+Take GAT \cite{huang2018_gat} as an example.
+%
+A GAT layer has two sub-layers and each sub-layer has $K$ heads under the multi-head attention mechanism.
+%
+For the GAT layer $l$, it first transforms every hidden vector received from the previous GAT layer $\boldsymbol{h}^l_x$ with a weight matrix $\textcolor{blue}{\boldsymbol{W}^{l}_{(k)}}$ for each head $k$ ($\parallel$ represents the concatenation operator):
+%
+\begin{equation}
+   \hvec{x} = \parallel_{k=1}^K \Param{\MyMat{W}^l_{(k)}}\MyVec{h}^l_x, \quad \text{denoting } \hvec{x}[k]=\Param{\MyMat{W}^l_{(k)}}\MyVec{h}^l_x.
+\end{equation}
+%
+The GAT layer $l$ then calculates the hidden vector $\MyVec{h}^{l,0}_x$ of every vertex $v_x$ in the first sub-layer as:
+%
+\newcommand{\GATCalcWeight}{\exp(LeakyReLU(\Param{\MyVec{a}}^T[\hvec{y}[k] \parallel \hvec{x}[k]]))}
+\begin{equation}
+    \begin{aligned}
+        \MyVec{m}^{l,0}_{y,x} & = \phi^{l,0}(\MyVec{h}^l_y, \MyVec{h}^l_x, \MyVec{e}_{y,x}, \hvec{y}, \hvec{x}) = \parallel_{k=1}^{K}\GATCalcWeight, \\
+        \MyVec{s}^{l,0}_{x} &= \mathlarger{\Sigma}_{v_y \in \mathcal{N}(v_x)}{\MyVec{m}^{l,0}_{y,x}}, \\
+        \MyVec{h}^{l,0}_{x} &= \gamma^{l,0}(\MyVec{h}^l_x, \MyVec{s}^{l,0}_{x})  = \MyVec{s}^{l,0}_{x}.
+     \end{aligned}
+\end{equation}
+%
+$\MyVec{h}^{l,0}_x$ stores the sum of adjacent edge weights of all heads for $v_x$.
+%
+It is passed to the second sub-layer as ($\delta$ represents the activation function):
+%
+\begin{equation}
+    \begin{aligned}
+        \MyVec{m}^{l,1}_{y,x} &= \phi^{l,1}(\MyVec{h}^{l,0}_y, \MyVec{h}^{l,0}_x, \MyVec{e}_{y,x}, \hvec{y}, \hvec{x}) = \parallel_{k=1}^{K}\frac{\GATCalcWeight}{\MyVec{h}^{l,0}_x[k]}\hvec{y}[k], \\
+        \MyVec{s}^{l,1}_x &= \mathlarger{\Sigma}_{v_y \in \mathcal{N}(v_x)} \MyVec{m}^{l,1}_{y,x}, \\
+        \MyVec{h}^{l,1}_x &= \gamma^{l,1}(\MyVec{h}^{l,0}, \MyVec{s}^{l,1}_x) = \delta(\MyVec{s}^{l,1}_x).
+    \end{aligned}
+\end{equation}
+%
+In the GAT layer $l$, the graph neuron corresponding to $v_x$ first transforms the hidden vector of $v_x$ from the previous layer $\boldsymbol{h}^l_x$ with a weight matrix $\textcolor{blue}{\boldsymbol{W}^{l,k}}\boldsymbol{h}_x^l$.
+calculates the weight (i.e., attention) of every adjacent edge dynamically with 
+
+%For ChebNet, we report its GNN sub-layer in the tables.
+%A ChebNet layer consists of $K$ GNN sub-layers and a summation layer:
+%$\boldsymbol{H}^{l+1} = \sum_{k=1}^K{\boldsymbol{Z}^{(k)} \textcolor{blue}{\boldsymbol{W}^{(k)}}}$ with the GNN sub-layers $\boldsymbol{Z}^{(1)}=\boldsymbol{H}^l$, %$\boldsymbol{Z}^{(2)}=\hat{\boldsymbol{L}}\boldsymbol{H}^l$, and $\boldsymbol{Z}^{(k)}=2\hat{\boldsymbol{L}}\boldsymbol{Z}^{(k-1)} - \boldsymbol{Z}^{(k-2)}$, where $\boldsymbol{H}^l$ is the matrix of output hidden feature vectors of the layer $l-1$.
+%For GAT, a GAT layer consists of two sub-layers and it conducts part of the vertex calculation before the two sub-layers.
+%For GaAN, a GaAN layer consists of four sub-layers: the first sub-layer calculates the summation $\boldsymbol{m}_{j, i, (k)}^{l,0}  = \exp((\textcolor{blue}{W^{l, k}_{xa}} \boldsymbol{h}_j^l + \textcolor{blue}{b^{l, k}_{xa}})^T (\textcolor{blue}{\boldsymbol{W}^{l, k}_{ya}} \boldsymbol{h}_i^l + \textcolor{blue}{\boldsymbol{b}^{l,k}_{ya}}))$, and the other three sub-layers calculate $\boldsymbol{m}^l_{j,i,1}$/$\boldsymbol{m}^l_{j,i,2}$/$\boldsymbol{m}^l_{j,i,3}$.
+
+\begin{table}[h]
+    \hspace{-2em}
     \begin{footnotesize}
-        \begin{tabular}{ccp{8em}p{22em}r}
+        \begin{tabular}{cccp{22em}r}
             \toprule
             GNN                                                                                                                       &
             Type                                                                                                                      &
-            $\Sigma$                                                                                                                  &
-            $\phi$                                                                                                                    &
+            $\Sigma^l$                                                                                                                  &
+            $\phi^l(\MyVec{h}^{l}_y, \MyVec{h}^l_x, \MyVec{e}_{y,x}, \dots)$                                                                                                                    &
             Complexity                                                                                                                  \\ \midrule
             ChebNet \cite{defferrad2016_chebnet}                                                                                      &
             Spectral                                                                                                                  &
             sum                                                                                                                       &
-            $\boldsymbol{m}_{j, i}^{(k)} = e_{j, i}\boldsymbol{z}_j^{(k-1)}$                                                          &
-            $O(d_{in})$                                                                                                                 \\
+            $\boldsymbol{m}_{y, x}^{l} = \MyVec{e}_{y, x}\boldsymbol{h}^{l}_y$                                                          &
+            $O(d_{in})$                                                                                                   \\
             \textbf{GCN} \cite{kipf2017_gcn}                                                                                          &
             Spectral                                                                                                                  &
             sum                                                                                                                       &
-            $\boldsymbol{m}_{j, i}^l = e_{j, i} \boldsymbol{h}_j^l$                                                                   &
+            $\boldsymbol{m}^l_{y, x} = \MyVec{e}_{y, x} \boldsymbol{h}^l_y$                                                                   &
             $O(d_{in})$                                                                                                                 \\
             AGCN \cite{li2018_agcn}                                                                                                   &
             Spectral                                                                                                                  &
             sum                                                                                                                       &
-            $\boldsymbol{m}_{j, i}^l = \tilde{e}_{j, i}^l \boldsymbol{h}_j^l$                                                         &
+            $\boldsymbol{m}^l_{y, x} = \tilde{e}^l_{y, x} \boldsymbol{h}^l_y$                                                         &
             $O(d_{in})$                                                                                                                 \\
             GraphSAGE \cite{hamilton2017_graphsage}                                                                                   &
             Non-spectral                                                                                                              &
             mean/LSTM                                                                                                                 &
-            $\boldsymbol{m}_{j, i}^l =  \boldsymbol{h}_j^l$                                                                           &
+            $\boldsymbol{m}_{y, x}^l =  \boldsymbol{h}_y^l$                                                                           &
             $O(1)$                                                                                                                      \\
             GraphSAGE-pool \cite{hamilton2017_graphsage}                                                                              &
             Non-spectral                                                                                                              &
             max                                                                                                                       &
-            $\boldsymbol{m}_{j, i}^l =  \delta(\textcolor{blue}{\boldsymbol{W}^l_{pool}} \boldsymbol{h}_j^l + \textcolor{blue}{b^l})$ &
+            $\MyVec{m}_{y, x}^l =  \delta(\Param{\MyMat{W}^l_{pool}} \MyVec{h}_y^l + \Param{b^l})$ &
             $O(d_{in} * d_{out})$                                                                                                       \\
             Neural FPs  \cite{duvenaud2015_neural_fps}                                                                                &
             Non-spectral                                                                                                              &
             sum                                                                                                                       &
-            $\boldsymbol{m}_{j, i}^l = \boldsymbol{h}_j^l$                                                                            &
+            $\boldsymbol{m}_{y, x}^l = \boldsymbol{h}_y^l$                                                                            &
             $O(1)$                                                                                                                      \\
             SSE \cite{han2018_sse}                                                                                                    &
             Recurrent                                                                                                                 &
             sum                                                                                                                       &
-            $\boldsymbol{m}_{j, i}^l = [\boldsymbol{x}_j \parallel \boldsymbol{h}_j^l]$                                               &
+            $\boldsymbol{m}_{y, x}^l = \MyVec{v}_y \parallel \boldsymbol{h}_y^l$                                               &
             $O(f+d_{in})$                                                                                                               \\
             \textbf{GGNN}  \cite{li2015_ggnn}                                                                                         &
             Gated                                                                                                                     &
             sum                                                                                                                       &
-            $\boldsymbol{m}_{j, i} = \textcolor{blue}{\boldsymbol{W}^l} \boldsymbol{h}_j^l$                                           &
+            $\MyVec{m}^l_{y, x} = \Param{\MyMat{W}^l}\MyVec{h}^l_y$                                           &
             $O(d_{in} * d_{out})$                                                                                                       \\
             \textbf{GAT}   \cite{huang2018_gat}                                                                                       &
             Attention                                                                                                                 &
@@ -195,11 +299,11 @@ For GaAN, a GaAN layer consists of four sub-layers: the first sub-layer calculat
             \begin{scriptsize}
                 $\begin{aligned}[t]
                          & \text{Sub-layer 0:}                                                                                                                                                                                    \\
-                         & \boldsymbol{m}^{l,0}_{j,i,(k)} = \exp(LeakyReLU(\textcolor{blue}{\boldsymbol{a}^T} [\hat{\boldsymbol{h}}^{l}_{i,(k)} \parallel \hat{\boldsymbol{h}}^{l}_{j, (k)}]))                                    \\
-                         & \text{Sub-layer 1:}                                                                                                                                                                                    \\
-                         & \alpha^l_{j, i, (k)} = \frac {\exp(LeakyReLU(\textcolor{blue}{\boldsymbol{a}^T} [\hat{\boldsymbol{h}}^{l}_{i,(k)} \parallel \hat{\boldsymbol{h}}^{l}_{j,(k)}] ))} {\hat{\boldsymbol{a}}^{l,0}_{i,(k)}} \\
-                         & \text{Multi-head concatenation}: \boldsymbol{m}_{j, i}^{l,1} = \parallel_{k=1}^K \alpha^l_{j, i, (k)} \hat{\boldsymbol{h}}^{l}_{j,(k)}                                                         \\
-                         & \text{Multi-head average}: \boldsymbol{m}_{j, i}^{l,1} = \frac{1}{K} \sum_{k=1}^K \alpha^l_{j, i, (k)} \hat{\boldsymbol{h}}^{l}_{j,(k)}
+                         & \MyVec{m}^{l,0}_{y,x}  = \parallel_{k=1}^{K}\GATCalcWeight                                    \\
+                         & \text{Sub-layer 1 (multi-head concatenation):}                                                                                                                                                                                    \\
+                         & \MyVec{m}^{l,1}_{y,x} = \parallel_{k=1}^{K}\frac{\GATCalcWeight}{\MyVec{h}^{l,0}_x[k]}\hvec{y}[k] \\
+                         & \text{Sub-layer 1 (multi-head average)}: \\
+                         & \boldsymbol{m}_{j, i}^{l,1} = \frac{1}{K}\sum_{k=1}^K \frac{\GATCalcWeight}{\MyVec{h}^{l,0}_x[k]}\hvec{y}[k]                                                         \\
                     \end{aligned}$
             \end{scriptsize}
                                                                                                                                       &
@@ -207,34 +311,40 @@ For GaAN, a GaAN layer consists of four sub-layers: the first sub-layer calculat
                 \begin{aligned}[t]
                     \text{concat: } O(d_{out})      & \\
                     \text{average: } O(K * d_{out}) & \\
-                    \text{Two sub-layers}           &
+                    \text{Two Sub-layers}           &
                 \end{aligned}
             $
             \\
             \textbf{GaAN}     \cite{zhang2018_gaan}                                                                                   &
             Attention                                                                                                                 &
-            sum,max,mean                                                                                                              &
+            \begin{scriptsize}\makecell[t]{Sub-layer 0: \\sum\\ Sub-layer 1:\\sum\\Sub-layer 2:\\max\\Sub-layer 3:\\mean}\end{scriptsize}                                                                                                              &
             \begin{scriptsize}
                 $\begin{aligned}[t]
                          & \text{Sub-layer 0:}                                                                                                                                                                                                                                                                  \\
-                         & \boldsymbol{m}_{j, i, (k)}^{l,0}  = \exp((\textcolor{blue}{W^{l, k}_{xa}} \boldsymbol{h}_j^l + \textcolor{blue}{b^{l, k}_{xa}})^T (\textcolor{blue}{\boldsymbol{W}^{l, k}_{ya}} \boldsymbol{h}_i^l + \textcolor{blue}{\boldsymbol{b}^{l,k}_{ya}}))                                   \\
+                         & \boldsymbol{m}_{y, x}^{l,0}  =\parallel_{k=1}^K \exp((\Param{\MyMat{W}^{l}_{(k), 1}}\MyVec{h}_y^l + \Param{\MyVec{b}^{l}_{(k),1}})^T (\Param{\MyMat{W}^{l}_{(k), 2}}\MyVec{h}_x^l + \Param{\MyVec{b}^{l}_{(k),2}}))                                   \\
+%                         & \boldsymbol{m}_{j, i, (k)}^{l,0}  =\parallel_{k=1}^K \exp((\textcolor{blue}{W^{l, k}_{xa}} \boldsymbol{h}_j^l + \textcolor{blue}{b^{l, k}_{xa}})^T (\textcolor{blue}{\boldsymbol{W}^{l, k}_{ya}} \boldsymbol{h}_i^l + \textcolor{blue}{\boldsymbol{b}^{l,k}_{ya}}))                                   \\
                          & \text{Sub-layer 1:}                                                                                                                                                                                                                                                                  \\
-                         & \alpha^l_{j, i, (k)} = \frac {\exp((\textcolor{blue}{W^{l, k}_{xa}} \boldsymbol{h}_j^l + \textcolor{blue}{b^{l, k}_{xa}})^T (\textcolor{blue}{\boldsymbol{W}^{l, k}_{ya}} \boldsymbol{h}_i^l + \textcolor{blue}{\boldsymbol{b}^{l,k}_{ya}}))} {\hat{\boldsymbol{a}}^{l, 0}_{i, (k)}} \\
-                         & \boldsymbol{m}_{j, i}^{l, 1} = \parallel_{k=1}^K \alpha_{j, i, (k)} LeakyReLU(\textcolor{blue}{\boldsymbol{W}^{l, k}_v} \boldsymbol{h}_j^l + \textcolor{blue}{b^{l, k}_v})                                                                                                           \\
+                         & \alpha_{(k)} = \frac {\exp((\Param{\MyMat{W}^{l}_{(k), 1}}\MyVec{h}_y^l + \Param{\MyVec{b}^{l}_{(k),1}})^T (\Param{\MyMat{W}^{l}_{(k), 2}}\MyVec{h}_x^l + \Param{\MyVec{b}^{l}_{(k),2}}))} {\MyVec{h}^{l,0}_{x}[k]} \\
+                         & \boldsymbol{m}_{y, x}^{l, 1} = \parallel_{k=1}^K \alpha_{(k)} LeakyReLU(\Param{\boldsymbol{W}^{l}_{(k),v}} \MyVec{h}_y^l + \Param{\MyVec{b}^{l}_{(k),v}})                                                                                                           \\
                          & \text{Sub-layer 2:}                                                                                                                                                                                                                                                                  \\
-                         & \boldsymbol{m}_{j, i}^{l, 2} = \textcolor{blue}{\boldsymbol{W}^l_m} \boldsymbol{h}_j^{l} + \textcolor{blue}{\boldsymbol{b}^l_m}                                                                                                                                                      \\
+                         & \boldsymbol{m}_{y, x}^{l, 2} = \Param{\MyMat{W}^l_m} \MyVec{h}_y^{l} + \Param{\MyVec{b}^l_m}                                                                                                                                                      \\
                          & \text{Sub-layer 3:}                                                                                                                                                                                                                                                                  \\
-                         & \boldsymbol{m}_{j, i}^{l, 3} = \boldsymbol{h}_j^l
+                         & \boldsymbol{m}_{y, x}^{l, 3} = \MyVec{h}_y^l
                     \end{aligned}$
             \end{scriptsize}                                                                                            &
-            \makecell[r]{$O(max(d_a, d_m, d_v) * K * d_{in})$                                                                           \\
-            Four sub-layers}                                                                                                            \\
+            \makecell[tr]{$O(\max(d_a, d_v, d_m) * K * d_{in})$                                                                           \\
+                Four Sub-layers \\ 
+                $\Param{\MyMat{W}^l_{(k),1}} \in \mathbb{R}^{d_a \times d_{in}}$ \\
+                $\Param{\MyMat{W}^l_{(k),v}} \in \mathbb{R}^{d_v \times d_{in}}$ \\
+                $\Param{\MyMat{W}^l_{m}} \in \mathbb{R}^{d_m \times d_{in}}$ 
+            }                                                                                                            \\
             \bottomrule
         \end{tabular}
     \end{footnotesize}
     \caption{Typical graph neural networks and their edge calculation functions.
-        $d_{in}$ and $d_{out}$ are dimensions of the input and output hidden feature vectors, respectively.
+        $d_{in}$ and $d_{out}$ are the dimensions of the input and output hidden vectors, respectively.
         Blue variables are model parameters to learn.
+        $\delta$ is the activation function.
     }
     \label{tab:gnn_overview_edge}
 \end{table}
@@ -242,39 +352,39 @@ For GaAN, a GaAN layer consists of four sub-layers: the first sub-layer calculat
 \begin{table}
     \centering
     \begin{footnotesize}
-        \begin{tabular}{cp{20em}r}
+        \begin{tabular}{clr}
             \toprule
             GNN                                                                                                                                                                                                              &
-            $\gamma$                                                                                                                                                                                                         &
+            $\gamma^l(\boldsymbol{h}^l_x, \boldsymbol{s}^l_x, \dots)$                                                                                                                                                                                                         &
             Complexity                                                                                                                                                                                                         \\ \midrule
             ChebNet \cite{defferrad2016_chebnet}                                                                                                                                                                             &
-            $\boldsymbol{z}_i^{(k)} = 2\boldsymbol{s}^{(k)}_{i} - \boldsymbol{z}_i^{(k-2)}$                                                                                                                                  &
+            $\MyVec{h}_x^{l+1} = 2\boldsymbol{s}^{l}_{x} - \boldsymbol{h}_x^{l-1}$                                                                                                                                  &
             $O(d_{out})$                                                                                                                                                                                                       \\
             \textbf{GCN} \cite{kipf2017_gcn}                                                                                                                                                                                 &
-            $\boldsymbol{h}_i^{l+1} = \textcolor{blue}{\boldsymbol{W}}^l  \boldsymbol{s}_i^{l}$                                                                                                                              &
+            $\boldsymbol{h}_x^{l+1} = \textcolor{blue}{\boldsymbol{W}}^l  \boldsymbol{s}_x^{l}$                                                                                                                              &
             $O(d_{in} * d_{out})$                                                                                                                                                                                              \\
             AGCN   \cite{li2018_agcn}                                                                                                                                                                                        &
-            $\boldsymbol{h}_i^{l+1} = \textcolor{blue}{\boldsymbol{W}}^l  \boldsymbol{s}_i^{l}$                                                                                                                              &
+            $\boldsymbol{h}_x^{l+1} = \textcolor{blue}{\boldsymbol{W}}^l  \boldsymbol{s}_x^{l}$                                                                                                                              &
             $O(d_{in} * d_{out})$                                                                                                                                                                                              \\
             GraphSAGE  \cite{hamilton2017_graphsage}                                                                                                                                                                         &
-            $\boldsymbol{h}_i^{l+1} =   \delta(\textcolor{blue}{\boldsymbol{W}}^l  [\boldsymbol{s}_i^{l} \parallel \boldsymbol{h}_i^l])$                                                                                     &
+            $\boldsymbol{h}_x^{l+1} =   \delta(\textcolor{blue}{\boldsymbol{W}}^l  [\boldsymbol{s}_x^{l} \parallel \boldsymbol{h}_x^l])$                                                                                     &
             $O(d_{in} * d_{out})$                                                                                                                                                                                              \\
             GraphSAGE-pool   \cite{hamilton2017_graphsage}                                                                                                                                                                   &
-            $\boldsymbol{h}_i^{l+1} = \boldsymbol{s}_i^l$                                                                                                                                                                    &
+            $\boldsymbol{h}_x^{l+1} = \boldsymbol{s}_x^l$                                                                                                                                                                    &
             $O(1)$                                                                                                                                                                                                             \\
             Neural FPs        \cite{duvenaud2015_neural_fps}                                                                                                                                                                 &
-            $\boldsymbol{h}_i^{l+1} = \delta(\textcolor{blue}{\boldsymbol{W}}^{l, |\mathcal{N}(i)|}  (\boldsymbol{h}_i^l + \boldsymbol{s}_i^{l}))$                                                                           &
+            $\boldsymbol{h}_x^{l+1} = \delta(\textcolor{blue}{\boldsymbol{W}}^{l, |\mathcal{N}(v_i)|}  (\boldsymbol{h}_x^l + \boldsymbol{s}_x^{l}))$                                                                           &
             $O(d_{in} * d_{out})$                                                                                                                                                                                              \\
             SSE             \cite{han2018_sse}                                                                                                                                                                               &
-            $\boldsymbol{h}_i^{l+1} = (1 - \alpha)  \boldsymbol{h}_i^l +\alpha    \delta(\textcolor{blue}{\boldsymbol{W}}^l_1 \delta(\textcolor{blue}{\boldsymbol{W}}^l_2 [\boldsymbol{x}_i \parallel \boldsymbol{s}_i^l]))$ &
+            $\boldsymbol{h}_x^{l+1} = (1 - \alpha)  \boldsymbol{h}_x^l +\alpha    \delta(\textcolor{blue}{\boldsymbol{W}}^l_1 \delta(\textcolor{blue}{\boldsymbol{W}}^l_2 [\boldsymbol{v}_x \parallel \boldsymbol{s}_x^l]))$ &
             $O((f + d_{in}) * d_{out})$                                                                                                                                                                                        \\
             \textbf{GGNN}    \cite{li2015_ggnn}                                                                                                                                                                              &
             \begin{scriptsize}
                 $\begin{aligned}[t]
-                         & {\boldsymbol{z}}_i^l = \delta ( \textcolor{blue}{\boldsymbol{W}^z} \boldsymbol{s}_i^l + \textcolor{blue}{\boldsymbol{b}^{sz}} + \textcolor{blue}{\boldsymbol{U}^z} \boldsymbol{h}_i^{l} + \textcolor{blue}{\boldsymbol{b}^{hz}})                    \\
-                         & \boldsymbol{r}_i^l = \delta ( \textcolor{blue}{\boldsymbol{W}^r} \boldsymbol{s}_i^l+ \textcolor{blue}{\boldsymbol{b}^{sr}} +\textcolor{blue}{\boldsymbol{U}^r} \boldsymbol{h}_i^{l} + \textcolor{blue}{\boldsymbol{b}^{hr}})                        \\
-                         & \boldsymbol{h}_i^{l+1} = tanh ( \textcolor{blue}{\boldsymbol{W}} \boldsymbol{s}_i^l + \textcolor{blue}{\boldsymbol{b}^s} + \textcolor{blue}{\boldsymbol{U}} ( \boldsymbol{r}_i^l \odot \boldsymbol{h}_i^{l}) + \textcolor{blue}{\boldsymbol{b}^h})) \\
-                         & \boldsymbol{h}_i^{l+1} = (1 - {\boldsymbol{z}}_i^l) \odot \boldsymbol{h}_i^l + {\boldsymbol{z}}_i^l \odot \boldsymbol{h}_i^{l+1}
+                         & {\boldsymbol{z}}_x^l = \delta ( \textcolor{blue}{\boldsymbol{W}^z} \boldsymbol{s}_x^l + \textcolor{blue}{\boldsymbol{b}^{sz}} + \textcolor{blue}{\boldsymbol{U}^z} \boldsymbol{h}_x^{l} + \textcolor{blue}{\boldsymbol{b}^{hz}})                    \\
+                         & \boldsymbol{r}_x^l = \delta ( \textcolor{blue}{\boldsymbol{W}^r} \boldsymbol{s}_x^l+ \textcolor{blue}{\boldsymbol{b}^{sr}} +\textcolor{blue}{\boldsymbol{U}^r} \boldsymbol{h}_x^{l} + \textcolor{blue}{\boldsymbol{b}^{hr}})                        \\
+                         & \boldsymbol{\bar{h}}_x^{l+1} = \tanh ( \textcolor{blue}{\boldsymbol{W}} \boldsymbol{s}_x^l + \textcolor{blue}{\boldsymbol{b}^s} + \textcolor{blue}{\boldsymbol{U}} ( \boldsymbol{r}_x^l \odot \boldsymbol{h}_x^{l}) + \textcolor{blue}{\boldsymbol{b}^h}) \\
+                         & \boldsymbol{h}_x^{l+1} = (1 - {\boldsymbol{z}}_x^l) \odot \boldsymbol{h}_x^l + {\boldsymbol{z}}_x^l \odot \boldsymbol{\bar{h}}_x^{l+1}
                     \end{aligned}$
             \end{scriptsize}
                                                                                                                                                                                                                              &
@@ -283,11 +393,11 @@ For GaAN, a GaAN layer consists of four sub-layers: the first sub-layer calculat
             \begin{scriptsize}
                 $\begin{aligned}[t]
                          & \text{Preprocessing:}                                                                          \\
-                         & \hat{\boldsymbol{h}}^{l}_{i,(k)} = \textcolor{blue}{\boldsymbol{W}^{l,k}} \boldsymbol{h}_i^{l} \\
+                         & \hat{\boldsymbol{h}}^{l}_{x} = \parallel_{k=1}^K \Param{\MyMat{W}^l_{(k)}}\MyVec{h}^l_x \\
                          & \text{Sub-layer 0:}                                                                            \\
-                         & \hat{\boldsymbol{a}}^{l,0}_{i,(k)} = \boldsymbol{s}^{l,0}_{i,(k)}                              \\
+                         & \MyVec{h}^{l,0}_{x} = \MyVec{s}^{l,0}_{x}                              \\
                          & \text{Sub-layer 1:}                                                                            \\
-                         & \boldsymbol{h}_i^{l+1} = \delta(\boldsymbol{s}_i^{l,1})
+                         & \boldsymbol{h}_x^{l+1} = \delta(\boldsymbol{s}_x^{l,1})
                     \end{aligned}
                 $
             \end{scriptsize}                                                                                                                                                                                   &
@@ -295,29 +405,30 @@ For GaAN, a GaAN layer consists of four sub-layers: the first sub-layer calculat
                 \begin{aligned}[t]
                     \text{concat:} O(d_{in}*d_{out})    & \\
                     \text{average:} O(K*d_{in}*d_{out}) & \\
-                    \text{Two sub-layers}               &
+                    \text{Two Sub-layers}               &
                 \end{aligned}
             $
             \\
             \textbf{GaAN}  \cite{zhang2018_gaan}                                                                                                                                                               &
             \begin{scriptsize}
                 $\begin{aligned}[t]
-                         & \text{Sub-layer 0:}                                                                                                                                                                            \\
-                         & \hat{\boldsymbol{a}}^{l,0}_{i,(k)} = \boldsymbol{s}^{l,0}_{i,(k)}                                                                                                                              \\
-                         & \text{After sub-layer 0,1,2,3:}                                                                                                                                                                      \\
-                         & \boldsymbol{g}_i^l = \textcolor{blue}{\boldsymbol{W}^l_g}[\boldsymbol{h}_i^{l} \parallel \boldsymbol{s}_{i}^{l, 2} \parallel \boldsymbol{s}_{i}^{l, 3}] + \textcolor{blue}{\boldsymbol{b}^l_g} \\
-                         & \boldsymbol{h}_i^{l+1} = \textcolor{blue}{\boldsymbol{W}^l_o} [\boldsymbol{h}_i^l \parallel (\boldsymbol{g}_{i}^l \odot \boldsymbol{s}_{i}^{l, 1})] + \textcolor{blue}{\boldsymbol{b}^l_o}
+                         & \text{Sub-layer 0/1/2:}                                                                                                                                                                            \\
+                         & \MyVec{h}^{l,*}_{x} = \MyVec{s}^{l,*}_{x}                                                                                                                              \\
+                         & \text{Sub-layer 3:}                                                                                                                                                                      \\
+                         & \boldsymbol{g}_x^l = \textcolor{blue}{\boldsymbol{W}^l_g}[\boldsymbol{h}_x^{l} \parallel \boldsymbol{h}_{x}^{l, 2} \parallel \boldsymbol{s}_{x}^{l, 3}] + \textcolor{blue}{\boldsymbol{b}^l_g} \\
+                         & \boldsymbol{h}_x^{l+1} = \textcolor{blue}{\boldsymbol{W}^l_o} [\boldsymbol{h}_x^l \parallel (\boldsymbol{g}_{x}^l \odot \boldsymbol{h}_{x}^{l, 1})] + \textcolor{blue}{\boldsymbol{b}^l_o}
                     \end{aligned}$
             \end{scriptsize}                                                                                                                                                                                   &
-            \makecell[r]{$O(max(K * d_v + d_{in}, 2 * d_{in} + d_m) * d_{out})$                                                                                                                                                \\
-                Four sub-layers}
+            \makecell[r]{$O(\max(K * d_v + d_{in}$, \\ $2 * d_{in} + d_m) * d_{out})$                                                                                                                                                \\
+                Four Sub-layers}
             \\ \bottomrule
         \end{tabular}
     \end{footnotesize}
     \caption{Typical graph neural networks and their vertex calculation functions.
-        $d_{in}$ and $d_{out}$ are dimensions of the input and output hidden feature vectors, respectively.
+        $d_{in}$ and $d_{out}$ are the dimensions of the input and output hidden vectors, respectively.
         Blue variables are model parameters to learn.
-        In Neural FPs, $\textcolor{blue}{\boldsymbol{W}}^{l, |\mathcal{N}(i)|}$ is the weight matrix for vertices with degree $|\mathcal{N}(i)|$ at layer $l$.
+        In Neural FPs, $\textcolor{blue}{\boldsymbol{W}}^{l, |\mathcal{N}(i)|}$ is the weight matrix for vertices with degree $|\mathcal{N}(i)|$ at the layer $l$.
+        $\delta$ is the activation function.
     }
     \label{tab:gnn_overview_vertex}
 \end{table}

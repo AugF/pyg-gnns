@@ -6,7 +6,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage[english]{babel}
 \usepackage[colorlinks=false, allcolors=red]{hyperref}
-\usepackage{amsmath, amsthm}
+\usepackage{amsmath, amsthm, amsfonts}
 \usepackage{relsize}
 \usepackage{booktabs}
 \usepackage{multirow}
@@ -18,6 +18,15 @@
 \usepackage{times}
 \modulolinenumbers[5]
 \bibliographystyle{elsarticle-num}
+
+% Vector
+\newcommand{\MyVec}[1]{\boldsymbol{#1}}
+% Matrix
+\newcommand{\MyMat}[1]{\boldsymbol{#1}}
+% Vectors with hat
+\newcommand{\hvec}[1]{\hat{\boldsymbol{h}}_{#1}}
+% Model parameters
+\newcommand{\Param}[1]{\textcolor{blue}{#1}}
 
 
 \begin{document}

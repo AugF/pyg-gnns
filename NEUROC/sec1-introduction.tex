@@ -6,7 +6,7 @@ They can learn the representation of vertices/edges in a graph from its topology
 The powerful expression ability makes GNNs achieve good accuracy in not only graph analytical tasks \cite{zhou2018_gnn_review, zhang2018_gnn_survey, comprehensive-survey-wu-2020} (like node classification and link prediction) but also computer vision tasks (like human-object interaction \cite{qi2018_learning_humanobject}, human parsing \cite{wang2020_hierarchical_human_parsing}, and video object segmentation \cite{wang2019_zeroshot_video}).
 
 To train GNNs easily, a series of GNN libraries/systems \cite{PyG, DGL, ma2019_neugraph, zhu2019_aligraph, PGL} are proposed.
-PyG \cite{PyG}, NeuGraph \cite{ma2019_neugraph}, PGL \cite{PGL} and DGL \cite{DGL} build upon the existing deep learning frameworks (PyG on PyTorch, NeuGraph on TensorFlow, PGL on PaddlePaddle, DGL on multiple backends).
+PyTorch Geometric (PyG) \cite{PyG}, NeuGraph \cite{ma2019_neugraph}, PGL \cite{PGL} and Deep Graph Library (DGL) \cite{DGL} build upon the existing deep learning frameworks (PyG on PyTorch, NeuGraph on TensorFlow, PGL on PaddlePaddle, DGL on multiple backends).
 They provide users with a high-level programming models (the message-passing model for PyG/PGL/DGL and the SAGA-NN model for NeuGraph) to describe the structure of a GNN.
 They take advantage of the common tools provided by the underlying frameworks like the automatic differentiation to simplify the development.
 They utilize specially optimized CUDA kernels (like kernel fusion \cite{DGL} \cite{ma2019_neugraph}) and other implementation techniques (like 2D graph partitioning \cite{ma2019_neugraph}) to improve the speed of GNN training on GPUs.
