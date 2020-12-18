@@ -34,7 +34,7 @@ We use blue characters $\Param{\MyVec{w}}$/$\Param{\MyMat{W}}$ to denote weight 
         & $\phi^l$ & The messaging function of the GNN layer $l$. \\
         & $\Sigma^l$ & The aggregation function of the GNN layer $l$. \\
         & $\gamma^l$ & The vertex updating function of the GNN layer $l$. \\ 
-        & $\phi^{l,i}$/$\Sigma^{l,i}$/$\gamma^{l,i}$ & The messaging/aggregation/updating function of the $i$-th sub-layer of the GNN layer  $l$.\\
+        & $\phi^{l,i}$ / $\Sigma^{l,i}$ / $\gamma^{l,i}$ & The messaging/aggregation/updating function of the $i$-th sub-layer of the GNN layer  $l$.\\
         & $\textcolor{blue}{\boldsymbol{W}^l, \boldsymbol{W}^{(k)}/\boldsymbol{b}, \boldsymbol{a}}$ & The matrices/vectors represented by the blue characters are the weight matrices/vectors that need to be learned in the GNN. \\  \midrule
         \multirow[c]{8}{3em}{Vectors}& $\boldsymbol{v}_x$ & The feature vector of the vertex $v_x$. \\
         & $\boldsymbol{e}_{x,y}$ & The feature vector of the edge $e_{x,y}$.  \\
@@ -42,7 +42,7 @@ We use blue characters $\Param{\MyVec{w}}$/$\Param{\MyMat{W}}$ to denote weight 
         & $\boldsymbol{h}_x^{l+1}$ &  The {output} hidden vector of the graph neuron corresponding to $v_x$ in the GNN layer $l$.\\
         & $\boldsymbol{m}_{x,y}^l$ & The message vector of the edge $e_{x,y}$ outputted by $\phi^l$ of the GNN layer $l$. \\
         & $\boldsymbol{s}_{x}^l$ & The aggregated vector of the vertex $v_x$ outputted by $\Sigma^l$ of the GNN layer $l$. \\
-        & $\boldsymbol{h}_{x}^{l,i}$/$\boldsymbol{m}_{x,y}^{l,i}$/$\boldsymbol{s}_{x}^{l,i}$ & The hidden/message/aggregated vector of the vertex $v_x$ outputted by $\gamma^{l,i}$/$\phi^{l,i}$/$\Sigma^{l,i}$ of the $i$-th sub-layer of the GNN layer $l$. \\
+        & $\boldsymbol{h}_{x}^{l,i}$ / $\boldsymbol{m}_{x,y}^{l,i}$ / $\boldsymbol{s}_{x}^{l,i}$ & The hidden/message/aggregated vector of the vertex $v_x$ outputted by $\gamma^{l,i}$/$\phi^{l,i}$/$\Sigma^{l,i}$ of the $i$-th sub-layer of the GNN layer $l$. \\
         & $d_{in}$, $d_{out}$ &  The dimensions of the input/output hidden vectors of a graph neuron. \\
         \bottomrule
         
@@ -148,7 +148,7 @@ Each vertex corresponds to a graph neuron.
 %
 A graph neuron is a small neural network.
 %
-For the graph neuron corresponding to $v_x$ at the layer $l$, it receives the hidden vector of itself $\boldsymbol{h}^l_x$ and the hidden vectors of its adjacent vertices $\boldsymbol{h}^l_y$ with $v_y \in \mathcal{N}(v_x)$ from the previous GNN layer\footnote{For the GNN layer 0, graph neurons receive input feature vectors, i.e., $\boldsymbol{h}^0_i=\boldsymbol{v}_i$}.
+For the graph neuron corresponding to $v_x$ at the layer $l$, it receives the hidden vector of itself $\boldsymbol{h}^l_x$ and the hidden vectors of its adjacent vertices $\boldsymbol{h}^l_y$ with $v_y \in \mathcal{N}(v_x)$ from the previous GNN layer\footnote{For the GNN layer 0, graph neurons receive input feature vectors, i.e., $\boldsymbol{h}^0_x=\boldsymbol{v}_x$}.
 %
 The graph neuron of $v_x$ aggregates the received hidden vectors, applies non-linear transformations, and outputs a new hidden vector $\boldsymbol{h}_x^{l+1}$.
 
@@ -196,46 +196,12 @@ We regard $\phi$ and $\Sigma$ as \emph{edge calculation} functions, since they a
 We regard $\gamma$ as the \emph{vertex calculation} function, as it is conducted over every vertex in $\mathcal{G}$.
 %
 \tablename~\ref{tab:gnn_overview_edge} and \tablename~\ref{tab:gnn_overview_vertex} list the edge calculation functions and the vertex calculation functions of typical GNNs, respectively.
-
-It is noteworthy that some complex GNNs like GAT, GaAN and ChebNet require more than one message passing phase in each GNN layer.
+%
+Some complex GNNs like GAT \cite{huang2018_gat} and GaAN  \cite{zhang2018_gaan} use more than one message passing phase in each GNN layer.
 %
 We regard every message passing phase in a GNN layer as a \emph{sub-layer}.
 %
-Take GAT \cite{huang2018_gat} as an example.
-%
-A GAT layer has two sub-layers and each sub-layer has $K$ heads under the multi-head attention mechanism.
-%
-For the GAT layer $l$, it first transforms every hidden vector received from the previous GAT layer $\boldsymbol{h}^l_x$ with a weight matrix $\textcolor{blue}{\boldsymbol{W}^{l}_{(k)}}$ for each head $k$ ($\parallel$ represents the concatenation operator):
-%
-\begin{equation}
-   \hvec{x} = \parallel_{k=1}^K \Param{\MyMat{W}^l_{(k)}}\MyVec{h}^l_x, \quad \text{denoting } \hvec{x}[k]=\Param{\MyMat{W}^l_{(k)}}\MyVec{h}^l_x.
-\end{equation}
-%
-The GAT layer $l$ then calculates the hidden vector $\MyVec{h}^{l,0}_x$ of every vertex $v_x$ in the first sub-layer as:
-%
-\newcommand{\GATCalcWeight}{\exp(LeakyReLU(\Param{\MyVec{a}}^T[\hvec{y}[k] \parallel \hvec{x}[k]]))}
-\begin{equation}
-    \begin{aligned}
-        \MyVec{m}^{l,0}_{y,x} & = \phi^{l,0}(\MyVec{h}^l_y, \MyVec{h}^l_x, \MyVec{e}_{y,x}, \hvec{y}, \hvec{x}) = \parallel_{k=1}^{K}\GATCalcWeight, \\
-        \MyVec{s}^{l,0}_{x} &= \mathlarger{\Sigma}_{v_y \in \mathcal{N}(v_x)}{\MyVec{m}^{l,0}_{y,x}}, \\
-        \MyVec{h}^{l,0}_{x} &= \gamma^{l,0}(\MyVec{h}^l_x, \MyVec{s}^{l,0}_{x})  = \MyVec{s}^{l,0}_{x}.
-     \end{aligned}
-\end{equation}
-%
-$\MyVec{h}^{l,0}_x$ stores the sum of adjacent edge weights of all heads for $v_x$.
-%
-It is passed to the second sub-layer as ($\delta$ represents the activation function):
-%
-\begin{equation}
-    \begin{aligned}
-        \MyVec{m}^{l,1}_{y,x} &= \phi^{l,1}(\MyVec{h}^{l,0}_y, \MyVec{h}^{l,0}_x, \MyVec{e}_{y,x}, \hvec{y}, \hvec{x}) = \parallel_{k=1}^{K}\frac{\GATCalcWeight}{\MyVec{h}^{l,0}_x[k]}\hvec{y}[k], \\
-        \MyVec{s}^{l,1}_x &= \mathlarger{\Sigma}_{v_y \in \mathcal{N}(v_x)} \MyVec{m}^{l,1}_{y,x}, \\
-        \MyVec{h}^{l,1}_x &= \gamma^{l,1}(\MyVec{h}^{l,0}, \MyVec{s}^{l,1}_x) = \delta(\MyVec{s}^{l,1}_x).
-    \end{aligned}
-\end{equation}
-%
-In the GAT layer $l$, the graph neuron corresponding to $v_x$ first transforms the hidden vector of $v_x$ from the previous layer $\boldsymbol{h}^l_x$ with a weight matrix $\textcolor{blue}{\boldsymbol{W}^{l,k}}\boldsymbol{h}_x^l$.
-calculates the weight (i.e., attention) of every adjacent edge dynamically with 
+We will give out more details on sub-layers when we introduce GAT.
 
 %For ChebNet, we report its GNN sub-layer in the tables.
 %A ChebNet layer consists of $K$ GNN sub-layers and a summation layer:
@@ -243,7 +209,9 @@ calculates the weight (i.e., attention) of every adjacent edge dynamically with
 %For GAT, a GAT layer consists of two sub-layers and it conducts part of the vertex calculation before the two sub-layers.
 %For GaAN, a GaAN layer consists of four sub-layers: the first sub-layer calculates the summation $\boldsymbol{m}_{j, i, (k)}^{l,0}  = \exp((\textcolor{blue}{W^{l, k}_{xa}} \boldsymbol{h}_j^l + \textcolor{blue}{b^{l, k}_{xa}})^T (\textcolor{blue}{\boldsymbol{W}^{l, k}_{ya}} \boldsymbol{h}_i^l + \textcolor{blue}{\boldsymbol{b}^{l,k}_{ya}}))$, and the other three sub-layers calculate $\boldsymbol{m}^l_{j,i,1}$/$\boldsymbol{m}^l_{j,i,2}$/$\boldsymbol{m}^l_{j,i,3}$.
 
-\begin{table}[h]
+\newcommand{\GATCalcWeight}{\exp(LeakyReLU(\Param{\MyVec{a}}^T[\hvec{y}[k] \parallel \hvec{x}[k]]))}
+
+\begin{table}[H]
     \hspace{-2em}
     \begin{footnotesize}
         \begin{tabular}{cccp{22em}r}
@@ -349,7 +317,7 @@ calculates the weight (i.e., attention) of every adjacent edge dynamically with
     \label{tab:gnn_overview_edge}
 \end{table}
 
-\begin{table}
+\begin{table}[H]
     \centering
     \begin{footnotesize}
         \begin{tabular}{clr}
@@ -397,7 +365,7 @@ calculates the weight (i.e., attention) of every adjacent edge dynamically with
                          & \text{Sub-layer 0:}                                                                            \\
                          & \MyVec{h}^{l,0}_{x} = \MyVec{s}^{l,0}_{x}                              \\
                          & \text{Sub-layer 1:}                                                                            \\
-                         & \boldsymbol{h}_x^{l+1} = \delta(\boldsymbol{s}_x^{l,1})
+                         & \boldsymbol{h}_x^{l+1} = \MyVec{h}^{l,1}_x = \delta(\boldsymbol{s}_x^{l,1})
                     \end{aligned}
                 $
             \end{scriptsize}                                                                                                                                                                                   &
@@ -416,7 +384,7 @@ calculates the weight (i.e., attention) of every adjacent edge dynamically with
                          & \MyVec{h}^{l,*}_{x} = \MyVec{s}^{l,*}_{x}                                                                                                                              \\
                          & \text{Sub-layer 3:}                                                                                                                                                                      \\
                          & \boldsymbol{g}_x^l = \textcolor{blue}{\boldsymbol{W}^l_g}[\boldsymbol{h}_x^{l} \parallel \boldsymbol{h}_{x}^{l, 2} \parallel \boldsymbol{s}_{x}^{l, 3}] + \textcolor{blue}{\boldsymbol{b}^l_g} \\
-                         & \boldsymbol{h}_x^{l+1} = \textcolor{blue}{\boldsymbol{W}^l_o} [\boldsymbol{h}_x^l \parallel (\boldsymbol{g}_{x}^l \odot \boldsymbol{h}_{x}^{l, 1})] + \textcolor{blue}{\boldsymbol{b}^l_o}
+                         & \boldsymbol{h}_x^{l+1} = \MyVec{h}^{l,3}_x = \textcolor{blue}{\boldsymbol{W}^l_o} [\boldsymbol{h}_x^l \parallel (\boldsymbol{g}_{x}^l \odot \boldsymbol{h}_{x}^{l, 1})] + \textcolor{blue}{\boldsymbol{b}^l_o}
                     \end{aligned}$
             \end{scriptsize}                                                                                                                                                                                   &
             \makecell[r]{$O(\max(K * d_v + d_{in}$, \\ $2 * d_{in} + d_m) * d_{out})$                                                                                                                                                \\
@@ -433,62 +401,107 @@ calculates the weight (i.e., attention) of every adjacent edge dynamically with
     \label{tab:gnn_overview_vertex}
 \end{table}
 
-\subsection{Classification of GNNs}
+\subsection{Representative GNNs}
 
-Since we focus on analyzing the performance bottleneck in training GNNs, we classify the typical GNNs from the view of time complexity.
+%Since we focus on analyzing the performance bottleneck in training GNNs, we classify the typical GNNs from the view of time complexity.
 We use $O_\phi$/$O_\Sigma$/$O_\gamma$ to denote the time complexity of the three functions in the message-passing model.
-The time complexity of a GNN layer is made up of two parts: the edge calculation complexity $m * (O_\phi$ + $O_\Sigma)$ and the vertex calculation complexity $n * O_\gamma$.
-
-In \tablename~\ref{tab:gnn_overview_edge} and \tablename~\ref{tab:gnn_overview_vertex}, we list the edge and vertex calculation complexity, respectively.
+The time complexity of a GNN layer is made up of two parts: the edge calculation complexity $O_\phi$ + $O_\Sigma$ and the vertex calculation complexity $O_\gamma$.
+%
+In \tablename~\ref{tab:gnn_overview_edge} and \tablename~\ref{tab:gnn_overview_vertex}, we list the edge and vertex calculation complexity of each GNN, respectively.
 The time complexity of a graph neuron is affected by the dimensions of the input/output hidden vectors $d_{in}$ and $d_{out}$ and the dimensions of the model parameters (like the number of heads $K$ in GAT and the dimensions of the view vectors $d_a$/$d_v$/$d_m$ in GaAN).
 
-We classify the typical GNNs into four quadrants based on their edge/vertex complexity as shown in \figurename~\ref{fig:gnn_complexity_quadrant}. We pick GCN, GGNN, GAT, and GaAN as the \emph{representative GNNs} of the four quadrants.
+Since we focus on analyzing the performance bottleneck in training GNNs, we classify the typical GNNs into four quadrants based on their edge/vertex complexity as shown in \figurename~\ref{fig:gnn_complexity_quadrant}. We pick GCN, GGNN, GAT, and GaAN as the \emph{representative} GNNs of the four quadrants.
 
-\begin{figure}
+\begin{figure}[h]
     \centering
     \includegraphics[width=0.7\columnwidth]{figs/illustration/GNN_complexity_quadrant.pdf}
     \caption{Complexity quadrants of typical GNNs. We compare the complexity according to the number of sub-layers, the Big-O notation and the number of parameters to train.}
     \label{fig:gnn_complexity_quadrant}
 \end{figure}
 
-\textbf{GCN} (low vertex \& edge calculation complexity): Graph convolution network (GCN \cite{kipf2017_gcn}) introduces the first-order approximation of the spectral-based graph convolutions.
-%By combining the advantages of both the spectral-based and the spatial-based convolution, it can learn the representation of the local topological structure and vertex features efficiently.
-It has only one parameter to learn at each layer, i.e. the weight matrix $\boldsymbol{W}^l$ in $\gamma$.
-A GCN graph neuron can be expressed as $\boldsymbol{h}^{l+1}_i = \boldsymbol{W}^l\sum_{v_j \in \mathcal{N}(v_i)}{e_{j,i}\boldsymbol{h}^l_j}$, where $e_{j,i}$ is the normalized weight of the edge $(v_j, v_i)$.
-%In the matrix view, $\boldsymbol{H}^{l+1} = (\boldsymbol{A}\boldsymbol{H}^l)\boldsymbol{W}^l$.
-According to the associative law of the matrix multiplication, $\boldsymbol{h}^{l+1}_i = \sum_{v_j \in \mathcal{N}(v_i)}{e_{j,i}\boldsymbol{W}^l\boldsymbol{h}^l_j}$.
-Since the dimension of $\boldsymbol{h}^{l+1}_i$ is usually smaller than $\boldsymbol{h}^l_i$ in practical GCNs, the implementation of GCN in PyTorch Geometric chooses to first conduct the vertex calculation $\hat{\boldsymbol{h}}^l_j = \boldsymbol{W}^l\boldsymbol{h}^l_j$ for each vertex $v_j$ and then conduct the edge calculation $\boldsymbol{h}^{l+1}_i=\sum_{v_j\in\mathcal{N}(v_i)}{e_{j,i}\hat{\boldsymbol{h}}^l_j}$.
-As $\hat{\boldsymbol{h}}^l_j$ has the same dimension as $\boldsymbol{h}^{l+1}_i$, the implementation significantly reduces the  computation cost of the edge calculation.
+\subsubsection{GCN (Low Vertex \& Low Edge Complexity)}
 
-\textbf{GGNN} (high vertex \& low edge calculation complexity):
-GGNN \cite{li2015_ggnn} introduces the gated recurrent unit (GRU) into the graph neural networks.
-The vertex updating function $\phi$ of GGNN is a modified GRU unit that has 12 model parameters to learn, having high computational complexity.
+Graph convolution network (GCN \cite{kipf2017_gcn}) introduces the first-order approximation of the spectral-based graph convolutions into graph neural networks.
+%
+It has only one parameter to learn at each layer, i.e. the weight matrix $\Param{\MyMat{W}^l}$ in the updating function $\gamma^l$.
+%
+A GCN graph neuron can be expressed as $\boldsymbol{h}^{l+1}_x = \Param{\MyMat{W}^l}\sum_{v_y \in \mathcal{N}(v_x)}{w_{y,x}\boldsymbol{h}^l_y}$, where $w_{y,x}$ is the normalized weight of the edge $e_{y,x}$.
+%
+According to the associative law of the matrix multiplication, $\boldsymbol{h}^{l+1}_x = \sum_{v_y \in \mathcal{N}(v_x)}{w_{y,x}\Param{\MyMat{W}^l}\boldsymbol{h}^l_y}$.
+%
+Since the dimension of $\boldsymbol{h}^{l+1}_x$ is usually smaller than $\boldsymbol{h}^l_x$ in practical GCNs, the implementation of GCN in PyG chooses to first conduct the vertex calculation $\hat{\boldsymbol{h}}^l_y = \Param{\MyMat{W}^l}\boldsymbol{h}^l_y$ for each vertex $v_y$ and then conduct the edge calculation $\boldsymbol{h}^{l+1}_x=\sum_{v_y\in\mathcal{N}(v_x)}{w_{y,x}\hat{\boldsymbol{h}}^l_y}$.
+%
+As $\hat{\boldsymbol{h}}^l_y$ has the same dimension as $\boldsymbol{h}^{l+1}_x$, the implementation significantly reduces the  computation cost of the edge calculation.
+
+\subsubsection{GGNN (High Vertex \& Low Edge Complexity)}
+
+GGNN \cite{li2015_ggnn} introduces the gated recurrent unit (GRU) into graph neural networks.
+%
+The updating function $\phi^l$ of GGNN is a modified GRU unit that has 12 model parameters to learn, having high computational complexity.
+%
 To lower the training cost, all GNN layers share the same group of parameters in GGNN.
+%
 GGNN further requires the dimension of $\boldsymbol{h}^{l+1}$ is equal to the dimension of $\boldsymbol{h}^l$.
-Since the messaging function $\phi$ only uses the hidden feature vector $\boldsymbol{h}^l_j$ of the source vertex $v_j$ of an edge $(v_j, v_i)$. In the implementation of PyG, GGNN conducts the pre-processing vertex calculation $\hat{\boldsymbol{h}}^l_i=\boldsymbol{W}\boldsymbol{h}^l_i$ for every vertex $v_i$ before the message-passing.
-The messaging function $\phi$ directly uses $\hat{\boldsymbol{h}}^l_j$ as the message vector for the edge $(v_j, v_i)$.
+%
+Since the messaging function $\phi^l$ only uses the hidden vector $\boldsymbol{h}^l_y$ of the source vertex $v_y$ for an edge $e_{y,x}$, in the implementation of PyG, GGNN conducts the pre-processing vertex calculation $\hat{\boldsymbol{h}}^l_x = \Param {\MyMat{W}^l}\boldsymbol{h}^l_x$ for every vertex $v_x$ before the message passing.
+%
+The messaging function $\phi^l$ directly uses $\hat{\boldsymbol{h}}^l_y$ as the message vector for every edge $e_{y, x}$.
+%
 In this way, GGNN further reduces the time complexity of the edge calculation to $O(1)$ without increasing the time complexity of the vertex calculation.
 
-\textbf{GAT} (low vertex \& high edge calculation complexity):
-GAT \cite{huang2018_gat} introduces the attention and multi-head mechanism into the graph neural networks.
-The $K$ heads generate $K$ independent views for an edge, where $K$ is a hyper-parameter.
-The views of $K$ heads can be merged by concatenating or by averaging.
-For concatenating, the dimension of the hidden feature vector of each head $d_{head}$ is $d_{out}/K$.
-For averaging, $d_{head}$ is $d_{out}$, multiplying the complexity by $K$.
-Each GAT layer consists of a preprocessing step and two sub-layers.
-In the preprocessing step, GAT calculates the attention vectors $\hat{\boldsymbol{h}}^{l}_{i,(k)}$ for every vertex $v_i$ in every head $k$.
-The first sub-layer uses the attention vectors to calculate the attention weights of every edge in every head $\boldsymbol{m}^{l,0}_{j,i,(k)}$.
-After aggregation, the first sub-layer gets the summation of attention weights of every vertex in every head $\hat{\boldsymbol{a}}^{l,0}_{i,(k)}$.
-The second sub-layer calculates the normalized attention weights $\alpha_{j, i, (k)}$ for every edge in every head and aggregates the hidden feature vectors with the normalized weights in the message-passing.
-GAT uses the aggregated vector $\boldsymbol{s}^{l,1}_i$ of the second sub-layer as the output hidden vector directly.
+\subsubsection{GAT (Low Vertex \& High Edge Complexity)}
 
-\textbf{GaAN} (high vertex \& edge calculation complexity):
+GAT \cite{huang2018_gat} introduces the multi-head attention mechanism into graph neural networks.
+%
+Each GAT layer has $K$ heads that generate $K$ independent views for an edge, where $K$ is a hyper-parameter.
+%
+The views of $K$ heads can be merged by concatenating or by averaging.
+%
+For concatenating, the dimension of the hidden vector of each head $d_{head}$ is $d_{out}/K$.
+%
+For averaging, $d_{head}$ is $d_{out}$.
+
+Each GAT layer consists of a vertex pre-processing phase and two sub-layers.
+
+The vertex pre-processing phase calculates the attention vector $\hat{\boldsymbol{h}}^{l}_{x}$ for every vertex $v_x$ by $\hvec{x} = \parallel_{k=1}^K \Param{\MyMat{W}^l_{(k)}}\MyVec{h}^l_x$. We denote the attention sub-vector generated by the $k$-th head as $\hvec{x}[k]=\Param{\MyMat{W}^l_{(k)}}\MyVec{h}^l_x$.
+
+The two sub-layers also follow the message-passing model.
+The first sub-layer (defined in Equation~\ref{eq:GAT-sub-layer-1}) uses the attention vectors to emit the attention weight vector for every edge $\boldsymbol{m}^{l,0}_{y,x}$ and aggregates the attention weight vectors for every vertex $v_x$ to get the weight sum vector $\MyVec{h}^{l,0}_x$.
+%
+\begin{equation}
+    \label{eq:GAT-sub-layer-1}
+    \begin{aligned}
+        \MyVec{m}^{l,0}_{y,x} & = \phi^{l,0}(\MyVec{h}^l_y, \MyVec{h}^l_x, \MyVec{e}_{y,x}, \hvec{y}, \hvec{x}) = \parallel_{k=1}^{K}\GATCalcWeight, \\
+        \MyVec{s}^{l,0}_{x} &= \mathlarger{\Sigma}_{v_y \in \mathcal{N}(v_x)}{\MyVec{m}^{l,0}_{y,x}}, \\
+        \MyVec{h}^{l,0}_{x} &= \gamma^{l,0}(\MyVec{h}^l_x, \MyVec{s}^{l,0}_{x})  = \MyVec{s}^{l,0}_{x}.
+    \end{aligned}
+\end{equation}
+%
+The second sub-layer (defined in Equation~\ref{eq:GAT-sub-layer-2}) uses the weight sum vectors to normalize the attention weights for every edge and aggregates the attention vectors $\boldsymbol{\hat{h}}^l_y$ with the normalized weights.
+%
+The aggregated attention vectors $\MyVec{s}^{l,1}_x$ are transformed by an activation function $\delta$ and outputted as the hidden vectors of the current layer $\MyVec{h}^{l+1}_x$.
+%
+\begin{equation}
+        \label{eq:GAT-sub-layer-2}
+    \begin{aligned}
+        \MyVec{m}^{l,1}_{y,x} &= \phi^{l,1}(\MyVec{h}^{l,0}_y, \MyVec{h}^{l,0}_x, \MyVec{e}_{y,x}, \hvec{y}, \hvec{x}) = \parallel_{k=1}^{K}\frac{\GATCalcWeight}{\MyVec{h}^{l,0}_x[k]}\hvec{y}[k], \\
+        \MyVec{s}^{l,1}_x &= \mathlarger{\Sigma}_{v_y \in \mathcal{N}(v_x)} \MyVec{m}^{l,1}_{y,x}, \\
+        \MyVec{h}^{l+1}_x = \MyVec{h}^{l,1}_x &= \gamma^{l,1}(\MyVec{h}^{l,0}, \MyVec{s}^{l,1}_x) = \delta(\MyVec{s}^{l,1}_x).
+    \end{aligned}
+\end{equation}
+
+\subsubsection{GaAN (High Vertex \& High Edge Complexity)}
+
 Based on the multi-head mechanism, GaAN \cite{zhang2018_gaan} introduces a convolutional subnetwork to control the weight of each head.
-Each GaAN layer consists of four sub-layers. The first two sub-layers are similar to GAT, and the last two sub-layers build the convolutional subnetwork.
-The first sub-layer aims to get the summation of attention weights of every vertex in each head $\boldsymbol{\hat{a}}^{l,0}_{j, i, (k)}$.
-The second sub-layer aggregates the feature vectors with the normalized attention weights $\boldsymbol{\hat{a}}^{l,0}_{i,(k)}$.
-The third and fourth sub-layers aggregate feature vectors with element-wise max and element-wise mean operators separately.
-After the four sub-layers, the vertex updating funciton uses the aggregated vectors of last three sub-layers $\boldsymbol{s}^{l, 1}_i, \boldsymbol{s}^{l, 2}_i, \boldsymbol{s}^{l, 3}_i$ to generate the output hidden vector $\boldsymbol{h}^{l+1}_i$
+%
+Each GaAN layer consists of four sub-layers (as defined in Table~\ref{tab:gnn_overview_edge} and Table~\ref{tab:gnn_overview_vertex}).
+%
+The first two sub-layers are similar to GAT, and the last two sub-layers build the convolutional subnetwork.
+%
+The first sub-layer aims to get the sum of attention weights of every vertex in all heads $\MyVec{h}^{l,0}_x$.
+The second sub-layer aggregates the hidden vectors from the previous GaAN layer with the normalized attention weights for all heads $\alpha_{(k)}$.
+The third and fourth sub-layers aggregate the hidden vectors from the GaAN previous layer with the element-wise max and mean operators separately.
+The vertex updating funciton $\gamma^{l,4}$ of the fourth sub-layer uses the hidden vectors of the last two sub-layers $\MyVec{h}^{l, 1}_x, \MyVec{h}^{l, 2}_x$ to generate the output hidden vector $\MyVec{h}^{l+1}_x$.
 
 \subsection{Sampling Techniques}
 
