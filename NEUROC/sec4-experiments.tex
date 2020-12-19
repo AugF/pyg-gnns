@@ -93,44 +93,69 @@ As the hidden vectors $\MyVec{h}^1_x$ consumed a small proportion of memory in G
 \paragraph{Summary}
 
 The complexity analysis in \tablename~\ref{tab:gnn_overview_edge} and \tablename~\ref{tab:gnn_overview_vertex} is valid.
+%
 Fixing other hyper-parameters, each hyper-parameter itself affects the training time and the memory usage of a GNN Layer \emph{in a linear way}.
+%
 Algorithm engineers can adjust hyper-parameters according to the time complexity to avoid explosive growth in the training time and memory usage.
 
 \subsection{Training Time Breakdown}
 \label{sec:training_time_breakdown}
 
-To find out which stage/step dominates the training time, we decompose the training time and analyze the performance bottleneck level by level.
+To find out which stage/step dominated the training time, we decomposed the training time and analyzed performance bottlenecks level by level.
 
 \subsubsection{Layer Level}
 
-\begin{figure}[tbp]
+\figurename~\ref{fig:exp_vertex_edge_cal_proportion} decomposes the training time of a GNN on the layer level.
+%
+The training time of each layer was the summation of the time in the forward, backward, and evaluation phases.
+%
+In GCN, GAT, and GaAN, the time spent on the layer 0 was much larger than the layer 1.
+%
+In those GNNs, the dimensions of the input/output hidden vectors in the layer 0 were much larger than the dimensions in the layer 1: $d^0_{in}=dim(\boldsymbol{v}_x)$, $d^0_{out}=d^1_{in}=64$, $d^1_{out}=\#Class$, and $dim(\boldsymbol{v}_x) \gg \#Class$.
+%
+For GaAN, since it required the dimensions of the input/output hidden vectors must be the same, the hyper-parameters were set to $d^0_{in}=d^0_{out}=d^1_{in}=d^1_{out}=64$ and the training time of both layers was close.
+
+\begin{figure}[H]
     \centering
     \subfloat[GCN]{\includegraphics[height=4.6cm]{figs/experiments/exp_layer_time_proportion_gcn.pdf}}
     \subfloat[GGNN]{\includegraphics[height=4.6cm]{figs/experiments/exp_layer_time_proportion_ggnn.pdf}}\\
     \subfloat[GAT]{\includegraphics[height=4.6cm]{figs/experiments/exp_layer_time_proportion_gat.pdf}}
     \subfloat[GaAN]{\includegraphics[height=4.6cm]{figs/experiments/exp_layer_time_proportion_gaan.pdf}}
-    \caption{Training time breakdown on the layer level. The training time of each layer includes the time spent on the forward, backward and evaluation phases. Each layer is further decomposed into the vertex and the edge calculation stages.}
+    \caption{Training time breakdown on the layer level. The training time of each layer included the time spent on the forward, backward and evaluation phases. Each layer was further decomposed into the vertex and the edge calculation stages.}
     \label{fig:exp_vertex_edge_cal_proportion}
 \end{figure}
 
-\figurename~\ref{fig:exp_vertex_edge_cal_proportion} decomposes the training time of a GNN on the layer level.
-The training time of each layer is the summation of the time in the forward, backward, and evaluation phases.
-In GCN, GAT, and GaAN, the time spent on the layer 0 is much larger than the layer 1.
-In those GNNs, the dimensions of the input/output hidden vectors in the layer 0 are much larger than the dimensions in the layer 1: $d^0_{in}=dim(\boldsymbol{v}_x)$, $d^0_{out}=d^1_{in}=64$, $d^1_{out}=\#Class$, and $dim(\boldsymbol{v}_x) \gg \#Class$.
-For GaAN, since it requires the dimensions of the input/output hidden vectors must be the same, the hyper-parameters are set as $d^0_{in}=d^0_{out}=d^1_{in}=d^1_{out}=64$ and the training time of both layers is close.
+Each GNN layer was further divided into the vertex and the edge calculation stages.
+%
+In \figurename~\ref{fig:exp_vertex_edge_cal_proportion}, GCN spent most of the training time on the edge calculation stage on most datasets.
+%
+A special case was the \texttt{cph} dataset.
+%
+The dimension of the input feature vectors was very high in \texttt{cph}, making the vertex calculation stage of the GCN Layer 0 spend considerable time.
+%
+GGNN also spent the majority of its training time on the edge calculation stage, but the high time complexity of its vertex updating function $\gamma^l$ made the proportion of the vertex calculation in the total training time much higher than the other GNNs.
+%
+For GAT and GaAN, due to their high edge calculation complexity, the edge calculation stage was the dominant stage.
 
-Each GNN layer can be further divided into the vertex and the edge calculation stages.
-In \figurename~\ref{fig:exp_vertex_edge_cal_proportion}, GCN spends most of the training time on the edge calculation stage in most datasets.
-A special case is the \texttt{cph} dataset.
-The dimension of the input feature vectors is very high in \texttt{cph}, making the vertex calculation stage of the GCN Layer 0 spend considerable time.
-GGNN also spends the majority of its training time on the edge calculation stage.
-But the high time complexity of its vertex updating function $\gamma$ makes the ratio of the vertex calculation in the total training time much higher than the other GNNs.
-%In \textit{pub} and cam dataset, the edge calculation cost, and the vertex calculation cost are close for GGNN
-%because the average degree of the two datasets is low (only 4.5 and 2.8).
-For GAT and GaAN, due to their high edge calculation complexity, the edge calculation stage is the absolutely dominant stage.
-In summary, \emph{the edge calculation stage is the most time-consuming stage in the GNN training}.
+The experimental results also indicated that the average degree of the dataset affected the proportion of the edge/vertex calculation time in the total training time.
+%
+For GaAN, the time spent on the vertex calculation stage exceeded the edge calculation stage on the \texttt{pub} and \texttt{cam} datasets, because the average degrees of the two datasets were low, making $|\mathcal{E}|$ and $|\mathcal{V}|$ much closer.
+%
+To evaluate the effects of the average degree, we generated random graphs with 50,000 vertices and average degrees ranging from 2 to 100.
+%
+\figurename~\ref{fig:exp_avg_degree_on_vertex_edge_cal_time} shows the training time of the four GNNs under different average degrees.
+%
+As the average degree increased, the training time of the edge calculation stage grew \emph{linearly}.
+%
+For GCN, GAT, and GaAN, the edge calculation stage dominated the entire training time even when the average degrees were small.
+%
+Only for GGNN that had high vertex and low edge calculation complexity, the training time of the vertex calculation stage exceeded the edge calculation stage under low average degrees ($<5$).
 
-\begin{figure}[tbp]
+In summary, \emph{the edge calculation stage was the most time-consuming stage in GNN training}.
+%
+Improving its efficiency is the key to reduce the GNN training time.
+
+\begin{figure}[H]
     \centering
     \subfloat[GCN]{\includegraphics[height=4cm]{figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_gcn.pdf}}
     \subfloat[GGNN]{\includegraphics[height=4cm]{figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_ggnn.pdf}}\\
@@ -140,115 +165,150 @@ In summary, \emph{the edge calculation stage is the most time-consuming stage in
     \label{fig:exp_avg_degree_on_vertex_edge_cal_time}
 \end{figure}
 
-The experimental results also indicate that the average degree of the dataset affects the time-consuming proportion of the edge/vertex calculation time.
-For GaAN, the time spent on the vertex calculation stage exceeds the edge calculation stage on the \texttt{pub} and \texttt{cam} datasets, because the average degrees of the two datasets are low, making $|\mathcal{E}|$ and $|\mathcal{V}|$ much closer.
-To evaluate the effects of the average degree, we used the R-MAT generator to generate random graphs with 50k vertices and the average degrees ranging from 2 to 100.
-\figurename~\ref{fig:exp_avg_degree_on_vertex_edge_cal_time} shows the training time of the four GNNs under different average degrees.
-As the average degree increases, the training time of the edge calculation stage grows \emph{linearly}.
-For GCN, GAT, and GaAN, the edge calculation stage dominates the entire training time even under small average degrees.
-Only for GGNN that has high vertex and low edge calculation complexities, the training time of the vertex calculation stage exceeds the edge calculation stage under low average degrees ($<5$).
-Therefore, \emph{improving the efficiency of the edge calculation stage is the key to reduce the GNN training time}.
-
 \subsubsection{Step Level in Edge Calculation}
 
-\begin{figure}[tbp]
-    \centering
-    \includegraphics[width=1\columnwidth]{figs/illustration/steps_in_edge_calculation.pdf}
-    \caption{Step decomposition of the edge calculation stage for the GNN layer $l$.}
-    \label{fig:steps_in_edge_calculation}
-\end{figure}
-
-In the implementation of PyG, the edge calculation stage can be decomposed into four steps: collection, messaging, aggregation, and vector updating, as shown in \figurename~\ref{fig:steps_in_edge_calculation}.
+We further investigated the most time-consuming step of the edge calculation stage.
 %
-The edge index is a matrix with $|\mathcal{E}|$ rows and 2 columns that holds the edge set of the graph.
+In the implementation of PyG, the edge calculation stage consists of four steps: collection, messaging, aggregation, and vector updating, as shown in \figurename~\ref{fig:steps_in_edge_calculation}.
 %
-The two columns of the edge index store the source vertex and the target vertex of each edge, respectively.
+The edge index is a matrix with $|\mathcal{E}|$ rows and two columns.
 %
-The collection step copies the hidden vectors from the previous layer $\MyVec{h}^l_x$ and $\MyVec{h}^l_y$ to the both endpoints of each edge $e_{x,y}$ in the edge index, forming the parameter tensor $[\MyVec{h}^l_x, \MyVec{h}^l_{y}, \MyVec{e}_{x,y}]$ of the messaging function $\phi^l$.
+It holds the edge set of the graph.
 %
-This step only involves the data movement.
+The two columns of the edge index store the source and the target vertex IDs of each edge.
+%
+The collection step copies the hidden vectors from the previous GNN layer $\MyVec{h}^l_x$ and $\MyVec{h}^l_y$ to the both endpoints of each edge $e_{x,y}$ in the edge index, forming the parameter tensor $[\MyVec{h}^l_x, \MyVec{h}^l_{y}, \MyVec{e}_{x,y}]$ of the messaging function $\phi^l$.
+%
+This step only involves data movement.
 %
 The messaging step calls the messaging function $\phi^l$ on all edges to get message vectors $\MyVec{m}^l_{x,y}$.
 %
-The aggregation step aggregates the message vectors with the same target vertex into an aggregated vector $\MyVec{s}^l_x$ with the aggregation function $\Sigma^l$.
+The aggregation step aggregates the message vectors with the same target vertex into an aggregated vector $\MyVec{s}^l_x$.
 %
 The vector updating step is optional.
 %
 It performs an additional transformation on the aggregated vectors (for example, adding the bias in GCN).
-%
-The aggregated vectors $\MyVec{s}^l_x$ will be fed into the vertex updating function $\gamma^l$ as one of the input parameters.
 
-\begin{figure}[tbp]
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\columnwidth]{figs/illustration/steps_in_edge_calculation.pdf}
+    \caption{Step decomposition of the edge calculation stage of the GNN layer $l$.}
+    \label{fig:steps_in_edge_calculation}
+\end{figure}
+
+We decomposed the execution time of the edge calculation stage in \figurename~\ref{fig:exp_edge_calc_decomposition}.
+%
+In each GNN, the proportions of the four steps were rather stable, rarely affected by datasets. 
+%
+For GAT and GaAN with the high edge calculation complexity, the messaging step consumed most of the training time. 
+%
+For GCN and GGNN with the low edge complexity, the proportions of the steps were close. 
+%
+Since the messaging function $\phi^l$ of GGNN used the pre-computed $\MyVec{\hat{h}}^l_y$ as the message vector directly, the time spent on the messaging step of GGNN was negligible.
+%
+Although the collecting step did not conduct any computation and only involved data movement, it occupied noticeable execution time in the four GNNs.
+
+The results indicate that \emph{the performance bottlenecks of the edge calculation stage depend on the complexity of the messaging function $\phi^l$}.
+%
+When the time complexity of $\phi^l$ is high, the messaging step is the performance bottleneck.
+%
+Optimizing the implementation of $\phi$ can significantly reduce training time.
+%
+Otherwise, the collection and the aggregation steps are performance bottlenecks.
+%
+Improving the efficiency of the two steps can benefit all GNNs.
+
+\begin{figure}[H]
     \centering
     \subfloat[GCN]{\includegraphics[height=4cm]{figs/experiments/exp_edge_calc_decomposition_gcn.pdf}}
     \subfloat[GGNN]{\includegraphics[height=4cm]{figs/experiments/exp_edge_calc_decomposition_ggnn.pdf}}\\
     \subfloat[GAT]{\includegraphics[height=4cm]{figs/experiments/exp_edge_calc_decomposition_gat.pdf}}
     \subfloat[GaAN]{\includegraphics[height=4cm]{figs/experiments/exp_edge_calc_decomposition_gaan.pdf}}
-    \caption{Training time breakdown of the edge calculation stage (including both GNN layers).}
+    \caption{Training time breakdown of the edge calculation stage.}
     \label{fig:exp_edge_calc_decomposition}
 \end{figure}
 
-We decompose the execution time of the edge calculation stage in \figurename~\ref{fig:exp_edge_calc_decomposition}.
-In each GNN, the proportions of the four steps are rather stable, rarely affected by datasets. 
-For GAT and GaAN with the high edge calculation complexity, the messaging step consumes most of the training time. 
-For GCN and GGNN with the low edge complexity, the proportions of the steps are close. 
-Since the messaging function $\phi^l$ of GGNN uses the pre-computed $\MyVec{\hat{h}}^l_y$ as the message vector directly, the time spent on the messaging step of GGNN is negligible.
-Although the collecting step does not conduct any computation and only involves data movement, it occupies noticeable execution time in all the GNNs.
-The experiments show that \emph{the performance bottleneck on the step level depends on the complexity of the messaging function $\phi$}.
-For GNNs with the high complexity, the messaging function $\phi$ is the performance bottleneck.
-Optimizing the implementation of $\phi$ can significantly reduce the training time.
-For the other GNNs, optimization should focus on reducing the costs of the collection and aggregation steps.
-Additionally, improving the efficiency of the collection step can benefit all GNNs.
-
 \subsubsection{Operator Level}
 
-The functions $\phi$, $\Sigma$ and $\gamma$ in the vertex and edge calculation stages are made up of a series of basic operators implemented on the GPU, like the matrix multiplication \texttt{mm}, the elementwise multiplication \texttt{mul} and the index-based selection \texttt{index\_select}.
-\figurename~\ref{fig:exp_top_basic_ops} shows the five most time-consuming basic operators in each GNN, averaged over all the real-world graphs in \tablename~\ref{tab:dataset_overview}.
+The functions $\phi$, $\Sigma$ and $\gamma$ in the edge and vertex calculation stages are made up of a series of basic operators implemented on the GPU side, such as the matrix multiplication \texttt{mm}, the elementwise multiplication \texttt{mul} and the index-based selection \texttt{index\_select}.
+%
+\figurename~\ref{fig:exp_top_basic_ops} shows the top-5 time-consuming basic operators in each GNN, averaged over all datasets.
 
-\begin{figure}[h]
+\begin{figure}[H]
     \centering
     \subfloat[GCN]{\includegraphics[height=4cm]{figs/experiments/exp_top_basic_ops_gcn.pdf}}
     \subfloat[GGNN]{\includegraphics[height=4cm]{figs/experiments/exp_top_basic_ops_ggnn.pdf}}\\
     \subfloat[GAT]{\includegraphics[height=4cm]{figs/experiments/exp_top_basic_ops_gat.pdf}}
     \subfloat[GaAN]{\includegraphics[height=4cm]{figs/experiments/exp_top_basic_ops_gaan.pdf}}
-    \caption{Top 5 time-consuming basic operators of typical GNNs. The time proportion of each basic operator is averaged over all graphs with the error bar indicating the maximal and the minimal.}
+    \caption{Top 5 time-consuming basic operators of typical GNNs. The time proportion of each basic operator was averaged over all datasets with the error bar indicating the maximum and the minimum.}
     \label{fig:exp_top_basic_ops}
 \end{figure}
 
 \paragraph{GCN}
-The most time-consuming basic operator is the matrix multiplication \texttt{mm} used in the vertex updating function $\gamma$.
-The elementwise multiplication \texttt{mul} used in the messaging function $\phi$ is also time-consuming.
-The other three operators are used in the edge calculation stage: \texttt{scatter\_add\_} for the aggregation step in the forward phase, \texttt{gather} for the aggregation step in the backward phase, and \texttt{index\_select} for the collection step.
-For GCN, the basic operators related to the edge calculation stage consume the majority of the training time.
+%
+The most time-consuming basic operator was the matrix multiplication \texttt{mm} used in the vertex updating function $\gamma$.
+%
+The elementwise multiplication \texttt{mul} used in the messaging function $\phi$ was also time-consuming.
+%
+The other three operators were used in the edge calculation stage: \texttt{scatter\_add\_} for the aggregation step in the forward phase, \texttt{gather} for the aggregation step in the backward phase, and \texttt{index\_select} for the collection step.
+%
+For GCN, the basic operators related to the edge calculation stage consumed the majority of the training time.
 
 \paragraph{GGNN}
-The top basic operator is \texttt{mm} used in the vertex updating function $\gamma$.
-Due to its high time complexity, the proportion of the \texttt{mm} is much higher than the other operators.
-The \texttt{thnn\_fused\_gru\_cell} operator used in the backward phase of $\gamma$ is also noticeable.
-The other three operators are used in the edge calculation stage.
+%
+The top basic operator was \texttt{mm} used in the vertex updating function $\gamma$.
+%
+Due to its high time complexity, the proportion of \texttt{mm} was much higher than the other operators.
+%
+The \texttt{thnn\_fused\_gru\_cell} operator was used in the backward phase of $\gamma$.
+%
+The other three operators were used in the edge calculation stage.
 
 \paragraph{GAT}
-All the top basic operators except for \texttt{mm} are related to the edge calculation stage.
-The \texttt{mm} operator is used in the vertex updating function $\gamma$.
+%
+All the top basic operators except for \texttt{mm} were related to the edge calculation stage.
+%
+The \texttt{mm} operator was used in the vertex updating function $\gamma$.
 
 \paragraph{GaAN}
-The top basic operator is \texttt{bmm} used in the messaging function $\phi$.
-The \texttt{addmm} operator and the \texttt{mm} operator are used in both the vertex and the edge calculation stages, where the edge calculation stage is dominant.
+%
+The top basic operator was \texttt{bmm} used in the messaging function $\phi$.
+%
+The \texttt{addmm} operator and the \texttt{mm} operator were used in both the vertex and the edge calculation stages, where the edge calculation stage was dominant.
 
-In general, the most time-consuming operator in the four GNNs, is still the matrix multiplication \texttt{mm} and the elementwise multiplication \texttt{mul}, \emph{making GNN training suitable for GPUs}.
-Although the aggregation step in the edge calculation stage is relatively simple (like sum and mean), the related operators \texttt{scatter\_add} and \texttt{gather} still consume a certain amount of the time.
-The operators have to synchronize between hardware threads to avoid updating the same aggregated vector at the same time. They also conduct non-regular memory access with the access pattern determined by the edge set dynamically.
-For GPUs, they are less efficient than \texttt{mm}.
-The index-based selection \texttt{index\_select} operator from the collection step consume around 10\% of the time in all GNNs.
-Though GPUs have high on-chip memory bandwidth, improving the efficiency of \texttt{scatter\_add}/\texttt{gather}/\texttt{index\_select} can benefit the training of all kinds of GNNs.
+The most time-consuming operators in the four GNNs were the matrix multiplication \texttt{mm} and the elementwise multiplication \texttt{mul}, \emph{making GNN training suitable for GPUs}.
+%
+Although the aggregation step in the edge calculation stage was relatively simple (like sum and mean), the related operators--\texttt{scatter\_add} and \texttt{gather}--still consumed a certain amount of the time.
+%
+The two operators had to synchronize between hardware threads to avoid updating the same aggregated vector at the same time.
+%
+They also conducted non-regular memory access with the access pattern determined by the edge set dynamically.
+%
+For GPUs, they were less efficient than \texttt{mm}.
+%
+The index-based selection operator \texttt{index\_select} used in the collection step consumed about 10\% of the training time in all GNNs.
+%
+Improving the efficiency of \texttt{scatter\_add}/\texttt{gather}/\texttt{index\_select} can benefit all kinds of GNNs.
 
-\paragraph{Summary}
+\paragraph{Summary of Training Time Breakdown}
+%
 The GNN training is suitable for GPUs.
+%
 \emph{The edge calculation stage is the main performance bottleneck in most cases}, except for training GNNs with high vertex calculation complexity on low-average-degree graphs.
 The performance bottleneck in the edge calculation stage depends on the time complexity of the messaging function $\phi$.
+%
 \begin{itemize}
-    \item If the time complexity of $\phi$ is {high}, the {efficiency of $\phi$} limits the performance. Reducing its computation cost (via optimizing its implementation or modifying the algorithm) can significantly reduce the training time.
-    \item If the time complexity of $\phi$ is {low}, the {collection step} and the {aggregation step} limit the performance. The collection step involves lots of data movement. The aggregation step suffers from data synchronization and non-regular data access. Optimizing their implementations can significantly reduce the training time.
+    \item If the time complexity of $\phi$ is {high}, {$\phi$} dominates the training time of the edge calculation stage.
+    %
+    Reducing its computation cost (via optimizing its implementation or modifying the algorithm design) can significantly reduce the training time.
+    
+    \item Otherwise, the {collection step} and the {aggregation step} dominate the training time.
+    %
+    The collection step involves lots of data movement.
+    %
+    The aggregation step suffers from data synchronization and non-regular data access.
+    %
+    Optimizing their implementations can significantly reduce the training time.
 \end{itemize}
 
 \subsection{Memory Usage Analysis}

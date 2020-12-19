@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/Arch Linux) (preloaded format=pdflatex 2020.11.6)  19 DEC 2020 20:02
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/Arch Linux) (preloaded format=pdflatex 2020.11.6)  19 DEC 2020 21:25
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -927,50 +927,8 @@ File: figs/experiments/exp_hyperparameter_on_memory_usage_gaan.pdf Graphic file
 Package pdftex.def Info: figs/experiments/exp_hyperparameter_on_memory_usage_ga
 an.pdf  used on input line 88.
 (pdftex.def)             Requested size: 320.09303pt x 85.35826pt.
-<figs/experiments/exp_layer_time_proportion_gcn.pdf, id=1121, 664.88402pt x 361
-.35pt>
-File: figs/experiments/exp_layer_time_proportion_gcn.pdf Graphic file (type pdf
-)
-<use figs/experiments/exp_layer_time_proportion_gcn.pdf>
-Package pdftex.def Info: figs/experiments/exp_layer_time_proportion_gcn.pdf  us
-ed on input line 108.
-(pdftex.def)             Requested size: 240.81898pt x 130.88284pt.
-<figs/experiments/exp_layer_time_proportion_ggnn.pdf, id=1122, 664.88402pt x 36
-1.35pt>
-File: figs/experiments/exp_layer_time_proportion_ggnn.pdf Graphic file (type pd
-f)
-<use figs/experiments/exp_layer_time_proportion_ggnn.pdf>
-Package pdftex.def Info: figs/experiments/exp_layer_time_proportion_ggnn.pdf  u
-sed on input line 109.
-(pdftex.def)             Requested size: 240.81898pt x 130.88284pt.
-
-Overfull \hbox (38.0595pt too wide) in paragraph at lines 108--109
- [][][][] 
- []
-
-<figs/experiments/exp_layer_time_proportion_gat.pdf, id=1123, 664.88402pt x 361
-.35pt>
-File: figs/experiments/exp_layer_time_proportion_gat.pdf Graphic file (type pdf
-)
-<use figs/experiments/exp_layer_time_proportion_gat.pdf>
-Package pdftex.def Info: figs/experiments/exp_layer_time_proportion_gat.pdf  us
-ed on input line 110.
-(pdftex.def)             Requested size: 240.81898pt x 130.88284pt.
-<figs/experiments/exp_layer_time_proportion_gaan.pdf, id=1124, 664.88402pt x 36
-1.35pt>
-File: figs/experiments/exp_layer_time_proportion_gaan.pdf Graphic file (type pd
-f)
-<use figs/experiments/exp_layer_time_proportion_gaan.pdf>
-Package pdftex.def Info: figs/experiments/exp_layer_time_proportion_gaan.pdf  u
-sed on input line 111.
-(pdftex.def)             Requested size: 240.81898pt x 130.88284pt.
-
-Overfull \hbox (38.0595pt too wide) in paragraph at lines 110--112
- [][][][] 
- []
-
-[14 <./figs/experiments/exp_hyperparameter_on_memory_usage_gcn.pdf> <./figs/exp
-eriments/exp_hyperparameter_on_memory_usage_ggnn.pdf
+ [14 <./figs/experiments/exp_hyperparameter_on_memory_usage_gcn.pdf> <./figs/ex
+periments/exp_hyperparameter_on_memory_usage_ggnn.pdf
 
 pdfTeX warning: /usr/bin/pdflatex (file ./figs/experiments/exp_hyperparameter_o
 n_memory_usage_ggnn.pdf): PDF inclusion: multiple pdfs with page group included
@@ -985,8 +943,51 @@ in a single page
 pdfTeX warning: /usr/bin/pdflatex (file ./figs/experiments/exp_hyperparameter_o
 n_memory_usage_gaan.pdf): PDF inclusion: multiple pdfs with page group included
  in a single page
->] [15 <./figs/experiments/exp_layer_time_proportion_gcn.pdf> <./figs/experimen
-ts/exp_layer_time_proportion_ggnn.pdf
+>]
+<figs/experiments/exp_layer_time_proportion_gcn.pdf, id=1366, 664.88402pt x 361
+.35pt>
+File: figs/experiments/exp_layer_time_proportion_gcn.pdf Graphic file (type pdf
+)
+<use figs/experiments/exp_layer_time_proportion_gcn.pdf>
+Package pdftex.def Info: figs/experiments/exp_layer_time_proportion_gcn.pdf  us
+ed on input line 120.
+(pdftex.def)             Requested size: 240.81898pt x 130.88284pt.
+<figs/experiments/exp_layer_time_proportion_ggnn.pdf, id=1367, 664.88402pt x 36
+1.35pt>
+File: figs/experiments/exp_layer_time_proportion_ggnn.pdf Graphic file (type pd
+f)
+<use figs/experiments/exp_layer_time_proportion_ggnn.pdf>
+Package pdftex.def Info: figs/experiments/exp_layer_time_proportion_ggnn.pdf  u
+sed on input line 121.
+(pdftex.def)             Requested size: 240.81898pt x 130.88284pt.
+
+Overfull \hbox (38.0595pt too wide) in paragraph at lines 120--121
+ [][][][] 
+ []
+
+<figs/experiments/exp_layer_time_proportion_gat.pdf, id=1368, 664.88402pt x 361
+.35pt>
+File: figs/experiments/exp_layer_time_proportion_gat.pdf Graphic file (type pdf
+)
+<use figs/experiments/exp_layer_time_proportion_gat.pdf>
+Package pdftex.def Info: figs/experiments/exp_layer_time_proportion_gat.pdf  us
+ed on input line 122.
+(pdftex.def)             Requested size: 240.81898pt x 130.88284pt.
+<figs/experiments/exp_layer_time_proportion_gaan.pdf, id=1369, 664.88402pt x 36
+1.35pt>
+File: figs/experiments/exp_layer_time_proportion_gaan.pdf Graphic file (type pd
+f)
+<use figs/experiments/exp_layer_time_proportion_gaan.pdf>
+Package pdftex.def Info: figs/experiments/exp_layer_time_proportion_gaan.pdf  u
+sed on input line 123.
+(pdftex.def)             Requested size: 240.81898pt x 130.88284pt.
+
+Overfull \hbox (38.0595pt too wide) in paragraph at lines 122--124
+ [][][][] 
+ []
+
+[15 <./figs/experiments/exp_layer_time_proportion_gcn.pdf> <./figs/experiments/
+exp_layer_time_proportion_ggnn.pdf
 
 pdfTeX warning: /usr/bin/pdflatex (file ./figs/experiments/exp_layer_time_propo
 rtion_ggnn.pdf): PDF inclusion: multiple pdfs with page group included in a sin
@@ -1002,38 +1003,45 @@ pdfTeX warning: /usr/bin/pdflatex (file ./figs/experiments/exp_layer_time_propo
 rtion_gaan.pdf): PDF inclusion: multiple pdfs with page group included in a sin
 gle page
 >]
-<figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_gcn.pdf, id=1575, 505.
+<figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_gcn.pdf, id=1577, 505.
 89pt x 346.89601pt>
 File: figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_gcn.pdf Graphic f
 ile (type pdf)
 <use figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_gcn.pdf>
 Package pdftex.def Info: figs/experiments/exp_avg_degree_on_vertex_edge_cal_tim
-e_gcn.pdf  used on input line 135.
+e_gcn.pdf  used on input line 160.
 (pdftex.def)             Requested size: 165.97157pt x 113.81102pt.
-<figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_ggnn.pdf, id=1576, 505
+<figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_ggnn.pdf, id=1578, 505
 .89pt x 346.89601pt>
 File: figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_ggnn.pdf Graphic 
 file (type pdf)
 <use figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_ggnn.pdf>
 Package pdftex.def Info: figs/experiments/exp_avg_degree_on_vertex_edge_cal_tim
-e_ggnn.pdf  used on input line 136.
+e_ggnn.pdf  used on input line 161.
 (pdftex.def)             Requested size: 165.97157pt x 113.81102pt.
-<figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_gat.pdf, id=1577, 505.
+<figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_gat.pdf, id=1579, 505.
 89pt x 346.89601pt>
 File: figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_gat.pdf Graphic f
 ile (type pdf)
 <use figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_gat.pdf>
 Package pdftex.def Info: figs/experiments/exp_avg_degree_on_vertex_edge_cal_tim
-e_gat.pdf  used on input line 137.
+e_gat.pdf  used on input line 162.
 (pdftex.def)             Requested size: 165.97157pt x 113.81102pt.
-<figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_gaan.pdf, id=1578, 505
+<figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_gaan.pdf, id=1580, 505
 .89pt x 346.89601pt>
 File: figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_gaan.pdf Graphic 
 file (type pdf)
 <use figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_gaan.pdf>
 Package pdftex.def Info: figs/experiments/exp_avg_degree_on_vertex_edge_cal_tim
-e_gaan.pdf  used on input line 138.
+e_gaan.pdf  used on input line 163.
 (pdftex.def)             Requested size: 165.97157pt x 113.81102pt.
+<figs/illustration/steps_in_edge_calculation.pdf, id=1582, 564.18782pt x 151.52
+61pt>
+File: figs/illustration/steps_in_edge_calculation.pdf Graphic file (type pdf)
+<use figs/illustration/steps_in_edge_calculation.pdf>
+Package pdftex.def Info: figs/illustration/steps_in_edge_calculation.pdf  used 
+on input line 194.
+(pdftex.def)             Requested size: 443.57848pt x 119.13782pt.
  [16 <./figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_gcn.pdf> <./fig
 s/experiments/exp_avg_degree_on_vertex_edge_cal_time_ggnn.pdf
 
@@ -1050,49 +1058,69 @@ ded in a single page
 pdfTeX warning: /usr/bin/pdflatex (file ./figs/experiments/exp_avg_degree_on_ve
 rtex_edge_cal_time_gaan.pdf): PDF inclusion: multiple pdfs with page group incl
 uded in a single page
->]
-<figs/illustration/steps_in_edge_calculation.pdf, id=1784, 564.18782pt x 151.52
-61pt>
-File: figs/illustration/steps_in_edge_calculation.pdf Graphic file (type pdf)
-<use figs/illustration/steps_in_edge_calculation.pdf>
-Package pdftex.def Info: figs/illustration/steps_in_edge_calculation.pdf  used 
-on input line 156.
-(pdftex.def)             Requested size: 443.57848pt x 119.13782pt.
-<figs/experiments/exp_edge_calc_decomposition_gcn.pdf, id=1786, 664.88402pt x 3
+> <./figs/illustration/steps_in_edge_calculation.pdf>]
+<figs/experiments/exp_edge_calc_decomposition_gcn.pdf, id=1805, 664.88402pt x 3
 61.35pt>
 File: figs/experiments/exp_edge_calc_decomposition_gcn.pdf Graphic file (type p
 df)
 <use figs/experiments/exp_edge_calc_decomposition_gcn.pdf>
 Package pdftex.def Info: figs/experiments/exp_edge_calc_decomposition_gcn.pdf  
-used on input line 183.
+used on input line 223.
 (pdftex.def)             Requested size: 209.40913pt x 113.81102pt.
-<figs/experiments/exp_edge_calc_decomposition_ggnn.pdf, id=1787, 664.88402pt x 
+<figs/experiments/exp_edge_calc_decomposition_ggnn.pdf, id=1806, 664.88402pt x 
 361.35pt>
 File: figs/experiments/exp_edge_calc_decomposition_ggnn.pdf Graphic file (type 
 pdf)
 <use figs/experiments/exp_edge_calc_decomposition_ggnn.pdf>
 Package pdftex.def Info: figs/experiments/exp_edge_calc_decomposition_ggnn.pdf 
- used on input line 184.
+ used on input line 224.
 (pdftex.def)             Requested size: 209.40913pt x 113.81102pt.
-<figs/experiments/exp_edge_calc_decomposition_gat.pdf, id=1788, 664.88402pt x 3
+<figs/experiments/exp_edge_calc_decomposition_gat.pdf, id=1807, 664.88402pt x 3
 61.35pt>
 File: figs/experiments/exp_edge_calc_decomposition_gat.pdf Graphic file (type p
 df)
 <use figs/experiments/exp_edge_calc_decomposition_gat.pdf>
 Package pdftex.def Info: figs/experiments/exp_edge_calc_decomposition_gat.pdf  
-used on input line 185.
+used on input line 225.
 (pdftex.def)             Requested size: 209.40913pt x 113.81102pt.
-<figs/experiments/exp_edge_calc_decomposition_gaan.pdf, id=1789, 664.88402pt x 
+<figs/experiments/exp_edge_calc_decomposition_gaan.pdf, id=1808, 664.88402pt x 
 361.35pt>
 File: figs/experiments/exp_edge_calc_decomposition_gaan.pdf Graphic file (type 
 pdf)
 <use figs/experiments/exp_edge_calc_decomposition_gaan.pdf>
 Package pdftex.def Info: figs/experiments/exp_edge_calc_decomposition_gaan.pdf 
- used on input line 186.
+ used on input line 226.
 (pdftex.def)             Requested size: 209.40913pt x 113.81102pt.
- [17 <./figs/illustration/steps_in_edge_calculation.pdf> <./figs/experiments/ex
-p_edge_calc_decomposition_gcn.pdf> <./figs/experiments/exp_edge_calc_decomposit
-ion_ggnn.pdf
+<figs/experiments/exp_top_basic_ops_gcn.pdf, id=1810, 462.52798pt x 346.89601pt
+>
+File: figs/experiments/exp_top_basic_ops_gcn.pdf Graphic file (type pdf)
+<use figs/experiments/exp_top_basic_ops_gcn.pdf>
+Package pdftex.def Info: figs/experiments/exp_top_basic_ops_gcn.pdf  used on in
+put line 239.
+(pdftex.def)             Requested size: 151.74544pt x 113.81102pt.
+<figs/experiments/exp_top_basic_ops_ggnn.pdf, id=1811, 462.52798pt x 346.89601p
+t>
+File: figs/experiments/exp_top_basic_ops_ggnn.pdf Graphic file (type pdf)
+<use figs/experiments/exp_top_basic_ops_ggnn.pdf>
+Package pdftex.def Info: figs/experiments/exp_top_basic_ops_ggnn.pdf  used on i
+nput line 240.
+(pdftex.def)             Requested size: 151.74544pt x 113.81102pt.
+<figs/experiments/exp_top_basic_ops_gat.pdf, id=1812, 462.52798pt x 346.89601pt
+>
+File: figs/experiments/exp_top_basic_ops_gat.pdf Graphic file (type pdf)
+<use figs/experiments/exp_top_basic_ops_gat.pdf>
+Package pdftex.def Info: figs/experiments/exp_top_basic_ops_gat.pdf  used on in
+put line 241.
+(pdftex.def)             Requested size: 151.74544pt x 113.81102pt.
+<figs/experiments/exp_top_basic_ops_gaan.pdf, id=1813, 462.52798pt x 346.89601p
+t>
+File: figs/experiments/exp_top_basic_ops_gaan.pdf Graphic file (type pdf)
+<use figs/experiments/exp_top_basic_ops_gaan.pdf>
+Package pdftex.def Info: figs/experiments/exp_top_basic_ops_gaan.pdf  used on i
+nput line 242.
+(pdftex.def)             Requested size: 151.74544pt x 113.81102pt.
+ [17 <./figs/experiments/exp_edge_calc_decomposition_gcn.pdf> <./figs/experimen
+ts/exp_edge_calc_decomposition_ggnn.pdf
 
 pdfTeX warning: /usr/bin/pdflatex (file ./figs/experiments/exp_edge_calc_decomp
 osition_ggnn.pdf): PDF inclusion: multiple pdfs with page group included in a s
@@ -1107,37 +1135,8 @@ ngle page
 pdfTeX warning: /usr/bin/pdflatex (file ./figs/experiments/exp_edge_calc_decomp
 osition_gaan.pdf): PDF inclusion: multiple pdfs with page group included in a s
 ingle page
->]
-<figs/experiments/exp_top_basic_ops_gcn.pdf, id=2004, 462.52798pt x 346.89601pt
->
-File: figs/experiments/exp_top_basic_ops_gcn.pdf Graphic file (type pdf)
-<use figs/experiments/exp_top_basic_ops_gcn.pdf>
-Package pdftex.def Info: figs/experiments/exp_top_basic_ops_gcn.pdf  used on in
-put line 210.
-(pdftex.def)             Requested size: 151.74544pt x 113.81102pt.
-<figs/experiments/exp_top_basic_ops_ggnn.pdf, id=2005, 462.52798pt x 346.89601p
-t>
-File: figs/experiments/exp_top_basic_ops_ggnn.pdf Graphic file (type pdf)
-<use figs/experiments/exp_top_basic_ops_ggnn.pdf>
-Package pdftex.def Info: figs/experiments/exp_top_basic_ops_ggnn.pdf  used on i
-nput line 211.
-(pdftex.def)             Requested size: 151.74544pt x 113.81102pt.
-<figs/experiments/exp_top_basic_ops_gat.pdf, id=2006, 462.52798pt x 346.89601pt
->
-File: figs/experiments/exp_top_basic_ops_gat.pdf Graphic file (type pdf)
-<use figs/experiments/exp_top_basic_ops_gat.pdf>
-Package pdftex.def Info: figs/experiments/exp_top_basic_ops_gat.pdf  used on in
-put line 212.
-(pdftex.def)             Requested size: 151.74544pt x 113.81102pt.
-<figs/experiments/exp_top_basic_ops_gaan.pdf, id=2007, 462.52798pt x 346.89601p
-t>
-File: figs/experiments/exp_top_basic_ops_gaan.pdf Graphic file (type pdf)
-<use figs/experiments/exp_top_basic_ops_gaan.pdf>
-Package pdftex.def Info: figs/experiments/exp_top_basic_ops_gaan.pdf  used on i
-nput line 213.
-(pdftex.def)             Requested size: 151.74544pt x 113.81102pt.
- [18 <./figs/experiments/exp_top_basic_ops_gcn.pdf> <./figs/experiments/exp_top
-_basic_ops_ggnn.pdf
+>] [18 <./figs/experiments/exp_top_basic_ops_gcn.pdf> <./figs/experiments/exp_t
+op_basic_ops_ggnn.pdf
 
 pdfTeX warning: /usr/bin/pdflatex (file ./figs/experiments/exp_top_basic_ops_gg
 nn.pdf): PDF inclusion: multiple pdfs with page group included in a single page
@@ -1157,7 +1156,7 @@ an.pdf): PDF inclusion: multiple pdfs with page group included in a single page
 File: figs/experiments/exp_memory_usage_stage_amp.pdf Graphic file (type pdf)
 <use figs/experiments/exp_memory_usage_stage_amp.pdf>
 Package pdftex.def Info: figs/experiments/exp_memory_usage_stage_amp.pdf  used 
-on input line 278.
+on input line 338.
 (pdftex.def)             Requested size: 189.68709pt x 142.26378pt.
 <figs/illustration/ggnn_vertex_func_computation_graph.pdf, id=2169, 788.9475pt 
 x 435.54718pt>
@@ -1165,71 +1164,98 @@ File: figs/illustration/ggnn_vertex_func_computation_graph.pdf Graphic file (ty
 pe pdf)
 <use figs/illustration/ggnn_vertex_func_computation_graph.pdf>
 Package pdftex.def Info: figs/illustration/ggnn_vertex_func_computation_graph.p
-df  used on input line 285.
+df  used on input line 345.
 (pdftex.def)             Requested size: 310.50357pt x 171.41785pt.
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[19 <./figs/experiments/exp_memory_usage_stage_amp.pdf>]
-<figs/experiments/exp_memory_expansion_ratio.pdf, id=2228, 462.52798pt x 346.89
+<figs/experiments/exp_memory_expansion_ratio.pdf, id=2171, 462.52798pt x 346.89
 601pt>
 File: figs/experiments/exp_memory_expansion_ratio.pdf Graphic file (type pdf)
 <use figs/experiments/exp_memory_expansion_ratio.pdf>
 Package pdftex.def Info: figs/experiments/exp_memory_expansion_ratio.pdf  used 
-on input line 298.
+on input line 358.
 (pdftex.def)             Requested size: 221.78923pt x 166.3441pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
 <figs/experiments/exp_memory_expansion_ratio_input_feature_dimension_com-amazon
-.pdf, id=2231, 462.52798pt x 346.89601pt>
+.pdf, id=2174, 462.52798pt x 346.89601pt>
 File: figs/experiments/exp_memory_expansion_ratio_input_feature_dimension_com-a
 mazon.pdf Graphic file (type pdf)
 <use figs/experiments/exp_memory_expansion_ratio_input_feature_dimension_com-am
 azon.pdf>
 Package pdftex.def Info: figs/experiments/exp_memory_expansion_ratio_input_feat
-ure_dimension_com-amazon.pdf  used on input line 314.
+ure_dimension_com-amazon.pdf  used on input line 374.
 (pdftex.def)             Requested size: 189.68709pt x 142.26378pt.
-
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[20 <./figs/illustration/ggnn_vertex_func_computation_graph.pdf> <./figs/experi
-ments/exp_memory_expansion_ratio.pdf>]
+[19 <./figs/experiments/exp_memory_usage_stage_amp.pdf>]
 <figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_edges_peak_m
-emory.pdf, id=2295, 462.52798pt x 346.89601pt>
+emory.pdf, id=2234, 462.52798pt x 346.89601pt>
 File: figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_edges_p
 eak_memory.pdf Graphic file (type pdf)
 <use figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_edges_pe
 ak_memory.pdf>
 Package pdftex.def Info: figs/experiments/exp_memory_expansion_ratio_input_grap
-h_number_of_edges_peak_memory.pdf  used on input line 331.
+h_number_of_edges_peak_memory.pdf  used on input line 391.
 (pdftex.def)             Requested size: 151.74544pt x 113.81102pt.
 <figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_edges_expans
-ion_ratio.pdf, id=2296, 462.52798pt x 346.89601pt>
+ion_ratio.pdf, id=2235, 462.52798pt x 346.89601pt>
 File: figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_edges_e
 xpansion_ratio.pdf Graphic file (type pdf)
 <use figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_edges_ex
 pansion_ratio.pdf>
 Package pdftex.def Info: figs/experiments/exp_memory_expansion_ratio_input_grap
-h_number_of_edges_expansion_ratio.pdf  used on input line 332.
+h_number_of_edges_expansion_ratio.pdf  used on input line 392.
 (pdftex.def)             Requested size: 151.74544pt x 113.81102pt.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
 <figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_vertices_fix
-ed_edge_peak_memory.pdf, id=2298, 462.52798pt x 346.89601pt>
+ed_edge_peak_memory.pdf, id=2237, 462.52798pt x 346.89601pt>
 File: figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_vertice
 s_fixed_edge_peak_memory.pdf Graphic file (type pdf)
 <use figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_vertices
 _fixed_edge_peak_memory.pdf>
 Package pdftex.def Info: figs/experiments/exp_memory_expansion_ratio_input_grap
-h_number_of_vertices_fixed_edge_peak_memory.pdf  used on input line 346.
+h_number_of_vertices_fixed_edge_peak_memory.pdf  used on input line 406.
 (pdftex.def)             Requested size: 151.74544pt x 113.81102pt.
 <figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_vertices_fix
-ed_edge_expansion_ratio.pdf, id=2299, 462.52798pt x 346.89601pt>
+ed_edge_expansion_ratio.pdf, id=2238, 462.52798pt x 346.89601pt>
 File: figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_vertice
 s_fixed_edge_expansion_ratio.pdf Graphic file (type pdf)
 <use figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_vertices
 _fixed_edge_expansion_ratio.pdf>
 Package pdftex.def Info: figs/experiments/exp_memory_expansion_ratio_input_grap
-h_number_of_vertices_fixed_edge_expansion_ratio.pdf  used on input line 347.
+h_number_of_vertices_fixed_edge_expansion_ratio.pdf  used on input line 407.
 (pdftex.def)             Requested size: 151.74544pt x 113.81102pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[20 <./figs/illustration/ggnn_vertex_func_computation_graph.pdf> <./figs/experi
+ments/exp_memory_expansion_ratio.pdf>]
+<figs/experiments/exp_sampling_minibatch_realtive_graph_info_graphsage_gcn.pdf,
+ id=2302, 1300.86pt x 346.89601pt>
+File: figs/experiments/exp_sampling_minibatch_realtive_graph_info_graphsage_gcn
+.pdf Graphic file (type pdf)
+<use figs/experiments/exp_sampling_minibatch_realtive_graph_info_graphsage_gcn.
+pdf>
+Package pdftex.def Info: figs/experiments/exp_sampling_minibatch_realtive_graph
+_info_graphsage_gcn.pdf  used on input line 444.
+(pdftex.def)             Requested size: 426.78409pt x 113.81102pt.
+<figs/experiments/exp_sampling_minibatch_realtive_graph_info_cluster_gcn.pdf, i
+d=2303, 1300.86pt x 346.89601pt>
+File: figs/experiments/exp_sampling_minibatch_realtive_graph_info_cluster_gcn.p
+df Graphic file (type pdf)
+<use figs/experiments/exp_sampling_minibatch_realtive_graph_info_cluster_gcn.pd
+f>
+Package pdftex.def Info: figs/experiments/exp_sampling_minibatch_realtive_graph
+_info_cluster_gcn.pdf  used on input line 445.
+(pdftex.def)             Requested size: 426.78409pt x 113.81102pt.
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
@@ -1248,140 +1274,121 @@ pdfTeX warning: /usr/bin/pdflatex (file ./figs/experiments/exp_memory_expansion
 _ratio_input_graph_number_of_edges_expansion_ratio.pdf): PDF inclusion: multipl
 e pdfs with page group included in a single page
 >]
-<figs/experiments/exp_sampling_minibatch_realtive_graph_info_graphsage_gcn.pdf,
- id=2425, 1300.86pt x 346.89601pt>
-File: figs/experiments/exp_sampling_minibatch_realtive_graph_info_graphsage_gcn
-.pdf Graphic file (type pdf)
-<use figs/experiments/exp_sampling_minibatch_realtive_graph_info_graphsage_gcn.
-pdf>
-Package pdftex.def Info: figs/experiments/exp_sampling_minibatch_realtive_graph
-_info_graphsage_gcn.pdf  used on input line 384.
-(pdftex.def)             Requested size: 426.78409pt x 113.81102pt.
-<figs/experiments/exp_sampling_minibatch_realtive_graph_info_cluster_gcn.pdf, i
-d=2426, 1300.86pt x 346.89601pt>
-File: figs/experiments/exp_sampling_minibatch_realtive_graph_info_cluster_gcn.p
-df Graphic file (type pdf)
-<use figs/experiments/exp_sampling_minibatch_realtive_graph_info_cluster_gcn.pd
-f>
-Package pdftex.def Info: figs/experiments/exp_sampling_minibatch_realtive_graph
-_info_cluster_gcn.pdf  used on input line 385.
-(pdftex.def)             Requested size: 426.78409pt x 113.81102pt.
- [22 <./figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_verti
-ces_fixed_edge_peak_memory.pdf> <./figs/experiments/exp_memory_expansion_ratio_
-input_graph_number_of_vertices_fixed_edge_expansion_ratio.pdf
-
-pdfTeX warning: /usr/bin/pdflatex (file ./figs/experiments/exp_memory_expansion
-_ratio_input_graph_number_of_vertices_fixed_edge_expansion_ratio.pdf): PDF incl
-usion: multiple pdfs with page group included in a single page
-> <./figs/experiments/exp_sampling_minibatch_realtive_graph_info_graphsage_gcn.
-pdf
-
-pdfTeX warning: /usr/bin/pdflatex (file ./figs/experiments/exp_sampling_minibat
-ch_realtive_graph_info_graphsage_gcn.pdf): PDF inclusion: multiple pdfs with pa
-ge group included in a single page
-> <./figs/experiments/exp_sampling_minibatch_realtive_graph_info_cluster_gcn.pd
-f
-
-pdfTeX warning: /usr/bin/pdflatex (file ./figs/experiments/exp_sampling_minibat
-ch_realtive_graph_info_cluster_gcn.pdf): PDF inclusion: multiple pdfs with page
- group included in a single page
->]
 <figs/experiments/exp_sampling_minibatch_degrees_distribution_amazon-photo.pdf,
- id=2648, 462.52798pt x 346.89601pt>
+ id=2429, 462.52798pt x 346.89601pt>
 File: figs/experiments/exp_sampling_minibatch_degrees_distribution_amazon-photo
 .pdf Graphic file (type pdf)
 <use figs/experiments/exp_sampling_minibatch_degrees_distribution_amazon-photo.
 pdf>
 Package pdftex.def Info: figs/experiments/exp_sampling_minibatch_degrees_distri
-bution_amazon-photo.pdf  used on input line 401.
+bution_amazon-photo.pdf  used on input line 461.
 (pdftex.def)             Requested size: 177.42868pt x 133.07104pt.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
 <figs/experiments/exp_sampling_relative_batch_size_train_time_stack_graphsage_a
-mazon-computers.pdf, id=2649, 462.52798pt x 346.89601pt>
+mazon-computers.pdf, id=2430, 462.52798pt x 346.89601pt>
 File: figs/experiments/exp_sampling_relative_batch_size_train_time_stack_graphs
 age_amazon-computers.pdf Graphic file (type pdf)
 <use figs/experiments/exp_sampling_relative_batch_size_train_time_stack_graphsa
 ge_amazon-computers.pdf>
 Package pdftex.def Info: figs/experiments/exp_sampling_relative_batch_size_trai
-n_time_stack_graphsage_amazon-computers.pdf  used on input line 408.
+n_time_stack_graphsage_amazon-computers.pdf  used on input line 468.
 (pdftex.def)             Requested size: 189.68709pt x 142.26378pt.
 <figs/experiments/exp_sampling_relative_batch_size_train_time_stack_graphsage_f
-lickr.pdf, id=2650, 462.52798pt x 346.89601pt>
+lickr.pdf, id=2431, 462.52798pt x 346.89601pt>
 File: figs/experiments/exp_sampling_relative_batch_size_train_time_stack_graphs
 age_flickr.pdf Graphic file (type pdf)
 <use figs/experiments/exp_sampling_relative_batch_size_train_time_stack_graphsa
 ge_flickr.pdf>
 Package pdftex.def Info: figs/experiments/exp_sampling_relative_batch_size_trai
-n_time_stack_graphsage_flickr.pdf  used on input line 409.
+n_time_stack_graphsage_flickr.pdf  used on input line 469.
 (pdftex.def)             Requested size: 189.68709pt x 142.26378pt.
 <figs/experiments/exp_sampling_relative_batch_size_train_time_stack_cluster_ama
-zon-computers.pdf, id=2651, 462.52798pt x 346.89601pt>
+zon-computers.pdf, id=2432, 462.52798pt x 346.89601pt>
 File: figs/experiments/exp_sampling_relative_batch_size_train_time_stack_cluste
 r_amazon-computers.pdf Graphic file (type pdf)
 <use figs/experiments/exp_sampling_relative_batch_size_train_time_stack_cluster
 _amazon-computers.pdf>
 Package pdftex.def Info: figs/experiments/exp_sampling_relative_batch_size_trai
-n_time_stack_cluster_amazon-computers.pdf  used on input line 410.
+n_time_stack_cluster_amazon-computers.pdf  used on input line 470.
 (pdftex.def)             Requested size: 189.68709pt x 142.26378pt.
 <figs/experiments/exp_sampling_relative_batch_size_train_time_stack_cluster_fli
-ckr.pdf, id=2652, 462.52798pt x 346.89601pt>
+ckr.pdf, id=2433, 462.52798pt x 346.89601pt>
 File: figs/experiments/exp_sampling_relative_batch_size_train_time_stack_cluste
 r_flickr.pdf Graphic file (type pdf)
 <use figs/experiments/exp_sampling_relative_batch_size_train_time_stack_cluster
 _flickr.pdf>
 Package pdftex.def Info: figs/experiments/exp_sampling_relative_batch_size_trai
-n_time_stack_cluster_flickr.pdf  used on input line 411.
+n_time_stack_cluster_flickr.pdf  used on input line 471.
 (pdftex.def)             Requested size: 189.68709pt x 142.26378pt.
-
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 <figs/experiments/exp_sampling_memory_usage_relative_batch_size_graphsage_amazo
-n-computers_peak_memory.pdf, id=2654, 462.52798pt x 346.89601pt>
+n-computers_peak_memory.pdf, id=2435, 462.52798pt x 346.89601pt>
 File: figs/experiments/exp_sampling_memory_usage_relative_batch_size_graphsage_
 amazon-computers_peak_memory.pdf Graphic file (type pdf)
 <use figs/experiments/exp_sampling_memory_usage_relative_batch_size_graphsage_a
 mazon-computers_peak_memory.pdf>
 Package pdftex.def Info: figs/experiments/exp_sampling_memory_usage_relative_ba
-tch_size_graphsage_amazon-computers_peak_memory.pdf  used on input line 430.
+tch_size_graphsage_amazon-computers_peak_memory.pdf  used on input line 490.
 (pdftex.def)             Requested size: 151.74544pt x 113.81102pt.
 <figs/experiments/exp_sampling_memory_usage_relative_batch_size_graphsage_flick
-r_peak_memory.pdf, id=2655, 462.52798pt x 346.89601pt>
+r_peak_memory.pdf, id=2436, 462.52798pt x 346.89601pt>
 File: figs/experiments/exp_sampling_memory_usage_relative_batch_size_graphsage_
 flickr_peak_memory.pdf Graphic file (type pdf)
 <use figs/experiments/exp_sampling_memory_usage_relative_batch_size_graphsage_f
 lickr_peak_memory.pdf>
 Package pdftex.def Info: figs/experiments/exp_sampling_memory_usage_relative_ba
-tch_size_graphsage_flickr_peak_memory.pdf  used on input line 431.
+tch_size_graphsage_flickr_peak_memory.pdf  used on input line 491.
 (pdftex.def)             Requested size: 151.74544pt x 113.81102pt.
 <figs/experiments/exp_sampling_memory_usage_relative_batch_size_cluster_amazon-
-computers_peak_memory.pdf, id=2656, 462.52798pt x 346.89601pt>
+computers_peak_memory.pdf, id=2437, 462.52798pt x 346.89601pt>
 File: figs/experiments/exp_sampling_memory_usage_relative_batch_size_cluster_am
 azon-computers_peak_memory.pdf Graphic file (type pdf)
 <use figs/experiments/exp_sampling_memory_usage_relative_batch_size_cluster_ama
 zon-computers_peak_memory.pdf>
 Package pdftex.def Info: figs/experiments/exp_sampling_memory_usage_relative_ba
-tch_size_cluster_amazon-computers_peak_memory.pdf  used on input line 432.
+tch_size_cluster_amazon-computers_peak_memory.pdf  used on input line 492.
 (pdftex.def)             Requested size: 151.74544pt x 113.81102pt.
 <figs/experiments/exp_sampling_memory_usage_relative_batch_size_cluster_flickr_
-peak_memory.pdf, id=2657, 462.52798pt x 346.89601pt>
+peak_memory.pdf, id=2438, 462.52798pt x 346.89601pt>
 File: figs/experiments/exp_sampling_memory_usage_relative_batch_size_cluster_fl
 ickr_peak_memory.pdf Graphic file (type pdf)
 <use figs/experiments/exp_sampling_memory_usage_relative_batch_size_cluster_fli
 ckr_peak_memory.pdf>
 Package pdftex.def Info: figs/experiments/exp_sampling_memory_usage_relative_ba
-tch_size_cluster_flickr_peak_memory.pdf  used on input line 433.
+tch_size_cluster_flickr_peak_memory.pdf  used on input line 493.
 (pdftex.def)             Requested size: 151.74544pt x 113.81102pt.
-<figs/experiments/exp_small_graph_train_time.pdf, id=2659, 462.52798pt x 346.89
+<figs/experiments/exp_small_graph_train_time.pdf, id=2440, 462.52798pt x 346.89
 601pt>
 File: figs/experiments/exp_small_graph_train_time.pdf Graphic file (type pdf)
 <use figs/experiments/exp_small_graph_train_time.pdf>
 Package pdftex.def Info: figs/experiments/exp_small_graph_train_time.pdf  used 
-on input line 445.
+on input line 505.
 (pdftex.def)             Requested size: 189.68709pt x 142.26378pt.
-) (./sec5-insights.tex [23 <./figs/experiments/exp_sampling_minibatch_degrees_d
-istribution_amazon-photo.pdf>] [24 <./figs/experiments/exp_sampling_relative_ba
-tch_size_train_time_stack_graphsage_amazon-computers.pdf> <./figs/experiments/e
-xp_sampling_relative_batch_size_train_time_stack_graphsage_flickr.pdf
+) (./sec5-insights.tex [22 <./figs/experiments/exp_memory_expansion_ratio_input
+_graph_number_of_vertices_fixed_edge_peak_memory.pdf> <./figs/experiments/exp_m
+emory_expansion_ratio_input_graph_number_of_vertices_fixed_edge_expansion_ratio
+.pdf
+
+pdfTeX warning: /usr/bin/pdflatex (file ./figs/experiments/exp_memory_expansion
+_ratio_input_graph_number_of_vertices_fixed_edge_expansion_ratio.pdf): PDF incl
+usion: multiple pdfs with page group included in a single page
+>] [23 <./figs/experiments/exp_sampling_minibatch_realtive_graph_info_graphsage
+_gcn.pdf> <./figs/experiments/exp_sampling_minibatch_realtive_graph_info_cluste
+r_gcn.pdf
+
+pdfTeX warning: /usr/bin/pdflatex (file ./figs/experiments/exp_sampling_minibat
+ch_realtive_graph_info_cluster_gcn.pdf): PDF inclusion: multiple pdfs with page
+ group included in a single page
+>]) (./sec6-related-work.tex) (./sec7-conclusion.tex [24 <./figs/experiments/ex
+p_sampling_minibatch_degrees_distribution_amazon-photo.pdf>] [25 <./figs/experi
+ments/exp_sampling_relative_batch_size_train_time_stack_graphsage_amazon-comput
+ers.pdf> <./figs/experiments/exp_sampling_relative_batch_size_train_time_stack_
+graphsage_flickr.pdf
 
 pdfTeX warning: /usr/bin/pdflatex (file ./figs/experiments/exp_sampling_relativ
 e_batch_size_train_time_stack_graphsage_flickr.pdf): PDF inclusion: multiple pd
@@ -1398,7 +1405,7 @@ _flickr.pdf
 pdfTeX warning: /usr/bin/pdflatex (file ./figs/experiments/exp_sampling_relativ
 e_batch_size_train_time_stack_cluster_flickr.pdf): PDF inclusion: multiple pdfs
  with page group included in a single page
->] [25 <./figs/experiments/exp_sampling_memory_usage_relative_batch_size_graphs
+>] [26 <./figs/experiments/exp_sampling_memory_usage_relative_batch_size_graphs
 age_amazon-computers_peak_memory.pdf> <./figs/experiments/exp_sampling_memory_u
 sage_relative_batch_size_graphsage_flickr_peak_memory.pdf
 
@@ -1422,15 +1429,15 @@ ple pdfs with page group included in a single page
 pdfTeX warning: /usr/bin/pdflatex (file ./figs/experiments/exp_small_graph_trai
 n_time.pdf): PDF inclusion: multiple pdfs with page group included in a single 
 page
->]) (./sec6-related-work.tex) (./sec7-conclusion.tex [26]) (./ms.bbl [27]
+>]) (./ms.bbl [27]
 Underfull \hbox (badness 1400) in paragraph at lines 96--99
 []\OT1/ptm/m/n/10 M. Fey, J. E. Lenssen, Fast graph rep-re-sen-ta-tion learn-in
 g with py-torch ge-o-met-ric, [][]$\OT1/pcr/m/n/10 https : / /
  []
 
-[28] [29])
+[28])
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 72.
- [30]
+ [29]
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 72.
  (./ms.aux)
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 72.
@@ -1440,13 +1447,13 @@ Package rerunfilecheck Info: File `ms.out' has not changed.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 72.
  ) 
 Here is how much of TeX's memory you used:
- 11060 strings out of 480478
- 183906 string characters out of 5905959
- 481858 words of memory out of 5000000
+ 11059 strings out of 480478
+ 183899 string characters out of 5905959
+ 481833 words of memory out of 5000000
  26560 multiletter control sequences out of 15000+600000
  566002 words of font info for 103 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 47i,24n,52p,642b,592s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 47i,24n,52p,642b,556s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texmf-dist/fon
 ts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texmf-dist/fonts/type1/publi
 c/amsfonts/cm/cmbx7.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/c
@@ -1476,10 +1483,10 @@ rw/courier/ucrr8a.pfb></usr/share/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pf
 b></usr/share/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/share/texmf-dis
 t/fonts/type1/urw/times/utmr8a.pfb></usr/share/texmf-dist/fonts/type1/urw/times
 /utmri8a.pfb>
-Output written on ms.pdf (30 pages, 2687876 bytes).
+Output written on ms.pdf (29 pages, 2687385 bytes).
 PDF statistics:
- 3449 PDF objects out of 3580 (max. 8388607)
- 1168 compressed objects within 12 object streams
- 202 named destinations out of 1000 (max. 500000)
+ 3445 PDF objects out of 3580 (max. 8388607)
+ 1165 compressed objects within 12 object streams
+ 201 named destinations out of 1000 (max. 500000)
  473 words of extra memory for PDF output out of 10000 (max. 10000000)
 
