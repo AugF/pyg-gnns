@@ -44,10 +44,9 @@ We use blue characters $\Param{\MyVec{w}}$/$\Param{\MyMat{W}}$ to denote weight 
         & $\boldsymbol{m}_{x,y}^l$ & The message vector of the edge $e_{x,y}$ outputted by $\phi^l$ of the GNN layer $l$. \\
         & $\boldsymbol{s}_{x}^l$ & The aggregated vector of the vertex $v_x$ outputted by $\Sigma^l$ of the GNN layer $l$. \\
         & $\boldsymbol{h}_{x}^{l,i}$ / $\boldsymbol{m}_{x,y}^{l,i}$ / $\boldsymbol{s}_{x}^{l,i}$ & The hidden/message/aggregated vector of the vertex $v_x$ outputted by $\gamma^{l,i}$/$\phi^{l,i}$/$\Sigma^{l,i}$ of the $i$-th sub-layer of the GNN layer $l$. \\
-        & $d^l_{in}$, $d^l_{out}$ &  The dimensions of the input/output hidden vectors of the GNN layer $l$. \\
+        & $d^l_{in}$, $d^l_{out}$ &  The dimension of the input/output hidden vectors of the GNN layer $l$. \\
         & $dim(\MyVec{x})$ & The dimension of a vector $\MyVec{x}$. \\
         \bottomrule
-        
     \end{tabular}
 \end{table}
 
@@ -89,7 +88,7 @@ GNN layers are \emph{sparsely} connected with the input layer and other GNN laye
     %
     The graph neuron aggregates input feature vectors, apply non-linear transformation, and outputs a hidden vector $\boldsymbol{h}^1_x$ for $v_x$.
     %
-    Take the demo GNN in \figurename~\ref{fig:general_structure_of_gnn}(a) as the example.
+    Take the demo GNN in \figurename~\ref{fig:general_structure_of_gnn}(a) as an example.
     %
     Since $\mathcal{N}(v_3) = \{v_1, v_2, v_4, v_5, v_6\}$, the graph neuron of $v_3$ at the GNN layer 0 collects the input feature vectors \{$\boldsymbol{v}_1$, $\boldsymbol{v}_2$, $\boldsymbol{v}_3$, $\boldsymbol{v}_4$, $\boldsymbol{v}_5$, $\boldsymbol{v}_6$\} from the input layer and outputs $\boldsymbol{h}^1_3$.
     %
@@ -162,7 +161,7 @@ The message-passing model is widely used in the cutting-edge GNN libraries like 
 %
 A graph neuron at the layer $l$ are made of three \emph{differentiable} functions: the messaging function $\phi^l$, the aggregation function $\Sigma^l$, and the updating function $\gamma^l$.
 
-\begin{figure}[H]
+\begin{figure}[h]
     \centering
     \includegraphics[width=0.5\columnwidth]{figs/illustration/GNN_Unit.pdf}
     \caption{Graph neuron of $v_3$ in the GNN layer $l$ with the demo graph $\mathcal{G}$ in \figurename~\ref{fig:general_structure_of_gnn}b. $\phi^l$/$\Sigma^l$/$\gamma^l$ are the messaging/aggregation/updating functions in the message-passing model, respecitvely.}
@@ -261,7 +260,7 @@ We will give out more details on sub-layers when we introduce GAT.
             \textbf{GGNN}  \cite{li2015_ggnn}                                                                                         &
             Gated                                                                                                                     &
             sum                                                                                                                       &
-            $\MyVec{m}^l_{y, x} = \Param{\MyMat{W}^l}\MyVec{h}^l_y$                                           &
+            $\MyVec{m}^l_{y, x} = \MyVec{\hat{h}}^l_y$                                           &
             $O(d_{in} * d_{out})$                                                                                                       \\
             \textbf{GAT}   \cite{huang2018_gat}                                                                                       &
             Attention                                                                                                                 &
@@ -351,6 +350,7 @@ We will give out more details on sub-layers when we introduce GAT.
             \textbf{GGNN}    \cite{li2015_ggnn}                                                                                                                                                                              &
             \begin{scriptsize}
                 $\begin{aligned}[t]
+                         & \text{Preprocessing: } \MyVec{\hat{h}}^l_x = \Param {\MyMat{W}^l}\boldsymbol{h}^l_x; \\
                          & {\boldsymbol{z}}_x^l = \delta ( \textcolor{blue}{\boldsymbol{W}^z} \boldsymbol{s}_x^l + \textcolor{blue}{\boldsymbol{b}^{sz}} + \textcolor{blue}{\boldsymbol{U}^z} \boldsymbol{h}_x^{l} + \textcolor{blue}{\boldsymbol{b}^{hz}})                    \\
                          & \boldsymbol{r}_x^l = \delta ( \textcolor{blue}{\boldsymbol{W}^r} \boldsymbol{s}_x^l+ \textcolor{blue}{\boldsymbol{b}^{sr}} +\textcolor{blue}{\boldsymbol{U}^r} \boldsymbol{h}_x^{l} + \textcolor{blue}{\boldsymbol{b}^{hr}})                        \\
                          & \boldsymbol{\bar{h}}_x^{l+1} = \tanh ( \textcolor{blue}{\boldsymbol{W}} \boldsymbol{s}_x^l + \textcolor{blue}{\boldsymbol{b}^s} + \textcolor{blue}{\boldsymbol{U}} ( \boldsymbol{r}_x^l \odot \boldsymbol{h}_x^{l}) + \textcolor{blue}{\boldsymbol{b}^h}) \\
@@ -362,8 +362,7 @@ We will give out more details on sub-layers when we introduce GAT.
             \textbf{GAT} \cite{huang2018_gat}                                                                                                                                                                                &
             \begin{scriptsize}
                 $\begin{aligned}[t]
-                         & \text{Preprocessing:}                                                                          \\
-                         & \hat{\boldsymbol{h}}^{l}_{x} = \parallel_{k=1}^K \Param{\MyMat{W}^l_{(k)}}\MyVec{h}^l_x \\
+                         & \text{Preprocessing: } \hat{\boldsymbol{h}}^{l}_{x} = \parallel_{k=1}^K \Param{\MyMat{W}^l_{(k)}}\MyVec{h}^l_x;        \\
                          & \text{Sub-layer 0:}                                                                            \\
                          & \MyVec{h}^{l,0}_{x} = \MyVec{s}^{l,0}_{x}                              \\
                          & \text{Sub-layer 1:}                                                                            \\
@@ -445,9 +444,9 @@ To lower the training cost, all GNN layers share the same group of parameters in
 %
 GGNN further requires the dimension of $\boldsymbol{h}^{l+1}$ is equal to the dimension of $\boldsymbol{h}^l$.
 %
-Since the messaging function $\phi^l$ only uses the hidden vector $\boldsymbol{h}^l_y$ of the source vertex $v_y$ for an edge $e_{y,x}$, in the implementation of PyG, GGNN conducts the pre-processing vertex calculation $\hat{\boldsymbol{h}}^l_x = \Param {\MyMat{W}^l}\boldsymbol{h}^l_x$ for every vertex $v_x$ before the message passing.
+Since the messaging function $\phi^l$ only uses the hidden vector $\boldsymbol{h}^l_y$ of the source vertex $v_y$ for an edge $e_{y,x}$, in the implementation of PyG, GGNN conducts the pre-processing vertex calculation $\MyVec{\hat{h}}^l_x = \Param {\MyMat{W}^l}\boldsymbol{h}^l_x$ for every vertex $v_x$ before the message passing.
 %
-The messaging function $\phi^l$ directly uses $\hat{\boldsymbol{h}}^l_y$ as the message vector for every edge $e_{y, x}$.
+The messaging function $\phi^l$ directly uses $\MyVec{\hat{h}}^l_y$ as the message vector for every edge $e_{y, x}$.
 %
 In this way, GGNN further reduces the time complexity of the edge calculation to $O(1)$ without increasing the time complexity of the vertex calculation.
 
@@ -463,12 +462,11 @@ For concatenating, the dimension of the hidden vector of each head $d_{head}$ is
 %
 For averaging, $d_{head}$ is $d_{out}$.
 
-Each GAT layer consists of a vertex pre-processing phase and two sub-layers.
+Each GAT layer consists of a vertex pre-processing phase and two sub-layers (i.e., message-passing phases).
 
 The vertex pre-processing phase calculates the attention vector $\hat{\boldsymbol{h}}^{l}_{x}$ for every vertex $v_x$ by $\hvec{x} = \parallel_{k=1}^K \Param{\MyMat{W}^l_{(k)}}\MyVec{h}^l_x$. We denote the attention sub-vector generated by the $k$-th head as $\hvec{x}[k]=\Param{\MyMat{W}^l_{(k)}}\MyVec{h}^l_x$.
 
-The two sub-layers also follow the message-passing model.
-The first sub-layer (defined in Equation~\ref{eq:GAT-sub-layer-1}) uses the attention vectors to emit the attention weight vector for every edge $\boldsymbol{m}^{l,0}_{y,x}$ and aggregates the attention weight vectors for every vertex $v_x$ to get the weight sum vector $\MyVec{h}^{l,0}_x$.
+The first sub-layer of GAT (defined in Equation~\ref{eq:GAT-sub-layer-1}) uses the attention vectors to emit the attention weight vector $\boldsymbol{m}^{l,0}_{y,x}$ for every edge $e_{y,x}$ and aggregates the attention weight vectors for every vertex $v_x$ to get the weight sum vector $\MyVec{h}^{l,0}_x$.
 %
 \begin{equation}
     \label{eq:GAT-sub-layer-1}
@@ -479,9 +477,9 @@ The first sub-layer (defined in Equation~\ref{eq:GAT-sub-layer-1}) uses the atte
     \end{aligned}
 \end{equation}
 %
-The second sub-layer (defined in Equation~\ref{eq:GAT-sub-layer-2}) uses the weight sum vectors to normalize the attention weights for every edge and aggregates the attention vectors $\boldsymbol{\hat{h}}^l_y$ with the normalized weights.
+The second sub-layer of GAT (defined in Equation~\ref{eq:GAT-sub-layer-2}) uses the weight sum vectors to normalize the attention weights for every edge and aggregates the attention vectors $\boldsymbol{\hat{h}}^l_y$ with the normalized weights.
 %
-The aggregated attention vectors $\MyVec{s}^{l,1}_x$ are transformed by an activation function $\delta$ and outputted as the hidden vectors of the current layer $\MyVec{h}^{l+1}_x$.
+The aggregated attention vectors $\MyVec{s}^{l,1}_x$ are transformed by an activation function $\delta$ and are outputted as the hidden vectors of the current layer $\MyVec{h}^{l+1}_x$.
 %
 \begin{equation}
         \label{eq:GAT-sub-layer-2}

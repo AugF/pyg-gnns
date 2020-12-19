@@ -13,7 +13,22 @@
 \usepackage{lipsum} % to generate some filler text
 \usepackage{fullpage}
 \usepackage{times}
-\usepackage{amsmath, amsthm}
+\usepackage{amsmath, amsthm, amsfonts}
+\usepackage{booktabs}
+\usepackage{makecell}
+\usepackage{multirow}
+\usepackage{lscape}
+\usepackage{xcolor}
+\usepackage{float}
+% Vector
+\newcommand{\MyVec}[1]{\boldsymbol{#1}}
+% Matrix
+\newcommand{\MyMat}[1]{\boldsymbol{#1}}
+% Vectors with hat
+\newcommand{\hvec}[1]{\hat{\boldsymbol{h}}_{#1}}
+% Model parameters
+\newcommand{\Param}[1]{\textcolor{blue}{#1}}
+
 
 % import Eq and Section references from the main manuscript where needed
 % \usepackage{xr}
@@ -68,31 +83,102 @@ In the following we address their concerns point by point.
 \begin{reply}
     We apologize for the confusing use of symbols.
     %
-    To clarify the symbol usage, we have checked the full text of the manuscript and unified the usage of symbols.
+    To clarify the symbol usage, we have checked the manuscript and unified the usage of symbol.
     %
-    We have avoided the problem of repeated use of symbols, so that each symbol only represents one meaning after the revision.
+    We avoid the problem of reusing symbols, so that each symbol only represents one meaning after the revision.
     %
     We summarize the frequently-used symbols in Table 1 in the revised manuscript.
     %
     We quote the table below:
-    %%%%% TODO, Paste Table 1 %%%%.
-    
-    In the revised manuscript, $\boldsymbol{e}_{x,y}$ represents the input feature vector of the edge $e_{x,y}$.
-    %
-    It is the same for all GNN layers.
-    %
-    $\boldsymbol{s}$ represents aggregated vectors outputted by the aggregation function $\Sigma$ in graph neurons.
-    %
-    $\boldsymbol{s}^l_x$ represents the aggregated vector of the graph neuron corresponding to the vertex $v_x$ in the GNN layer $l$.
-    %
-    If the GNN layer $l$ has sub-layers, $\boldsymbol{s}^{l,i}_x$ represents the aggregated vector corresponding to $v_x$ in the $i$-th sub-layer.
-    
-    To clarify the concept of sub-layers in a GNN layer, we have added the following description in Section 2.2 ``Graph Neuron and Message-passing Model'' in the revised manuscript:
-    %%%%% TODO %%%%%%%%
-    
+    \begin{table}[H]
+        \footnotesize
+        \centering
+    \begin{tabular}{p{3em}lp{35em}}
+        \toprule
+        Category & Symbol & Meaning \\
+        \midrule
+        \multirow[c]{4}{3em}{Graph Structure}& $\mathcal{G}=(\mathcal{V}, \mathcal{E})$ & The simple undirected input graph with the vertex set $\mathcal{V}$ and the edge set $\mathcal{E}$. \\
+        & $v_x$ & The $x$-th vertex of the input graph. \\
+        & $e_{x,y}$ & The edge pointing from $v_x$ to $v_y$ of the input graph. \\
+        & $\mathcal{N}(v_x)$ & The adjacency set of $v_x$ in the input graph. \\ 
+        & $\bar{d}$ & The average degree of the input graph. \\ \midrule
+        \multirow[c]{6}{3em}{GNN Definition}& $L$ & The number of GNN layers. \\
+        & $K$ & The number of heads in a GNN layer. \\
+        & $\phi^l$ & The messaging function of the GNN layer $l$. \\
+        & $\Sigma^l$ & The aggregation function of the GNN layer $l$. \\
+        & $\gamma^l$ & The vertex updating function of the GNN layer $l$. \\ 
+        & $\phi^{l,i}$ / $\Sigma^{l,i}$ / $\gamma^{l,i}$ & The messaging/aggregation/updating function of the $i$-th sub-layer of the GNN layer  $l$.\\
+        & $\textcolor{blue}{\boldsymbol{W}^l, \boldsymbol{W}^{(k)}/\boldsymbol{b}, \boldsymbol{a}}$ & The matrices/vectors represented by the blue characters are the weight matrices/vectors that need to be learned in the GNN. \\  \midrule
+        \multirow[c]{8}{3em}{Vector}& $\boldsymbol{v}_x$ & The feature vector of the vertex $v_x$. \\
+        & $\boldsymbol{e}_{x,y}$ & The feature vector of the edge $e_{x,y}$.  \\
+        & $\boldsymbol{h}_x^{l}$ &  The {input} hidden vector of the graph neuron corresponding to $v_x$ in the GNN layer $l$. \\
+        & $\boldsymbol{h}_x^{l+1}$ &  The {output} hidden vector of the graph neuron corresponding to $v_x$ in the GNN layer $l$.\\
+        & $\boldsymbol{m}_{x,y}^l$ & The message vector of the edge $e_{x,y}$ outputted by $\phi^l$ of the GNN layer $l$. \\
+        & $\boldsymbol{s}_{x}^l$ & The aggregated vector of the vertex $v_x$ outputted by $\Sigma^l$ of the GNN layer $l$. \\
+        & $\boldsymbol{h}_{x}^{l,i}$ / $\boldsymbol{m}_{x,y}^{l,i}$ / $\boldsymbol{s}_{x}^{l,i}$ & The hidden/message/aggregated vector of the vertex $v_x$ outputted by $\gamma^{l,i}$/$\phi^{l,i}$/$\Sigma^{l,i}$ of the $i$-th sub-layer of the GNN layer $l$. \\
+        & $d^l_{in}$, $d^l_{out}$ &  The dimension of the input/output hidden vectors of the GNN layer $l$. \\
+        & $dim(\MyVec{x})$ & The dimension of a vector $\MyVec{x}$. \\
+        \bottomrule
+    \end{tabular}
+\end{table}
 
     
+    In the revised manuscript, we use $e_{x,y}$ to represent an edge and use $\boldsymbol{e}_{x,y}$ to represent its input feature vector.
+    %
+    The input feature vectors of all edges are same for all GNN layers.
+    %
+    We use $\boldsymbol{s}$ to represent aggregated vectors outputted by the aggregation function $\Sigma$ in graph neurons.
+    %
+    For every vertex $v_x$, we use $\boldsymbol{s}^l_x$ to denote its aggregated vector in the GNN layer $l$.
+    %
+    If the GNN layer $l$ has sub-layers, $\boldsymbol{s}^{l,i}_x$ represents its aggregated vector in the $i$-th sub-layer.
     
+    To clarify the concept of \emph{sub-layers} in a GNN layer, we have added more description on it in the revised manuscript.
+    %
+    We first introduce the concept of sub-layer in Section 2.2 ``Graph Neuron and Message-passing Model'' as:
+    %
+    \begin{quote}
+        Some complex GNNs like GAT [6] and GaAN [7] use more than one message passing phase in each GNN layer.
+        %
+        We regard every message passing phase in a GNN layer as a \emph{sub-layer}.
+        %
+        We will give out more details on sub-layers when we introduce GAT.
+    \end{quote}
+    %
+    We then use GAT as an example to elaborate on the concept of sub-layers in Section 2.3 ``Representative GNNs'' as:
+    %
+    \begin{quote}
+        \newcommand{\GATCalcWeight}{\exp(LeakyReLU(\Param{\MyVec{a}}^T[\hvec{y}[k] \parallel \hvec{x}[k]]))}
+        Each GAT layer consists of a vertex pre-processing phase and two sub-layers (i.e., message-passing phases).
+        
+        The vertex pre-processing phase calculates the attention vector $\hat{\boldsymbol{h}}^{l}_{x}$ for every vertex $v_x$ by $\hvec{x} = \parallel_{k=1}^K \Param{\MyMat{W}^l_{(k)}}\MyVec{h}^l_x$. We denote the attention sub-vector generated by the $k$-th head as $\hvec{x}[k]=\Param{\MyMat{W}^l_{(k)}}\MyVec{h}^l_x$.
+        
+        The first sub-layer of GAT (defined in Equation~\ref{eq:GAT-sub-layer-1}) uses the attention vectors to emit the attention weight vector $\boldsymbol{m}^{l,0}_{y,x}$ for every edge $e_{y,x}$ and aggregates the attention weight vectors for every vertex $v_x$ to get the weight sum vector $\MyVec{h}^{l,0}_x$.
+        %
+        \begin{equation}
+            \footnotesize
+            \label{eq:GAT-sub-layer-1}
+            \begin{aligned}
+                \MyVec{m}^{l,0}_{y,x} & = \phi^{l,0}(\MyVec{h}^l_y, \MyVec{h}^l_x, \MyVec{e}_{y,x}, \hvec{y}, \hvec{x}) = \parallel_{k=1}^{K}\GATCalcWeight, \\
+                \MyVec{s}^{l,0}_{x} &= {\Sigma}_{v_y \in \mathcal{N}(v_x)}{\MyVec{m}^{l,0}_{y,x}}, \\
+                \MyVec{h}^{l,0}_{x} &= \gamma^{l,0}(\MyVec{h}^l_x, \MyVec{s}^{l,0}_{x})  = \MyVec{s}^{l,0}_{x}.
+            \end{aligned}
+        \end{equation}
+        %
+        The second sub-layer of GAT (defined in Equation~\ref{eq:GAT-sub-layer-2}) uses the weight sum vectors to normalize the attention weights for every edge and aggregates the attention vectors $\boldsymbol{\hat{h}}^l_y$ with the normalized weights.
+        %
+        The aggregated attention vectors $\MyVec{s}^{l,1}_x$ are transformed by an activation function $\delta$ and are outputted as the hidden vectors of the current layer $\MyVec{h}^{l+1}_x$.
+        %
+        \begin{equation}
+            \footnotesize
+            \label{eq:GAT-sub-layer-2}
+            \begin{aligned}
+                \MyVec{m}^{l,1}_{y,x} &= \phi^{l,1}(\MyVec{h}^{l,0}_y, \MyVec{h}^{l,0}_x, \MyVec{e}_{y,x}, \hvec{y}, \hvec{x}) = \parallel_{k=1}^{K}\frac{\GATCalcWeight}{\MyVec{h}^{l,0}_x[k]}\hvec{y}[k], \\
+                \MyVec{s}^{l,1}_x &= {\Sigma}_{v_y \in \mathcal{N}(v_x)} \MyVec{m}^{l,1}_{y,x}, \\
+                \MyVec{h}^{l+1}_x = \MyVec{h}^{l,1}_x &= \gamma^{l,1}(\MyVec{h}^{l,0}, \MyVec{s}^{l,1}_x) = \delta(\MyVec{s}^{l,1}_x).
+            \end{aligned}
+        \end{equation}
+    \end{quote}  
 \end{reply}
 
 \begin{point}
@@ -103,15 +189,24 @@ In the following we address their concerns point by point.
 	Thank you for pointing out our shortcomings. Computer vision is indeed another important application area of graph neural networks. We have added the mentioned references in the INTRODUCTION section in the revised manuscript. We quote the related sentence below:
     \begin{quote}
          The powerful expression ability makes GNNs achieve good accuracy in not only graph analytical tasks [8, 9, 10] (like node classification and link prediction) but also computer vision tasks (like human-object interaction [11], human parsing [12], and video object segmentation [13]).
-        
     \end{quote}
 \end{reply}
 
-\subsection*{Minor}
+\begin{point}
+There are some grammar errors and typos:\\
+  - `Take the demo GNN in Figure 1(a) as  the example.'\\
+ - `to calculate the  output hidden vector $h^{l+1}$ of the current layer l, i.e., $h^{l+1}$ = $\gamma^l(h^l,s^l)$ The end-to-end training requires…'\\
+ - `Implementing it with the specially optimized basic operators on the GPU is a potential optimization'\\
+ - The sentences in the experimental section should be unified.\\
+\end{point}
 
-% Use the short-hand macros for one-liners.
-\shortpoint{ Typo in line xy. }
-\shortreply{ Fixed.}
+\begin{reply}
+Thank you for pointing them out.
+%
+We have proofread our revised manuscript carefully to eliminate grammar errors and typos.
+%
+We have also unified the sentences that describe the experimental results  in the experimental section in the past tense.
+\end{reply}
 
 % Begin a new reviewer section
 \reviewersection

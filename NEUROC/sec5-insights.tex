@@ -19,7 +19,7 @@ Through the extensive experiments, we propose the following key findings and sug
               \item If the complexity of the messaging function $\phi$ is high, the implementation of $\phi$ is critical to performance.
                     Improving its efficiency can significantly reduce the training time.
                     For example, the attention mechanism in GNNs (like GAT and GaAN) requires an extra sub-layer to calculate the attention weight of each edge.
-                    Implementing it with the specially optimized basic operators on the GPU is a potential optimization.
+                    Implementing the attention mechanism with specially optimized basic operators on the GPU side is a potential optimization.
               \item If the complexity of $\phi$ is low, the efficiency of the collection step and the aggregation step becomes critical.
                     The existing GNN libraries \cite{DGL, PyG, ma2019_neugraph} already introduce the \emph{fused} operator to improve their efficiency.
                     When the messaging function $\phi$ is an assignment or a scalar multiplication of the hidden feature vector of the source vertex, the libraries replace the collection, messaging, and aggregation steps with a single fused operator.
