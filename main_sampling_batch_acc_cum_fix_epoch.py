@@ -170,18 +170,15 @@ def train(optimizer, t0, bs_count, best_val_acc, test_acc):
             
             loss.backward()
             optimizer.step()
-            
-            print(f"Batch: {bs_count:03d}, train_loss: {loss:.8f}, train_time: {(time.time() - t1): .4f}s")
-            
+                        
             # 指定batch size下，进行汇报时间和精度
             bs_count += 1
-            if bs_count % 10 == 0:
-                accs = test()
-                if accs[1] > best_val_acc:
-                    best_val_acc = accs[1]
-                    test_acc = max(test_acc, accs[2])
-                print(f"Batch: {bs_count:03d}, train_acc: {accs[0]:.8f}, val_acc: {accs[1]:.8f}, best_val_acc: {best_val_acc: .8f}, best_test_acc: {test_acc:.8f}, cur_use_time: {(time.time() - t0):.4f}s")
-        except StopIteration:
+            accs = test()
+            if accs[1] > best_val_acc:
+                best_val_acc = accs[1]
+                test_acc = accs[2]
+            print(f"Batch: {bs_count:03d}, loss:{loss.item():.8f}, train_acc: {accs[0]:.8f}, val_acc: {accs[1]:.8f}, best_val_acc: {best_val_acc: .8f}, best_test_acc: {test_acc:.8f}, cur_use_time: {cur_use_time:.4f}s")
+    except StopIteration:
             break
     return bs_count, best_val_acc, test_acc
 

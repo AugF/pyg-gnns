@@ -1,7 +1,2 @@
-# echo "run_gcn_ggnn"
-# date
-# bash gcn_ggnn_exp_acc.sh
-# echo "run_gat"
-# bash gat_exp_acc.sh
-# date
-bash gaan_exp_acc_2.sh
+# echo "run_gaan"
+bash gaan_memory.sh >gaan_memory.log 2>&1

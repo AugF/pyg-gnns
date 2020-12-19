@@ -22,7 +22,7 @@ do
             if [ -f "${dir_config}/config0_${model}_${data}_${hd}.json" ]; then # 断点续传
                 continue
             fi
-            python ../main.py --dataset ${data} --model ${model} --json_path "${dir_config}/config0_${model}_${data}_${hd}.json" --epochs 5 --hidden_dims ${hd}
+            python ../main_memory.py --device cuda:0 --dataset ${data} --model ${model} --json_path "${dir_config}/config0_${model}_${data}_${hd}.json" --epochs 5 --hidden_dims ${hd}
         done
     done
 done

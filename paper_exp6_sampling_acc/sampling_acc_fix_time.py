@@ -38,7 +38,7 @@ fix_times = {
     'amazon-computers': 1400
 }
 
-dir_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "log_fix_time")
+dir_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "log_fix_time_new")
 if not os.path.exists(dir_path):
     os.makedirs(dir_path)
 
@@ -75,6 +75,6 @@ for i, mode in enumerate(['cluster', 'graphsage']):
                 full_log = os.path.join(dir_path, '_'.join([mode, alg, data, 'full']) + '.log')
                 full_sh = f"python -u /home/wangzhaokang/wangyunpan/gnns-project/pyg-gnns/main_full_batch_acc_cum.py --runs 1 --epochs 1000 --mode {mode} --model {alg} --data {data} --device cuda:{i} {config_str} >>{full_log} 2>&1"
                 sh_commands.append(full_sh)
-    with open("sh_" + mode + "_fix_time.sh", "w") as f:
+    with open("sh_" + mode + "_fix_time_new.sh", "w") as f:
         for sh in sh_commands:
             f.write(sh + '\n')

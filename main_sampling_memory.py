@@ -49,6 +49,7 @@ flag = not args.json_path == ''
 
 print(args)
 print(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())))
+device = torch.device(f'cuda: {args.gpu}' if gpu else 'cpu') # todo: model's device
 
 # 0. set manual seed
 np.random.seed(args.seed)
@@ -66,12 +67,12 @@ data = dataset[0]
 
 # add train, val, test split
 if args.dataset in ['amazon-computers', 'amazon-photo', 'coauthor-physics']:
-    file_path = osp.join("/data/wangzhaokang/wangyunpan", "data/" + args.dataset + "/raw/role.json")
+    file_path = osp.join("/home/wangzhaokang/wangyunpan/gnns-project/datasets", args.dataset + "/raw/role.json")
     data.train_mask, data.val_mask, data.test_mask = get_split_by_file(file_path, data.num_nodes)
 
 num_features = dataset.num_features
 if dataset_info[0] in small_datasets and len(dataset_info) > 1:
-    file_path = osp.join("/data/wangzhaokang/wangyunpan", "data/feats_x/" + '_'.join(dataset_info) + '_feats.npy')
+    file_path = osp.join("/home/wangzhaokang/wangyunpan/gnns-project/datasets", "data/feats_x/" + '_'.join(dataset_info) + '_feats.npy')
     if osp.exists(file_path):
         data.x = torch.from_numpy(np.load(file_path)).to(torch.float) # 因为这里是随机生成的，不考虑normal features
         num_features = data.x.size(1)
@@ -114,19 +115,19 @@ if args.model == 'gcn':
     model = GCN(
         layers=args.layers,
         n_features=num_features, n_classes=dataset.num_classes,
-        hidden_dims=args.hidden_dims, gpu=gpu, flag=flag, norm=norm, cluster_flag=args.mode == 'cluster'
+        hidden_dims=args.hidden_dims, gpu=gpu, flag=flag, norm=norm, device=device, cluster_flag=args.mode == 'cluster'
     )
 elif args.model == 'gat':
     model = GAT(
         layers=args.layers,
         n_features=num_features, n_classes=dataset.num_classes,
-        head_dims=args.head_dims, heads=args.heads, gpu=gpu, flag=flag
+        head_dims=args.head_dims, heads=args.heads, gpu=gpu, flag=flag, device=device
     )
 elif args.model == 'ggnn':
     model = GGNN(
         layers=args.layers,
         n_features=num_features, n_classes=dataset.num_classes,
-        hidden_dims=args.hidden_dims, gpu=gpu, flag=flag
+        hidden_dims=args.hidden_dims, gpu=gpu, flag=flag, device=device
     )
 elif args.model == 'gaan':
     model = GaAN(
@@ -134,10 +135,9 @@ elif args.model == 'gaan':
         n_features=num_features, n_classes=dataset.num_classes,
         hidden_dims=args.hidden_dims,
         heads=args.heads, d_v=args.d_v,
-        d_a=args.d_a, d_m=args.d_m, gpu=gpu, flag=flag
+        d_a=args.d_a, d_m=args.d_m, gpu=gpu, flag=flag, device=device
     )
 
-device = torch.device(f'cuda: {args.gpu}' if gpu else 'cpu') # todo: model's device
 model = model.to(device)
 optimizer = torch.optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
 log_memory(flag, device, 'model load')
@@ -169,8 +169,6 @@ def train(epoch):
                 to_time += t2 - t1
                 optimizer.zero_grad()
                 log_memory(flag, device, 'to end') # 
-                #nodes, edges = batch.x.shape[0], batch.edge_index.shape[1]
-                #print(f"nodes: {nodes}, edges: {edges}")
                 out = model(batch.x, batch.edge_index)
                 if args.dataset in ['yelp', 'amazon']:
                     loss = torch.nn.BCEWithLogitsLoss()(out[batch.train_mask, :], batch.y[batch.train_mask, :])
@@ -180,8 +178,6 @@ def train(epoch):
             elif args.mode == 'graphsage':
                 batch_size, n_id, adjs = batch
                 adjs = [adj.to(device) for adj in adjs] # 这里等于成熟
-                #print(f"nodes: {nodes}, edges: {edges}")
-                #print(adjs[0][2], adjs[1][2])
                 x = data.x[n_id].to(device)
                 if args.dataset in ['yelp', 'amazon']:
                     y = data.y[n_id[:batch_size], :].to(device)

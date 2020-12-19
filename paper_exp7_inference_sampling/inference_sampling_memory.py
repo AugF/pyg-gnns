@@ -15,7 +15,7 @@ for alg in algs:
         if os.path.exists(file_path):
             continue
         print(file_path)
-        cmd = "python /home/wangzhaokang/wangyunpan/gnns-project/pyg-gnns/main_inference_sampling.py --device cuda:1 --model {} --data {} --epochs 10 --infer_json_path {}"
+        cmd = "python /home/wangzhaokang/wangyunpan/gnns-project/pyg-gnns/main_inference_sampling.py --device cuda:0 --model {} --data {} --epochs 10 --infer_json_path {}"
         sh_commands.append(cmd.format(alg, data, file_path))
 
 with open("inference_sampling_memory.sh", "w") as f:

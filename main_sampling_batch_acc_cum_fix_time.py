@@ -28,7 +28,7 @@ parser.add_argument('--dataset', type=str, default='cora', help="dataset: [cora,
 
 parser.add_argument('--model', type=str, default='gcn', help="gnn models: [gcn, ggnn, gat, gaan]")
 parser.add_argument('--runs', type=int, default=1, help="total runs")
-parser.add_argument('--epochs', type=int, default=1000, help="epochs for training")
+parser.add_argument('--epochs', type=int, default=100000, help="epochs for training")
 parser.add_argument('--layers', type=int, default=2, help="layers for hidden layer")
 parser.add_argument('--hidden_dims', type=int, default=64, help="hidden layer output dims")
 parser.add_argument('--heads', type=int, default=8, help="gat or gaan model: heads")
@@ -170,21 +170,17 @@ def train(optimizer, t0, bs_count, best_val_acc, test_acc):
             
             loss.backward()
             optimizer.step()
-            
-            print(f"Batch: {bs_count:03d}, train_loss: {loss:.8f}, train_time: {(time.time() - t1): .4f}s")
-            
             # 指定batch size下，进行汇报时间和精度
             bs_count += 1
-            if bs_count % 10 == 0:
-                accs = test()
-                if accs[1] > best_val_acc:
-                    best_val_acc = accs[1]
-                    test_acc = max(test_acc, accs[2])
-                cur_use_time = time.time() - t0
-                print(f"Batch: {bs_count:03d}, train_acc: {accs[0]:.8f}, val_acc: {accs[1]:.8f}, best_val_acc: {best_val_acc: .8f}, best_test_acc: {test_acc:.8f}, cur_use_time: {cur_use_time:.4f}s")
-            
-                if cur_use_time > args.fix_time:
-                    sys.exit(0)   
+            accs = test()
+            if accs[1] >= best_val_acc:
+                best_val_acc = accs[1]
+                test_acc = accs[2]
+            cur_use_time = time.time() - t0
+            print(f"Batch: {bs_count:03d}, loss:{loss.item():.8f}, train_acc: {accs[0]:.8f}, val_acc: {accs[1]:.8f}, best_val_acc: {best_val_acc: .8f}, best_test_acc: {test_acc:.8f}, cur_use_time: {cur_use_time:.4f}s")
+        
+            if cur_use_time > args.fix_time:
+                sys.exit(0)   
         except StopIteration:
             break
     return bs_count, best_val_acc, test_acc

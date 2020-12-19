@@ -24,7 +24,7 @@ do
             if [ -f "${dir_config}/config0_${model}_${data}_4_${hd}_64.json" ]; then # 断点续传
                 continue
             fi
-            python ../main.py --json_path "${dir_config}/config0_${model}_${data}_4_${hd}_64.json" --dataset ${data} --model ${model} --d_v ${hd} --d_a ${hd} --d_m ${hd} --heads 4 --hidden_dims 64
+            python ../main_memory.py --device cuda:1 --json_path "${dir_config}/config0_${model}_${data}_4_${hd}_64.json" --dataset ${data} --model ${model} --d_v ${hd} --d_a ${hd} --d_m ${hd} --heads 4 --hidden_dims 64
         done
 
         # hidden_dims
@@ -35,7 +35,7 @@ do
             if [ -f "${dir_config}/config0_${model}_${data}_4_32_${hd}.json" ]; then # 断点续传
                 continue
             fi
-            python ../main.py --json_path "${dir_config}/config0_${model}_${data}_4_32_${hd}.json" --dataset ${data} --model ${model} --hidden_dims ${hd} --heads 4 --d_v 32 --d_a 32 --d_m 32
+            python ../main_memory.py --device cuda:1 --json_path "${dir_config}/config0_${model}_${data}_4_32_${hd}.json" --dataset ${data} --model ${model} --hidden_dims ${hd} --heads 4 --d_v 32 --d_a 32 --d_m 32
         done
         
         # heads
@@ -46,7 +46,7 @@ do
             if [ -f "${dir_config}/config0_${model}_${data}_${h}_32_64.json" ]; then # 断点续传
                 continue
             fi
-            python ../main.py --json_path "${dir_config}/config0_${model}_${data}_${h}_32_64.json" --dataset ${data} --model ${model} --d_m 32 --d_v 32 --d_a 32 --heads ${h} --hidden_dims 64
+            python ../main_memory.py --device cuda:1 --json_path "${dir_config}/config0_${model}_${data}_${h}_32_64.json" --dataset ${data} --model ${model} --d_m 32 --d_v 32 --d_a 32 --heads ${h} --hidden_dims 64
         done
     done
 done

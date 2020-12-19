@@ -3,7 +3,7 @@ import time
 
 small_datasets =  ['amazon-photo', 'pubmed', 'amazon-computers', 'coauthor-physics', 'flickr', 'com-amazon']
 
-algs = ['gaan']
+algs = ['gcn', 'ggnn', 'gat']
 cluster_batchs = [15, 45, 90, 150, 375, 750]
 
 graphsage_batchs = {

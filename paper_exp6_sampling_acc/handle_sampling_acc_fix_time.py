@@ -89,8 +89,7 @@ for data in datasets:
                                 df_accs[xticklabels[i]].append(float(match_line.group(1)))
                                 df_times[xticklabels[i]].append(float(match_line.group(2)))
             
-            # full 
-                              
+            # full    
             # 画精度关于时间的图像
             fig, ax = plt.subplots()
             ax.set_ylabel('Accucary')
@@ -111,4 +110,3 @@ for data in datasets:
             plt.close()    
             
 
-    

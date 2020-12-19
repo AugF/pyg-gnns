@@ -1,5 +1,5 @@
 """
-跟main.py相比为full文件的对比版本
+超参数对精度的影响实验代码
 """
 import torch
 import torch.nn.functional as F
@@ -16,14 +16,14 @@ from gat.models import GAT
 from gcn.models import GCN
 from sklearn.metrics import f1_score
 from utils import get_dataset, get_split_by_file, nvtx_push, nvtx_pop, log_memory, small_datasets
+from logger import Logger
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--dataset', type=str, default='cora', help="dataset: [cora, flickr, com-amazon, reddit, com-lj,"
                                                                     "amazon-computers, amazon-photo, coauthor-physics, pubmed]")
-
 parser.add_argument('--model', type=str, default='gcn', help="gnn models: [gcn, ggnn, gat, gaan]")
-parser.add_argument('--runs', type=int, default=10, help="total runs")
-parser.add_argument('--epochs', type=int, default=100000, help="epochs for training")
+parser.add_argument('--runs', type=int, default=1, help="total runs")
+parser.add_argument('--epochs', type=int, default=50, help="epochs for training")
 parser.add_argument('--layers', type=int, default=2, help="layers for hidden layer")
 parser.add_argument('--hidden_dims', type=int, default=64, help="hidden layer output dims")
 parser.add_argument('--heads', type=int, default=8, help="gat or gaan model: heads")
@@ -40,8 +40,6 @@ parser.add_argument('--lr', type=float, default=0.01, help="adam's learning rate
 parser.add_argument('--weight_decay', type=float, default=0.0005, help="adam's weight decay")
 parser.add_argument('--no_record_shapes', action='store_false', default=True, help="nvtx or autograd's profile to record shape")
 parser.add_argument('--json_path', type=str, default='', help="json file path for memory")
-parser.add_argument('--fix_time', type=int, default=800, help="fix_time")
-
 
 args = parser.parse_args()
 gpu = not args.cpu and torch.cuda.is_available()
@@ -124,47 +122,78 @@ print(model)
 # set to gpu
 model, data = model.to(device), data.to(device)
 
+log_memory(flag, device, 'data load')
+
 def train(epoch):
+    t = time.time()
+
+    # add forward start
+    log_memory(flag, device, 'forward_start')
+
+    nvtx_push(gpu, "forward")
     model.train()
     out = model(data.x, data.edge_index)
+    nvtx_push(gpu, "loss")
     loss = F.nll_loss(F.log_softmax(out, dim=1)[data.train_mask], data.y[data.train_mask])
     optimizer.zero_grad()
+    nvtx_pop(gpu)
+    nvtx_pop(gpu)
+    log_memory(flag, device, 'forward_end')
 
+    # add forward end
+    nvtx_push(gpu, "backward")
     loss.backward()
     optimizer.step()
-    return loss.item()
+    nvtx_pop(gpu)
+
+    # add backward end
+    log_memory(flag, device, 'backward_end')
+
+    log = 'Epoch: {:03d}, train_loss: {:.8f}, train_time: {:.4f}s'
+    t = time.time() - t
+    print(log.format(epoch, loss.data.item(), t))
+    return 
 
 @torch.no_grad()
 def test():
     model.eval()
     out = model(data.x, data.edge_index)
+    log_memory(flag, device, 'other_start')    
+    nvtx_push(gpu, "other")
+    
     
     logits, accs = F.log_softmax(out, dim=1), []
     for _, mask in data('train_mask', 'val_mask', 'test_mask'):
         pred = logits[mask].max(1)[1]
         acc = pred.eq(data.y[mask]).sum().item() / mask.sum().item()
         accs.append(acc)
+    nvtx_pop(gpu)
     return accs
 
 
-for run in range(args.runs):
-    model.reset_parameters()
-    optimizer = torch.optim.Adam([
-        dict(params=model.convs[i].parameters(), weight_decay=args.weight_decay if i == 0 else 0)
-        for i in range(1 if args.model == "ggnn" else args.layers)]
-        , lr=args.lr)  # Only perform weight-decay on first convolution, 参考了pytorch_geometric中的gcn.py的例子: https://github.com/rusty1s/pytorch_geometric/blob/master/examples/gcn.py
 
-    es_count = best_val_acc = test_acc = 0
-    t0 = time.time()
-    patient_step = 0
-    for epoch in range(args.epochs):
-        loss = train(epoch)
-        accs = test()
-        if accs[1] > best_val_acc:
-            best_val_acc = accs[1]
-            test_acc = accs[2]
-        cur_time = time.time() - t0
-        print(f"Batch: {epoch:03d}, loss:{loss:.8f}, train_acc: {accs[0]:.8f}, val_acc: {accs[1]:.8f}, best_val_acc: {best_val_acc: .8f}, best_test_acc: {test_acc:.8f}, cur_use_time: {cur_time:.4f}s")
-        if cur_time > args.fix_time:
-            sys.exit(0)
-  
+optimizer = torch.optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)  # Only perform weight-decay on first convolution, 参考了pytorch_geometric中的gcn.py的例子: https://github.com/rusty1s/pytorch_geometric/blob/master/examples/gcn.py
+
+train(-1)
+log_memory(flag, device, 'eval_end')
+for epoch in range(args.epochs):
+    nvtx_push(gpu, "epochs" + str(epoch))
+    
+    nvtx_push(gpu, "train")
+    train(epoch)
+    nvtx_pop(gpu)
+    
+    nvtx_push(gpu, "eval")
+    log = 'Epoch: {:03d}, Train: {:.8f}, Val: {:.8f}, Test: {:.8f}'
+    accs = test()
+    print(log.format(epoch, *accs))
+    log_memory(flag, device, 'eval_end')
+    nvtx_pop(gpu)
+    
+    nvtx_pop(gpu)
+    
+
+if flag:
+    from utils import df
+    with open(args.json_path, "w") as f:
+        json.dump(df, f)
