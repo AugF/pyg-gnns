@@ -1,10 +1,9 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/W32TeX) (preloaded format=pdflatex 2019.5.19)  20 DEC 2020 22:43
+This is XeTeX, Version 3.14159265-2.6-0.999991 (TeX Live 2019/W32TeX) (preloaded format=xelatex 2019.5.19)  20 DEC 2020 22:56
 entering extended mode
  restricted \write18 enabled.
- file:line:error style messages enabled.
  %&-line parsing enabled.
-**c:/Users/Dell/Desktop/gnns-project/pyg-gnns/NEUROC/ms
-(c:/Users/Dell/Desktop/gnns-project/pyg-gnns/NEUROC/ms.tex
+**ms.tex
+(./ms.tex
 LaTeX2e <2018-12-01>
 (c:/texlive/2019/texmf-dist/tex/latex/elsarticle/elsarticle.cls
 Document Class: elsarticle 2019/02/25, 3.2: Elsevier Ltd
@@ -25,21 +24,27 @@ File: size10.clo 2018/09/03 v1.4i Standard LaTeX file (size option)
 \abovecaptionskip=\skip41
 \belowcaptionskip=\skip42
 \bibindent=\dimen103
-) (c:/texlive/2019/texmf-dist/tex/latex/graphics/graphicx.sty
+)
+(c:/texlive/2019/texmf-dist/tex/latex/graphics/graphicx.sty
 Package: graphicx 2017/06/01 v1.1a Enhanced LaTeX Graphics (DPC,SPQR)
- (c:/texlive/2019/texmf-dist/tex/latex/graphics/keyval.sty
+
+(c:/texlive/2019/texmf-dist/tex/latex/graphics/keyval.sty
 Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
 \KV@toks@=\toks14
-) (c:/texlive/2019/texmf-dist/tex/latex/graphics/graphics.sty
+)
+(c:/texlive/2019/texmf-dist/tex/latex/graphics/graphics.sty
 Package: graphics 2017/06/25 v1.2c Standard LaTeX Graphics (DPC,SPQR)
- (c:/texlive/2019/texmf-dist/tex/latex/graphics/trig.sty
+
+(c:/texlive/2019/texmf-dist/tex/latex/graphics/trig.sty
 Package: trig 2016/01/03 v1.10 sin cos tan (DPC)
-) (c:/texlive/2019/texmf-dist/tex/latex/graphics-cfg/graphics.cfg
+)
+(c:/texlive/2019/texmf-dist/tex/latex/graphics-cfg/graphics.cfg
 File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
 )
-Package graphics Info: Driver file: pdftex.def on input line 99.
- (c:/texlive/2019/texmf-dist/tex/latex/graphics-def/pdftex.def
-File: pdftex.def 2018/01/08 v1.0l Graphics/color driver for pdftex
+Package graphics Info: Driver file: xetex.def on input line 99.
+
+(c:/texlive/2019/texmf-dist/tex/latex/graphics-def/xetex.def
+File: xetex.def 2017/06/24 v5.0h Graphics/color driver for xetex
 ))
 \Gin@req@height=\dimen104
 \Gin@req@width=\dimen105
@@ -63,7 +68,8 @@ File: pdftex.def 2018/01/08 v1.0l Graphics/color driver for pdftex
 \@enLab=\toks16
 \@sep=\skip43
 \@@sep=\skip44
- (./ms.spl) (c:/texlive/2019/texmf-dist/tex/latex/natbib/natbib.sty
+ (./ms.spl)
+(c:/texlive/2019/texmf-dist/tex/latex/natbib/natbib.sty
 Package: natbib 2010/09/13 8.31b (PWD, AO)
 \bibhang=\skip45
 \bibsep=\skip46
@@ -74,14 +80,18 @@ LaTeX Info: Redefining \cite on input line 694.
 \openout3 = `ms.spl'.
 
 \appnamewidth=\dimen109
-) (c:/texlive/2019/texmf-dist/tex/latex/geometry/geometry.sty
+)
+(c:/texlive/2019/texmf-dist/tex/latex/geometry/geometry.sty
 Package: geometry 2018/04/16 v5.8 Page Geometry
- (c:/texlive/2019/texmf-dist/tex/generic/oberdiek/ifpdf.sty
+
+(c:/texlive/2019/texmf-dist/tex/generic/oberdiek/ifpdf.sty
 Package: ifpdf 2018/09/07 v3.3 Provides the ifpdf switch
-) (c:/texlive/2019/texmf-dist/tex/generic/oberdiek/ifvtex.sty
+)
+(c:/texlive/2019/texmf-dist/tex/generic/oberdiek/ifvtex.sty
 Package: ifvtex 2016/05/16 v1.6 Detect VTeX and its facilities (HO)
 Package ifvtex Info: VTeX not detected.
-) (c:/texlive/2019/texmf-dist/tex/generic/ifxetex/ifxetex.sty
+)
+(c:/texlive/2019/texmf-dist/tex/generic/ifxetex/ifxetex.sty
 Package: ifxetex 2010/09/12 v0.6 Provides ifxetex conditional
 )
 \Gm@cnth=\count95
@@ -96,8 +106,10 @@ Package: ifxetex 2010/09/12 v0.6 Provides ifxetex conditional
 \Gm@layouthoffset=\dimen116
 \Gm@layoutvoffset=\dimen117
 \Gm@dimlist=\toks17
-) (c:/texlive/2019/texmf-dist/tex/latex/lineno/lineno.sty
+)
+(c:/texlive/2019/texmf-dist/tex/latex/lineno/lineno.sty
 Package: lineno 2005/11/02 line numbers on paragraphs v4.41
+Invalid UTF-8 byte or sequence at line 296 replaced by U+FFFD.
 \linenopenalty=\count98
 \output=\toks18
 \linenoprevgraf=\count99
@@ -113,31 +125,45 @@ Package: lineno 2005/11/02 line numbers on paragraphs v4.41
 \bframesep=\dimen122
 \bframebox=\box33
 LaTeX Info: Redefining \\ on input line 3056.
-) (c:/texlive/2019/texmf-dist/tex/latex/base/inputenc.sty
+)
+(c:/texlive/2019/texmf-dist/tex/latex/base/inputenc.sty
 Package: inputenc 2018/08/11 v1.3c Input encoding file
 \inpenc@prehook=\toks19
 \inpenc@posthook=\toks20
+
+
+Package inputenc Warning: inputenc package ignored with utf8 based engines.
+
 ) (c:/texlive/2019/texmf-dist/tex/generic/babel/babel.sty
 Package: babel 2019/04/03 3.29 The Babel package
- (c:/texlive/2019/texmf-dist/tex/generic/babel/switch.def
+
+(c:/texlive/2019/texmf-dist/tex/generic/babel/switch.def
 File: switch.def 2019/04/03 3.29 Babel switching mechanism
-) (c:/texlive/2019/texmf-dist/tex/generic/babel-english/english.ldf
+)
+(c:/texlive/2019/texmf-dist/tex/generic/babel-english/english.ldf
 Language: english 2017/06/06 v3.3r English support from the babel system
- (c:/texlive/2019/texmf-dist/tex/generic/babel/babel.def
+
+(c:/texlive/2019/texmf-dist/tex/generic/babel/babel.def
 File: babel.def 2019/04/03 3.29 Babel common definitions
 \babel@savecnt=\count105
 \U@D=\dimen123
- (c:/texlive/2019/texmf-dist/tex/generic/babel/txtbabel.def)
+
+(c:/texlive/2019/texmf-dist/tex/generic/babel/xebabel.def
+(c:/texlive/2019/texmf-dist/tex/generic/babel/txtbabel.def))
 \bbl@dirlevel=\count106
 )
 \l@canadian = a dialect from \language\l@american 
 \l@australian = a dialect from \language\l@british 
 \l@newzealand = a dialect from \language\l@british 
-)) (c:/texlive/2019/texmf-dist/tex/latex/hyperref/hyperref.sty
+))
+(c:/texlive/2019/texmf-dist/tex/latex/hyperref/hyperref.sty
 Package: hyperref 2018/11/30 v6.88e Hypertext links for LaTeX
- (c:/texlive/2019/texmf-dist/tex/generic/oberdiek/hobsub-hyperref.sty
+
+(c:/texlive/2019/texmf-dist/tex/generic/oberdiek/hobsub-hyperref.sty
 Package: hobsub-hyperref 2016/05/16 v1.14 Bundle oberdiek, subset hyperref (HO)
- (c:/texlive/2019/texmf-dist/tex/generic/oberdiek/hobsub-generic.sty
+
+
+(c:/texlive/2019/texmf-dist/tex/generic/oberdiek/hobsub-generic.sty
 Package: hobsub-generic 2016/05/16 v1.14 Bundle oberdiek, subset generic (HO)
 Package: hobsub 2016/05/16 v1.14 Construct package bundles (HO)
 Package: infwarerr 2016/05/16 v1.4 Providing info/warning/error messages (HO)
@@ -150,13 +176,16 @@ Package hobsub Info: Skipping package `ifpdf' (already loaded).
 Package: etexcmds 2016/05/16 v1.6 Avoid name clashes with e-TeX commands (HO)
 Package: kvsetkeys 2016/05/16 v1.17 Key value parser (HO)
 Package: kvdefinekeys 2016/05/16 v1.4 Define keys (HO)
-Package: pdftexcmds 2018/09/10 v0.29 Utility functions of pdfTeX for LuaTeX (HO)
+Package: pdftexcmds 2018/09/10 v0.29 Utility functions of pdfTeX for LuaTeX (HO
+)
 Package pdftexcmds Info: LuaTeX not detected.
+Package pdftexcmds Info: pdfTeX >= 1.30 not detected.
 Package pdftexcmds Info: \pdf@primitive is available.
 Package pdftexcmds Info: \pdf@ifprimitive is available.
-Package pdftexcmds Info: \pdfdraftmode found.
+Package pdftexcmds Info: \pdfdraftmode not found.
 Package: pdfescape 2016/05/16 v1.14 Implements pdfTeX's escape features (HO)
-Package: bigintcalc 2016/05/16 v1.4 Expandable calculations on big integers (HO)
+Package: bigintcalc 2016/05/16 v1.4 Expandable calculations on big integers (HO
+)
 Package: bitset 2016/05/16 v1.2 Handle bit-vector datatype (HO)
 Package: uniquecounter 2016/05/16 v1.3 Provide unlimited unique counter (HO)
 )
@@ -169,21 +198,23 @@ Package atveryend Info: \enddocument detected (standard20110627).
 Package: atbegshi 2016/06/09 v1.18 At begin shipout hook (HO)
 Package: refcount 2016/05/16 v3.5 Data extraction from label references (HO)
 Package: hycolor 2016/05/16 v1.8 Color options for hyperref/bookmark (HO)
-) (c:/texlive/2019/texmf-dist/tex/latex/oberdiek/auxhook.sty
+)
+(c:/texlive/2019/texmf-dist/tex/latex/oberdiek/auxhook.sty
 Package: auxhook 2016/05/16 v1.4 Hooks for auxiliary files (HO)
-) (c:/texlive/2019/texmf-dist/tex/latex/oberdiek/kvoptions.sty
+)
+(c:/texlive/2019/texmf-dist/tex/latex/oberdiek/kvoptions.sty
 Package: kvoptions 2016/05/16 v3.12 Key value format for package options (HO)
 )
 \@linkdim=\dimen124
 \Hy@linkcounter=\count107
 \Hy@pagecounter=\count108
- (c:/texlive/2019/texmf-dist/tex/latex/hyperref/pd1enc.def
+
+(c:/texlive/2019/texmf-dist/tex/latex/hyperref/pd1enc.def
 File: pd1enc.def 2018/11/30 v6.88e Hyperref: PDFDocEncoding definition (HO)
-Now handling font encoding PD1 ...
-... no UTF-8 mapping file for font encoding PD1
 )
 \Hy@SavedSpaceFactor=\count109
- (c:/texlive/2019/texmf-dist/tex/latex/latexconfig/hyperref.cfg
+
+(c:/texlive/2019/texmf-dist/tex/latex/latexconfig/hyperref.cfg
 File: hyperref.cfg 2002/06/06 v1.2 hyperref configuration of TeXLive
 )
 Package hyperref Info: Option `colorlinks' set `true' on input line 4393.
@@ -195,7 +226,8 @@ Package hyperref Info: Backreferencing OFF on input line 4539.
 Package hyperref Info: Implicit mode ON; LaTeX internals redefined.
 Package hyperref Info: Bookmarks ON on input line 4772.
 \c@Hy@tempcnt=\count110
- (c:/texlive/2019/texmf-dist/tex/latex/url/url.sty
+
+(c:/texlive/2019/texmf-dist/tex/latex/url/url.sty
 \Urlmuskip=\muskip10
 Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
 )
@@ -217,57 +249,75 @@ LaTeX Info: Redefining \pageref on input line 6454.
 \c@Item=\count113
 \c@Hfootnote=\count114
 )
-Package hyperref Info: Driver (autodetected): hpdftex.
- (c:/texlive/2019/texmf-dist/tex/latex/hyperref/hpdftex.def
-File: hpdftex.def 2018/11/30 v6.88e Hyperref driver for pdfTeX
-\Fld@listcount=\count115
-\c@bookmark@seq@number=\count116
- (c:/texlive/2019/texmf-dist/tex/latex/oberdiek/rerunfilecheck.sty
+Package hyperref Info: Driver (autodetected): hxetex.
+
+(c:/texlive/2019/texmf-dist/tex/latex/hyperref/hxetex.def
+File: hxetex.def 2018/11/30 v6.88e Hyperref driver for XeTeX
+
+(c:/texlive/2019/texmf-dist/tex/latex/hyperref/puenc.def
+File: puenc.def 2018/11/30 v6.88e Hyperref: PDF Unicode definition (HO)
+)
+(c:/texlive/2019/texmf-dist/tex/generic/oberdiek/stringenc.sty
+Package: stringenc 2016/05/16 v1.11 Convert strings between diff. encodings (HO
+)
+)
+\pdfm@box=\box34
+\c@Hy@AnnotLevel=\count115
+\HyField@AnnotCount=\count116
+\Fld@listcount=\count117
+\c@bookmark@seq@number=\count118
+
+(c:/texlive/2019/texmf-dist/tex/latex/oberdiek/rerunfilecheck.sty
 Package: rerunfilecheck 2016/05/16 v1.8 Rerun checks for auxiliary files (HO)
-Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 282.
+Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
+82.
 )
 \Hy@SectionHShift=\skip47
-) (c:/texlive/2019/texmf-dist/tex/latex/amsmath/amsmath.sty
+)
+(c:/texlive/2019/texmf-dist/tex/latex/amsmath/amsmath.sty
 Package: amsmath 2018/12/01 v2.17b AMS math features
 \@mathmargin=\skip48
 
 For additional information on amsmath, use the `?' option.
 (c:/texlive/2019/texmf-dist/tex/latex/amsmath/amstext.sty
 Package: amstext 2000/06/29 v2.01 AMS text
- (c:/texlive/2019/texmf-dist/tex/latex/amsmath/amsgen.sty
+
+(c:/texlive/2019/texmf-dist/tex/latex/amsmath/amsgen.sty
 File: amsgen.sty 1999/11/30 v2.0 generic functions
 \@emptytoks=\toks21
 \ex@=\dimen128
-)) (c:/texlive/2019/texmf-dist/tex/latex/amsmath/amsbsy.sty
+))
+(c:/texlive/2019/texmf-dist/tex/latex/amsmath/amsbsy.sty
 Package: amsbsy 1999/11/29 v1.2d Bold Symbols
 \pmbraise@=\dimen129
-) (c:/texlive/2019/texmf-dist/tex/latex/amsmath/amsopn.sty
+)
+(c:/texlive/2019/texmf-dist/tex/latex/amsmath/amsopn.sty
 Package: amsopn 2016/03/08 v2.02 operator names
 )
-\inf@bad=\count117
+\inf@bad=\count119
 LaTeX Info: Redefining \frac on input line 223.
-\uproot@=\count118
-\leftroot@=\count119
+\uproot@=\count120
+\leftroot@=\count121
 LaTeX Info: Redefining \overline on input line 385.
-\classnum@=\count120
-\DOTSCASE@=\count121
+\classnum@=\count122
+\DOTSCASE@=\count123
 LaTeX Info: Redefining \ldots on input line 482.
 LaTeX Info: Redefining \dots on input line 485.
 LaTeX Info: Redefining \cdots on input line 606.
-\Mathstrutbox@=\box34
-\strutbox@=\box35
+\Mathstrutbox@=\box35
+\strutbox@=\box36
 \big@size=\dimen130
 LaTeX Font Info:    Redeclaring font encoding OML on input line 729.
 LaTeX Font Info:    Redeclaring font encoding OMS on input line 730.
-\macc@depth=\count122
-\c@MaxMatrixCols=\count123
+\macc@depth=\count124
+\c@MaxMatrixCols=\count125
 \dotsspace@=\muskip11
-\c@parentequation=\count124
-\dspbrk@lvl=\count125
+\c@parentequation=\count126
+\dspbrk@lvl=\count127
 \tag@help=\toks22
-\row@=\count126
-\column@=\count127
-\maxfields@=\count128
+\row@=\count128
+\column@=\count129
+\maxfields@=\count130
 \andhelp@=\toks23
 \eqnshift@=\dimen131
 \alignsep@=\dimen132
@@ -281,7 +331,8 @@ LaTeX Font Info:    Redeclaring font encoding OMS on input line 730.
 \mathdisplay@stack=\toks25
 LaTeX Info: Redefining \[ on input line 2844.
 LaTeX Info: Redefining \] on input line 2845.
-) (c:/texlive/2019/texmf-dist/tex/latex/amscls/amsthm.sty
+)
+(c:/texlive/2019/texmf-dist/tex/latex/amscls/amsthm.sty
 Package: amsthm 2017/10/31 v2.20.4
 \thm@style=\toks26
 \thm@bodyfont=\toks27
@@ -293,15 +344,18 @@ Package: amsthm 2017/10/31 v2.20.4
 \thm@headsep=\skip53
 \dth@everypar=\toks31
 LaTeX Info: Redefining \qed on input line 274.
-) (c:/texlive/2019/texmf-dist/tex/latex/amsfonts/amsfonts.sty
+)
+(c:/texlive/2019/texmf-dist/tex/latex/amsfonts/amsfonts.sty
 Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
 \symAMSa=\mathgroup4
 \symAMSb=\mathgroup5
 LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
 (Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
-) (c:/texlive/2019/texmf-dist/tex/latex/relsize/relsize.sty
+)
+(c:/texlive/2019/texmf-dist/tex/latex/relsize/relsize.sty
 Package: relsize 2013/03/29 ver 4.1
-) (c:/texlive/2019/texmf-dist/tex/latex/booktabs/booktabs.sty
+)
+(c:/texlive/2019/texmf-dist/tex/latex/booktabs/booktabs.sty
 Package: booktabs 2016/04/27 v1.618033 publication quality tables
 \heavyrulewidth=\dimen137
 \lightrulewidth=\dimen138
@@ -313,44 +367,49 @@ Package: booktabs 2016/04/27 v1.618033 publication quality tables
 \cmidrulesep=\dimen144
 \cmidrulekern=\dimen145
 \defaultaddspace=\dimen146
-\@cmidla=\count129
-\@cmidlb=\count130
+\@cmidla=\count131
+\@cmidlb=\count132
 \@aboverulesep=\dimen147
 \@belowrulesep=\dimen148
-\@thisruleclass=\count131
-\@lastruleclass=\count132
+\@thisruleclass=\count133
+\@lastruleclass=\count134
 \@thisrulewidth=\dimen149
-) (c:/texlive/2019/texmf-dist/tex/latex/multirow/multirow.sty
+)
+(c:/texlive/2019/texmf-dist/tex/latex/multirow/multirow.sty
 Package: multirow 2019/01/01 v2.4 Span multiple rows of a table
 \multirow@colwidth=\skip54
-\multirow@cntb=\count133
+\multirow@cntb=\count135
 \multirow@dima=\skip55
 \bigstrutjot=\dimen150
-) (c:/texlive/2019/texmf-dist/tex/latex/makecell/makecell.sty
+)
+(c:/texlive/2019/texmf-dist/tex/latex/makecell/makecell.sty
 Package: makecell 2009/08/03 V0.1e Managing of Tab Column Heads and Cells
- (c:/texlive/2019/texmf-dist/tex/latex/tools/array.sty
+
+(c:/texlive/2019/texmf-dist/tex/latex/tools/array.sty
 Package: array 2018/12/30 v2.4k Tabular extension package (FMi)
 \col@sep=\dimen151
-\ar@mcellbox=\box36
+\ar@mcellbox=\box37
 \extrarowheight=\dimen152
 \NC@list=\toks32
 \extratabsurround=\skip56
 \backup@length=\skip57
-\ar@cellbox=\box37
+\ar@cellbox=\box38
 )
 \rotheadsize=\dimen153
-\c@nlinenum=\count134
+\c@nlinenum=\count136
 \TeXr@lab=\toks33
-) (c:/texlive/2019/texmf-dist/tex/latex/graphics/lscape.sty
+)
+(c:/texlive/2019/texmf-dist/tex/latex/graphics/lscape.sty
 Package: lscape 2000/10/22 v3.01 Landscape Pages (DPC)
-) (c:/texlive/2019/texmf-dist/tex/latex/xcolor/xcolor.sty
+)
+(c:/texlive/2019/texmf-dist/tex/latex/xcolor/xcolor.sty
 Package: xcolor 2016/05/11 v2.12 LaTeX color extensions (UK)
- (c:/texlive/2019/texmf-dist/tex/latex/graphics-cfg/color.cfg
+
+(c:/texlive/2019/texmf-dist/tex/latex/graphics-cfg/color.cfg
 File: color.cfg 2016/01/02 v1.6 sample color configuration
 )
-Package xcolor Info: Driver file: pdftex.def on input line 225.
+Package xcolor Info: Driver file: xetex.def on input line 225.
 Package xcolor Info: Model `cmy' substituted by `cmy0' on input line 1348.
-Package xcolor Info: Model `hsb' substituted by `rgb' on input line 1352.
 Package xcolor Info: Model `RGB' extended on input line 1364.
 Package xcolor Info: Model `HTML' substituted by `rgb' on input line 1366.
 Package xcolor Info: Model `Hsb' substituted by `hsb' on input line 1367.
@@ -358,11 +417,14 @@ Package xcolor Info: Model `tHsb' substituted by `hsb' on input line 1368.
 Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1369.
 Package xcolor Info: Model `Gray' substituted by `gray' on input line 1370.
 Package xcolor Info: Model `wave' substituted by `hsb' on input line 1371.
-) (c:/texlive/2019/texmf-dist/tex/latex/subfig/subfig.sty
+)
+(c:/texlive/2019/texmf-dist/tex/latex/subfig/subfig.sty
 Package: subfig 2005/06/28 ver: 1.3 subfig package
- (c:/texlive/2019/texmf-dist/tex/latex/caption/caption.sty
+
+(c:/texlive/2019/texmf-dist/tex/latex/caption/caption.sty
 Package: caption 2018/10/06 v3.3-154 Customizing captions (AR)
- (c:/texlive/2019/texmf-dist/tex/latex/caption/caption3.sty
+
+(c:/texlive/2019/texmf-dist/tex/latex/caption/caption3.sty
 Package: caption3 2018/09/12 v1.8c caption3 kernel (AR)
 Package caption3 Info: TeX engine: e-TeX on input line 64.
 \captionmargin=\dimen154
@@ -373,31 +435,33 @@ Package caption3 Info: TeX engine: e-TeX on input line 64.
 \caption@parindent=\dimen159
 \caption@hangindent=\dimen160
 )
-\c@caption@flags=\count135
-\c@ContinuedFloat=\count136
+\c@caption@flags=\count137
+\c@ContinuedFloat=\count138
 Package caption Info: hyperref package is loaded.
 )
-\c@KVtest=\count137
+\c@KVtest=\count139
 \sf@farskip=\skip58
 \sf@captopadj=\dimen161
 \sf@capskip=\skip59
 \sf@nearskip=\skip60
-\c@subfigure=\count138
-\c@subfigure@save=\count139
-\c@lofdepth=\count140
-\c@subtable=\count141
-\c@subtable@save=\count142
-\c@lotdepth=\count143
+\c@subfigure=\count140
+\c@subfigure@save=\count141
+\c@lofdepth=\count142
+\c@subtable=\count143
+\c@subtable@save=\count144
+\c@lotdepth=\count145
 \sf@top=\skip61
 \sf@bottom=\skip62
-) (c:/texlive/2019/texmf-dist/tex/latex/float/float.sty
+)
+(c:/texlive/2019/texmf-dist/tex/latex/float/float.sty
 Package: float 2001/11/08 v1.3d Float enhancements (AL)
-\c@float@type=\count144
+\c@float@type=\count146
 \float@exts=\toks34
-\float@box=\box38
+\float@box=\box39
 \@float@everytoks=\toks35
-\@floatcapt=\box39
-) (c:/texlive/2019/texmf-dist/tex/latex/psnfss/times.sty
+\@floatcapt=\box40
+)
+(c:/texlive/2019/texmf-dist/tex/latex/psnfss/times.sty
 Package: times 2005/04/12 PSNFSS-v9.2a (SPQR) 
 ) (./ms.aux)
 \openout1 = `ms.aux'.
@@ -410,44 +474,27 @@ LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 32.
 LaTeX Font Info:    ... okay on input line 32.
 LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 32.
 LaTeX Font Info:    ... okay on input line 32.
+LaTeX Font Info:    Checking defaults for TU/lmr/m/n on input line 32.
+LaTeX Font Info:    ... okay on input line 32.
 LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 32.
 LaTeX Font Info:    ... okay on input line 32.
 LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 32.
 LaTeX Font Info:    ... okay on input line 32.
 LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 32.
 LaTeX Font Info:    ... okay on input line 32.
-LaTeX Font Info:    Try loading font information for OT1+ptm on input line 32.
- (c:/texlive/2019/texmf-dist/tex/latex/psnfss/ot1ptm.fd
-File: ot1ptm.fd 2001/06/04 font definitions for OT1/ptm.
-) (c:/texlive/2019/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
-[Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count145
-\scratchdimen=\dimen162
-\scratchbox=\box40
-\nofMPsegments=\count146
-\nofMParguments=\count147
-\everyMPshowfont=\toks36
-\MPscratchCnt=\count148
-\MPscratchDim=\dimen163
-\MPnumerator=\count149
-\makeMPintoPDFobject=\count150
-\everyMPtoPDFconversion=\toks37
-) (c:/texlive/2019/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
-Package: epstopdf-base 2016/05/15 v2.6 Base part for package epstopdf
- (c:/texlive/2019/texmf-dist/tex/latex/oberdiek/grfext.sty
-Package: grfext 2016/05/16 v1.2 Manage graphics extensions (HO)
-)
-Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 438.
-Package grfext Info: Graphics extension search list:
-(grfext)             [.pdf,.png,.jpg,.mps,.jpeg,.jbig2,.jb2,.PDF,.PNG,.JPG,.JPEG,.JBIG2,.JB2,.eps]
-(grfext)             \AppendGraphicsExtensions on input line 456.
- (c:/texlive/2019/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
-File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
-))
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 32.
+LaTeX Font Info:    ... okay on input line 32.
+LaTeX Font Info:    Try loading font information for TU+ptm on input line 32.
+LaTeX Font Info:    No file TUptm.fd. on input line 32.
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/n' undefined
+(Font)              using `TU/lmr/m/n' instead on input line 32.
+
 *geometry* driver: auto-detecting
-*geometry* detected driver: pdftex
+*geometry* detected driver: xetex
 *geometry* verbose mode - [ preamble ] result:
-* driver: pdftex
+* driver: xetex
 * paper: <default>
 * layout: <same size as paper>
 * layoutoffset:(h,v)=(0.0pt,0.0pt)
@@ -482,10 +529,11 @@ File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
 Package hyperref Info: Link coloring ON on input line 32.
 (c:/texlive/2019/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2016/05/21 v2.44 Cross-referencing by name of section
- (c:/texlive/2019/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
+
+(c:/texlive/2019/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
 Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
 )
-\c@section@level=\count151
+\c@section@level=\count147
 )
 LaTeX Info: Redefining \ref on input line 32.
 LaTeX Info: Redefining \pageref on input line 32.
@@ -498,281 +546,150 @@ Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: subfig package v1.3 is loaded.
 Package caption Info: float package is loaded.
 Package caption Info: End \AtBeginDocument code.
-LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 42.
+
+
+LaTeX Font Warning: Font shape `TU/ptm/bx/n' undefined
+(Font)              using `TU/ptm/m/n' instead on input line 42.
+
+
+Overfull \hbox (5.58356pt too wide) in paragraph at lines 42--51
+\TU/ptm/m/n/10 mance in many graph analysis tasks. Recently, various graph neur
+al network libraries have emerged.They
+ []
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/it' undefined
+(Font)              using `TU/ptm/m/n' instead on input line 53.
+
 LaTeX Font Info:    Try loading font information for U+msa on input line 57.
- (c:/texlive/2019/texmf-dist/tex/latex/amsfonts/umsa.fd
+(c:/texlive/2019/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
 LaTeX Font Info:    Try loading font information for U+msb on input line 57.
- (c:/texlive/2019/texmf-dist/tex/latex/amsfonts/umsb.fd
+
+(c:/texlive/2019/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-LaTeX Font Info:    Try loading font information for OT1+pcr on input line 57.
- (c:/texlive/2019/texmf-dist/tex/latex/psnfss/ot1pcr.fd
-File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
-) (./sec1-introduction.tex
-LaTeX Font Info:    Try loading font information for OT1+phv on input line 1.
- (c:/texlive/2019/texmf-dist/tex/latex/psnfss/ot1phv.fd
-File: ot1phv.fd 2001/06/04 scalable font definitions for OT1/phv.
+LaTeX Font Info:    Try loading font information for TU+pcr on input line 57.
+LaTeX Font Info:    No file TUpcr.fd. on input line 57.
+
+
+LaTeX Font Warning: Font shape `TU/pcr/m/n' undefined
+(Font)              using `TU/lmr/m/n' instead on input line 57.
+
+(./sec1-introduction.tex
+LaTeX Font Info:    Try loading font information for TU+phv on input line 1.
+LaTeX Font Info:    No file TUphv.fd. on input line 1.
+
+
+LaTeX Font Warning: Font shape `TU/phv/m/n' undefined
+(Font)              using `TU/lmr/m/n' instead on input line 1.
+
+(c:/texlive/2019/texmf-dist/tex/generic/oberdiek/se-ascii-print.def
+File: se-ascii-print.def 2016/05/16 v1.11 stringenc: Printable ASCII characters
+
 )
-
-Package natbib Warning: Citation `kipf2017_gcn' on page 1 undefined on input line 4.
-
-
-Package natbib Warning: Citation `defferrad2016_chebnet' on page 1 undefined on input line 4.
-
-
-Package natbib Warning: Citation `li2018_agcn' on page 1 undefined on input line 4.
-
-
-Package natbib Warning: Citation `li2015_ggnn' on page 1 undefined on input line 4.
-
-
-Package natbib Warning: Citation `hamilton2017_graphsage' on page 1 undefined on input line 4.
-
-
-Package natbib Warning: Citation `huang2018_gat' on page 1 undefined on input line 4.
-
-
-Package natbib Warning: Citation `zhang2018_gaan' on page 1 undefined on input line 4.
-
-
-Package natbib Warning: Citation `zhou2018_gnn_review' on page 1 undefined on input line 6.
-
-
-Package natbib Warning: Citation `zhang2018_gnn_survey' on page 1 undefined on input line 6.
-
-
-Package natbib Warning: Citation `comprehensive-survey-wu-2020' on page 1 undefined on input line 6.
-
-
-Package natbib Warning: Citation `qi2018_learning_humanobject' on page 1 undefined on input line 6.
-
-
-Package natbib Warning: Citation `wang2020_hierarchical_human_parsing' on page 1 undefined on input line 6.
-
-
-Package natbib Warning: Citation `wang2019_zeroshot_video' on page 1 undefined on input line 6.
-
-
-Package natbib Warning: Citation `PyG' on page 1 undefined on input line 8.
-
-
-Package natbib Warning: Citation `DGL' on page 1 undefined on input line 8.
-
-
-Package natbib Warning: Citation `ma2019_neugraph' on page 1 undefined on input line 8.
-
-
-Package natbib Warning: Citation `zhu2019_aligraph' on page 1 undefined on input line 8.
-
-
-Package natbib Warning: Citation `PGL' on page 1 undefined on input line 8.
-
-
-Package natbib Warning: Citation `PyG' on page 1 undefined on input line 9.
-
-
-Package natbib Warning: Citation `ma2019_neugraph' on page 1 undefined on input line 9.
-
-
-Package natbib Warning: Citation `PGL' on page 1 undefined on input line 9.
-
-
-Package natbib Warning: Citation `DGL' on page 1 undefined on input line 9.
-
-
-Package natbib Warning: Citation `DGL' on page 1 undefined on input line 12.
-
-
-Package natbib Warning: Citation `ma2019_neugraph' on page 1 undefined on input line 12.
-
-
-Package natbib Warning: Citation `ma2019_neugraph' on page 1 undefined on input line 12.
-
-
-Package natbib Warning: Citation `yan2020_characterizing_gcn' on page 1 undefined on input line 15.
-
-
-Package natbib Warning: Citation `zhang2020_analysis_neugraph' on page 1 undefined on input line 15.
-
-
-Overfull \hbox (1.90002pt too wide) has occurred while \output is active
+Overfull \hbox (2.22pt too wide) has occurred while \output is active
 [] 
  []
 
 
-Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `math shift' on input line 19.
 
 
-Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `superscript' on input line 19.
 
 
-Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `math shift' on input line 19.
 
 
-Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `\<def>-command' on input line 19.
 
 
-Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `\cnotenum' on input line 19.
 
 
-Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `\<def>-command' on input line 19.
 
 
-Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `\@corref' on input line 19.
 
 
-Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `math shift' on input line 19.
 
 
-Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `superscript' on input line 19.
 
 
-Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `math shift' on input line 19.
 
 
-Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `\<def>-command' on input line 19.
 
 
-Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `\cnotenum' on input line 19.
 
 
-Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `\<def>-command' on input line 19.
 
 
-Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `\@corref' on input line 19.
 
 [1
 
 
-{c:/texlive/2019/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-LaTeX Font Info:    Try loading font information for OMS+ptm on input line 23.
- (c:/texlive/2019/texmf-dist/tex/latex/psnfss/omsptm.fd
-File: omsptm.fd 
-)
-LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 23.
-
-
-Package natbib Warning: Citation `kipf2017_gcn' on page 2 undefined on input line 24.
-
-
-Package natbib Warning: Citation `li2015_ggnn' on page 2 undefined on input line 24.
-
-
-Package natbib Warning: Citation `huang2018_gat' on page 2 undefined on input line 24.
-
-
-Package natbib Warning: Citation `zhang2018_gaan' on page 2 undefined on input line 24.
-
-) (./sec2-review-of-graph-neural-network.tex [2]
-Overfull \hbox (5.85876pt too wide) in paragraph at lines 26--26
-[]|\OT1/ptm/m/n/9 Category| 
+]) (./sec2-review-of-graph-neural-network.tex [2]
+Overfull \hbox (9.765pt too wide) in paragraph at lines 26--26
+[]|\TU/ptm/m/n/9 Category| 
  []
 
 
-Overfull \hbox (5.99356pt too wide) in paragraph at lines 28--28
-\OT1/ptm/m/n/9 Structure|  
+Overfull \hbox (11.079pt too wide) in paragraph at lines 28--28
+\TU/ptm/m/n/9 Structure|  
  []
 
 
-Overfull \hbox (9.50357pt too wide) in paragraph at lines 33--33
-\OT1/ptm/m/n/9 Definition|  
+Overfull \hbox (12.96901pt too wide) in paragraph at lines 33--33
+\TU/ptm/m/n/9 Definition|  
  []
 
-<figs/illustration/GNN_common_architecture.pdf, id=127, 502.99919pt x 231.74579pt>
+
+Underfull \hbox (badness 1859) in paragraph at lines 46--47
+[]|\TU/ptm/m/n/9 The hidden/message/aggregated vector of the vertex $\OML/cmm/m
+/it/9 v[]$ \TU/ptm/m/n/9 outputted by
+ []
+
+
+Overfull \hbox (3.42336pt too wide) in paragraph at lines 24--51
+ [][] 
+ []
+
 File: figs/illustration/GNN_common_architecture.pdf Graphic file (type pdf)
 <use figs/illustration/GNN_common_architecture.pdf>
-Package pdftex.def Info: figs/illustration/GNN_common_architecture.pdf  used on input line 59.
-(pdftex.def)             Requested size: 421.3982pt x 194.15945pt.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[3]
-
-Package natbib Warning: Citation `bryan2014_deepwalk' on page 4 undefined on input line 135.
-
-
-Package natbib Warning: Citation `aditya2016_node2vec' on page 4 undefined on input line 135.
-
-[4 <./figs/illustration/GNN_common_architecture.pdf
-
-pdfTeX warning: pdflatex.exe (file ./figs/illustration/GNN_common_architecture.pdf): PDF inclusion: invalid other resource which is no dict (key 'ProcSets', type <array>); ignored.
->]
-
-Package natbib Warning: Citation `gilmer_messgae_passing' on page 5 undefined on input line 156.
-
-
-Package natbib Warning: Citation `PyG' on page 5 undefined on input line 158.
-
-
-Package natbib Warning: Citation `DGL' on page 5 undefined on input line 158.
-
-<figs/illustration/GNN_Unit.pdf, id=224, 244.9953pt x 218.7372pt>
+[3] [4]
 File: figs/illustration/GNN_Unit.pdf Graphic file (type pdf)
 <use figs/illustration/GNN_Unit.pdf>
-Package pdftex.def Info: figs/illustration/GNN_Unit.pdf  used on input line 166.
-(pdftex.def)             Requested size: 221.78923pt x 198.02649pt.
-
-Package natbib Warning: Citation `huang2018_gat' on page 5 undefined on input line 201.
-
-
-Package natbib Warning: Citation `zhang2018_gaan' on page 5 undefined on input line 201.
-
-[5 <./figs/illustration/GNN_Unit.pdf>]
-LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <8> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 225.
-
-
-Package natbib Warning: Citation `defferrad2016_chebnet' on page 6 undefined on input line 225.
-
-
-Package natbib Warning: Citation `kipf2017_gcn' on page 6 undefined on input line 230.
-
-
-Package natbib Warning: Citation `li2018_agcn' on page 6 undefined on input line 235.
-
-
-Package natbib Warning: Citation `hamilton2017_graphsage' on page 6 undefined on input line 240.
-
-
-Package natbib Warning: Citation `hamilton2017_graphsage' on page 6 undefined on input line 245.
-
-
-Package natbib Warning: Citation `duvenaud2015_neural_fps' on page 6 undefined on input line 250.
-
-
-Package natbib Warning: Citation `han2018_sse' on page 6 undefined on input line 255.
-
-
-Package natbib Warning: Citation `li2015_ggnn' on page 6 undefined on input line 260.
-
-
-Package natbib Warning: Citation `huang2018_gat' on page 6 undefined on input line 265.
-
-
+ [5]
 Overfull \hbox (26.91475pt too wide) in paragraph at lines 269--278
 []|$[][]$| 
  []
-
-
-Package natbib Warning: Citation `zhang2018_gaan' on page 6 undefined on input line 287.
 
 
 Overfull \hbox (35.72496pt too wide) in paragraph at lines 291--303
@@ -780,7 +697,7 @@ Overfull \hbox (35.72496pt too wide) in paragraph at lines 291--303
  []
 
 
-Overfull \hbox (37.74033pt too wide) in paragraph at lines 216--317
+Overfull \hbox (57.90947pt too wide) in paragraph at lines 216--317
 []   []
  []
 
@@ -789,661 +706,245 @@ Underfull \hbox (badness 10000) in paragraph at lines 216--317
 
  []
 
-
-Package natbib Warning: Citation `defferrad2016_chebnet' on page 6 undefined on input line 329.
-
-
-Package natbib Warning: Citation `kipf2017_gcn' on page 6 undefined on input line 332.
-
-
-Package natbib Warning: Citation `li2018_agcn' on page 6 undefined on input line 335.
-
-
-Package natbib Warning: Citation `hamilton2017_graphsage' on page 6 undefined on input line 338.
-
-
-Package natbib Warning: Citation `hamilton2017_graphsage' on page 6 undefined on input line 341.
-
-
-Package natbib Warning: Citation `duvenaud2015_neural_fps' on page 6 undefined on input line 344.
-
-
-Package natbib Warning: Citation `han2018_sse' on page 6 undefined on input line 347.
-
-
-Package natbib Warning: Citation `li2015_ggnn' on page 6 undefined on input line 350.
-
-
-Package natbib Warning: Citation `huang2018_gat' on page 6 undefined on input line 362.
-
-
-Package natbib Warning: Citation `zhang2018_gaan' on page 6 undefined on input line 381.
-
 [6]
-<figs/illustration/GNN_complexity_quadrant.pdf, id=284, 435.54718pt x 239.93639pt>
 File: figs/illustration/GNN_complexity_quadrant.pdf Graphic file (type pdf)
 <use figs/illustration/GNN_complexity_quadrant.pdf>
-Package pdftex.def Info: figs/illustration/GNN_complexity_quadrant.pdf  used on input line 418.
-(pdftex.def)             Requested size: 354.86412pt x 195.49333pt.
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-
-Package natbib Warning: Citation `kipf2017_gcn' on page 7 undefined on input line 425.
-
-
-Package natbib Warning: Citation `li2015_ggnn' on page 7 undefined on input line 439.
-
-[7]
-
-Package natbib Warning: Citation `huang2018_gat' on page 8 undefined on input line 455.
-
-[8 <./figs/illustration/GNN_complexity_quadrant.pdf>]
-
-Package natbib Warning: Citation `zhang2018_gaan' on page 9 undefined on input line 495.
-
-
-Package natbib Warning: Citation `chiang2019_cluster_gcn' on page 9 undefined on input line 509.
-
-
-Package natbib Warning: Citation `hamilton2017_graphsage' on page 9 undefined on input line 520.
-
-
-Package natbib Warning: Citation `ying2018_pinsage' on page 9 undefined on input line 520.
-
-
-Package natbib Warning: Citation `chen2018_fastgcn' on page 9 undefined on input line 520.
-
-
-Package natbib Warning: Citation `chen2018_sgcn' on page 9 undefined on input line 520.
-
-
-Package natbib Warning: Citation `huang2018_adap' on page 9 undefined on input line 520.
-
-
-Package natbib Warning: Citation `hamilton2017_graphsage' on page 9 undefined on input line 522.
-
-<figs/illustration/layer_sampling.pdf, id=322, 744.86276pt x 476.74109pt>
+[7] [8]
 File: figs/illustration/layer_sampling.pdf Graphic file (type pdf)
 <use figs/illustration/layer_sampling.pdf>
-Package pdftex.def Info: figs/illustration/layer_sampling.pdf  used on input line 531.
-(pdftex.def)             Requested size: 200.04726pt x 128.0374pt.
-<figs/illustration/graph_sampling.pdf, id=323, 1110.06712pt x 476.74109pt>
 File: figs/illustration/graph_sampling.pdf Graphic file (type pdf)
 <use figs/illustration/graph_sampling.pdf>
-Package pdftex.def Info: figs/illustration/graph_sampling.pdf  used on input line 533.
-(pdftex.def)             Requested size: 298.12993pt x 128.0374pt.
 
 Overfull \hbox (54.59871pt too wide) in paragraph at lines 531--534
  [][][][] 
  []
 
-
-Package natbib Warning: Citation `zeng2018_aesg' on page 9 undefined on input line 538.
-
-
-Package natbib Warning: Citation `chiang2019_cluster_gcn' on page 9 undefined on input line 538.
-
-
-Package natbib Warning: Citation `zeng2020_graphsaint' on page 9 undefined on input line 538.
-
-
-Package natbib Warning: Citation `chiang2019_cluster_gcn' on page 9 undefined on input line 540.
-
-) (./sec3-experiment-design.tex [9 <./figs/illustration/layer_sampling.pdf> <./figs/illustration/graph_sampling.pdf>]
-
-Package natbib Warning: Citation `yang2016_revisiting_semisupervised' on page 10 undefined on input line 19.
-
-
-Package natbib Warning: Citation `zeng2020_graphsaint' on page 10 undefined on input line 19.
-
-
-Package natbib Warning: Citation `shchur2018_pitfall_of_gnn' on page 10 undefined on input line 19.
-
-
-Package natbib Warning: Citation `rmat-generator' on page 10 undefined on input line 24.
-
-
-Package natbib Warning: Citation `yang2016_revisiting_semisupervised' on page 10 undefined on input line 34.
-
-
-Package natbib Warning: Citation `shchur2018_pitfall_of_gnn' on page 10 undefined on input line 35.
-
-
-Package natbib Warning: Citation `shchur2018_pitfall_of_gnn' on page 10 undefined on input line 36.
-
-
-Package natbib Warning: Citation `shchur2018_pitfall_of_gnn' on page 10 undefined on input line 37.
-
-
-Package natbib Warning: Citation `zeng2020_graphsaint' on page 10 undefined on input line 38.
-
-
-Package natbib Warning: Citation `yang2012_defining' on page 10 undefined on input line 39.
-
-
-Package natbib Warning: Citation `kipf2017_gcn' on page 10 undefined on input line 56.
-
-
-Package natbib Warning: Citation `huang2018_gat' on page 10 undefined on input line 56.
-
-
-Package natbib Warning: Citation `zhang2018_gaan' on page 10 undefined on input line 56.
-
-
-Package natbib Warning: Citation `kipf2017_gcn' on page 10 undefined on input line 64.
-
-
-Package natbib Warning: Citation `li2015_ggnn' on page 10 undefined on input line 64.
-
-
-Package natbib Warning: Citation `huang2018_gat' on page 10 undefined on input line 64.
-
-
-Package natbib Warning: Citation `zhang2018_gaan' on page 10 undefined on input line 64.
-
-
-Package natbib Warning: Citation `hamilton2017_graphsage' on page 10 undefined on input line 84.
-
-
-Package natbib Warning: Citation `chiang2019_cluster_gcn' on page 10 undefined on input line 84.
-
-
-Package natbib Warning: Citation `hamilton2017_graphsage' on page 10 undefined on input line 88.
-
-
-Package natbib Warning: Citation `chiang2019_cluster_gcn' on page 10 undefined on input line 90.
-
-[10]) (./sec4-experiments.tex [11]
-<figs/experiments/exp_absolute_training_time_comparison_pubmed.pdf, id=419, 168.63pt x 168.63pt>
-File: figs/experiments/exp_absolute_training_time_comparison_pubmed.pdf Graphic file (type pdf)
+) (./sec3-experiment-design.tex [9] [10] [11]) (./sec4-experiments.tex
+File: figs/experiments/exp_absolute_training_time_comparison_pubmed.pdf Graphic
+ file (type pdf)
 <use figs/experiments/exp_absolute_training_time_comparison_pubmed.pdf>
-Package pdftex.def Info: figs/experiments/exp_absolute_training_time_comparison_pubmed.pdf  used on input line 24.
-(pdftex.def)             Requested size: 113.8126pt x 113.81102pt.
-<figs/experiments/exp_absolute_training_time_comparison_amazon-photo.pdf, id=420, 168.63pt x 168.63pt>
-File: figs/experiments/exp_absolute_training_time_comparison_amazon-photo.pdf Graphic file (type pdf)
+File: figs/experiments/exp_absolute_training_time_comparison_amazon-photo.pdf G
+raphic file (type pdf)
 <use figs/experiments/exp_absolute_training_time_comparison_amazon-photo.pdf>
-Package pdftex.def Info: figs/experiments/exp_absolute_training_time_comparison_amazon-photo.pdf  used on input line 25.
-(pdftex.def)             Requested size: 113.8126pt x 113.81102pt.
-<figs/experiments/exp_absolute_training_time_comparison_coauthor-physics.pdf, id=421, 168.63pt x 168.63pt>
-File: figs/experiments/exp_absolute_training_time_comparison_coauthor-physics.pdf Graphic file (type pdf)
-<use figs/experiments/exp_absolute_training_time_comparison_coauthor-physics.pdf>
-Package pdftex.def Info: figs/experiments/exp_absolute_training_time_comparison_coauthor-physics.pdf  used on input line 26.
-(pdftex.def)             Requested size: 113.8126pt x 113.81102pt.
-<figs/experiments/exp_absolute_training_time_comparison_amazon-computers.pdf, id=422, 168.63pt x 168.63pt>
-File: figs/experiments/exp_absolute_training_time_comparison_amazon-computers.pdf Graphic file (type pdf)
-<use figs/experiments/exp_absolute_training_time_comparison_amazon-computers.pdf>
-Package pdftex.def Info: figs/experiments/exp_absolute_training_time_comparison_amazon-computers.pdf  used on input line 27.
-(pdftex.def)             Requested size: 113.8126pt x 113.81102pt.
-<figs/experiments/exp_absolute_training_time_comparison_flickr.pdf, id=423, 168.63pt x 168.63pt>
-File: figs/experiments/exp_absolute_training_time_comparison_flickr.pdf Graphic file (type pdf)
+File: figs/experiments/exp_absolute_training_time_comparison_coauthor-physics.p
+df Graphic file (type pdf)
+<use figs/experiments/exp_absolute_training_time_comparison_coauthor-physics.pd
+f>
+File: figs/experiments/exp_absolute_training_time_comparison_amazon-computers.p
+df Graphic file (type pdf)
+<use figs/experiments/exp_absolute_training_time_comparison_amazon-computers.pd
+f>
+File: figs/experiments/exp_absolute_training_time_comparison_flickr.pdf Graphic
+ file (type pdf)
 <use figs/experiments/exp_absolute_training_time_comparison_flickr.pdf>
-Package pdftex.def Info: figs/experiments/exp_absolute_training_time_comparison_flickr.pdf  used on input line 28.
-(pdftex.def)             Requested size: 113.8126pt x 113.81102pt.
-<figs/experiments/exp_absolute_training_time_comparison_com-amazon.pdf, id=424, 168.63pt x 168.63pt>
-File: figs/experiments/exp_absolute_training_time_comparison_com-amazon.pdf Graphic file (type pdf)
+File: figs/experiments/exp_absolute_training_time_comparison_com-amazon.pdf Gra
+phic file (type pdf)
 <use figs/experiments/exp_absolute_training_time_comparison_com-amazon.pdf>
-Package pdftex.def Info: figs/experiments/exp_absolute_training_time_comparison_com-amazon.pdf  used on input line 29.
-(pdftex.def)             Requested size: 113.8126pt x 113.81102pt.
-<figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gcn.pdf, id=426, 505.89pt x 252.945pt>
-File: figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gcn.pdf Graphic file (type pdf)
+File: figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gcn.pdf Gra
+phic file (type pdf)
 <use figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gcn.pdf>
-Package pdftex.def Info: figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gcn.pdf  used on input line 38.
-(pdftex.def)             Requested size: 170.71892pt x 85.35826pt.
-<figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_ggnn.pdf, id=427, 505.89pt x 252.945pt>
-File: figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_ggnn.pdf Graphic file (type pdf)
+File: figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_ggnn.pdf Gr
+aphic file (type pdf)
 <use figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_ggnn.pdf>
-Package pdftex.def Info: figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_ggnn.pdf  used on input line 40.
-(pdftex.def)             Requested size: 170.71892pt x 85.35826pt.
-<figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gat.pdf, id=428, 505.89pt x 505.89pt>
-File: figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gat.pdf Graphic file (type pdf)
+File: figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gat.pdf Gra
+phic file (type pdf)
 <use figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gat.pdf>
-Package pdftex.def Info: figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gat.pdf  used on input line 42.
-(pdftex.def)             Requested size: 170.71892pt x 170.71652pt.
-<figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gaan.pdf, id=429, 505.89pt x 385.44pt>
-File: figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gaan.pdf Graphic file (type pdf)
+File: figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gaan.pdf Gr
+aphic file (type pdf)
 <use figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gaan.pdf>
-Package pdftex.def Info: figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gaan.pdf  used on input line 44.
-(pdftex.def)             Requested size: 224.05893pt x 170.71652pt.
- [12 <./figs/experiments/exp_absolute_training_time_comparison_pubmed.pdf> <./figs/experiments/exp_absolute_training_time_comparison_amazon-photo.pdf
-
-pdfTeX warning: pdflatex.exe (file ./figs/experiments/exp_absolute_training_time_comparison_amazon-photo.pdf): PDF inclusion: multiple pdfs with page group included in a single page
-> <./figs/experiments/exp_absolute_training_time_comparison_coauthor-physics.pdf
-
-pdfTeX warning: pdflatex.exe (file ./figs/experiments/exp_absolute_training_time_comparison_coauthor-physics.pdf): PDF inclusion: multiple pdfs with page group included in a single page
-> <./figs/experiments/exp_absolute_training_time_comparison_amazon-computers.pdf
-
-pdfTeX warning: pdflatex.exe (file ./figs/experiments/exp_absolute_training_time_comparison_amazon-computers.pdf): PDF inclusion: multiple pdfs with page group included in a single page
-> <./figs/experiments/exp_absolute_training_time_comparison_flickr.pdf
-
-pdfTeX warning: pdflatex.exe (file ./figs/experiments/exp_absolute_training_time_comparison_flickr.pdf): PDF inclusion: multiple pdfs with page group included in a single page
-> <./figs/experiments/exp_absolute_training_time_comparison_com-amazon.pdf
-
-pdfTeX warning: pdflatex.exe (file ./figs/experiments/exp_absolute_training_time_comparison_com-amazon.pdf): PDF inclusion: multiple pdfs with page group included in a single page
->] [13 <./figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gcn.pdf> <./figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_ggnn.pdf
-
-pdfTeX warning: pdflatex.exe (file ./figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_ggnn.pdf): PDF inclusion: multiple pdfs with page group included in a single page
-> <./figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gat.pdf
-
-pdfTeX warning: pdflatex.exe (file ./figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gat.pdf): PDF inclusion: multiple pdfs with page group included in a single page
-> <./figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gaan.pdf
-
-pdfTeX warning: pdflatex.exe (file ./figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gaan.pdf): PDF inclusion: multiple pdfs with page group included in a single page
->]
-<figs/experiments/exp_hyperparameter_on_memory_usage_gcn.pdf, id=999, 252.945pt x 289.08pt>
-File: figs/experiments/exp_hyperparameter_on_memory_usage_gcn.pdf Graphic file (type pdf)
+ [12]
+[13]
+File: figs/experiments/exp_hyperparameter_on_memory_usage_gcn.pdf Graphic file 
+(type pdf)
 <use figs/experiments/exp_hyperparameter_on_memory_usage_gcn.pdf>
-Package pdftex.def Info: figs/experiments/exp_hyperparameter_on_memory_usage_gcn.pdf  used on input line 85.
-(pdftex.def)             Requested size: 74.68759pt x 85.35826pt.
-<figs/experiments/exp_hyperparameter_on_memory_usage_ggnn.pdf, id=1000, 252.945pt x 289.08pt>
-File: figs/experiments/exp_hyperparameter_on_memory_usage_ggnn.pdf Graphic file (type pdf)
+File: figs/experiments/exp_hyperparameter_on_memory_usage_ggnn.pdf Graphic file
+ (type pdf)
 <use figs/experiments/exp_hyperparameter_on_memory_usage_ggnn.pdf>
-Package pdftex.def Info: figs/experiments/exp_hyperparameter_on_memory_usage_ggnn.pdf  used on input line 86.
-(pdftex.def)             Requested size: 74.68759pt x 85.35826pt.
-<figs/experiments/exp_hyperparameter_on_memory_usage_gat.pdf, id=1001, 505.89pt x 252.945pt>
-File: figs/experiments/exp_hyperparameter_on_memory_usage_gat.pdf Graphic file (type pdf)
+File: figs/experiments/exp_hyperparameter_on_memory_usage_gat.pdf Graphic file 
+(type pdf)
 <use figs/experiments/exp_hyperparameter_on_memory_usage_gat.pdf>
-Package pdftex.def Info: figs/experiments/exp_hyperparameter_on_memory_usage_gat.pdf  used on input line 87.
-(pdftex.def)             Requested size: 170.71892pt x 85.35826pt.
-<figs/experiments/exp_hyperparameter_on_memory_usage_gaan.pdf, id=1002, 505.89pt x 192.72pt>
-File: figs/experiments/exp_hyperparameter_on_memory_usage_gaan.pdf Graphic file (type pdf)
+File: figs/experiments/exp_hyperparameter_on_memory_usage_gaan.pdf Graphic file
+ (type pdf)
 <use figs/experiments/exp_hyperparameter_on_memory_usage_gaan.pdf>
-Package pdftex.def Info: figs/experiments/exp_hyperparameter_on_memory_usage_gaan.pdf  used on input line 88.
-(pdftex.def)             Requested size: 224.05893pt x 85.35826pt.
- [14 <./figs/experiments/exp_hyperparameter_on_memory_usage_gcn.pdf> <./figs/experiments/exp_hyperparameter_on_memory_usage_ggnn.pdf
-
-pdfTeX warning: pdflatex.exe (file ./figs/experiments/exp_hyperparameter_on_memory_usage_ggnn.pdf): PDF inclusion: multiple pdfs with page group included in a single page
-> <./figs/experiments/exp_hyperparameter_on_memory_usage_gat.pdf
-
-pdfTeX warning: pdflatex.exe (file ./figs/experiments/exp_hyperparameter_on_memory_usage_gat.pdf): PDF inclusion: multiple pdfs with page group included in a single page
-> <./figs/experiments/exp_hyperparameter_on_memory_usage_gaan.pdf
-
-pdfTeX warning: pdflatex.exe (file ./figs/experiments/exp_hyperparameter_on_memory_usage_gaan.pdf): PDF inclusion: multiple pdfs with page group included in a single page
->]
-<figs/experiments/exp_layer_time_proportion_gcn.pdf, id=1278, 664.88402pt x 361.35pt>
-File: figs/experiments/exp_layer_time_proportion_gcn.pdf Graphic file (type pdf)
+ [14]
+File: figs/experiments/exp_layer_time_proportion_gcn.pdf Graphic file (type pdf
+)
 <use figs/experiments/exp_layer_time_proportion_gcn.pdf>
-Package pdftex.def Info: figs/experiments/exp_layer_time_proportion_gcn.pdf  used on input line 120.
-(pdftex.def)             Requested size: 240.81898pt x 130.88284pt.
-<figs/experiments/exp_layer_time_proportion_ggnn.pdf, id=1279, 664.88402pt x 361.35pt>
-File: figs/experiments/exp_layer_time_proportion_ggnn.pdf Graphic file (type pdf)
+File: figs/experiments/exp_layer_time_proportion_ggnn.pdf Graphic file (type pd
+f)
 <use figs/experiments/exp_layer_time_proportion_ggnn.pdf>
-Package pdftex.def Info: figs/experiments/exp_layer_time_proportion_ggnn.pdf  used on input line 121.
-(pdftex.def)             Requested size: 240.81898pt x 130.88284pt.
 
-Overfull \hbox (38.0595pt too wide) in paragraph at lines 120--121
+Overfull \hbox (38.05946pt too wide) in paragraph at lines 120--121
  [][][][] 
  []
 
-<figs/experiments/exp_layer_time_proportion_gat.pdf, id=1280, 664.88402pt x 361.35pt>
-File: figs/experiments/exp_layer_time_proportion_gat.pdf Graphic file (type pdf)
+File: figs/experiments/exp_layer_time_proportion_gat.pdf Graphic file (type pdf
+)
 <use figs/experiments/exp_layer_time_proportion_gat.pdf>
-Package pdftex.def Info: figs/experiments/exp_layer_time_proportion_gat.pdf  used on input line 122.
-(pdftex.def)             Requested size: 240.81898pt x 130.88284pt.
-<figs/experiments/exp_layer_time_proportion_gaan.pdf, id=1281, 664.88402pt x 361.35pt>
-File: figs/experiments/exp_layer_time_proportion_gaan.pdf Graphic file (type pdf)
+File: figs/experiments/exp_layer_time_proportion_gaan.pdf Graphic file (type pd
+f)
 <use figs/experiments/exp_layer_time_proportion_gaan.pdf>
-Package pdftex.def Info: figs/experiments/exp_layer_time_proportion_gaan.pdf  used on input line 123.
-(pdftex.def)             Requested size: 240.81898pt x 130.88284pt.
 
-Overfull \hbox (38.0595pt too wide) in paragraph at lines 122--124
+Overfull \hbox (38.05946pt too wide) in paragraph at lines 122--124
  [][][][] 
  []
 
-[15 <./figs/experiments/exp_layer_time_proportion_gcn.pdf> <./figs/experiments/exp_layer_time_proportion_ggnn.pdf
-
-pdfTeX warning: pdflatex.exe (file ./figs/experiments/exp_layer_time_proportion_ggnn.pdf): PDF inclusion: multiple pdfs with page group included in a single page
-> <./figs/experiments/exp_layer_time_proportion_gat.pdf
-
-pdfTeX warning: pdflatex.exe (file ./figs/experiments/exp_layer_time_proportion_gat.pdf): PDF inclusion: multiple pdfs with page group included in a single page
-> <./figs/experiments/exp_layer_time_proportion_gaan.pdf
-
-pdfTeX warning: pdflatex.exe (file ./figs/experiments/exp_layer_time_proportion_gaan.pdf): PDF inclusion: multiple pdfs with page group included in a single page
->]
-<figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_gcn.pdf, id=1490, 505.89pt x 346.89601pt>
-File: figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_gcn.pdf Graphic file (type pdf)
+[15]
+File: figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_gcn.pdf Graphic f
+ile (type pdf)
 <use figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_gcn.pdf>
-Package pdftex.def Info: figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_gcn.pdf  used on input line 160.
-(pdftex.def)             Requested size: 165.97157pt x 113.81102pt.
-<figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_ggnn.pdf, id=1491, 505.89pt x 346.89601pt>
-File: figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_ggnn.pdf Graphic file (type pdf)
+File: figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_ggnn.pdf Graphic 
+file (type pdf)
 <use figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_ggnn.pdf>
-Package pdftex.def Info: figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_ggnn.pdf  used on input line 161.
-(pdftex.def)             Requested size: 165.97157pt x 113.81102pt.
-<figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_gat.pdf, id=1492, 505.89pt x 346.89601pt>
-File: figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_gat.pdf Graphic file (type pdf)
+File: figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_gat.pdf Graphic f
+ile (type pdf)
 <use figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_gat.pdf>
-Package pdftex.def Info: figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_gat.pdf  used on input line 162.
-(pdftex.def)             Requested size: 165.97157pt x 113.81102pt.
-<figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_gaan.pdf, id=1493, 505.89pt x 346.89601pt>
-File: figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_gaan.pdf Graphic file (type pdf)
+File: figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_gaan.pdf Graphic 
+file (type pdf)
 <use figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_gaan.pdf>
-Package pdftex.def Info: figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_gaan.pdf  used on input line 163.
-(pdftex.def)             Requested size: 165.97157pt x 113.81102pt.
-<figs/illustration/steps_in_edge_calculation.pdf, id=1495, 564.18782pt x 151.5261pt>
+ [16]
 File: figs/illustration/steps_in_edge_calculation.pdf Graphic file (type pdf)
 <use figs/illustration/steps_in_edge_calculation.pdf>
-Package pdftex.def Info: figs/illustration/steps_in_edge_calculation.pdf  used on input line 194.
-(pdftex.def)             Requested size: 443.57848pt x 119.13782pt.
- [16 <./figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_gcn.pdf> <./figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_ggnn.pdf
-
-pdfTeX warning: pdflatex.exe (file ./figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_ggnn.pdf): PDF inclusion: multiple pdfs with page group included in a single page
-> <./figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_gat.pdf
-
-pdfTeX warning: pdflatex.exe (file ./figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_gat.pdf): PDF inclusion: multiple pdfs with page group included in a single page
-> <./figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_gaan.pdf
-
-pdfTeX warning: pdflatex.exe (file ./figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_gaan.pdf): PDF inclusion: multiple pdfs with page group included in a single page
->]
-<figs/experiments/exp_edge_calc_decomposition_gcn.pdf, id=1702, 664.88402pt x 361.35pt>
-File: figs/experiments/exp_edge_calc_decomposition_gcn.pdf Graphic file (type pdf)
+File: figs/experiments/exp_edge_calc_decomposition_gcn.pdf Graphic file (type p
+df)
 <use figs/experiments/exp_edge_calc_decomposition_gcn.pdf>
-Package pdftex.def Info: figs/experiments/exp_edge_calc_decomposition_gcn.pdf  used on input line 223.
-(pdftex.def)             Requested size: 209.40913pt x 113.81102pt.
-<figs/experiments/exp_edge_calc_decomposition_ggnn.pdf, id=1703, 664.88402pt x 361.35pt>
-File: figs/experiments/exp_edge_calc_decomposition_ggnn.pdf Graphic file (type pdf)
+File: figs/experiments/exp_edge_calc_decomposition_ggnn.pdf Graphic file (type 
+pdf)
 <use figs/experiments/exp_edge_calc_decomposition_ggnn.pdf>
-Package pdftex.def Info: figs/experiments/exp_edge_calc_decomposition_ggnn.pdf  used on input line 224.
-(pdftex.def)             Requested size: 209.40913pt x 113.81102pt.
-<figs/experiments/exp_edge_calc_decomposition_gat.pdf, id=1704, 664.88402pt x 361.35pt>
-File: figs/experiments/exp_edge_calc_decomposition_gat.pdf Graphic file (type pdf)
+File: figs/experiments/exp_edge_calc_decomposition_gat.pdf Graphic file (type p
+df)
 <use figs/experiments/exp_edge_calc_decomposition_gat.pdf>
-Package pdftex.def Info: figs/experiments/exp_edge_calc_decomposition_gat.pdf  used on input line 225.
-(pdftex.def)             Requested size: 209.40913pt x 113.81102pt.
-<figs/experiments/exp_edge_calc_decomposition_gaan.pdf, id=1705, 664.88402pt x 361.35pt>
-File: figs/experiments/exp_edge_calc_decomposition_gaan.pdf Graphic file (type pdf)
+File: figs/experiments/exp_edge_calc_decomposition_gaan.pdf Graphic file (type 
+pdf)
 <use figs/experiments/exp_edge_calc_decomposition_gaan.pdf>
-Package pdftex.def Info: figs/experiments/exp_edge_calc_decomposition_gaan.pdf  used on input line 226.
-(pdftex.def)             Requested size: 209.40913pt x 113.81102pt.
- [17 <./figs/illustration/steps_in_edge_calculation.pdf> <./figs/experiments/exp_edge_calc_decomposition_gcn.pdf> <./figs/experiments/exp_edge_calc_decomposition_ggnn.pdf
-
-pdfTeX warning: pdflatex.exe (file ./figs/experiments/exp_edge_calc_decomposition_ggnn.pdf): PDF inclusion: multiple pdfs with page group included in a single page
-> <./figs/experiments/exp_edge_calc_decomposition_gat.pdf
-
-pdfTeX warning: pdflatex.exe (file ./figs/experiments/exp_edge_calc_decomposition_gat.pdf): PDF inclusion: multiple pdfs with page group included in a single page
-> <./figs/experiments/exp_edge_calc_decomposition_gaan.pdf
-
-pdfTeX warning: pdflatex.exe (file ./figs/experiments/exp_edge_calc_decomposition_gaan.pdf): PDF inclusion: multiple pdfs with page group included in a single page
->]
-<figs/experiments/exp_top_basic_ops_gcn.pdf, id=1916, 462.52798pt x 346.89601pt>
+ [17]
 File: figs/experiments/exp_top_basic_ops_gcn.pdf Graphic file (type pdf)
 <use figs/experiments/exp_top_basic_ops_gcn.pdf>
-Package pdftex.def Info: figs/experiments/exp_top_basic_ops_gcn.pdf  used on input line 239.
-(pdftex.def)             Requested size: 151.74544pt x 113.81102pt.
-<figs/experiments/exp_top_basic_ops_ggnn.pdf, id=1917, 462.52798pt x 346.89601pt>
 File: figs/experiments/exp_top_basic_ops_ggnn.pdf Graphic file (type pdf)
 <use figs/experiments/exp_top_basic_ops_ggnn.pdf>
-Package pdftex.def Info: figs/experiments/exp_top_basic_ops_ggnn.pdf  used on input line 240.
-(pdftex.def)             Requested size: 151.74544pt x 113.81102pt.
-<figs/experiments/exp_top_basic_ops_gat.pdf, id=1918, 462.52798pt x 346.89601pt>
 File: figs/experiments/exp_top_basic_ops_gat.pdf Graphic file (type pdf)
 <use figs/experiments/exp_top_basic_ops_gat.pdf>
-Package pdftex.def Info: figs/experiments/exp_top_basic_ops_gat.pdf  used on input line 241.
-(pdftex.def)             Requested size: 151.74544pt x 113.81102pt.
-<figs/experiments/exp_top_basic_ops_gaan.pdf, id=1919, 462.52798pt x 346.89601pt>
 File: figs/experiments/exp_top_basic_ops_gaan.pdf Graphic file (type pdf)
 <use figs/experiments/exp_top_basic_ops_gaan.pdf>
-Package pdftex.def Info: figs/experiments/exp_top_basic_ops_gaan.pdf  used on input line 242.
-(pdftex.def)             Requested size: 151.74544pt x 113.81102pt.
- [18 <./figs/experiments/exp_top_basic_ops_gcn.pdf> <./figs/experiments/exp_top_basic_ops_ggnn.pdf
 
-pdfTeX warning: pdflatex.exe (file ./figs/experiments/exp_top_basic_ops_ggnn.pdf): PDF inclusion: multiple pdfs with page group included in a single page
-> <./figs/experiments/exp_top_basic_ops_gat.pdf
+Overfull \hbox (1.07353pt too wide) in paragraph at lines 259--266
+\TU/pcr/m/n/10 complexity, the proportion of mm was much higher than the other 
+operators. The thnn_fused_gru_cell
+ []
 
-pdfTeX warning: pdflatex.exe (file ./figs/experiments/exp_top_basic_ops_gat.pdf): PDF inclusion: multiple pdfs with page group included in a single page
-> <./figs/experiments/exp_top_basic_ops_gaan.pdf
-
-pdfTeX warning: pdflatex.exe (file ./figs/experiments/exp_top_basic_ops_gaan.pdf): PDF inclusion: multiple pdfs with page group included in a single page
->]
-<figs/experiments/exp_memory_usage_stage_amp.pdf, id=2082, 462.52798pt x 346.89601pt>
+[18]
 File: figs/experiments/exp_memory_usage_stage_amp.pdf Graphic file (type pdf)
 <use figs/experiments/exp_memory_usage_stage_amp.pdf>
-Package pdftex.def Info: figs/experiments/exp_memory_usage_stage_amp.pdf  used on input line 348.
-(pdftex.def)             Requested size: 189.68709pt x 142.26378pt.
-<figs/illustration/ggnn_vertex_func_computation_graph.pdf, id=2083, 788.9475pt x 435.54718pt>
-File: figs/illustration/ggnn_vertex_func_computation_graph.pdf Graphic file (type pdf)
+File: figs/illustration/ggnn_vertex_func_computation_graph.pdf Graphic file (ty
+pe pdf)
 <use figs/illustration/ggnn_vertex_func_computation_graph.pdf>
-Package pdftex.def Info: figs/illustration/ggnn_vertex_func_computation_graph.pdf  used on input line 355.
-(pdftex.def)             Requested size: 310.50357pt x 171.41785pt.
- [19 <./figs/experiments/exp_memory_usage_stage_amp.pdf> <./figs/illustration/ggnn_vertex_func_computation_graph.pdf>]
-<figs/experiments/exp_memory_expansion_ratio.pdf, id=2160, 462.52798pt x 346.89601pt>
+ [19]
 File: figs/experiments/exp_memory_expansion_ratio.pdf Graphic file (type pdf)
 <use figs/experiments/exp_memory_expansion_ratio.pdf>
-Package pdftex.def Info: figs/experiments/exp_memory_expansion_ratio.pdf  used on input line 376.
-(pdftex.def)             Requested size: 221.78923pt x 166.3441pt.
-<figs/experiments/exp_memory_expansion_ratio_input_feature_dimension_com-amazon.pdf, id=2162, 462.52798pt x 346.89601pt>
-File: figs/experiments/exp_memory_expansion_ratio_input_feature_dimension_com-amazon.pdf Graphic file (type pdf)
-<use figs/experiments/exp_memory_expansion_ratio_input_feature_dimension_com-amazon.pdf>
-Package pdftex.def Info: figs/experiments/exp_memory_expansion_ratio_input_feature_dimension_com-amazon.pdf  used on input line 392.
-(pdftex.def)             Requested size: 189.68709pt x 142.26378pt.
-<figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_edges_peak_memory.pdf, id=2164, 462.52798pt x 346.89601pt>
-File: figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_edges_peak_memory.pdf Graphic file (type pdf)
-<use figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_edges_peak_memory.pdf>
-Package pdftex.def Info: figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_edges_peak_memory.pdf  used on input line 417.
-(pdftex.def)             Requested size: 151.74544pt x 113.81102pt.
-<figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_edges_expansion_ratio.pdf, id=2165, 462.52798pt x 346.89601pt>
-File: figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_edges_expansion_ratio.pdf Graphic file (type pdf)
-<use figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_edges_expansion_ratio.pdf>
-Package pdftex.def Info: figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_edges_expansion_ratio.pdf  used on input line 418.
-(pdftex.def)             Requested size: 151.74544pt x 113.81102pt.
- [20 <./figs/experiments/exp_memory_expansion_ratio.pdf> <./figs/experiments/exp_memory_expansion_ratio_input_feature_dimension_com-amazon.pdf
-
-pdfTeX warning: pdflatex.exe (file ./figs/experiments/exp_memory_expansion_ratio_input_feature_dimension_com-amazon.pdf): PDF inclusion: multiple pdfs with page group included in a single page
->]
-<figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_vertices_fixed_edge_peak_memory.pdf, id=2247, 462.52798pt x 346.89601pt>
-File: figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_vertices_fixed_edge_peak_memory.pdf Graphic file (type pdf)
-<use figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_vertices_fixed_edge_peak_memory.pdf>
-Package pdftex.def Info: figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_vertices_fixed_edge_peak_memory.pdf  used on input line 437.
-(pdftex.def)             Requested size: 151.74544pt x 113.81102pt.
-<figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_vertices_fixed_edge_expansion_ratio.pdf, id=2248, 462.52798pt x 346.89601pt>
-File: figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_vertices_fixed_edge_expansion_ratio.pdf Graphic file (type pdf)
-<use figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_vertices_fixed_edge_expansion_ratio.pdf>
-Package pdftex.def Info: figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_vertices_fixed_edge_expansion_ratio.pdf  used on input line 438.
-(pdftex.def)             Requested size: 151.74544pt x 113.81102pt.
- [21 <./figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_edges_peak_memory.pdf> <./figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_edges_expansion_ratio.pdf
-
-pdfTeX warning: pdflatex.exe (file ./figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_edges_expansion_ratio.pdf): PDF inclusion: multiple pdfs with page group included in a single page
-> <./figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_vertices_fixed_edge_peak_memory.pdf
-
-pdfTeX warning: pdflatex.exe (file ./figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_vertices_fixed_edge_peak_memory.pdf): PDF inclusion: multiple pdfs with page group included in a single page
-> <./figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_vertices_fixed_edge_expansion_ratio.pdf
-
-pdfTeX warning: pdflatex.exe (file ./figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_vertices_fixed_edge_expansion_ratio.pdf): PDF inclusion: multiple pdfs with page group included in a single page
->]
-<figs/experiments/exp_sampling_minibatch_realtive_graph_info_graphsage_gcn.pdf, id=2422, 1300.86pt x 346.89601pt>
-File: figs/experiments/exp_sampling_minibatch_realtive_graph_info_graphsage_gcn.pdf Graphic file (type pdf)
-<use figs/experiments/exp_sampling_minibatch_realtive_graph_info_graphsage_gcn.pdf>
-Package pdftex.def Info: figs/experiments/exp_sampling_minibatch_realtive_graph_info_graphsage_gcn.pdf  used on input line 494.
-(pdftex.def)             Requested size: 426.78409pt x 113.81102pt.
-<figs/experiments/exp_sampling_minibatch_realtive_graph_info_cluster_gcn.pdf, id=2423, 1300.86pt x 346.89601pt>
-File: figs/experiments/exp_sampling_minibatch_realtive_graph_info_cluster_gcn.pdf Graphic file (type pdf)
-<use figs/experiments/exp_sampling_minibatch_realtive_graph_info_cluster_gcn.pdf>
-Package pdftex.def Info: figs/experiments/exp_sampling_minibatch_realtive_graph_info_cluster_gcn.pdf  used on input line 495.
-(pdftex.def)             Requested size: 426.78409pt x 113.81102pt.
-<figs/experiments/exp_sampling_minibatch_degrees_distribution_amazon-photo.pdf, id=2426, 462.52798pt x 346.89601pt>
-File: figs/experiments/exp_sampling_minibatch_degrees_distribution_amazon-photo.pdf Graphic file (type pdf)
-<use figs/experiments/exp_sampling_minibatch_degrees_distribution_amazon-photo.pdf>
-Package pdftex.def Info: figs/experiments/exp_sampling_minibatch_degrees_distribution_amazon-photo.pdf  used on input line 516.
-(pdftex.def)             Requested size: 177.42868pt x 133.07104pt.
- [22 <./figs/experiments/exp_sampling_minibatch_realtive_graph_info_graphsage_gcn.pdf> <./figs/experiments/exp_sampling_minibatch_realtive_graph_info_cluster_gcn.pdf
-
-pdfTeX warning: pdflatex.exe (file ./figs/experiments/exp_sampling_minibatch_realtive_graph_info_cluster_gcn.pdf): PDF inclusion: multiple pdfs with page group included in a single page
->]
-<figs/experiments/exp_sampling_relative_batch_size_train_time_stack_graphsage_amazon-computers.pdf, id=2564, 462.52798pt x 346.89601pt>
-File: figs/experiments/exp_sampling_relative_batch_size_train_time_stack_graphsage_amazon-computers.pdf Graphic file (type pdf)
-<use figs/experiments/exp_sampling_relative_batch_size_train_time_stack_graphsage_amazon-computers.pdf>
-Package pdftex.def Info: figs/experiments/exp_sampling_relative_batch_size_train_time_stack_graphsage_amazon-computers.pdf  used on input line 546.
-(pdftex.def)             Requested size: 189.68709pt x 142.26378pt.
-<figs/experiments/exp_sampling_relative_batch_size_train_time_stack_graphsage_flickr.pdf, id=2565, 462.52798pt x 346.89601pt>
-File: figs/experiments/exp_sampling_relative_batch_size_train_time_stack_graphsage_flickr.pdf Graphic file (type pdf)
-<use figs/experiments/exp_sampling_relative_batch_size_train_time_stack_graphsage_flickr.pdf>
-Package pdftex.def Info: figs/experiments/exp_sampling_relative_batch_size_train_time_stack_graphsage_flickr.pdf  used on input line 547.
-(pdftex.def)             Requested size: 189.68709pt x 142.26378pt.
-<figs/experiments/exp_sampling_relative_batch_size_train_time_stack_cluster_amazon-computers.pdf, id=2566, 462.52798pt x 346.89601pt>
-File: figs/experiments/exp_sampling_relative_batch_size_train_time_stack_cluster_amazon-computers.pdf Graphic file (type pdf)
-<use figs/experiments/exp_sampling_relative_batch_size_train_time_stack_cluster_amazon-computers.pdf>
-Package pdftex.def Info: figs/experiments/exp_sampling_relative_batch_size_train_time_stack_cluster_amazon-computers.pdf  used on input line 548.
-(pdftex.def)             Requested size: 189.68709pt x 142.26378pt.
-<figs/experiments/exp_sampling_relative_batch_size_train_time_stack_cluster_flickr.pdf, id=2567, 462.52798pt x 346.89601pt>
-File: figs/experiments/exp_sampling_relative_batch_size_train_time_stack_cluster_flickr.pdf Graphic file (type pdf)
-<use figs/experiments/exp_sampling_relative_batch_size_train_time_stack_cluster_flickr.pdf>
-Package pdftex.def Info: figs/experiments/exp_sampling_relative_batch_size_train_time_stack_cluster_flickr.pdf  used on input line 549.
-(pdftex.def)             Requested size: 189.68709pt x 142.26378pt.
- [23 <./figs/experiments/exp_sampling_minibatch_degrees_distribution_amazon-photo.pdf>]
-<figs/experiments/exp_sampling_memory_usage_relative_batch_size_graphsage_amazon-computers_peak_memory.pdf, id=2613, 462.52798pt x 346.89601pt>
-File: figs/experiments/exp_sampling_memory_usage_relative_batch_size_graphsage_amazon-computers_peak_memory.pdf Graphic file (type pdf)
-<use figs/experiments/exp_sampling_memory_usage_relative_batch_size_graphsage_amazon-computers_peak_memory.pdf>
-Package pdftex.def Info: figs/experiments/exp_sampling_memory_usage_relative_batch_size_graphsage_amazon-computers_peak_memory.pdf  used on input line 564.
-(pdftex.def)             Requested size: 151.74544pt x 113.81102pt.
-<figs/experiments/exp_sampling_memory_usage_relative_batch_size_graphsage_flickr_peak_memory.pdf, id=2614, 462.52798pt x 346.89601pt>
-File: figs/experiments/exp_sampling_memory_usage_relative_batch_size_graphsage_flickr_peak_memory.pdf Graphic file (type pdf)
-<use figs/experiments/exp_sampling_memory_usage_relative_batch_size_graphsage_flickr_peak_memory.pdf>
-Package pdftex.def Info: figs/experiments/exp_sampling_memory_usage_relative_batch_size_graphsage_flickr_peak_memory.pdf  used on input line 565.
-(pdftex.def)             Requested size: 151.74544pt x 113.81102pt.
-<figs/experiments/exp_sampling_memory_usage_relative_batch_size_cluster_amazon-computers_peak_memory.pdf, id=2615, 462.52798pt x 346.89601pt>
-File: figs/experiments/exp_sampling_memory_usage_relative_batch_size_cluster_amazon-computers_peak_memory.pdf Graphic file (type pdf)
-<use figs/experiments/exp_sampling_memory_usage_relative_batch_size_cluster_amazon-computers_peak_memory.pdf>
-Package pdftex.def Info: figs/experiments/exp_sampling_memory_usage_relative_batch_size_cluster_amazon-computers_peak_memory.pdf  used on input line 566.
-(pdftex.def)             Requested size: 151.74544pt x 113.81102pt.
-<figs/experiments/exp_sampling_memory_usage_relative_batch_size_cluster_flickr_peak_memory.pdf, id=2616, 462.52798pt x 346.89601pt>
-File: figs/experiments/exp_sampling_memory_usage_relative_batch_size_cluster_flickr_peak_memory.pdf Graphic file (type pdf)
-<use figs/experiments/exp_sampling_memory_usage_relative_batch_size_cluster_flickr_peak_memory.pdf>
-Package pdftex.def Info: figs/experiments/exp_sampling_memory_usage_relative_batch_size_cluster_flickr_peak_memory.pdf  used on input line 567.
-(pdftex.def)             Requested size: 151.74544pt x 113.81102pt.
- [24 <./figs/experiments/exp_sampling_relative_batch_size_train_time_stack_graphsage_amazon-computers.pdf> <./figs/experiments/exp_sampling_relative_batch_size_train_time_stack_graphsage_flickr.pdf
-
-pdfTeX warning: pdflatex.exe (file ./figs/experiments/exp_sampling_relative_batch_size_train_time_stack_graphsage_flickr.pdf): PDF inclusion: multiple pdfs with page group included in a single page
-> <./figs/experiments/exp_sampling_relative_batch_size_train_time_stack_cluster_amazon-computers.pdf
-
-pdfTeX warning: pdflatex.exe (file ./figs/experiments/exp_sampling_relative_batch_size_train_time_stack_cluster_amazon-computers.pdf): PDF inclusion: multiple pdfs with page group included in a single page
-> <./figs/experiments/exp_sampling_relative_batch_size_train_time_stack_cluster_flickr.pdf
-
-pdfTeX warning: pdflatex.exe (file ./figs/experiments/exp_sampling_relative_batch_size_train_time_stack_cluster_flickr.pdf): PDF inclusion: multiple pdfs with page group included in a single page
->]
-<figs/experiments/exp_small_graph_train_time.pdf, id=2866, 462.52798pt x 346.89601pt>
+File: figs/experiments/exp_memory_expansion_ratio_input_feature_dimension_com-a
+mazon.pdf Graphic file (type pdf)
+<use figs/experiments/exp_memory_expansion_ratio_input_feature_dimension_com-am
+azon.pdf>
+ [20]
+File: figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_edges_p
+eak_memory.pdf Graphic file (type pdf)
+<use figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_edges_pe
+ak_memory.pdf>
+File: figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_edges_e
+xpansion_ratio.pdf Graphic file (type pdf)
+<use figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_edges_ex
+pansion_ratio.pdf>
+File: figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_vertice
+s_fixed_edge_peak_memory.pdf Graphic file (type pdf)
+<use figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_vertices
+_fixed_edge_peak_memory.pdf>
+File: figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_vertice
+s_fixed_edge_expansion_ratio.pdf Graphic file (type pdf)
+<use figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_vertices
+_fixed_edge_expansion_ratio.pdf>
+ [21]
+File: figs/experiments/exp_sampling_minibatch_realtive_graph_info_graphsage_gcn
+.pdf Graphic file (type pdf)
+<use figs/experiments/exp_sampling_minibatch_realtive_graph_info_graphsage_gcn.
+pdf>
+File: figs/experiments/exp_sampling_minibatch_realtive_graph_info_cluster_gcn.p
+df Graphic file (type pdf)
+<use figs/experiments/exp_sampling_minibatch_realtive_graph_info_cluster_gcn.pd
+f>
+ [22]
+File: figs/experiments/exp_sampling_minibatch_degrees_distribution_amazon-photo
+.pdf Graphic file (type pdf)
+<use figs/experiments/exp_sampling_minibatch_degrees_distribution_amazon-photo.
+pdf>
+ [23]
+File: figs/experiments/exp_sampling_relative_batch_size_train_time_stack_graphs
+age_amazon-computers.pdf Graphic file (type pdf)
+<use figs/experiments/exp_sampling_relative_batch_size_train_time_stack_graphsa
+ge_amazon-computers.pdf>
+File: figs/experiments/exp_sampling_relative_batch_size_train_time_stack_graphs
+age_flickr.pdf Graphic file (type pdf)
+<use figs/experiments/exp_sampling_relative_batch_size_train_time_stack_graphsa
+ge_flickr.pdf>
+File: figs/experiments/exp_sampling_relative_batch_size_train_time_stack_cluste
+r_amazon-computers.pdf Graphic file (type pdf)
+<use figs/experiments/exp_sampling_relative_batch_size_train_time_stack_cluster
+_amazon-computers.pdf>
+File: figs/experiments/exp_sampling_relative_batch_size_train_time_stack_cluste
+r_flickr.pdf Graphic file (type pdf)
+<use figs/experiments/exp_sampling_relative_batch_size_train_time_stack_cluster
+_flickr.pdf>
+File: figs/experiments/exp_sampling_memory_usage_relative_batch_size_graphsage_
+amazon-computers_peak_memory.pdf Graphic file (type pdf)
+<use figs/experiments/exp_sampling_memory_usage_relative_batch_size_graphsage_a
+mazon-computers_peak_memory.pdf>
+File: figs/experiments/exp_sampling_memory_usage_relative_batch_size_graphsage_
+flickr_peak_memory.pdf Graphic file (type pdf)
+<use figs/experiments/exp_sampling_memory_usage_relative_batch_size_graphsage_f
+lickr_peak_memory.pdf>
+File: figs/experiments/exp_sampling_memory_usage_relative_batch_size_cluster_am
+azon-computers_peak_memory.pdf Graphic file (type pdf)
+<use figs/experiments/exp_sampling_memory_usage_relative_batch_size_cluster_ama
+zon-computers_peak_memory.pdf>
+File: figs/experiments/exp_sampling_memory_usage_relative_batch_size_cluster_fl
+ickr_peak_memory.pdf Graphic file (type pdf)
+<use figs/experiments/exp_sampling_memory_usage_relative_batch_size_cluster_fli
+ckr_peak_memory.pdf>
+ [24]
 File: figs/experiments/exp_small_graph_train_time.pdf Graphic file (type pdf)
 <use figs/experiments/exp_small_graph_train_time.pdf>
-Package pdftex.def Info: figs/experiments/exp_small_graph_train_time.pdf  used on input line 586.
-(pdftex.def)             Requested size: 189.68709pt x 142.26378pt.
-) (./sec5-insights.tex [25 <./figs/experiments/exp_sampling_memory_usage_relative_batch_size_graphsage_amazon-computers_peak_memory.pdf> <./figs/experiments/exp_sampling_memory_usage_relative_batch_size_graphsage_flickr_peak_memory.pdf
+) (./sec5-insights.tex [25])
+(./sec6-related-work.tex [26]) (./sec7-conclusion.tex [27])
+Overfull \hbox (9.53041pt too wide) in paragraph at lines 21--68
+[]\TU/pcr/m/n/10 This work is funded in part by National Key R&D Program of Chi
+na [grant number 2019YFC1711000];
+ []
 
-pdfTeX warning: pdflatex.exe (file ./figs/experiments/exp_sampling_memory_usage_relative_batch_size_graphsage_flickr_peak_memory.pdf): PDF inclusion: multiple pdfs with page group included in a single page
-> <./figs/experiments/exp_sampling_memory_usage_relative_batch_size_cluster_amazon-computers_peak_memory.pdf
-
-pdfTeX warning: pdflatex.exe (file ./figs/experiments/exp_sampling_memory_usage_relative_batch_size_cluster_amazon-computers_peak_memory.pdf): PDF inclusion: multiple pdfs with page group included in a single page
-> <./figs/experiments/exp_sampling_memory_usage_relative_batch_size_cluster_flickr_peak_memory.pdf
-
-pdfTeX warning: pdflatex.exe (file ./figs/experiments/exp_sampling_memory_usage_relative_batch_size_cluster_flickr_peak_memory.pdf): PDF inclusion: multiple pdfs with page group included in a single page
-> <./figs/experiments/exp_small_graph_train_time.pdf
-
-pdfTeX warning: pdflatex.exe (file ./figs/experiments/exp_small_graph_train_time.pdf): PDF inclusion: multiple pdfs with page group included in a single page
->]
-
-Package natbib Warning: Citation `DGL' on page 26 undefined on input line 24.
-
-
-Package natbib Warning: Citation `PyG' on page 26 undefined on input line 24.
-
-
-Package natbib Warning: Citation `ma2019_neugraph' on page 26 undefined on input line 24.
-
-
-Package natbib Warning: Citation `yan2020_characterizing_gcn' on page 26 undefined on input line 27.
-
-
-Package natbib Warning: Citation `zhang2020_analysis_neugraph' on page 26 undefined on input line 27.
-
-
-Package natbib Warning: Citation `ma2019_neugraph' on page 26 undefined on input line 33.
-
-
-Package natbib Warning: Citation `chen2016_training_deep' on page 26 undefined on input line 34.
-
-) (./sec6-related-work.tex
-
-Package natbib Warning: Citation `zhou2018_gnn_review' on page 26 undefined on input line 5.
-
-
-Package natbib Warning: Citation `zhang2018_gnn_survey' on page 26 undefined on input line 5.
-
-
-Package natbib Warning: Citation `comprehensive-survey-wu-2020' on page 26 undefined on input line 5.
-
-
-Package natbib Warning: Citation `shchur2018_pitfall_of_gnn' on page 26 undefined on input line 11.
-
-
-Package natbib Warning: Citation `dwivedi2020_benchmark_of_gnn' on page 26 undefined on input line 12.
-
-
-Package natbib Warning: Citation `hu2020_open_graph_benchmark' on page 26 undefined on input line 13.
-
-[26]
-
-Package natbib Warning: Citation `yan2020_characterizing_gcn' on page 27 undefined on input line 18.
-
-
-Package natbib Warning: Citation `zhang2020_analysis_neugraph' on page 27 undefined on input line 20.
-
-
-Package natbib Warning: Citation `ma2019_neugraph' on page 27 undefined on input line 20.
-
-
-Package natbib Warning: Citation `yan2020_characterizing_gcn' on page 27 undefined on input line 26.
-
-
-Package natbib Warning: Citation `zhang2020_analysis_neugraph' on page 27 undefined on input line 26.
-
-
-Package natbib Warning: Citation `PyG' on page 27 undefined on input line 30.
-
-
-Package natbib Warning: Citation `DGL' on page 27 undefined on input line 30.
-
-
-Package natbib Warning: Citation `PyG' on page 27 undefined on input line 31.
-
-
-Package natbib Warning: Citation `DGL' on page 27 undefined on input line 32.
-
-
-Package natbib Warning: Citation `ma2019_neugraph' on page 27 undefined on input line 34.
-
-
-Package natbib Warning: Citation `zhu2019_aligraph' on page 27 undefined on input line 37.
-
-
-Package natbib Warning: Citation `PGL' on page 27 undefined on input line 39.
-
-) (./sec7-conclusion.tex)
-No file ms.bbl.
-
-Package natbib Warning: There were undefined citations.
-
+(./ms.bbl [28] [29])
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 72.
-[27]
+ [30]
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 72.
  (./ms.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 72.
+Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 72.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 72.
 Package rerunfilecheck Info: File `ms.out' has not changed.
-(rerunfilecheck)             Checksum: 23B694B96B2706E7D0F94C5A820F424E;1797.
+(rerunfilecheck)             Checksum: 9562241A83F76C947F03122675F0A639.
+
+
+LaTeX Font Warning: Some font shapes were not available, defaults substituted.
+
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 72.
  ) 
 Here is how much of TeX's memory you used:
- 10354 strings out of 492623
- 166476 string characters out of 6133290
- 293993 words of memory out of 5000000
- 13844 multiletter control sequences out of 15000+600000
- 36990 words of font info for 92 fonts, out of 8000000 for 9000
- 1141 hyphenation exceptions out of 8191
- 44i,24n,49p,689b,444s stack positions out of 5000i,500n,10000p,200000b,80000s
-{c:/texlive/2019/texmf-dist/fonts/enc/dvips/base/8r.enc}<c:/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb><c:/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx7.pfb><c:/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx8.pfb><c:/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb><c:/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmex7.pfb><c:/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><c:/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb><c:/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb><c:/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb><c:/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb><c:/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb><c:/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmmib10.pfb><c:/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmmib7.pfb><c:/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmmib8.pfb><c:/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmmib9.pfb><c:/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><c:/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb><c:/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb><c:/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb><c:/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb><c:/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb><c:/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb><c:/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><c:/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb><c:/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb><c:/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb><c:/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb><c:/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb><c:/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb><c:/texlive/2019/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb><c:/texlive/2019/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb><c:/texlive/2019/texmf-dist/fonts/type1/urw/times/utmb8a.pfb><c:/texlive/2019/texmf-dist/fonts/type1/urw/times/utmr8a.pfb><c:/texlive/2019/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on ms.pdf (27 pages, 2669412 bytes).
-PDF statistics:
- 3269 PDF objects out of 3580 (max. 8388607)
- 981 compressed objects within 10 object streams
- 159 named destinations out of 1000 (max. 500000)
- 473 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 13162 strings out of 492922
+ 199636 string characters out of 6136751
+ 325497 words of memory out of 5000000
+ 16957 multiletter control sequences out of 15000+600000
+ 17480 words of font info for 73 fonts, out of 8000000 for 9000
+ 1348 hyphenation exceptions out of 8191
+ 44i,24n,49p,642b,560s stack positions out of 5000i,500n,10000p,200000b,80000s
 
+Output written on ms.pdf (30 pages).

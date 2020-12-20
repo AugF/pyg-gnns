@@ -14,8 +14,7 @@
 \fi}
 \global\let\hyper@last\relax 
 \gdef\HyperFirstAtBeginDocument#1{#1}
-\providecommand\HyField@AuxAddToFields[1]{}
-\providecommand\HyField@AuxAddToCoFields[2]{}
+\providecommand*\HyPL@Entry[1]{}
 \bibstyle{elsarticle-num}
 \emailauthor{{wangzhaokang, wangyp}@smail.nju.edu.cn, {cfyuan, gurong, yhuang}@nju.edu.cn}{Zhaokang Wang, Yunpan Wang, Chunfeng Yuan, Rong Gu$^*$ \corref {correspondingauthor1}, Yihua Huang$^*$ \corref {correspondingauthor2}}
 \Newlabel{correspondingauthor}{1}
@@ -34,31 +33,32 @@
 \citation{ma2019_neugraph}
 \citation{yan2020_characterizing_gcn}
 \citation{zhang2020_analysis_neugraph}
+\HyPL@Entry{0<</S/D>>}
 \babel@aux{english}{}
 \@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{1}{section.1}\protected@file@percent }
 \citation{kipf2017_gcn}
 \citation{li2015_ggnn}
 \citation{huang2018_gat}
 \citation{zhang2018_gaan}
-\@writefile{toc}{\contentsline {paragraph}{Outline}{2}{section*.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Outline}{3}{section*.1}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {2}Review of Graph Neural Networks}{3}{section.2}\protected@file@percent }
 \newlabel{sec:review_of_gnns}{{2}{3}{Review of Graph Neural Networks}{section.2}{}}
 \@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Notations\relax }}{3}{table.caption.2}\protected@file@percent }
 \providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
 \newlabel{tab:notations}{{1}{3}{Notations\relax }{table.caption.2}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Structure of Graph Neural Networks}{3}{subsection.2.1}\protected@file@percent }
-\citation{bryan2014_deepwalk}
-\citation{aditya2016_node2vec}
 \@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Structure of a typical graph neural network. (a) Demo GNN, (b) Demo graph. The target application is the node classification. The demo GNN has two GNN layers.\relax }}{4}{figure.caption.3}\protected@file@percent }
 \newlabel{fig:general_structure_of_gnn}{{1}{4}{Structure of a typical graph neural network. (a) Demo GNN, (b) Demo graph. The target application is the node classification. The demo GNN has two GNN layers.\relax }{figure.caption.3}{}}
+\citation{bryan2014_deepwalk}
+\citation{aditya2016_node2vec}
 \citation{gilmer_messgae_passing}
 \citation{PyG}
 \citation{DGL}
-\citation{huang2018_gat}
-\citation{zhang2018_gaan}
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Graph Neuron and Message-passing Model}{5}{subsection.2.2}\protected@file@percent }
 \@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Graph neuron of $v_3$ in the GNN layer $l$ with the demo graph $\mathcal  {G}$ in Figure~\ref  {fig:general_structure_of_gnn}b. $\phi ^l$/$\Sigma ^l$/$\gamma ^l$ are the messaging/aggregation/updating functions in the message-passing model, respecitvely.\relax }}{5}{figure.caption.4}\protected@file@percent }
 \newlabel{fig:graph_neuron_structure}{{2}{5}{Graph neuron of $v_3$ in the GNN layer $l$ with the demo graph $\mathcal {G}$ in \figurename ~\ref {fig:general_structure_of_gnn}b. $\phi ^l$/$\Sigma ^l$/$\gamma ^l$ are the messaging/aggregation/updating functions in the message-passing model, respecitvely.\relax }{figure.caption.4}{}}
+\citation{huang2018_gat}
+\citation{zhang2018_gaan}
 \citation{defferrad2016_chebnet}
 \citation{kipf2017_gcn}
 \citation{li2018_agcn}
@@ -93,21 +93,13 @@
 \newlabel{fig:gnn_complexity_quadrant}{{3}{8}{Complexity quadrants of typical GNNs. We compare the complexity according to the number of sub-layers, the Big-O notation, and the number of parameters to train.\relax }{figure.caption.7}{}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {2.3.3}GAT (Low Vertex \& High Edge Complexity)}{8}{subsubsection.2.3.3}\protected@file@percent }
 \newlabel{eq:GAT-sub-layer-1}{{2}{8}{GAT (Low Vertex \& High Edge Complexity)}{equation.2.2}{}}
-\newlabel{eq:GAT-sub-layer-2}{{3}{8}{GAT (Low Vertex \& High Edge Complexity)}{equation.2.3}{}}
 \citation{zhang2018_gaan}
 \citation{chiang2019_cluster_gcn}
 \citation{hamilton2017_graphsage,ying2018_pinsage,chen2018_fastgcn,chen2018_sgcn,huang2018_adap}
 \citation{hamilton2017_graphsage}
 \citation{zeng2018_aesg,chiang2019_cluster_gcn,zeng2020_graphsaint}
 \citation{chiang2019_cluster_gcn}
-\newlabel{fig:gnn_sampling_neighbor_sampling}{{4a}{9}{Subfigure 4a}{subfigure.4.1}{}}
-\newlabel{sub@fig:gnn_sampling_neighbor_sampling}{{(a)}{a}{Subfigure 4a\relax }{subfigure.4.1}{}}
-\newlabel{fig:gnn_sampling_graph_sampling}{{4b}{9}{Subfigure 4b}{subfigure.4.2}{}}
-\newlabel{sub@fig:gnn_sampling_graph_sampling}{{(b)}{b}{Subfigure 4b\relax }{subfigure.4.2}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Training a GNN with sampling techniques. The faded graph neurons and their connections are inactivated.\relax }}{9}{figure.caption.8}\protected@file@percent }
-\newlabel{fig:gnn_sampling}{{4}{9}{Training a GNN with sampling techniques. The faded graph neurons and their connections are inactivated.\relax }{figure.caption.8}{}}
-\@writefile{lof}{\contentsline {subfigure}{\numberline{(a)}{\ignorespaces {Neighbor sampling}}}{9}{subfigure.4.1}\protected@file@percent }
-\@writefile{lof}{\contentsline {subfigure}{\numberline{(b)}{\ignorespaces {Graph sampling}}}{9}{subfigure.4.2}\protected@file@percent }
+\newlabel{eq:GAT-sub-layer-2}{{3}{9}{GAT (Low Vertex \& High Edge Complexity)}{equation.2.3}{}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {2.3.4}GaAN (High Vertex \& High Edge Complexity)}{9}{subsubsection.2.3.4}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.4}Sampling Techniques}{9}{subsection.2.4}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {3}Evaluation Design}{9}{section.3}\protected@file@percent }
@@ -123,11 +115,14 @@
 \citation{kipf2017_gcn}
 \citation{huang2018_gat}
 \citation{zhang2018_gaan}
-\citation{kipf2017_gcn,li2015_ggnn,huang2018_gat,zhang2018_gaan}
-\citation{hamilton2017_graphsage}
-\citation{chiang2019_cluster_gcn}
-\citation{hamilton2017_graphsage}
-\citation{chiang2019_cluster_gcn}
+\newlabel{fig:gnn_sampling_neighbor_sampling}{{4a}{10}{Subfigure 4a}{subfigure.4.1}{}}
+\newlabel{sub@fig:gnn_sampling_neighbor_sampling}{{(a)}{a}{Subfigure 4a\relax }{subfigure.4.1}{}}
+\newlabel{fig:gnn_sampling_graph_sampling}{{4b}{10}{Subfigure 4b}{subfigure.4.2}{}}
+\newlabel{sub@fig:gnn_sampling_graph_sampling}{{(b)}{b}{Subfigure 4b\relax }{subfigure.4.2}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Training a GNN with sampling techniques. The faded graph neurons and their connections are inactivated.\relax }}{10}{figure.caption.8}\protected@file@percent }
+\newlabel{fig:gnn_sampling}{{4}{10}{Training a GNN with sampling techniques. The faded graph neurons and their connections are inactivated.\relax }{figure.caption.8}{}}
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(a)}{\ignorespaces {Neighbor sampling}}}{10}{subfigure.4.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(b)}{\ignorespaces {Graph sampling}}}{10}{subfigure.4.2}\protected@file@percent }
 \@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces Dataset overview. $\mathaccentV {bar}016{d}$ represents the average vertex degree. $dim(\boldsymbol  {v})$ is the dimension of the input feature vector.\relax }}{10}{table.caption.11}\protected@file@percent }
 \newlabel{tab:dataset_overview}{{4}{10}{Dataset overview. $\bar {d}$ represents the average vertex degree. $dim(\boldsymbol {v})$ is the dimension of the input feature vector.\relax }{table.caption.11}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Experimental Setting}{10}{subsection.3.1}\protected@file@percent }
@@ -136,12 +131,17 @@
 \@writefile{toc}{\contentsline {paragraph}{Datasets}{10}{section*.10}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{Learning Task}{10}{section*.12}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{GNN Implementation}{10}{section*.13}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Hyper-parameters}{10}{section*.14}\protected@file@percent }
+\citation{kipf2017_gcn,li2015_ggnn,huang2018_gat,zhang2018_gaan}
+\citation{hamilton2017_graphsage}
+\citation{chiang2019_cluster_gcn}
+\citation{hamilton2017_graphsage}
+\citation{chiang2019_cluster_gcn}
+\@writefile{toc}{\contentsline {paragraph}{Hyper-parameters}{11}{section*.14}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{Sampling Techniques}{11}{section*.15}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Experimental Scheme}{11}{subsection.3.2}\protected@file@percent }
 \newlabel{sec:experimental_scheme}{{3.2}{11}{Experimental Scheme}{subsection.3.2}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {4}Evaluation Results and Analysis}{11}{section.4}\protected@file@percent }
-\newlabel{sec:experiment_results}{{4}{11}{Evaluation Results and Analysis}{section.4}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Evaluation Results and Analysis}{12}{section.4}\protected@file@percent }
+\newlabel{sec:experiment_results}{{4}{12}{Evaluation Results and Analysis}{section.4}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Effects of Hyper-parameters on Performance}{12}{subsection.4.1}\protected@file@percent }
 \newlabel{sec:effects_of_hyper-parameters_on_performance}{{4.1}{12}{Effects of Hyper-parameters on Performance}{subsection.4.1}{}}
 \newlabel{fig:exp_absolute_training_time_pubmed}{{5a}{12}{Subfigure 5a}{subfigure.5.1}{}}
@@ -209,7 +209,7 @@
 \@writefile{lof}{\contentsline {subfigure}{\numberline{(b)}{\ignorespaces {GGNN}}}{17}{subfigure.11.2}\protected@file@percent }
 \@writefile{lof}{\contentsline {subfigure}{\numberline{(c)}{\ignorespaces {GAT}}}{17}{subfigure.11.3}\protected@file@percent }
 \@writefile{lof}{\contentsline {subfigure}{\numberline{(d)}{\ignorespaces {GaAN}}}{17}{subfigure.11.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.2.3}Operator Level}{17}{subsubsection.4.2.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.2.3}Operator Level}{18}{subsubsection.4.2.3}\protected@file@percent }
 \@writefile{lof}{\contentsline {figure}{\numberline {12}{\ignorespaces Top 5 time-consuming basic operators of typical GNNs. The time proportion of each basic operator was averaged over all datasets with the error bar indicating the maximum and the minimum.\relax }}{18}{figure.caption.24}\protected@file@percent }
 \newlabel{fig:exp_top_basic_ops}{{12}{18}{Top 5 time-consuming basic operators of typical GNNs. The time proportion of each basic operator was averaged over all datasets with the error bar indicating the maximum and the minimum.\relax }{figure.caption.24}{}}
 \@writefile{lof}{\contentsline {subfigure}{\numberline{(a)}{\ignorespaces {GCN}}}{18}{subfigure.12.1}\protected@file@percent }
@@ -225,27 +225,27 @@
 \newlabel{sec:memory_usage_analysis}{{4.3}{19}{Memory Usage Analysis}{subsection.4.3}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {13}{\ignorespaces Memory usage of each phase during the GNN training. Dataset: \texttt  {amp}.\relax }}{19}{figure.caption.30}\protected@file@percent }
 \newlabel{fig:exp_memory_usage_stage_amp}{{13}{19}{Memory usage of each phase during the GNN training. Dataset: \texttt {amp}.\relax }{figure.caption.30}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {14}{\ignorespaces Computation graph of the vertex updating function $\gamma $ of GGNN.\relax }}{19}{figure.caption.31}\protected@file@percent }
-\newlabel{fig:ggnn_vertex_func_computation_graph}{{14}{19}{Computation graph of the vertex updating function $\gamma $ of GGNN.\relax }{figure.caption.31}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {14}{\ignorespaces Computation graph of the vertex updating function $\gamma $ of GGNN.\relax }}{20}{figure.caption.31}\protected@file@percent }
+\newlabel{fig:ggnn_vertex_func_computation_graph}{{14}{20}{Computation graph of the vertex updating function $\gamma $ of GGNN.\relax }{figure.caption.31}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {15}{\ignorespaces Memory expansion ratios of typical GNNs.\relax }}{20}{figure.caption.32}\protected@file@percent }
 \newlabel{fig:exp_memory_expansion_ratio}{{15}{20}{Memory expansion ratios of typical GNNs.\relax }{figure.caption.32}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {16}{\ignorespaces Memory expansion ratio under different dimensions of input feature vectors. Dataset: \texttt  {cam}.\relax }}{20}{figure.caption.33}\protected@file@percent }
-\newlabel{fig:exp_memory_expension_ratio_input_feature_dimension}{{16}{20}{Memory expansion ratio under different dimensions of input feature vectors. Dataset: \texttt {cam}.\relax }{figure.caption.33}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {16}{\ignorespaces Memory expansion ratio under different dimensions of input feature vectors. Dataset: \texttt  {cam}.\relax }}{21}{figure.caption.33}\protected@file@percent }
+\newlabel{fig:exp_memory_expension_ratio_input_feature_dimension}{{16}{21}{Memory expansion ratio under different dimensions of input feature vectors. Dataset: \texttt {cam}.\relax }{figure.caption.33}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {17}{\ignorespaces Memory usage under different average degrees. The random graphs were generated by fixing the number of vertices at 10K and the dimension of input feature vectors at 32.\relax }}{21}{figure.caption.34}\protected@file@percent }
 \newlabel{fig:exp_memory_expansion_ratio_input_graph_number_of_edges}{{17}{21}{Memory usage under different average degrees. The random graphs were generated by fixing the number of vertices at 10K and the dimension of input feature vectors at 32.\relax }{figure.caption.34}{}}
 \@writefile{lof}{\contentsline {subfigure}{\numberline{(a)}{\ignorespaces {Peak memory usage}}}{21}{subfigure.17.1}\protected@file@percent }
 \@writefile{lof}{\contentsline {subfigure}{\numberline{(b)}{\ignorespaces {Memory expansion ratio}}}{21}{subfigure.17.2}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {18}{\ignorespaces Memory usage under different numbers of vertices. The random graphs were generated by fixing the number of edges at 500K and the dimension of input feature vectors at 32.\relax }}{21}{figure.caption.35}\protected@file@percent }
-\newlabel{fig:exp_memory_expansion_ratio_input_graph_number_of_vertices_fixed_edge}{{18}{21}{Memory usage under different numbers of vertices. The random graphs were generated by fixing the number of edges at 500K and the dimension of input feature vectors at 32.\relax }{figure.caption.35}{}}
-\@writefile{lof}{\contentsline {subfigure}{\numberline{(a)}{\ignorespaces {Peak memory usage}}}{21}{subfigure.18.1}\protected@file@percent }
-\@writefile{lof}{\contentsline {subfigure}{\numberline{(b)}{\ignorespaces {Memory expansion ratio}}}{21}{subfigure.18.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Summary of Memory Usage}{21}{section*.36}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.4}Effects of Sampling Techniques on Performance}{21}{subsection.4.4}\protected@file@percent }
-\newlabel{sec:effects_of_sampling_techniques_on_performance}{{4.4}{21}{Effects of Sampling Techniques on Performance}{subsection.4.4}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {19}{\ignorespaces Sizes of sampled subgraphs under different relative batch sizes. The batch size was relative to the full graph. Each batch size was sampled 50 times and the average values were reported. The error bar indicates the standard deviation.\relax }}{22}{figure.caption.37}\protected@file@percent }
-\newlabel{fig:exp_sampling_minibatch_graph_info}{{19}{22}{Sizes of sampled subgraphs under different relative batch sizes. The batch size was relative to the full graph. Each batch size was sampled 50 times and the average values were reported. The error bar indicates the standard deviation.\relax }{figure.caption.37}{}}
-\@writefile{lof}{\contentsline {subfigure}{\numberline{(a)}{\ignorespaces {Neighbor sampler}}}{22}{subfigure.19.1}\protected@file@percent }
-\@writefile{lof}{\contentsline {subfigure}{\numberline{(b)}{\ignorespaces {Cluster sampler}}}{22}{subfigure.19.2}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {18}{\ignorespaces Memory usage under different numbers of vertices. The random graphs were generated by fixing the number of edges at 500K and the dimension of input feature vectors at 32.\relax }}{22}{figure.caption.35}\protected@file@percent }
+\newlabel{fig:exp_memory_expansion_ratio_input_graph_number_of_vertices_fixed_edge}{{18}{22}{Memory usage under different numbers of vertices. The random graphs were generated by fixing the number of edges at 500K and the dimension of input feature vectors at 32.\relax }{figure.caption.35}{}}
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(a)}{\ignorespaces {Peak memory usage}}}{22}{subfigure.18.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(b)}{\ignorespaces {Memory expansion ratio}}}{22}{subfigure.18.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Summary of Memory Usage}{22}{section*.36}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.4}Effects of Sampling Techniques on Performance}{22}{subsection.4.4}\protected@file@percent }
+\newlabel{sec:effects_of_sampling_techniques_on_performance}{{4.4}{22}{Effects of Sampling Techniques on Performance}{subsection.4.4}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {19}{\ignorespaces Sizes of sampled subgraphs under different relative batch sizes. The batch size was relative to the full graph. Each batch size was sampled 50 times and the average values were reported. The error bar indicates the standard deviation.\relax }}{23}{figure.caption.37}\protected@file@percent }
+\newlabel{fig:exp_sampling_minibatch_graph_info}{{19}{23}{Sizes of sampled subgraphs under different relative batch sizes. The batch size was relative to the full graph. Each batch size was sampled 50 times and the average values were reported. The error bar indicates the standard deviation.\relax }{figure.caption.37}{}}
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(a)}{\ignorespaces {Neighbor sampler}}}{23}{subfigure.19.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(b)}{\ignorespaces {Cluster sampler}}}{23}{subfigure.19.2}\protected@file@percent }
 \@writefile{lof}{\contentsline {figure}{\numberline {20}{\ignorespaces Vertex degree distribution of the sampled subgraph (relative batch size: 6\%) and the original graph. Dataset:\texttt  {amp}.\relax }}{23}{figure.caption.38}\protected@file@percent }
 \newlabel{fig:exp_sampling_minibatch_degrees_distribution}{{20}{23}{Vertex degree distribution of the sampled subgraph (relative batch size: 6\%) and the original graph. Dataset:\texttt {amp}.\relax }{figure.caption.38}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {21}{\ignorespaces Training time per batch breakdown. FULL means that the full graph participates in the training.\relax }}{24}{figure.caption.39}\protected@file@percent }
@@ -267,17 +267,14 @@
 \citation{yan2020_characterizing_gcn,zhang2020_analysis_neugraph}
 \citation{ma2019_neugraph}
 \citation{chen2016_training_deep}
+\@writefile{toc}{\contentsline {section}{\numberline {5}Insights}{26}{section.5}\protected@file@percent }
+\newlabel{sec:insights}{{5}{26}{Insights}{section.5}{}}
 \citation{zhou2018_gnn_review}
 \citation{zhang2018_gnn_survey}
 \citation{comprehensive-survey-wu-2020}
 \citation{shchur2018_pitfall_of_gnn}
 \citation{dwivedi2020_benchmark_of_gnn}
 \citation{hu2020_open_graph_benchmark}
-\@writefile{toc}{\contentsline {section}{\numberline {5}Insights}{26}{section.5}\protected@file@percent }
-\newlabel{sec:insights}{{5}{26}{Insights}{section.5}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {6}Related Work}{26}{section.6}\protected@file@percent }
-\newlabel{sec:related_work}{{6}{26}{Related Work}{section.6}{}}
-\@writefile{toc}{\contentsline {paragraph}{Survey of GNNs}{26}{section*.43}\protected@file@percent }
 \citation{yan2020_characterizing_gcn}
 \citation{zhang2020_analysis_neugraph}
 \citation{ma2019_neugraph}
@@ -289,9 +286,52 @@
 \citation{ma2019_neugraph}
 \citation{zhu2019_aligraph}
 \citation{PGL}
-\citation{*}
-\bibdata{gnnref.bib}
+\@writefile{toc}{\contentsline {section}{\numberline {6}Related Work}{27}{section.6}\protected@file@percent }
+\newlabel{sec:related_work}{{6}{27}{Related Work}{section.6}{}}
+\@writefile{toc}{\contentsline {paragraph}{Survey of GNNs}{27}{section*.43}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{Evaluation of GNNs}{27}{section*.44}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{Libraries/Systems of GNNs}{27}{section*.45}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {7}Conclusion}{27}{section.7}\protected@file@percent }
 \newlabel{sec:conclusion}{{7}{27}{Conclusion}{section.7}{}}
+\citation{*}
+\bibdata{gnnref.bib}
+\bibcite{kipf2017_gcn}{{1}{}{{}}{{}}}
+\bibcite{defferrad2016_chebnet}{{2}{}{{}}{{}}}
+\bibcite{li2018_agcn}{{3}{}{{}}{{}}}
+\bibcite{li2015_ggnn}{{4}{}{{}}{{}}}
+\bibcite{hamilton2017_graphsage}{{5}{}{{}}{{}}}
+\bibcite{huang2018_gat}{{6}{}{{}}{{}}}
+\bibcite{zhang2018_gaan}{{7}{}{{}}{{}}}
+\bibcite{zhou2018_gnn_review}{{8}{}{{}}{{}}}
+\bibcite{zhang2018_gnn_survey}{{9}{}{{}}{{}}}
+\bibcite{comprehensive-survey-wu-2020}{{10}{}{{}}{{}}}
+\bibcite{qi2018_learning_humanobject}{{11}{}{{}}{{}}}
+\bibcite{wang2020_hierarchical_human_parsing}{{12}{}{{}}{{}}}
+\bibcite{wang2019_zeroshot_video}{{13}{}{{}}{{}}}
+\bibcite{PyG}{{14}{}{{}}{{}}}
+\bibcite{DGL}{{15}{}{{}}{{}}}
+\bibcite{ma2019_neugraph}{{16}{}{{}}{{}}}
+\bibcite{zhu2019_aligraph}{{17}{}{{}}{{}}}
+\bibcite{PGL}{{18}{}{{}}{{}}}
+\bibcite{yan2020_characterizing_gcn}{{19}{}{{}}{{}}}
+\bibcite{zhang2020_analysis_neugraph}{{20}{}{{}}{{}}}
+\bibcite{bryan2014_deepwalk}{{21}{}{{}}{{}}}
+\bibcite{aditya2016_node2vec}{{22}{}{{}}{{}}}
+\bibcite{gilmer_messgae_passing}{{23}{}{{}}{{}}}
+\bibcite{duvenaud2015_neural_fps}{{24}{}{{}}{{}}}
+\bibcite{han2018_sse}{{25}{}{{}}{{}}}
+\bibcite{chiang2019_cluster_gcn}{{26}{}{{}}{{}}}
+\bibcite{ying2018_pinsage}{{27}{}{{}}{{}}}
+\bibcite{chen2018_fastgcn}{{28}{}{{}}{{}}}
+\bibcite{chen2018_sgcn}{{29}{}{{}}{{}}}
+\bibcite{huang2018_adap}{{30}{}{{}}{{}}}
+\bibcite{zeng2018_aesg}{{31}{}{{}}{{}}}
+\bibcite{zeng2020_graphsaint}{{32}{}{{}}{{}}}
+\bibcite{yang2016_revisiting_semisupervised}{{33}{}{{}}{{}}}
+\bibcite{shchur2018_pitfall_of_gnn}{{34}{}{{}}{{}}}
+\bibcite{rmat-generator}{{35}{}{{}}{{}}}
+\bibcite{yang2012_defining}{{36}{}{{}}{{}}}
+\bibcite{chen2016_training_deep}{{37}{}{{}}{{}}}
+\bibcite{dwivedi2020_benchmark_of_gnn}{{38}{}{{}}{{}}}
+\bibcite{hu2020_open_graph_benchmark}{{39}{}{{}}{{}}}
+\providecommand\NAT@force@numbers{}\NAT@force@numbers
