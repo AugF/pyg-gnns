@@ -193,19 +193,51 @@ In the following we address their concerns point by point.
 \end{reply}
 
 \begin{point}
-There are some grammar errors and typos:\\
-  - `Take the demo GNN in Figure 1(a) as  the example.'\\
- - `to calculate the  output hidden vector $h^{l+1}$ of the current layer l, i.e., $h^{l+1}$ = $\gamma^l(h^l,s^l)$ The end-to-end training requires…'\\
- - `Implementing it with the specially optimized basic operators on the GPU is a potential optimization'\\
- - The sentences in the experimental section should be unified.\\
+There are some grammar errors and typos:
+\\
+  - `Take the demo GNN in Figure 1(a) as  the example.'
+\\
+ - `to calculate the  output hidden vector $h^{l+1}$ of the current layer l, i.e., $h^{l+1}$ = $\gamma^l(h^l,s^l)$ The end-to-end training requires…'
+\\
+ - `Implementing it with the specially optimized basic operators on the GPU is a potential optimization'
+\\
+ - The sentences in the experimental section should be unified.
 \end{point}
 
 \begin{reply}
-Thank you for pointing them out.
-%
-We have proofread our revised manuscript carefully to eliminate grammar errors and typos.
-%
-We have also unified the sentences that describe the experimental results  in the experimental section in the past tense.
+
+    Thank you for pointing them out.
+    %
+    We have proofread our revised manuscript carefully to eliminate grammar errors and typos.
+    %
+    We have also unified the tenses of the sentences in Section 3 ``Evaluation Design'' and Section 4 ``Evaluation Results and Analysis''.
+    %
+    We use the past tense to describe experimental methods, results and what they indicate.
+    %
+    We only use the present tense in the sentences that Figure/Table X are the subjects of the sentences.
+
+\end{reply}
+
+\begin{point}
+    Figures 6 and 7 should be adjusted. The figures and fonts are too small.
+\end{point}
+
+\begin{reply}
+    
+    We appreciate your comment.
+    %
+    We have enlarged Figure 6 and Figure 7 in the revised manuscript.
+    %
+    Besides them, we have also enlarged fonts in other figures in the manuscript, to make sure that font sizes in figures are no less than the font size of figure captions.
+
+\end{reply}
+
+\begin{point}
+    In my view, computation efficiency is to describe the testing or validation process. Except for reporting and analyzing the training times, it is meaningful to discuss the inference time. This is also an important point of view for deep learning researchers to be concerned about.
+\end{point}
+
+\begin{reply}
+    %%% TODO %%%
 \end{reply}
 
 % Begin a new reviewer section
@@ -218,7 +250,6 @@ We have also unified the sentences that describe the experimental results  in th
 
 \begin{reply}
 	Our reply to it with reference to one of our points above using the \LaTeX's 
-	label/ref system (see also \ref{pt:foo}).
 \end{reply}
 
 \end{document}
