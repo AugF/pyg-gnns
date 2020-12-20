@@ -292,178 +292,256 @@ Improving the efficiency of \texttt{scatter\_add}/\texttt{gather}/\texttt{index\
 
 \paragraph{Summary of Training Time Breakdown}
 %
-The GNN training is suitable for GPUs.
+The GNN training was suitable for GPUs.
 %
-\emph{The edge calculation stage is the main performance bottleneck in most cases}, except for training GNNs with high vertex calculation complexity on low-average-degree graphs.
-The performance bottleneck in the edge calculation stage depends on the time complexity of the messaging function $\phi$.
+\emph{The edge calculation stage was the main performance bottleneck in most cases}, except for training GNNs with high vertex calculation complexity on low-average-degree graphs.
 %
-\begin{itemize}
-    \item If the time complexity of $\phi$ is {high}, {$\phi$} dominates the training time of the edge calculation stage.
-    %
-    Reducing its computation cost (via optimizing its implementation or modifying the algorithm design) can significantly reduce the training time.
-    
-    \item Otherwise, the {collection step} and the {aggregation step} dominate the training time.
-    %
-    The collection step involves lots of data movement.
-    %
-    The aggregation step suffers from data synchronization and non-regular data access.
-    %
-    Optimizing their implementations can significantly reduce the training time.
-\end{itemize}
+The performance bottleneck in the edge calculation stage depended on the time complexity of the messaging function $\phi$.
+%
+If the time complexity of $\phi$ was {high}, {$\phi$} dominated the training time of the edge calculation stage.
+%
+Optimizations should focus on improving its efficiency.
+%
+Otherwise, the {collection step} and the {aggregation step} dominated the training time.
+%
+The collection step suffered from lots of data movement.
+%
+The aggregation step suffered from data synchronization and non-regular data access.
 
 \subsection{Memory Usage Analysis}
 \label{sec:memory_usage_analysis}
 
-During the GNN training, all data (including datasets and intermediate results) are stored in the on-chip memory of the GPU.
-Compared with the main memory on the host side, the capacity of the GPU memory is very limited.
-\emph{The GPU memory capacity limits the scales of the graphs that a GPU can train GNNs on}.
-For example, GaAN is unable to train on \texttt{cph} dataset due to the out of memory exception.
+During the GNN training, we stored all data (including datasets and intermediate results) in the on-chip memory of the GPU.
+%
+Compared with the main memory on the host side (90 GB), the capacity of the GPU memory (16 GB) was very limited.
+%
+\emph{The GPU memory capacity limited the scales of the graphs that it could handle}.
+%
+For example, GaAN was unable to train on the \texttt{cph} dataset due to the out of memory exception.
 
-\figurename~\ref{fig:exp_memory_usage_stage_amp} shows the peak memory usage of each phase in the GNN training on the \texttt{amp} dataset.
-The trend is similar on the other datasets.
-\emph{The GNN training achieves its peak memory usage in the forward and the backward phases}.
-The forward phase generates lots of intermediate results.
-Some key intermediate results are cached, increasing memory usage.
-The cached results are used in the gradient calculation in the backward phase.
-\figurename~\ref{fig:ggnn_vertex_func_computation_graph} shows the computation graph of the vertex updating function $\gamma$ of GGNN.
-The computation graph has a large number of operators. Each operator generates an intermediate tensor.
+\figurename~\ref{fig:exp_memory_usage_stage_amp} shows the peak memory usage of each phase during the GNN training on the \texttt{amp} dataset.
+%
+The trends on the other datasets were similar.
+%
+\emph{The GNN training achieved its peak memory usage in the forward and the backward phases}.
+%
+The forward phase generated lots of intermediate results.
+%
+Some key intermediate results were cached for the gradient calculation in the backward phase, increasing memory usage.
+%
+For example, \figurename~\ref{fig:ggnn_vertex_func_computation_graph} shows the computation graph of the vertex updating function $\gamma^l$ of GGNN.
+%
+Each operator in the computation graph generated an intermediate tensor.
+%
 Some key intermediate tensors are cached.
-The cached tensors are the main source of memory usage in the loss phase.
-By the end of the backward phase, the cached tensors are released.
-Since the evaluation phase does not need to calculate the gradients, it does not cache intermediate tensors.
-Its memory usage declines sharply.
+%
+The cached tensors were the main source of memory usage in the loss phase.
+%
+By the end of the backward phase, the cached tensors were released.
+%
+Since the evaluation phase did not have to calculate the gradients, it did not cache intermediate tensors.
+%
+Its memory usage declined sharply.
 
-\begin{figure}[h]
+\begin{figure}[H]
     \centering
     \includegraphics[height=5cm]{figs/experiments/exp_memory_usage_stage_amp.pdf}
-    \caption{Memory usage of each phase. Dataset: \texttt{amp}.}
+    \caption{Memory usage of each phase during the GNN training. Dataset: \texttt{amp}.}
     \label{fig:exp_memory_usage_stage_amp}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.7\columnwidth]{figs/illustration/ggnn_vertex_func_computation_graph.pdf}
     \caption{Computation graph of the vertex updating function $\gamma$ of GGNN.}
     \label{fig:ggnn_vertex_func_computation_graph}
 \end{figure}
 
-The peak memory usage during the GNN training far exceeds the size of the dataset itself.
-We define the \emph{memory expansion ratio} (MER) as the ratio of the peak memory usage during the training to the memory usage after loading the dataset.
+The peak memory usage during the GNN training far exceeded the size of the dataset itself.
+%
+We defined the \emph{memory expansion ratio} (MER) as the ratio of the peak memory usage during the training to the memory usage after loading the dataset.
+%
 \figurename~\ref{fig:exp_memory_expansion_ratio} compares MER of different GNNs.
-GCN has the lowest MER (up to 15) while GaAN has the highest MER (up to 104).
-\emph{The high MER limits the data scalability of GNNs}, making GPUs unable to handle big graphs.
+%
+GCN had the lowest MER (up to 15) while GaAN had the highest MER (up to 104).
+%
+\emph{The high MERs limited the data scalability of GNNs}, making GPUs unable to handle big graphs.
+%
+\figurename~\ref{fig:exp_memory_expansion_ratio} also indicates that the same GNN had different MERs for different datasets.
+%
+Two characteristics of a dataset affected the MER: the dimension of the input feature vectors and the average degree of the graph.
 
-\begin{figure}[h]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.5\columnwidth]{figs/experiments/exp_memory_expansion_ratio.pdf}
     \caption{Memory expansion ratios of typical GNNs.}
     \label{fig:exp_memory_expansion_ratio}
 \end{figure}
 
-\figurename~\ref{fig:exp_memory_expansion_ratio} also indicates that the same GNN has different MERs for different datasets.
-Two characteristics of a dataset affect the MER: the dimension of the input feature vectors and the average degree of the graph.
+To find out how the dimension of input feature vectors affected the MER, we generated random input feature vectors with different dimensions for the \texttt{cam} dataset and measured the MER in \figurename~\ref{fig:exp_memory_expension_ratio_input_feature_dimension}.
+%
+Under the same hyper-parameters, \emph{the MER decreased as the dimension of input feature vectors increased}.
+%
+When the dimension of the input feature vectors was high, the size of the dataset itself was large.
+%
+The size became comparable to the size of intermediate results,  making MERs low.
 
-Given the same graph, the scales of the intermediate results are mainly affected by the hyper-parameters of the GNN.
-If the dimension of the input feature vectors is high (like the \texttt{cph} dataset), the size of the dataset is large.
-The size may become comparable to the scales of the intermediate results,  making the MER low.
-To find out how the dimension affects the MER, we generated random input feature vectors with different dimensions for the \texttt{cam} dataset and measured the MER in \figurename~\ref{fig:exp_memory_expension_ratio_input_feature_dimension}.
-For a GNN under the same hyper-parameters, \emph{the MER decreases as the dimension of the input feature vectors increases}.
 
-\begin{figure}[h]
+\begin{figure}[H]
     \centering
     \includegraphics[height=5cm]{figs/experiments/exp_memory_expansion_ratio_input_feature_dimension_com-amazon.pdf}
-    \caption{Memory expansion ratio under different dimensions of the input feature vectors. Dataset: \texttt{cam}.}
+    \caption{Memory expansion ratio under different dimensions of input feature vectors. Dataset: \texttt{cam}.}
     \label{fig:exp_memory_expension_ratio_input_feature_dimension}
 \end{figure}
 
-The average degree of the graph also affects MER by influencing the relative scales of the intermediate results from the edge/vertex calculation stages.
-Fixing the number of vertices $|\mathcal{V}|$, we used the R-MAT generator to generate random graphs with different average degrees.
-\figurename~\ref{fig:exp_memory_expansion_ratio_input_graph_number_of_edges} shows how the memory usage changes according to the average degrees.
-As the average degree $\bar{d}$ increases, the number of edges $|\mathcal{E}|$ increases and the peak memory usage increases \emph{linearly} with $\bar{d}$.
-The edge calculation stage gradually dominates the memory usage and \emph{the MER converges to a stable value}.
-The stable value is determined by the complexity of the edge calculation stage.
-Except for GGNN, the MER of the other GNNs increases as $\bar{d}$ increases.
-As GGNN has high vertex calculation complexity, the MER related to the vertex calculation stage is much larger than the edge calculation stage.
-When the edge calculation stage dominates the memory usage, its MER becomes smaller.
+Average degrees also affected MERs by influencing the relative sizes of intermediate results from the edge and the vertex calculation stages.
+%
+Fixing the number of vertices $|\mathcal{V}|$, we generated random graphs with different average degrees.
+%
+\figurename~\ref{fig:exp_memory_expansion_ratio_input_graph_number_of_edges} shows how the memory usage changed according to the average degree.
+%
+As the average degree $\bar{d}$ increased, the peak memory usage increased \emph{linearly} with $\bar{d}$.
+%
+The edge calculation stage gradually dominated the memory usage and \emph{the MER converged to a stable value}.
+%
+The stable value was determined by the complexity of the edge calculation stage.
+%
+Except for GGNN, the MERs of the other GNNs increased as $\bar{d}$ increased.
+%
+As GGNN had high vertex calculation complexity, the MERs related to the vertex calculation stage were much higher than the edge calculation stage.
+%
+When the edge calculation stage dominated the memory usage, its MERs became smaller.
 
-\begin{figure}[h]
+\begin{figure}[H]
     \centering
     \subfloat[Peak memory usage]{\includegraphics[height=4cm]{figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_edges_peak_memory.pdf}}
     \subfloat[Memory expansion ratio]{\includegraphics[height=4cm]{figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_edges_expansion_ratio.pdf}}
-    \caption{Memory usage under different average degrees of the graph. The graph was generated with the R-MAT generator fixing the number of vertices at 10K and the dimension of the input feature vectors at 32.}
+    \caption{Memory usage under different average degrees. The random graphs were generated by fixing the number of vertices at 10K and the dimension of input feature vectors at 32.}
     \label{fig:exp_memory_expansion_ratio_input_graph_number_of_edges}
 \end{figure}
 
-We also fixed the number of edges $|\mathcal{E}|$ in the graphs and generated random graphs with different $|\mathcal{V}|$.
-\figurename~\ref{fig:exp_memory_expansion_ratio_input_graph_number_of_vertices_fixed_edge} shows how the memory usage changes according to $|\mathcal{V}|$.
-All GNNs are insensitive to the changes in $|\mathcal{V}|$ compared to $|\mathcal{E}|$.
-Except for GGNN, the MERs of the other GNNs decline as $|\mathcal{V}|$ increases because the scales of the datasets increase more quickly than the scales of the intermediate results.
-As GGNN has high vertex calculation complexity, the scales of the intermediate results are much more sensitive to $|\mathcal{V}|$.
-It indicates that \emph{the intermediate results of the edge calculation stage dominated the memory usage during the GNN training}.
+We also fixed the number of edges $|\mathcal{E}|$ and generated random graphs with different $|\mathcal{V}|$.
+%
+\figurename~\ref{fig:exp_memory_expansion_ratio_input_graph_number_of_vertices_fixed_edge} shows how the memory usage changed according to $|\mathcal{V}|$.
+%
+MERs of all GNNs were insensitive to $|\mathcal{V}|$, compared to $|\mathcal{E}|$.
+%
+Except for GGNN, the MERs of the other GNNs declined as $|\mathcal{V}|$ increased because the sizes of the datasets increased more quickly than the sizes of the intermediate results.
+%
+As GGNN had high vertex calculation complexity, the sizes of the intermediate results were very sensitive to $|\mathcal{V}|$.
+%
+It indicated that \emph{the intermediate results of the edge calculation stage dominated the memory usage during the GNN training}.
 
-\begin{figure}[h]
+\begin{figure}[H]
     \centering
     \subfloat[Peak memory usage]{\includegraphics[height=4cm]{figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_vertices_fixed_edge_peak_memory.pdf}}
     \subfloat[Memory expansion ratio]{\includegraphics[height=4cm]{figs/experiments/exp_memory_expansion_ratio_input_graph_number_of_vertices_fixed_edge_expansion_ratio.pdf}}
-    \caption{Memory usage under different numbers of vertices of the graph. The graph was generated with the R-MAT generator fixing the number of edges at 500K and the dimension of the input feature vectors at 32.}
+    \caption{Memory usage under different numbers of vertices. The random graphs were generated by fixing the number of edges at 500K and the dimension of input feature vectors at 32.}
     \label{fig:exp_memory_expansion_ratio_input_graph_number_of_vertices_fixed_edge}
 \end{figure}
 
-\paragraph{Summary}
-The \emph{high} memory expansion ratio severely restrictes the data scalability of the GNN training.
-The memory usage mainly comes from the intermediate results of the \emph{edge calculation stage}.
-Fixing the number of vertices, the memory usage increases \emph{linearly} along with the number of edges.
-Optimizing the memory usage of the edge calculation stage can significantly reduce the memory expansion ratio.
-Fixing the GNN structures and the hyper-parameters, increasing the dimension of the input feature vectors can also reduce the memory expansion ratio.
+\paragraph{Summary of Memory Usage}
+%
+The \emph{high} memory expansion ratio severely restricted the data scalability of GNN training.
+%
+The memory usage mainly came from the intermediate results of the \emph{edge calculation stage}.
+%
+Fixing the number of vertices, the memory usage increased \emph{linearly} along with the number of edges.
+%
+Fixing the GNN structure and the hyper-parameters, increasing the dimension of input feature vectors could reduce the memory expansion ratio.
+%
+To reduce the memory usage of GNN training, optimizations should focus on reducing memory footprints of the edge calculation stage.
 
 \subsection{Effects of Sampling Techniques on Performance}
 \label{sec:effects_of_sampling_techniques_on_performance}
 
-With the sampling techniques, GNNs can be trained in a mini-batch manner.
-Each mini-batch updates the model parameters based on a small subgraph sampled from the original input graph.
-Thus, the training time per batch and the peak memory usage during the training should both decline significantly.
+With the sampling techniques, GNNs were trained in a mini-batch manner.
+%
+Each mini-batch updated the model parameters based on a small subgraph sampled from the original input graph.
+%
+Thus, the training time per batch and the peak memory usage during the training both declined significantly.
 
-In the implementation in PyG, the GNN model and the dataset resides on the GPU side.
-To process each epoch, PyG samples the original dataset in the main memory and generates several batches.
-Each batch is a small subgraph of the dataset.
-To train on each batch, PyG sends the sampled subgraph to the GPU, calculates the gradients on the subgraph, and updates the model parameters directly on the GPU.
-With the sampling techniques, the model parameters are updated by a stochastic gradient descent optimizer.
-PyG conducts the evaluation phase every several epochs (either on the CPU side or the GPU side) to determine whether to stop the training.
-In this section, the experiments focus on the training phase of each batch.
+In the implementation in PyG, the GNN model and the dataset resided on the GPU side.
+%
+To process each epoch, PyG sampled the original dataset in the main memory and generated several batches.
+%
+Each batch was a small subgraph of the dataset.
+%
+To train on each batch, PyG sent the sampled subgraph to the GPU, calculated the gradients on the subgraph, and updated the model parameters directly on the GPU.
+%
+With the sampling techniques, the model parameters were updated by a stochastic gradient descent optimizer.
+%
+PyG conducted the evaluation phase every several epochs or batches (either on the CPU side or the GPU side) to determine whether to stop the training.
+%
+In this section, the experiments focused on the training phase of each batch.
 
-\figurename~\ref{fig:exp_sampling_minibatch_graph_info} shows how the size of the sampled subgraph changes with the batch size.
-For the neighbor sampler, the relative batch size is the proportion of the sampled vertices of the last GNN layer in $|\mathcal{V}|$.
-For the cluster sampler, the relative batch size is the proportion of the sampled partitions to all partitions of the graph.
-The neighbor sampler is very sensitive to the batch size.
-As the batch size increases, the size of the sampled subgraph first increases quickly and then stabilizes.
-The cluster sampler is much less sensitive compared to the neighbor sampler.
-The number of vertices and the average degree of the sampled subgraphs increases linearly with the batch size.
+\figurename~\ref{fig:exp_sampling_minibatch_graph_info} shows how the size of the sampled subgraph changed with the batch size.
+%
+For the neighbor sampler, the relative batch size was the proportion of the sampled vertices of the last GNN layer in $\mathcal{V}$.
+%
+For the cluster sampler, the relative batch size was the proportion of the sampled partitions in all partitions of the graph.
+%
+The neighbor sampler was very sensitive to the batch size.
+%
+As the batch size increased, the size of the sampled subgraph first increased quickly and then stabilized.
+%
+The cluster sampler was much less sensitive compared to the neighbor sampler.
+%
+The number of vertices and the average degree of the sampled subgraphs increased linearly with the batch size.
 
-\begin{figure}[h]
+\begin{figure}[H]
     \centering
     \subfloat[Neighbor sampler]{\includegraphics[height=4cm]{figs/experiments/exp_sampling_minibatch_realtive_graph_info_graphsage_gcn.pdf}} \\
     \subfloat[Cluster sampler]{\includegraphics[height=4cm]{figs/experiments/exp_sampling_minibatch_realtive_graph_info_cluster_gcn.pdf}}
-    \caption{Sizes of the sampled subgraphs under different batch sizes. Each batch size was sampled 50 times and the average value was reported. The error bar indicates the standard deviation. The batch size is relative to the full graph.}
+    \caption{Sizes of sampled subgraphs under different relative batch sizes. The batch size was relative to the full graph. Each batch size was sampled 50 times and the average values were reported. The error bar indicates the standard deviation.}
     \label{fig:exp_sampling_minibatch_graph_info}
 \end{figure}
 
-It is worth noting that the average degree of the sampled subgraph is \emph{much lower} than the average degree of the whole graph, especially when the relative batch size is low.
-Taking the neighbor sampler with the relative batch size of 6\% as an example, the average degree of the \texttt{amp} dataset is 31.1, but the average degree of the sampled subgraph is only 5.8.
-For the cluster sampler, the average degree is 3.0.
+The average degree of the sampled subgraph was \emph{much lower} than the average degree of the original graph, especially when the relative batch size is low.
+%
+Taking the neighbor sampler with the relative batch size of 6\% as an example, the average degree of the \texttt{amp} dataset was 31.1, but the average degree of the sampled subgraph was only 5.8.
+%
+For the cluster sampler, the average degree was 3.0.
+%
 \figurename~\ref{fig:exp_sampling_minibatch_degrees_distribution} compares the degree distribution of the sampled subgraphs with the original graph.
-The slopes of the curves are similar.
-It indicates that the sampled subgraphs still follow the power-law degree distribution.
-However, there are much less vertices in the sampled subgraphs, significantly lowering the average degrees.
-According to the experimental results in Section~\ref{sec:training_time_breakdown}, if the average degree becomes lower, the proportion of the training time spent on the vertex calculation stage will become higher, especially for GGNN.
+%
+The slopes of the curves were similar, indicating that the sampled subgraphs still followed the power-law degree distribution.
+%
+However, the numbers of high-degree vertices were much less than the original graph, lowering the average degrees.
+%
+According to the experimental results in Section~\ref{sec:training_time_breakdown}, if the average degree became lower, the proportion of the training time spent on the vertex calculation stage would become higher, especially for GGNN.
 
-\begin{figure}[h]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.4\columnwidth]{figs/experiments/exp_sampling_minibatch_degrees_distribution_amazon-photo.pdf}
     \caption{Vertex degree distribution of the sampled subgraph (relative batch size: 6\%) and the original graph. Dataset:\texttt{amp}.}
     \label{fig:exp_sampling_minibatch_degrees_distribution}
 \end{figure}
 
-\begin{figure}[h]
+To find out performance bottlenecks of the sampling techniques, we decomposed the training time per batch into three phases: \emph{sampling} on the CPU side, \emph{transferring} sampled subgraphs from the CPU side to the GPU side, and \emph{training} with the sampled subgraphs on the GPU side.
+%
+\figurename~\ref{fig:exp_sampling_batch_train_time} shows the time breakdown of the four GNNs under different relative batch sizes.
+%
+For the neighbor sampler, the sampling technique reduced the training time per batch only when the batch size was very small.
+%
+When the batch became bigger, the sampling and the data transferring phases introduced noticeable overheads, making the training time exceed the full-batch training.
+%
+For the clustering sampler, the sampled subgraph was smaller than the neighbor sampler under the same relative batch size.
+%
+The reduction in the training time was more obvious than the neighbor sampler.
+%
+However, the overheads increased quickly as the relative batch size increased.
+%
+The training time under the 25\% relative batch size already exceeded the time of full-batch training.
+%
+The experimental results indicated that the current implementation of the sampling techniques in PyG was inefficient.
+%
+When the batch size was large, more than 50\% of the time had been spent on sampling and data transferring.
+%
+\emph{The sampling techniques were only efficient under small batch sizes.}
+
+
+\begin{figure}[H]
     \centering
     \subfloat[Neighbor sampler on \texttt{amc}]{\includegraphics[height=5cm]{figs/experiments/exp_sampling_relative_batch_size_train_time_stack_graphsage_amazon-computers.pdf}}
     \subfloat[Neighbor sampler on \texttt{fli}]{\includegraphics[height=5cm]{figs/experiments/exp_sampling_relative_batch_size_train_time_stack_graphsage_flickr.pdf}} \\
@@ -473,51 +551,52 @@ According to the experimental results in Section~\ref{sec:training_time_breakdow
     \label{fig:exp_sampling_batch_train_time}
 \end{figure}
 
-To find out the performance bottleneck with the sampling techniques, we decompose the training time per batch into three phases: \emph{sampling} on the CPU, \emph{transferring} sampled subgraphs from the CPU to the GPU and \emph{training} with the subgraphs on the GPU.
-\figurename~\ref{fig:exp_sampling_batch_train_time} shows the time breakdown of the four GNNs under different relative batch sizes.
-For the neighbor sampler, the sampling technique reduces the training time per batch only when the batch size is very small.
-When the batch becomes bigger, the sampling and the data transferring phases introduce noticeable overheads, making the training time exceed the full-batch training.
-For the clustering sampler, the sampled subgraph is smaller than the neighbor sampler under the same relative batch size.
-The reduction in the training time is more obvious than the neighbor sampler.
-However, the overheads increase quickly as the relative batch size increase.
-The training time under the 25\% relative batch size already exceede the time of full-batch training.
-The experimental results indicate that the current implementation of the sampling techniques in PyG is inefficient.
-When the batch size is slightly big, more than 50\% of the time has been spent on sampling and data transferring.
-\emph{The sampling techniques are only efficient under small batch sizes.}
+The main advantage of the sampling techniques was \emph{reducing the peak memory usage} during training.
+%
+\figurename~\ref{fig:exp_sampling_memory_usage} shows the memory usage under different batch sizes.
+%
+The peak memory usage declined significantly even under big batch sizes.
+%
+The sampling techniques made training GNNs on big graphs \emph{possible} for GPUs.
 
-\begin{figure}[tbp]
+\begin{figure}[H]
     \centering
     \subfloat[Neighbor sampler on \texttt{amc}]{\includegraphics[height=4cm]{figs/experiments/exp_sampling_memory_usage_relative_batch_size_graphsage_amazon-computers_peak_memory.pdf}}
     \subfloat[Neighbor sampler on \texttt{fli}]{\includegraphics[height=4cm]{figs/experiments/exp_sampling_memory_usage_relative_batch_size_graphsage_flickr_peak_memory.pdf}} \\
     \subfloat[Cluster sampler on \texttt{amc}]{\includegraphics[height=4cm]{figs/experiments/exp_sampling_memory_usage_relative_batch_size_cluster_amazon-computers_peak_memory.pdf}}
     \subfloat[Cluster sampler on \texttt{fli}]{\includegraphics[height=4cm]{figs/experiments/exp_sampling_memory_usage_relative_batch_size_cluster_flickr_peak_memory.pdf}}
-    \caption{Peak memory usage under different batch sizes. FULL means the full graph participates in the training.}
+    \caption{Peak memory usage under different batch sizes. FULL means that the full graph participated in the training.}
     \label{fig:exp_sampling_memory_usage}
 \end{figure}
 
-The main advantage of the sampling technique is \emph{reducing the peak memory usage} during the training.
-\figurename~\ref{fig:exp_sampling_memory_usage} shows the memory usage under different batch sizes.
-The peak memory usage declines significantly even under big batch sizes.
-The sampling techniques make training GNNs on big graphs possible for GPUs.
+The disadvantage of the sampling technique was wasting GPU resources.
+%
+As the sampling techniques were only effective under small batch sizes, the sampled subgraphs were very small in those cases.
+%
+They could not make full use of the computing power of a GPU.
+%
+To simulate the situation, we generated random graphs with few vertices and measured the training time per batch in \figurename~\ref{fig:exp_small_graph_train_time}.
+%
+As the number of vertices increased, the training time was almost unchanged except for GaAN.
+%
+The training time of GaAN increased only with $|\mathcal{V}| \geq 4000$.
 
-\begin{figure}[tbp]
+\begin{figure}[H]
     \centering
     \includegraphics[height=5cm]{figs/experiments/exp_small_graph_train_time.pdf}
-    \caption{Training time per epoch on small random graphs. For each number of vertices, we generated 50 random R-MAT graphs with the average degree of 4.0 and reported the average training time per epoch (without the evaluation phase). The error bar indicates the standard deviation.}
+    \caption{Training time per epoch on small random graphs. For each number of vertices, we generated 50 random graphs with the average degree of 4.0 and reported the average training time per batch (without the evaluation phase). The error bar indicates the standard deviation.}
     \label{fig:exp_small_graph_train_time}
 \end{figure}
 
-The disadvantage of the sampling technique is wasting GPU resources.
-As the sampling techniques are only effective under small batch sizes, the sampled subgraphs will be very small in those cases.
-They cannot make full use of the computing power of a GPU.
-To simulate the situation, we generated random graphs with few vertices and measured the training time per epoch in \figurename~\ref{fig:exp_small_graph_train_time}.
-As the number of vertices increases, the training time is almost unchanged except for GaAN.
-The training time of GaAN increases only with $|\mathcal{V}| \geq 4000$.
 
+\paragraph{Summary of Sampling Techniques}
 
-\paragraph{Summary}
-The sampled subgraphs have lower average degrees than the whole graph.
-With small batch sizes, the sampling techniques can significantly reduce the training time per batch and the peak memory usage during the training.
-However, small batch sizes cannot make full use of the computing power of a GPU.
-With big batch sizes, the current implementation of the sampling techniques in PyG is inefficient.
-The time spent on the sampling phase and the data transferring phase even exceeds the training phase.
+The sampled subgraphs had lower average degrees than the original graph.
+%
+With small batch sizes, the sampling techniques could significantly reduce the training time per batch and the peak memory usage.
+%
+However, small batch sizes could not make full use of the computing power of a GPU.
+%
+With big batch sizes, the current implementation of the sampling techniques in PyG was inefficient.
+%
+The time spent on the sampling phase and the data transferring phase even exceeded the training phase.

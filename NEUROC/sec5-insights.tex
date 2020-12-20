@@ -4,7 +4,7 @@
 Through the extensive experiments, we propose the following key findings and suggestions for how to optimize the performance of the GNN training.
 
 \begin{enumerate}
-    \item \emph{The time complexity in \tablename~\ref{tab:gnn_overview_edge} and \tablename~\ref{tab:gnn_overview_vertex} points out the performance bottleneck theoretically.}
+    \item \emph{The time complexity in \tablename~\ref{tab:gnn_overview_edge} and \tablename~\ref{tab:gnn_overview_vertex} points out performance bottlenecks theoretically.}
           The experimental results validate the time complexity analysis.
           The time complexity points out where the bottleneck comes from.
           Optimization should focus on complex operations in the messaging function $\phi$ and the vertex updating function $\gamma$.
