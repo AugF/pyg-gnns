@@ -196,12 +196,6 @@ J.~Chen, J.~Zhu, L.~Song, Stochastic training of graph convolutional networks
   Machine Learning, {ICML} 2018, Stockholmsm{\"{a}}ssan, Stockholm, Sweden,
   July 10-15, 2018, 2018, pp. 941--949.
 
-\bibitem{huang2018_adap}
-W.~Huang, T.~Zhang, Y.~Rong, J.~Huang, Adaptive sampling towards fast graph
-  representation learning, Advances in Neural Information Processing Systems
-  31: Annual Conference on Neural Information Processing Systems 2018, NeurIPS
-  2018, 3-8 December 2018, Montr{\'{e}}al, Canada, 2018, pp. 4563--4572.
-
 \bibitem{zeng2018_aesg}
 H.~Zeng, H.~Zhou, A.~Srivastava, R.~Kannan, V.~K. Prasanna, Accurate, efficient
   and scalable graph embedding, 2019 {IEEE} International Parallel and
@@ -215,6 +209,12 @@ H.~Zeng, H.~Zhou, A.~Srivastava, R.~Kannan, V.~K. Prasanna, Graphsaint: Graph
   sampling based inductive learning method, 8th International Conference on
   Learning Representations, {ICLR} 2020, Addis Ababa, Ethiopia, April 26-30,
   2020, OpenReview.net, 2020.
+
+\bibitem{huang2018_adap}
+W.~Huang, T.~Zhang, Y.~Rong, J.~Huang, Adaptive sampling towards fast graph
+  representation learning, Advances in Neural Information Processing Systems
+  31: Annual Conference on Neural Information Processing Systems 2018, NeurIPS
+  2018, 3-8 December 2018, Montr{\'{e}}al, Canada, 2018, pp. 4563--4572.
 
 \bibitem{yang2016_revisiting_semisupervised}
 Z.~Yang, W.~W. Cohen, R.~Salakhutdinov, Revisiting semi-supervised learning
@@ -241,6 +241,32 @@ J.~Yang, J.~Leskovec, Defining and evaluating network communities based on
   pp. 745--754.
 \newblock \href {http://dx.doi.org/10.1109/ICDM.2012.138}
   {\path{doi:10.1109/ICDM.2012.138}}.
+
+\bibitem{diederik2015_adam}
+D.~P. Kingma, J.~Ba, \href{http://arxiv.org/abs/1412.6980}{Adam: {A} method for
+  stochastic optimization}, in: Y.~Bengio, Y.~LeCun (Eds.), 3rd International
+  Conference on Learning Representations, {ICLR} 2015, San Diego, CA, USA, May
+  7-9, 2015, Conference Track Proceedings, 2015.
+\newline\urlprefix\url{http://arxiv.org/abs/1412.6980}
+
+\bibitem{xavier2010_glorot}
+X.~Glorot, Y.~Bengio,
+  \href{http://proceedings.mlr.press/v9/glorot10a.html}{Understanding the
+  difficulty of training deep feedforward neural networks}, in: Y.~W. Teh,
+  D.~M. Titterington (Eds.), Proceedings of the Thirteenth International
+  Conference on Artificial Intelligence and Statistics, {AISTATS} 2010, Chia
+  Laguna Resort, Sardinia, Italy, May 13-15, 2010, Vol.~9 of {JMLR}
+  Proceedings, JMLR.org, 2010, pp. 249--256.
+\newline\urlprefix\url{http://proceedings.mlr.press/v9/glorot10a.html}
+
+\bibitem{weihua2020_ogb-benchmark}
+W.~Hu, M.~Fey, M.~Zitnik, Y.~Dong, H.~Ren, B.~Liu, M.~Catasta, J.~Leskovec,
+  \href{https://proceedings.neurips.cc/paper/2020/hash/fb60d411a5c5b72b2e7d3527cfc84fd0-Abstract.html}{Open
+  graph benchmark: Datasets for machine learning on graphs}, in: H.~Larochelle,
+  M.~Ranzato, R.~Hadsell, M.~Balcan, H.~Lin (Eds.), Advances in Neural
+  Information Processing Systems 33: Annual Conference on Neural Information
+  Processing Systems 2020, NeurIPS 2020, December 6-12, 2020, virtual, 2020.
+\newline\urlprefix\url{https://proceedings.neurips.cc/paper/2020/hash/fb60d411a5c5b72b2e7d3527cfc84fd0-Abstract.html}
 
 \bibitem{chen2016_training_deep}
 T.~Chen, B.~Xu, C.~Zhang, C.~Guestrin, Training deep nets with sublinear memory

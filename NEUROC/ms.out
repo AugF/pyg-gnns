@@ -1,24 +1,24 @@
 \BOOKMARK [1][-]{section.1}{Introduction}{}% 1
-\BOOKMARK [1][-]{section.2}{Review of Graph Neural Networks}{}% 2
-\BOOKMARK [2][-]{subsection.2.1}{Structure of Graph Neural Networks}{section.2}% 3
-\BOOKMARK [2][-]{subsection.2.2}{Graph Neuron and Message-passing Model}{section.2}% 4
-\BOOKMARK [2][-]{subsection.2.3}{Representative GNNs}{section.2}% 5
-\BOOKMARK [3][-]{subsubsection.2.3.1}{GCN \(Low Vertex \046 Low Edge Complexity\)}{subsection.2.3}% 6
-\BOOKMARK [3][-]{subsubsection.2.3.2}{GGNN \(High Vertex \046 Low Edge Complexity\)}{subsection.2.3}% 7
-\BOOKMARK [3][-]{subsubsection.2.3.3}{GAT \(Low Vertex \046 High Edge Complexity\)}{subsection.2.3}% 8
-\BOOKMARK [3][-]{subsubsection.2.3.4}{GaAN \(High Vertex \046 High Edge Complexity\)}{subsection.2.3}% 9
-\BOOKMARK [2][-]{subsection.2.4}{Sampling Techniques}{section.2}% 10
-\BOOKMARK [1][-]{section.3}{Evaluation Design}{}% 11
-\BOOKMARK [2][-]{subsection.3.1}{Experimental Setting}{section.3}% 12
-\BOOKMARK [2][-]{subsection.3.2}{Experimental Scheme}{section.3}% 13
-\BOOKMARK [1][-]{section.4}{Evaluation Results and Analysis}{}% 14
-\BOOKMARK [2][-]{subsection.4.1}{Effects of Hyper-parameters on Performance}{section.4}% 15
-\BOOKMARK [2][-]{subsection.4.2}{Training Time Breakdown}{section.4}% 16
-\BOOKMARK [3][-]{subsubsection.4.2.1}{Layer Level}{subsection.4.2}% 17
-\BOOKMARK [3][-]{subsubsection.4.2.2}{Step Level in Edge Calculation}{subsection.4.2}% 18
-\BOOKMARK [3][-]{subsubsection.4.2.3}{Operator Level}{subsection.4.2}% 19
-\BOOKMARK [2][-]{subsection.4.3}{Memory Usage Analysis}{section.4}% 20
-\BOOKMARK [2][-]{subsection.4.4}{Effects of Sampling Techniques on Performance}{section.4}% 21
+\BOOKMARK [1][-]{section.2}{Review\040of\040Graph\040Neural\040Networks}{}% 2
+\BOOKMARK [2][-]{subsection.2.1}{Structure\040of\040Graph\040Neural\040Networks}{section.2}% 3
+\BOOKMARK [2][-]{subsection.2.2}{Graph\040Neuron\040and\040Message-passing\040Model}{section.2}% 4
+\BOOKMARK [2][-]{subsection.2.3}{Representative\040GNNs}{section.2}% 5
+\BOOKMARK [3][-]{subsubsection.2.3.1}{GCN\040\(Low\040Vertex\040&\040Low\040Edge\040Complexity\)}{subsection.2.3}% 6
+\BOOKMARK [3][-]{subsubsection.2.3.2}{GGNN\040\(High\040Vertex\040&\040Low\040Edge\040Complexity\)}{subsection.2.3}% 7
+\BOOKMARK [3][-]{subsubsection.2.3.3}{GAT\040\(Low\040Vertex\040&\040High\040Edge\040Complexity\)}{subsection.2.3}% 8
+\BOOKMARK [3][-]{subsubsection.2.3.4}{GaAN\040\(High\040Vertex\040&\040High\040Edge\040Complexity\)}{subsection.2.3}% 9
+\BOOKMARK [2][-]{subsection.2.4}{Sampling\040Techniques}{section.2}% 10
+\BOOKMARK [1][-]{section.3}{Evaluation\040Design}{}% 11
+\BOOKMARK [2][-]{subsection.3.1}{Experimental\040Setting}{section.3}% 12
+\BOOKMARK [2][-]{subsection.3.2}{Experimental\040Scheme}{section.3}% 13
+\BOOKMARK [1][-]{section.4}{Evaluation\040Results\040and\040Analysis}{}% 14
+\BOOKMARK [2][-]{subsection.4.1}{Effects\040of\040Hyper-parameters\040on\040Performance}{section.4}% 15
+\BOOKMARK [2][-]{subsection.4.2}{Training\040Time\040Breakdown}{section.4}% 16
+\BOOKMARK [3][-]{subsubsection.4.2.1}{Layer\040Level}{subsection.4.2}% 17
+\BOOKMARK [3][-]{subsubsection.4.2.2}{Step\040Level\040in\040Edge\040Calculation}{subsection.4.2}% 18
+\BOOKMARK [3][-]{subsubsection.4.2.3}{Operator\040Level}{subsection.4.2}% 19
+\BOOKMARK [2][-]{subsection.4.3}{Memory\040Usage\040Analysis}{section.4}% 20
+\BOOKMARK [2][-]{subsection.4.4}{Effects\040of\040Sampling\040Techniques\040on\040Performance}{section.4}% 21
 \BOOKMARK [1][-]{section.5}{Insights}{}% 22
-\BOOKMARK [1][-]{section.6}{Related Work}{}% 23
+\BOOKMARK [1][-]{section.6}{Related\040Work}{}% 23
 \BOOKMARK [1][-]{section.7}{Conclusion}{}% 24
