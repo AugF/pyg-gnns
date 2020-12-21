@@ -11,7 +11,7 @@ According to \tablename~\ref{tab:gnn_overview_edge} and \tablename~\ref{tab:gnn_
 %
 If we increase one of the hyper-parameters and fix the others, the training time should increase linearly.
 
-To verify the time complexity analysis in \tablename~\ref{tab:gnn_overview_edge} and \tablename~\ref{tab:gnn_overview_vertex}, we first compared the training time of the four GNNs.
+To verify the time complexity analysis in \tablename~\ref{tab:gnn_overview_edge} and \tablename~\ref{tab:gnn_overview_vertex}, we first compared the training time of the four GNNs in \figurename~\ref{fig:exp_absolute_training_time}.
 %
 The ranking of the training time was GaAN $\gg$ GAT $>$ GGNN $>$ GCN in all cases.
 %
@@ -21,31 +21,66 @@ The ranking was consistent with the time complexity analysis.
 
 \begin{figure}[htb]
     \centering
-    \subfloat[\texttt{pub}\label{fig:exp_absolute_training_time_pubmed}]{\includegraphics[height=4cm]{figs/experiments/exp_absolute_training_time_comparison_pubmed.pdf}}
-    \subfloat[\texttt{aph}\label{fig:exp_absolute_training_time_amazon-photo}]{\includegraphics[height=4cm]{figs/experiments/exp_absolute_training_time_comparison_amazon-photo.pdf}}
-    \subfloat[\texttt{cph}\label{fig:exp_absolute_training_time_coauthor-physics}]{\includegraphics[height=4cm]{figs/experiments/exp_absolute_training_time_comparison_coauthor-physics.pdf}} \\
-    \subfloat[\texttt{amc}\label{fig:exp_absolute_training_time_amazon-computers}]{\includegraphics[height=4cm]{figs/experiments/exp_absolute_training_time_comparison_amazon-computers.pdf}}
-    \subfloat[\texttt{fli}\label{fig:exp_absolute_training_time_flickr}]{\includegraphics[height=4cm]{figs/experiments/exp_absolute_training_time_comparison_flickr.pdf}}
-    \subfloat[\texttt{cam}\label{fig:exp_absolute_training_time_com-amazon}]{\includegraphics[height=4cm]{figs/experiments/exp_absolute_training_time_comparison_com-amazon.pdf}}
+    \includegraphics[width=0.32\textwidth]{figs/experiments/exp_absolute_training_time_comparison_pubmed.pdf}
+    \includegraphics[width=0.32\textwidth]{figs/experiments/exp_absolute_training_time_comparison_amazon-photo.pdf}
+    \includegraphics[width=0.32\textwidth]{figs/experiments/exp_absolute_training_time_comparison_coauthor-physics.pdf}
+
+    \includegraphics[width=0.32\textwidth]{figs/experiments/exp_absolute_training_time_comparison_amazon-computers.pdf}
+    \includegraphics[width=0.32\textwidth]{figs/experiments/exp_absolute_training_time_comparison_flickr.pdf}
+    \includegraphics[width=0.32\textwidth]{figs/experiments/exp_absolute_training_time_comparison_com-amazon.pdf}
+    %\subfloat[\label{fig:exp_absolute_training_time_pubmed}]{\includegraphics[width=0.32\textwidth]{figs/experiments/exp_absolute_training_time_comparison_pubmed.pdf}}
+    %\subfloat[\label{fig:exp_absolute_training_time_amazon-photo}]{\includegraphics[width=0.32\textwidth]{figs/experiments/exp_absolute_training_time_comparison_amazon-photo.pdf}}
+    %\subfloat[\label{fig:exp_absolute_training_time_coauthor-physics}]{\includegraphics[width=0.32\textwidth]{figs/experiments/exp_absolute_training_time_comparison_coauthor-physics.pdf}} \\
+    %\subfloat[\label{fig:exp_absolute_training_time_amazon-computers}]{\includegraphics[width=0.32\textwidth]{figs/experiments/exp_absolute_training_time_comparison_amazon-computers.pdf}}
+    %\subfloat[\label{fig:exp_absolute_training_time_flickr}]{\includegraphics[width=0.32\textwidth]{figs/experiments/exp_absolute_training_time_comparison_flickr.pdf}}
+    %\subfloat[\label{fig:exp_absolute_training_time_com-amazon}]{\includegraphics[width=0.32\textwidth]{figs/experiments/exp_absolute_training_time_comparison_com-amazon.pdf}}
     \caption{Distribution of the wall-clock training time of 50 epoches on different datasets. GaAN crashed due to out of memory exception on the \texttt{cph} dataset.}
     \label{fig:exp_absolute_training_time}
 \end{figure}
 
-To further evaluate effects of hyper-parameters on performance, we measured the training time of each GNN with varying hyper-parameters in \figurename~\ref{fig:exp_hyperparameter_on_vertex_edge_phase_time}.
+To further evaluate effects of hyper-parameters on performance, we measured the training time of each GNN with varying hyper-parameters in \figurename~\ref{fig:exp_hyperparameter_on_vertex_edge_phase_time_gcn} to \figurename~\ref{fig:exp_hyperparameter_on_vertex_edge_phase_time_gaan}.
 
 \begin{figure}[H]
     \centering
-    \subfloat[GCN\label{fig:exp_hyperparameter_on_vertex_edge_phase_time_gcn}]{\includegraphics[height=3cm]{figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gcn.pdf}}
-    \\
-    \subfloat[GGNN\label{fig:exp_hyperparameter_on_vertex_edge_phase_time_ggnn}]{\includegraphics[height=3cm]{figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_ggnn.pdf}}
-    \\
-    \subfloat[GAT\label{fig:exp_hyperparameter_on_vertex_edge_phase_time_gat}]{\includegraphics[height=6cm]{figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gat.pdf}}
-    \\
-    \subfloat[GaAN\label{fig:exp_hyperparameter_on_vertex_edge_phase_time_gaan}]{\includegraphics[height=6cm]{figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gaan.pdf}}
-
-    \caption{Effects of hyper-parameters on the edge/vertex calculation time.}
-    \label{fig:exp_hyperparameter_on_vertex_edge_phase_time}
+    \includegraphics[width=0.6\textwidth]{figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gcn.pdf}
+    \caption{Effects of hyper-parameters on the vertex/edge calculation time of GCN.}
+    \label{fig:exp_hyperparameter_on_vertex_edge_phase_time_gcn}
 \end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_ggnn.pdf}
+    \caption{Effects of hyper-parameters on the vertex/edge calculation time of GGNN.}
+    \label{fig:exp_hyperparameter_on_vertex_edge_phase_time_ggnn}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gat.pdf}
+    \caption{Effects of hyper-parameters on the vertex/edge calculation time of GGNN.}
+    \label{fig:exp_hyperparameter_on_vertex_edge_phase_time_gat}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gaan.pdf}
+    \caption{Effects of hyper-parameters on the vertex/edge calculation time of GaAN.}
+    \label{fig:exp_hyperparameter_on_vertex_edge_phase_time_gaan}
+\end{figure}
+
+%\begin{figure}[H]
+    %\centering
+    %\subfloat[GCN\label{fig:exp_hyperparameter_on_vertex_edge_phase_time_gcn}]{\includegraphics[width=0.6\textwidth]%{figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gcn.pdf}}
+%    \\
+    %\subfloat[GGNN\label{fig:exp_hyperparameter_on_vertex_edge_phase_time_ggnn}]{\includegraphics[width=0.6\textwidth]{figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_ggnn.pdf}}
+%    \\
+    %\subfloat[GAT\label{fig:exp_hyperparameter_on_vertex_edge_phase_time_gat}]{\includegraphics[width=0.6\textwidth]{figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gat.pdf}}
+    %\\
+    %\subfloat[GaAN\label{fig:exp_hyperparameter_on_vertex_edge_phase_time_gaan}]{\includegraphics[width=0.9\textwidth]{figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gaan.pdf}}
+
+    %\caption{Effects of hyper-parameters on the edge/vertex calculation time.}
+    %\label{fig:exp_hyperparameter_on_vertex_edge_phase_time}
+%\end{figure}
 
 For GCN and GGNN, $dim(\MyVec{h}^0_x)$ and $dim(\MyVec{h}^1_x)$ were solely determined by the dataset with $d^0_{in} = dim(\MyVec{h}^0_x) = dim(\MyVec{v_x})$ and $d^1_{out} = dim(\boldsymbol{h}^2_x)=\#Class$.
 %
