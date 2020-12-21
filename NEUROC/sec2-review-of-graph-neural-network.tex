@@ -506,39 +506,59 @@ The vertex updating funciton $\gamma^{l,4}$ of the fourth sub-layer uses the hid
 \subsection{Sampling Techniques}
 
 By default, GNNs are trained in a full-batch way, using the whole graph in each iteration.
-The full-batch gradient descent has two disadvantages \cite{chiang2019_cluster_gcn}.
-It has to cache intermediate results of all vertices in the forward phase, which consumes lots of memory space.
-It updates the parameters only once for each epoch, slowing the convergence of gradient descent.
+%
+The full-batch gradient descent has two disadvantages \cite{chiang2019_cluster_gcn}:
+%
+(1) it has to cache intermediate results of all vertices in the forward phase, which consumes lots of memory space;
+%
+(2) it updates the model parameters only once for each epoch, slowing the convergence of gradient descent.
 
-To train GNNs in a mini-batch way, the sampling techniques are proposed.
+To train GNNs in a mini-batch way, the sampling techniques \cite{hamilton2017_graphsage, ying2018_pinsage, chen2018_fastgcn, chen2018_sgcn, zeng2018_aesg, chiang2019_cluster_gcn, zeng2020_graphsaint} are proposed.
+%
 In each mini-batch, they sample a small subgraph from the whole graph $\mathcal{G}$ and uses the subgraph to update the model parameters.
+%
 The sampling techniques only active the graph neurons and the connections that appear in the sampled subgraph between GNN layers, as shown in \figurename~\ref{fig:gnn_sampling}.
-In active graph neurons and connections do not participate in the training of this mini-batch, saving lots of computation and storage costs.
+%
+Inactive graph neurons and connections do not participate in the training of this mini-batch, saving lots of computation and storage costs.
+%
 Moreover, it may reduce the risk of overfitting the training graph.
-The existing sampling techniques can be classified into two groups \textbf{neighbor sampling and graph sampling} based on whether different GNN layers sample different subgraphs.
+%
+The existing sampling techniques can be classified into two groups: \emph{neighbor sampling} and \emph{graph sampling}, based on whether different GNN layers sample different subgraphs.
 
 The neighbor sampling techniques \cite{hamilton2017_graphsage, ying2018_pinsage, chen2018_fastgcn, chen2018_sgcn, huang2018_adap} sample nodes or edges layer by layer.
-The sampled subgraphs of different GNN layers may be \emph{different}, as shown in \figurename~\ref{fig:gnn_sampling_neighbor_sampling}.
-GraphSAGE \cite{hamilton2017_graphsage} is the representative technique.
+%
+The sampled subgraphs of different GNN layers may be \emph{different}, as shown in \figurename~\ref{fig:gnn_sampling}(a).
+%
+GraphSAGE \cite{hamilton2017_graphsage} is a representative neighbor sampling technique.
+%
 The tecnnique first samples several vertices from $\mathcal{V}$ in the last GNN layer.
-Then it repeatedly samples the neighbors of those sampled vertices in the previous layer until the input layer.
-For every sampled vertex $v_x$ in the GNN layer $l$, GraphSAGE samples at most $S^l$ neighbors of $v_x$ from the previous GNN layer.
-$S^l$ is the hyper-parameter that is usually much smaller than $|\mathcal{V}|$.
-In this way, GraphSAGE limits the neighborhood sizes of the vertices in the sampled subgraph, especially high-degree vertices.
+%
+Then it repeatedly samples the neighbors of the sampled vertices from the previous layer until the input layer.
+%
+For every sampled vertex $v_x$ in the GNN layer $l$, GraphSAGE samples at most $\eta^l$ neighbors of $v_x$ from the previous layer.
+%
+$\eta^l$ is the hyper-parameter that is usually much smaller than $|\mathcal{V}|$.
+%
+By this way, GraphSAGE limits neighborhood sizes of vertices in the sampled subgraph, especially high-degree vertices.
 
-\begin{figure}
+\begin{figure}[H]
     \centering
-    \subfloat[Neighbor sampling\label{fig:gnn_sampling_neighbor_sampling}]{\includegraphics[height=4.5cm]{figs/illustration/layer_sampling.pdf}}
+    \includegraphics[width=0.9\columnwidth]{figs/illustration/sampling_techniques.pdf}
+    %\subfloat[Neighbor sampling\label{fig:gnn_sampling_neighbor_sampling}]{\includegraphics[height=4.5cm]{figs/illustration/layer_sampling.pdf}}
     %
-    \subfloat[Graph sampling\label{fig:gnn_sampling_graph_sampling}]{\includegraphics[height=4.5cm]{figs/illustration/graph_sampling.pdf}}
+    %\subfloat[Graph sampling\label{fig:gnn_sampling_graph_sampling}]{\includegraphics[height=4.5cm]{figs/illustration/graph_sampling.pdf}}
     \caption{Training a GNN with sampling techniques. The faded graph neurons and their connections are inactivated.}
     \label{fig:gnn_sampling}
 \end{figure}
 
-The graph sampling techniques \cite{zeng2018_aesg, chiang2019_cluster_gcn, zeng2020_graphsaint} sample a subgraph for each mini-batch and use the same sampled graph for all GNN layers, as shown in \figurename~\ref{fig:gnn_sampling_graph_sampling}.
-They differ in the methods to sample subgraphs.
-The cluster sampler technique \cite{chiang2019_cluster_gcn} is the representative technique.
-Given a training graph $\mathcal{G}$, it partitions $\mathcal{G}$ into dense clusters.
+The graph sampling techniques \cite{zeng2018_aesg, chiang2019_cluster_gcn, zeng2020_graphsaint} sample a subgraph for each mini-batch and use the same sampled subgraph for all GNN layers, as shown in \figurename~\ref{fig:gnn_sampling}(b).
+%
+They differ in how to sample subgraphs.
+%
+The cluster sampler technique \cite{chiang2019_cluster_gcn} is a representative graph sampling technique.
+%
+Given a training graph $\mathcal{G}$, it partitions $\mathcal{G}$ into several dense clusters.
+%
 For each mini-batch, it randomly pick $N$ clusters to form the sampled subgraph, where $N$ is the hyper-parameter.
 
 

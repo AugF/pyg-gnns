@@ -1,0 +1,261 @@
+\begin{thebibliography}{10}
+\expandafter\ifx\csname url\endcsname\relax
+  \def\url#1{\texttt{#1}}\fi
+\expandafter\ifx\csname urlprefix\endcsname\relax\def\urlprefix{URL }\fi
+\expandafter\ifx\csname href\endcsname\relax
+  \def\href#1#2{#2} \def\path#1{#1}\fi
+
+\bibitem{kipf2017_gcn}
+T.~N. Kipf, M.~Welling, Semi-supervised classification with graph convolutional
+  networks, 5th International Conference on Learning Representations, {ICLR}
+  2017, Toulon, France, April 24-26, 2017, Conference Track Proceedings,
+  OpenReview.net, 2017.
+
+\bibitem{defferrad2016_chebnet}
+M.~Defferrard, X.~Bresson, P.~Vandergheynst, Convolutional neural networks on
+  graphs with fast localized spectral filtering, Advances in Neural Information
+  Processing Systems 29: Annual Conference on Neural Information Processing
+  Systems 2016, December 5-10, 2016, Barcelona, Spain, 2016, pp. 3837--3845.
+
+\bibitem{li2018_agcn}
+R.~Li, S.~Wang, F.~Zhu, J.~Huang, Adaptive graph convolutional neural networks,
+  Proceedings of the Thirty-Second {AAAI} Conference on Artificial
+  Intelligence, (AAAI-18), the 30th innovative Applications of Artificial
+  Intelligence (IAAI-18), and the 8th {AAAI} Symposium on Educational Advances
+  in Artificial Intelligence (EAAI-18), New Orleans, Louisiana, USA, February
+  2-7, 2018, 2018, pp. 3546--3553.
+
+\bibitem{li2015_ggnn}
+Y.~Li, D.~Tarlow, M.~Brockschmidt, R.~S. Zemel, Gated graph sequence neural
+  networks, 4th International Conference on Learning Representations, {ICLR}
+  2016, San Juan, Puerto Rico, May 2-4, 2016, Conference Track Proceedings,
+  2016.
+
+\bibitem{hamilton2017_graphsage}
+W.~L. Hamilton, Z.~Ying, J.~Leskovec, Inductive representation learning on
+  large graphs, Advances in Neural Information Processing Systems 30: Annual
+  Conference on Neural Information Processing Systems 2017, 4-9 December 2017,
+  Long Beach, CA, {USA}, 2017, pp. 1024--1034.
+
+\bibitem{huang2018_gat}
+P.~Velickovic, G.~Cucurull, A.~Casanova, A.~Romero, P.~Li{\`{o}}, Y.~Bengio,
+  Graph attention networks, 6th International Conference on Learning
+  Representations, {ICLR} 2018, Vancouver, BC, Canada, April 30 - May 3, 2018,
+  Conference Track Proceedings, 2018.
+
+\bibitem{zhang2018_gaan}
+J.~Zhang, X.~Shi, J.~Xie, H.~Ma, I.~King, D.~Yeung, Gaan: Gated attention
+  networks for learning on large and spatiotemporal graphs, Proceedings of the
+  Thirty-Fourth Conference on Uncertainty in Artificial Intelligence, {UAI}
+  2018, Monterey, California, USA, August 6-10, 2018, 2018, pp. 339--349.
+
+\bibitem{zhou2018_gnn_review}
+J.~Zhou, G.~Cui, Z.~Zhang, C.~Yang, Z.~Liu, L.~Wang, C.~Li, M.~Sun, Graph
+  neural networks: A review of methods and applications,
+  \url{https://arxiv.org/abs/1812.08434} (2018).
+\newblock \href {http://arxiv.org/abs/1812.08434} {\path{arXiv:1812.08434}}.
+
+\bibitem{zhang2018_gnn_survey}
+Z.~Zhang, P.~Cui, W.~Zhu, Deep learning on graphs: {A} survey, IEEE
+  Transactions on Knowledge and Data Engineering (Early Access) (2020) 1--1.
+\newblock \href {http://dx.doi.org/10.1109/TKDE.2020.2981333}
+  {\path{doi:10.1109/TKDE.2020.2981333}}.
+
+\bibitem{comprehensive-survey-wu-2020}
+Z.~{Wu}, S.~{Pan}, F.~{Chen}, G.~{Long}, C.~{Zhang}, P.~S. {Yu}, A
+  comprehensive survey on graph neural networks, IEEE Transactions on Neural
+  Networks and Learning Systems (Early Access) (2020) 1--21.
+\newblock \href {http://dx.doi.org/10.1109/TNNLS.2020.2978386}
+  {\path{doi:10.1109/TNNLS.2020.2978386}}.
+
+\bibitem{qi2018_learning_humanobject}
+S.~Qi, W.~Wang, B.~Jia, J.~Shen, S.~Zhu, Learning human-object interactions by
+  graph parsing neural networks, in: V.~Ferrari, M.~Hebert, C.~Sminchisescu,
+  Y.~Weiss (Eds.), Computer Vision -- ECCV 2018, Vol. 11213 of Lecture Notes in
+  Computer Science, Springer, 2018, pp. 407--423.
+\newblock \href {http://dx.doi.org/10.1007/978-3-030-01240-3\_25}
+  {\path{doi:10.1007/978-3-030-01240-3\_25}}.
+
+\bibitem{wang2020_hierarchical_human_parsing}
+W.~Wang, H.~Zhu, J.~Dai, Y.~Pang, J.~Shen, L.~Shao, Hierarchical human parsing
+  with typed part-relation reasoning, in: Proceedings of the 2020 {IEEE/CVF}
+  Conference on Computer Vision and Pattern Recognition (CVPR), IEEE, 2020, pp.
+  8926--8936.
+\newblock \href {http://dx.doi.org/10.1109/CVPR42600.2020.00895}
+  {\path{doi:10.1109/CVPR42600.2020.00895}}.
+
+\bibitem{wang2019_zeroshot_video}
+W.~Wang, X.~Lu, J.~Shen, D.~J. Crandall, L.~Shao, Zero-shot video object
+  segmentation via attentive graph neural networks, in: Proceedings of the 2019
+  {IEEE/CVF} International Conference on Computer Vision (ICCV), IEEE, 2019,
+  pp. 9235--9244.
+\newblock \href {http://dx.doi.org/10.1109/ICCV.2019.00933}
+  {\path{doi:10.1109/ICCV.2019.00933}}.
+
+\bibitem{PyG}
+M.~Fey, J.~E. Lenssen, Fast graph representation learning with pytorch
+  geometric, \url{https://pytorch-geometric.readthedocs.io/} (2019).
+\newblock \href {http://arxiv.org/abs/1903.02428} {\path{arXiv:1903.02428}}.
+
+\bibitem{DGL}
+M.~Wang, L.~Yu, D.~Zheng, Q.~Gan, Y.~Gai, Z.~Ye, M.~Li, J.~Zhou, Q.~Huang,
+  C.~Ma, Z.~Huang, Q.~Guo, H.~Zhang, H.~Lin, J.~Zhao, J.~Li, A.~J. Smola,
+  Z.~Zhang, Deep graph library: Towards efficient and scalable deep learning on
+  graphs, \url{https://www.dgl.ai/} (2019).
+\newblock \href {http://arxiv.org/abs/1909.01315} {\path{arXiv:1909.01315}}.
+
+\bibitem{ma2019_neugraph}
+L.~Ma, Z.~Yang, Y.~Miao, J.~Xue, M.~Wu, L.~Zhou, Y.~Dai, Neugraph: Parallel
+  deep neural network computation on large graphs, 2019 {USENIX} Annual
+  Technical Conference, {USENIX} {ATC} 2019, Renton, WA, USA, July 10-12, 2019,
+  2019, pp. 443--458.
+
+\bibitem{zhu2019_aligraph}
+R.~Zhu, K.~Zhao, H.~Yang, W.~Lin, C.~Zhou, B.~Ai, Y.~Li, J.~Zhou, Aligraph: {A}
+  comprehensive graph neural network platform, Proc. {VLDB} Endow. 12~(12)
+  (2019) 2094--2105.
+\newblock \href {http://dx.doi.org/10.14778/3352063.3352127}
+  {\path{doi:10.14778/3352063.3352127}}.
+
+\bibitem{PGL}
+Baidu, Paddle graph learning, \url{https://github.com/PaddlePaddle/PGL}.
+
+\bibitem{yan2020_characterizing_gcn}
+M.~{Yan}, Z.~{Chen}, L.~{Deng}, X.~{Ye}, Z.~{Zhang}, D.~{Fan}, Y.~{Xie},
+  Characterizing and understanding gcns on gpu, IEEE Computer Architecture
+  Letters 19~(1) (2020) 22--25.
+
+\bibitem{zhang2020_analysis_neugraph}
+Z.~Zhang, J.~Leng, L.~Ma, Y.~Miao, C.~Li, M.~Guo, Architectural implications of
+  graph neural networks, IEEE Computer Architecture Letters 19~(1) (2020)
+  59--62.
+
+\bibitem{bryan2014_deepwalk}
+B.~Perozzi, R.~Al{-}Rfou, S.~Skiena, Deepwalk: online learning of social
+  representations, The 20th {ACM} {SIGKDD} International Conference on
+  Knowledge Discovery and Data Mining, {KDD} '14, New York, NY, {USA} - August
+  24 - 27, 2014, 2014, pp. 701--710.
+\newblock \href {http://dx.doi.org/10.1145/2623330.2623732}
+  {\path{doi:10.1145/2623330.2623732}}.
+
+\bibitem{aditya2016_node2vec}
+A.~Grover, J.~Leskovec, node2vec: Scalable feature learning for networks,
+  Proceedings of the 22nd {ACM} {SIGKDD} International Conference on Knowledge
+  Discovery and Data Mining, San Francisco, CA, USA, August 13-17, 2016, 2016,
+  pp. 855--864.
+\newblock \href {http://dx.doi.org/10.1145/2939672.2939754}
+  {\path{doi:10.1145/2939672.2939754}}.
+
+\bibitem{gilmer_messgae_passing}
+J.~Gilmer, S.~S. Schoenholz, P.~F. Riley, O.~Vinyals, G.~E. Dahl, Neural
+  message passing for quantum chemistry, Vol.~70 of Proceedings of Machine
+  Learning Research, Proceedings of the 34th International Conference on
+  Machine Learning, PMLR, International Convention Centre, Sydney, Australia,
+  2017, pp. 1263--1272.
+
+\bibitem{duvenaud2015_neural_fps}
+D.~Duvenaud, D.~Maclaurin, J.~Aguilera{-}Iparraguirre,
+  R.~G{\'{o}}mez{-}Bombarelli, T.~Hirzel, A.~Aspuru{-}Guzik, R.~P. Adams,
+  Convolutional networks on graphs for learning molecular fingerprints,
+  Advances in Neural Information Processing Systems 28: Annual Conference on
+  Neural Information Processing Systems 2015, December 7-12, 2015, Montreal,
+  Quebec, Canada, 2015, pp. 2224--2232.
+
+\bibitem{han2018_sse}
+H.~Dai, Z.~Kozareva, B.~Dai, A.~J. Smola, L.~Song, Learning steady-states of
+  iterative algorithms over graphs, Proceedings of the 35th International
+  Conference on Machine Learning, {ICML} 2018, Stockholmsm{\"{a}}ssan,
+  Stockholm, Sweden, July 10-15, 2018, 2018, pp. 1114--1122.
+
+\bibitem{chiang2019_cluster_gcn}
+W.-L. Chiang, X.~Liu, S.~Si, Y.~Li, S.~Bengio, C.-J. Hsieh, Cluster-gcn: An
+  efficient algorithm for training deep and large graph convolutional networks,
+  Proceedings of the 25th ACM SIGKDD International Conference on Knowledge
+  Discovery \& Data Mining, {ACM}, 2019, pp. 257–--266.
+\newblock \href {http://dx.doi.org/10.1145/3292500.3330925}
+  {\path{doi:10.1145/3292500.3330925}}.
+
+\bibitem{ying2018_pinsage}
+R.~Ying, R.~He, K.~Chen, P.~Eksombatchai, W.~L. Hamilton, J.~Leskovec, Graph
+  convolutional neural networks for web-scale recommender systems, Proceedings
+  of the 24th {ACM} {SIGKDD} International Conference on Knowledge Discovery
+  {\&} Data Mining, {KDD} 2018, London, UK, August 19-23, 2018, 2018, pp.
+  974--983.
+\newblock \href {http://dx.doi.org/10.1145/3219819.3219890}
+  {\path{doi:10.1145/3219819.3219890}}.
+
+\bibitem{chen2018_fastgcn}
+J.~Chen, T.~Ma, C.~Xiao, Fastgcn: Fast learning with graph convolutional
+  networks via importance sampling, 6th International Conference on Learning
+  Representations, {ICLR} 2018, Vancouver, BC, Canada, April 30 - May 3, 2018,
+  Conference Track Proceedings, 2018.
+
+\bibitem{chen2018_sgcn}
+J.~Chen, J.~Zhu, L.~Song, Stochastic training of graph convolutional networks
+  with variance reduction, Proceedings of the 35th International Conference on
+  Machine Learning, {ICML} 2018, Stockholmsm{\"{a}}ssan, Stockholm, Sweden,
+  July 10-15, 2018, 2018, pp. 941--949.
+
+\bibitem{huang2018_adap}
+W.~Huang, T.~Zhang, Y.~Rong, J.~Huang, Adaptive sampling towards fast graph
+  representation learning, Advances in Neural Information Processing Systems
+  31: Annual Conference on Neural Information Processing Systems 2018, NeurIPS
+  2018, 3-8 December 2018, Montr{\'{e}}al, Canada, 2018, pp. 4563--4572.
+
+\bibitem{zeng2018_aesg}
+H.~Zeng, H.~Zhou, A.~Srivastava, R.~Kannan, V.~K. Prasanna, Accurate, efficient
+  and scalable graph embedding, 2019 {IEEE} International Parallel and
+  Distributed Processing Symposium, {IPDPS} 2019, Rio de Janeiro, Brazil, May
+  20-24, 2019, 2019, pp. 462--471.
+\newblock \href {http://dx.doi.org/10.1109/IPDPS.2019.00056}
+  {\path{doi:10.1109/IPDPS.2019.00056}}.
+
+\bibitem{zeng2020_graphsaint}
+H.~Zeng, H.~Zhou, A.~Srivastava, R.~Kannan, V.~K. Prasanna, Graphsaint: Graph
+  sampling based inductive learning method, 8th International Conference on
+  Learning Representations, {ICLR} 2020, Addis Ababa, Ethiopia, April 26-30,
+  2020, OpenReview.net, 2020.
+
+\bibitem{yang2016_revisiting_semisupervised}
+Z.~Yang, W.~W. Cohen, R.~Salakhutdinov, Revisiting semi-supervised learning
+  with graph embeddings, Vol.~48 of {JMLR} Workshop and Conference Proceedings,
+  Proceedings of the 33nd International Conference on Machine Learning, {ICML}
+  2016, New York City, NY, USA, June 19-24, 2016, JMLR.org, 2016, pp. 40--48.
+
+\bibitem{shchur2018_pitfall_of_gnn}
+O.~Shchur, M.~Mumme, A.~Bojchevski, S.~G{\"{u}}nnemann, Pitfalls of graph
+  neural network evaluation, CoRR abs/1811.05868.
+\newblock \href {http://arxiv.org/abs/1811.05868} {\path{arXiv:1811.05868}}.
+
+\bibitem{rmat-generator}
+D.~Chakrabarti, Y.~Zhan, C.~Faloutsos, R-mat: A recursive model for graph
+  mining, Proceedings of the 2004 SIAM International Conference on Data Mining,
+  pp. 442--446.
+\newblock \href {http://dx.doi.org/10.1137/1.9781611972740.43}
+  {\path{doi:10.1137/1.9781611972740.43}}.
+
+\bibitem{yang2012_defining}
+J.~Yang, J.~Leskovec, Defining and evaluating network communities based on
+  ground-truth, 12th {IEEE} International Conference on Data Mining, {ICDM}
+  2012, Brussels, Belgium, December 10-13, 2012, {IEEE} Computer Society, 2012,
+  pp. 745--754.
+\newblock \href {http://dx.doi.org/10.1109/ICDM.2012.138}
+  {\path{doi:10.1109/ICDM.2012.138}}.
+
+\bibitem{chen2016_training_deep}
+T.~Chen, B.~Xu, C.~Zhang, C.~Guestrin, Training deep nets with sublinear memory
+  cost, \url{https://arxiv.org/abs/1604.06174} (2016).
+\newblock \href {http://arxiv.org/abs/1604.06174} {\path{arXiv:1604.06174}}.
+
+\bibitem{dwivedi2020_benchmark_of_gnn}
+V.~P. Dwivedi, C.~K. Joshi, T.~Laurent, Y.~Bengio, X.~Bresson, Benchmarking
+  graph neural networks (2020).
+\newblock \href {http://arxiv.org/abs/2003.00982} {\path{arXiv:2003.00982}}.
+
+\bibitem{hu2020_open_graph_benchmark}
+W.~Hu, M.~Fey, M.~Zitnik, Y.~Dong, H.~Ren, B.~Liu, M.~Catasta, J.~Leskovec,
+  Open graph benchmark: Datasets for machine learning on graphs,
+  \url{https://arxiv.org/abs/2005.00687} (2020).
+\newblock \href {http://arxiv.org/abs/2005.00687} {\path{arXiv:2005.00687}}.
+
+\end{thebibliography}
