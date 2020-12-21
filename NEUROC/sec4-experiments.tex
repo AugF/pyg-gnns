@@ -461,13 +461,13 @@ Each mini-batch updated the model parameters based on a small subgraph sampled f
 %
 Thus, the training time per batch and the peak memory usage during the training both declined significantly.
 
-In the implementation in PyG, the GNN model and the dataset resided on the GPU side.
+In the implementation in PyG, the GNN model resided on the GPU side and the dataset resided on the host side.
 %
 To process each epoch, PyG sampled the original dataset in the main memory and generated several batches.
 %
 Each batch was a small subgraph of the dataset.
 %
-To train on each batch, PyG sent the sampled subgraph to the GPU, calculated the gradients on the subgraph, and updated the model parameters directly on the GPU.
+To train the GNN model with each batch, PyG sent the sampled subgraph to the GPU, calculated the gradients on the subgraph, and updated the model parameters directly on the GPU.
 %
 With the sampling techniques, the model parameters were updated by a stochastic gradient descent optimizer.
 %
@@ -477,11 +477,11 @@ In this section, the experiments focused on the training phase of each batch.
 
 \figurename~\ref{fig:exp_sampling_minibatch_graph_info} shows how the size of the sampled subgraph changed with the batch size.
 %
-For the neighbor sampler, the relative batch size was the proportion of the sampled vertices of the last GNN layer in $\mathcal{V}$.
+For the neighbor sampler, the relative batch size was defined as the proportion of the sampled vertices of the last GNN layer in $\mathcal{V}$.
 %
-For the cluster sampler, the relative batch size was the proportion of the sampled partitions in all partitions of the graph.
+For the cluster sampler, the relative batch size was defined as the proportion of the sampled partitions in all partitions of the graph.
 %
-The neighbor sampler was very sensitive to the batch size.
+The experimental results indicated that the neighbor sampler was very sensitive to the batch size.
 %
 As the batch size increased, the size of the sampled subgraph first increased quickly and then stabilized.
 %
@@ -575,11 +575,11 @@ As the sampling techniques were only effective under small batch sizes, the samp
 %
 They could not make full use of the computing power of a GPU.
 %
-To simulate the situation, we generated random graphs with few vertices and measured the training time per batch in \figurename~\ref{fig:exp_small_graph_train_time}.
+To simulate the situation, we generated random graphs with few vertices and measured their training time per epoch in \figurename~\ref{fig:exp_small_graph_train_time}.
 %
 As the number of vertices increased, the training time was almost unchanged except for GaAN.
 %
-The training time of GaAN increased only with $|\mathcal{V}| \geq 4000$.
+The training time of GaAN increased only when $|\mathcal{V}| \geq 4000$.
 
 \begin{figure}[H]
     \centering
@@ -587,7 +587,6 @@ The training time of GaAN increased only with $|\mathcal{V}| \geq 4000$.
     \caption{Training time per epoch on small random graphs. For each number of vertices, we generated 50 random graphs with the average degree of 4.0 and reported the average training time per batch (without the evaluation phase). The error bar indicates the standard deviation.}
     \label{fig:exp_small_graph_train_time}
 \end{figure}
-
 
 \paragraph{Summary of Sampling Techniques}
 
