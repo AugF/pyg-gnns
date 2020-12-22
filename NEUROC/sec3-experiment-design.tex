@@ -103,10 +103,6 @@ We set the default batch size to 512, according to \cite{hamilton2017_graphsage}
 %
 For the cluster sampler, we partitioned the input graph into 1500 partitions and used 20 partitions per batch, according to \cite{chiang2019_cluster_gcn}.
 
-% added by wangyupan, 2020-12-21 ----start----
-In sampled-based inference experiment, according to \cite{weihua2020_ogb-benchmark}, we used neighbor sampler \cite{hamilton2017_graphsage} with batch size of 1024 and all neighbors were inclued in all layers.
-% added by wangyupan, 2020-12-21 ----end----
-
 \subsection{Experimental Scheme}
 \label{sec:experimental_scheme}
 
@@ -116,19 +112,23 @@ The answers to those questions will give us a more comprehensive view of perform
 
 \begin{itemize}
 
-    \item[Q1] \emph{How do the hyper-parameters affect the training/inference time and memory usage of a GNN?} (Section~\ref{sec:effects_of_hyper-parameters_on_performance})
+    \item[Q1] \emph{How do the hyper-parameters affect the training/inference time, memory usage and accuracy of a GNN?} (Section~\ref{sec:effects_of_hyper-parameters_on_performance})
 
           Every GNN has a group of hyper-parameters, such as the number of GNN layers and the dimensions of hidden feature vectors.
           %
           The hyper-parameters affect the processing time per epoch and the peak memory usage during training and inference.
           %
-          To evaluate their effects, we measured how the training time per epoch, the peak memory usage (of the GPU), and the accuracy changed as we increased the values of the hyper-parameters.
+          They also affect the accuracy of a GNN.
+          %
+          Larger hyper-parameter values usually mean more model parameters and more complex models.
+          %
+          To evaluate their effects, we measured how the training/inference time per epoch, the peak memory usage (of the GPU), and the accuracy on the test set changed as we increased the values of the hyper-parameters.
           %
           Through the experiments, we verified the validity of the time complexity analysis in \tablename~\ref{tab:gnn_overview_edge} and \tablename~\ref{tab:gnn_overview_vertex}.
           %
           The complexity analysis allowed us to analyze performance bottlenecks theoretically.
 
-    \item[Q2] \emph{Which stage is the most time-consuming stage in GNN training?} (Section~\ref{sec:training_time_breakdown})
+    \item[Q2] \emph{Which stage is the most time-consuming stage in GNN training and inference?} (Section~\ref{sec:training_time_breakdown})
 
           We decomposed the GNN training time on different levels: the layer level, the edge/vertex calculation level, and the basic operator level.
           %
@@ -137,6 +137,10 @@ The answers to those questions will give us a more comprehensive view of perform
           The most time-consuming stage was the performance bottleneck.
           %
           Optimizing its implementation will significantly reduce the training time.
+          %
+          For GNN inference, we conducted similar experimental analysis.
+          %
+          We discussed the differences in performance characteristics between training and inference.
 
     \item[Q3] \emph{Which consumes most of memory in GNN training?} (Section~\ref{sec:memory_usage_analysis})
 
@@ -148,15 +152,19 @@ The answers to those questions will give us a more comprehensive view of perform
           %
           Reducing its memory usage will enable us to train GNNs on bigger graphs under the same memory capacity.
 
-    \item[Q4] \emph{Can sampling techniques remove performance bottlenecks in GNN training?} (Section~\ref{sec:effects_of_sampling_techniques_on_performance})
+    \item[Q4] \emph{Can sampling techniques remove performance bottlenecks in GNN training? Does the use of sampling techniques in training affect the test accuracy?} (Section~\ref{sec:effects_of_sampling_techniques_on_performance})
 
-          Theoretically, sampling techniques can significantly reduce the number of graph neurons that participate in the training of a batch.
+          Theoretically, sampling techniques can significantly reduce the number of graph neurons that participate in the training/inference of a batch.
           %
-          Consequently, the training time and the memory usage should also decrease.
+          Consequently, the processing time and memory usage per batch should also decrease.
           %
-          To validate effectiveness of sampling techniques, we measured the training time and peak memory usage under different batch sizes.
+          The test accuracy of GNNs may also be affected.
           %
-          If sampling techniques were effective, they will be the keys to conduct GNN training on very big graphs.
+          To validate effectiveness of sampling techniques, we measured the training time, peak memory usage and test accuracy under different batch sizes.
           %
-          If they were not effective, we want to find out which impairs its efficiency.
+          If sampling techniques are effective, they will be the keys to conduct GNN training on very big graphs.
+          %
+          If they are not effective, we want to find out which impairs its efficiency.
+          %
+
 \end{itemize}
