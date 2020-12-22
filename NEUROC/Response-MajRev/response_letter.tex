@@ -74,7 +74,7 @@ In the following we address their concerns point by point.
 % Let's start point-by-point with Reviewer 1
 \reviewersection
 
-% Point one description 
+% R1Q1
 \begin{point}
 	There are lots of symbols in this paper. Some symbols are reused and confusing, such as s denotes sub-layers or edge features.
 \end{point}
@@ -181,6 +181,7 @@ In the following we address their concerns point by point.
     \end{quote}  
 \end{reply}
 
+% R1Q2
 \begin{point}
     Some typical applications of GNNs should be included, such as video object segmentation [ref1], human-object interaction [ref2] and human-parsing [ref3].[1] Zero-shot video object segmentation via attentive graph neural networks,iccv 2019 [2] Learning human-object interactions by graph parsing neural networks, eccv 2018. [3] Hierarchical human parsing with typed part-relation reasoning, cvpr 2020.
 \end{point}
@@ -192,6 +193,7 @@ In the following we address their concerns point by point.
     \end{quote}
 \end{reply}
 
+% R1Q3
 \begin{point}
 There are some grammar errors and typos:
 \\
@@ -218,6 +220,7 @@ There are some grammar errors and typos:
 
 \end{reply}
 
+% R1Q4
 \begin{point}
     Figures 6 and 7 should be adjusted. The figures and fonts are too small.
 \end{point}
@@ -232,12 +235,24 @@ There are some grammar errors and typos:
 
 \end{reply}
 
+% R1Q5
 \begin{point}
     In my view, computation efficiency is to describe the testing or validation process. Except for reporting and analyzing the training times, it is meaningful to discuss the inference time. This is also an important point of view for deep learning researchers to be concerned about.
 \end{point}
 
 \begin{reply}
-    %%% TODO %%%
+    Thank you for the insightful comment.
+    %
+    The efficiency of inference (including inference time and memory usage) is also important for deep learning researchers and engineers.
+    %
+    To discuss the efficiency of GNN inference on GPUs, we have added a new subsection (Section 2.5 ``Inference with GNNs'') in the revised manuscript to briefly review how to perform inference with GNNs.
+    %
+    We have also added corresponding analysis on GNN inference in every subsection of Section 4 ``Evaluation Results and Analysis'' in the revised manuscript:
+    %
+    \begin{enumerate}
+        \item In Section 4.1 ``Effects of Hyper-parameters on Performance'', 
+    \end{enumerate}
+
 \end{reply}
 
 % Begin a new reviewer section
