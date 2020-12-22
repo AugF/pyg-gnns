@@ -542,23 +542,11 @@ To reduce the memory usage of GNN training, optimizations should focus on reduci
 
 With the sampling techniques, GNNs were trained in a mini-batch manner.
 %
-Each mini-batch updated the model parameters based on a small subgraph sampled from the original input graph.
+Each epoch was decomposed into many batches.
 %
-Thus, the training time per batch and the peak memory usage during the training both declined significantly.
-
-In the implementation in PyG, the GNN model resided on the GPU side and the dataset resided on the host side.
+In each batch, PyG only sent the sampled subgraph to the GPU to train or inference.
 %
-To process each epoch, PyG sampled the original dataset in the main memory and generated several batches.
-%
-Each batch was a small subgraph of the dataset.
-%
-To train the GNN model with each batch, PyG sent the sampled subgraph to the GPU, calculated the gradients on the subgraph, and updated the model parameters directly on the GPU.
-%
-With the sampling techniques, the model parameters were updated by a stochastic gradient descent optimizer.
-%
-PyG conducted the evaluation phase every several epochs or batches (either on the CPU side or the GPU side) to determine whether to stop the training.
-%
-In this section, the experiments focused on the training phase of each batch.
+Since the sampled subgraphs could be much smaller than the original graph, the experiments in this section focused on finding out how the sample size affected the training time, the memory usage and the accuracy of GNNs.
 
 \figurename~\ref{fig:exp_sampling_minibatch_graph_info} shows how the size of the sampled subgraph changed with the batch size.
 %
