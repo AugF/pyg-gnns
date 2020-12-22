@@ -424,10 +424,14 @@ The collection step suffered from lots of data movement.
 %
 The aggregation step suffered from data synchronization and non-regular data access.
 
-\subsection{Inference Time Breakdown Analysis}
-% 该部分
-
+% added by wangyunpan, 2020-12-22 ----start----
+\paragraph{Inference Time Breakdown Analysis}
+We conducted the same experiments in the inference stage as above.
 %
+The results of layer level experiment, step Level in edge Calculation experiment and operator Level experiment were in general consistent with those in the Training stage.
+%
+The performance bottleneck analysis in the Training stage can also be applied to the inference stage.
+% added by wangyunpan, 2020-12-22 ----end----
 
 \subsection{Memory Usage Analysis}
 \label{sec:memory_usage_analysis}
@@ -484,7 +488,7 @@ We defined the \emph{memory expansion ratio} (MER) as the ratio of the peak memo
 %
 \figurename~\ref{fig:exp_memory_expansion_ratio} compares MER of different GNNs.
 %
-GCN had the lowest MER (up to 15) while GaAN had the highest MER (up to 104).
+GCN had the lowest MER (up to 15.2) while GaAN had the highest MER (up to 104.6).
 %
 \emph{The high MERs limited the data scalability of GNNs}, making GPUs unable to handle big graphs.
 %
@@ -572,6 +576,50 @@ Fixing the number of vertices, the memory usage increased \emph{linearly} along 
 Fixing the GNN structure and the hyper-parameters, increasing the dimension of input feature vectors could reduce the memory expansion ratio.
 %
 To reduce the memory usage of GNN training, optimizations should focus on reducing memory footprints of the edge calculation stage.
+
+% added by wangyunpan, 2020-12-22 ----start----
+\paragraph{Inference Stage Memory Usage Analysis}
+
+% 不同点: phase
+\begin{figure}[H]
+    \centering
+    \includegraphics[height=5cm]{figs/experiments/exp_inference_full_memory_usage_stage_amp.pdf}
+    \caption{Memory usage of each phase during the GNN training. Dataset: \texttt{amp}.}
+    \label{fig:exp_inference_full_memory_usage_stage_amp}
+\end{figure}
+
+% 不同点： 膨胀比例
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\columnwidth]{figs/experiments/exp_inference_full_memory_expansion_ratio.pdf}
+    \caption{Memory expansion ratios of typical GNNs.}
+    \label{fig:exp_inference_full_memory_expansion_ratio}
+\end{figure}
+
+% 不同点: input feature dims
+\begin{figure}[H]
+    \centering
+    \includegraphics[height=5cm]{figs/experiments/exp_inference_full_memory_expansion_ratio_input_feature_dimension_com-amazon_expansion_ratio.pdf}
+    \caption{Memory expansion ratio under different dimensions of input feature vectors. Dataset: \texttt{cam}.}
+    \label{fig:exp_inference_full_memory_expension_ratio_input_feature_dimension}
+\end{figure}
+
+For the inference stage, we did the same experiment as above. The experimental results were as follows:
+%
+\figurename~\ref{fig:exp_inference_full_memory_usage_stage_amp} shows the peak memory usage of each phase during inference stage.  
+%
+Compared with the results of training stage in \figurename~\ref{fig:exp_memory_usage_stage_amp}, the peak memory usage of inference stage was significantly lower.
+%
+This was because the inference stage didn't require backward propagation and the peak memory was only determined by the temporary variables generated during the computation.
+%
+
+\figurename~\ref{fig:exp_inference_full_memory_expansion_ratio} compares MER of different GNNs on inference stage. 
+%
+We found that the performance of GNNs on all datasets was consistent with the training stage (\figurename~\ref{fig:exp_memory_expansion_ratio}). 
+%
+
+
+% added by wangyunpan, 2020-12-22 ----end----
 
 \subsection{Effects of Sampling Techniques on Performance}
 \label{sec:effects_of_sampling_techniques_on_performance}
