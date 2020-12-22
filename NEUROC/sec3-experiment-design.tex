@@ -79,6 +79,21 @@ For GGNN, we set $dim(\boldsymbol{h}^0_x) = dim(\boldsymbol{h}^1_x) = dim(\bolds
 %
 We used 8 heads in the both GaAN layers with $d_a=d_v=8$, and $d_m=64$.
 
+% added by wangyupan, 2020-12-21 ----start----
+In the precision experiment of hyper-parameters, we used the same training procedure for all the models. 
+%
+That is, we used the same optimizer(Adam \cite{diederik2015_adam} with a learning rate of 0.01 and L2 regularization of 1e-5), 
+same initialization(weights initialized according to \cite{xavier2010_glorot}, biases initialized with zeros), same maximum epochs, and same early stopping criterion according to \cite{shchur2018_pitfall_of_gnn}. 
+%
+We trained for a maximum of 100k epochs. 
+%
+If total validation loss (loss on the data plus regularization loss) did not improve for 50 epochs, we would stop training. 
+%
+We reset the state of the weights of the step with the lowest validation loss and got the reported test accuracy.
+%
+Besides, in the precision experiment of sampling techniques, we selected the network structure corresponding to the highest accuracy in the hyperparameter experiment for each dataset of each model.
+% added by wangyupan, 2020-12-21 ----end----
+
 \paragraph{Sampling Techniques}
 
 We picked the neighbor sampler from GraphSAGE \cite{hamilton2017_graphsage} and the cluster sampler from ClusterGCN \cite{chiang2019_cluster_gcn} as the typical sampling techniques.
@@ -88,6 +103,10 @@ For the neighbor sampler, we set the neighborhood sample sizes of the GNN layer 
 We set the default batch size to 512, according to \cite{hamilton2017_graphsage}.
 %
 For the cluster sampler, we partitioned the input graph into 1500 partitions and used 20 partitions per batch, according to \cite{chiang2019_cluster_gcn}.
+
+% added by wangyupan, 2020-12-21 ----start----
+In sampled-based inference experiment, according to \cite{weihua2020_ogb-benchmark}, we used neighbor sampler \cite{hamilton2017_graphsage} with batch size of 1024 and all neighbors were inclued in all layers.
+% added by wangyupan, 2020-12-21 ----end----
 
 \subsection{Experimental Scheme}
 \label{sec:experimental_scheme}
