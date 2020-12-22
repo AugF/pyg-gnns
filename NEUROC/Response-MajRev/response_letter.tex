@@ -66,13 +66,42 @@
 
 \begin{document}
 
-\section*{Response to the reviewers}
+\section*{Response to the Reviewers}
 % General intro text goes here
-We thank the reviewers for their critical assessment of our work. 
-In the following we address their concerns point by point. 
+We thank the reviewers for their critical assessment and insightful comments of our work.
+%
+We have made extensive modifications to our manuscript.
+%
+In the following we address their concerns point by point.
+%
+We also prepare an \emph{annotated version} for our revised manuscript.
+%
+In the annotated version, changes corresponding to each point are all highlighted by red squares.
+
+\subsection*{Summary of Changes}
+
+%%%% TODO %%%
 
 % Let's start point-by-point with Reviewer 1
 \reviewersection
+
+% R1Q0
+\begin{point}
+    The authors conduct an empirical analysis of performance bottlenecks in graph neural network training. The authors identify the edge-related calculation is the performance bottleneck. Experimental of several GNN variants, such as GCN, GGNNNN, GAT and GaAN on six real-world graph datasets verify the importance of the findings. The experimental analysis is sufficient. However, there are some tiny issues in this paper.
+\end{point}
+
+\begin{reply}
+    Thank you for your positive comments on our manuscript.
+    %
+    We have carefully revised the manuscript according to your comments. 
+    %
+    Based on the suggestions, we have made an extensive modification on the revised manuscript.
+    %
+    Please see the detailed responses below.
+    %
+    The changes corresponding to each issue were highlighted by red squares in the annotated version of our manuscript.
+
+\end{reply}
 
 % R1Q1
 \begin{point}
@@ -81,7 +110,7 @@ In the following we address their concerns point by point.
 
 % Our reply
 \begin{reply}
-    We apologize for the confusing use of symbols.
+    We apologize for the confusing use of symbols and thank you for pointing the problem out.
     %
     To clarify the symbol usage, we have checked the manuscript and unified the usage of symbol.
     %
@@ -210,6 +239,8 @@ There are some grammar errors and typos:
 
     Thank you for pointing them out.
     %
+    We feel really sorry for our carelessness.
+    %
     We have proofread our revised manuscript carefully to eliminate grammar errors and typos.
     %
     We have also unified the tenses of the sentences in Section 3 ``Evaluation Design'' and Section 4 ``Evaluation Results and Analysis''.
@@ -241,16 +272,38 @@ There are some grammar errors and typos:
 \end{point}
 
 \begin{reply}
-    Thank you for the insightful comment.
+    Thank you for the insightful comment and suggestion.
     %
-    The efficiency of inference (including inference time and memory usage) is also important for deep learning researchers and engineers.
+    The efficiency of inference (including inference time and memory usage) is indeed important for deep learning researchers and engineers.
     %
-    To discuss the efficiency of GNN inference on GPUs, we have added a new subsection (Section 2.5 ``Inference with GNNs'') in the revised manuscript to briefly review how to perform inference with GNNs.
+    In the revised manuscript, we have added a new subsection (Section 2.5 ``Inference with GNNs'') in the revised manuscript to briefly review how to perform inference with GNNs.
     %
-    We have also added corresponding analysis on GNN inference in every subsection of Section 4 ``Evaluation Results and Analysis'' in the revised manuscript:
+    To discuss the efficiency of GNN inference on GPUs, we have added performance bottleneck analysis on GNN inference in every subsection of Section 4 ``Evaluation Results and Analysis'':
     %
     \begin{enumerate}
-        \item In Section 4.1 ``Effects of Hyper-parameters on Performance'', 
+
+        \item In Section 4.1 ``Effects of Hyper-parameters on Performance'', we have additionally measured how the inference time and the peak memory usage changed as we increased the values of the hyper-parameters.
+        %
+        We find that ...
+        %%% TODO %%%
+        
+        \item In Section 4.2 ``Time Breakdown Analysis'', we have additionally conducted the time breakdown analysis for GNN inference.
+        %
+        We find that the performance characteristics of GNN inference are similar to GNN training.
+        %
+        The performance bottenecks in GNN inference are also similar to the bottlenecks in training.
+        %
+        Therefore, we focus on discussing the differences between GNN training and inference in the revised manuscript.
+        
+        \item In Section 4.3 ``Memory Usage Analysis'', we have additionally conducted the memory usage analysis for GNN inference.
+        %
+        We find that ... 
+        %%% TODO %%%
+
+        \item In Section 4.4 ``Effects of Sampling Techniques on Performance'', we have additionally evaluated the performance bottlenecks in sample-based GNN inference.
+        %
+        We find that ...
+        %%% TODO %%%
     \end{enumerate}
 
 \end{reply}
@@ -259,12 +312,53 @@ There are some grammar errors and typos:
 \reviewersection
 
 \begin{point}
-	This is the first point of Reviewer \thereviewer. With some more words foo
-	bar foo bar ...
+    In the paper, authors accomplished a unique study and analysis on GNN models training complexity.  The articles first review and development history of GNNs and creatively model all architectures as input layers, intermediate layers of graph neurons and prediction layers. And they quantitatively summarize the time and space complexity of 4 representative GNNs, including graph convolution, gated recurrent graph net, graph attention net and GraphSage. Most importantly, the article first break down complexity into operator level and offered analysis of good granularity, giving reader more guidance in future study. At last, the solid experiments included the study of effects of hyper-parameters and a comparison of two major sampling techniques: neighbor sampling and cluster sampling.
 \end{point}
 
 \begin{reply}
-	Our reply to it with reference to one of our points above using the \LaTeX's 
+    Thank you for your positive comments on our manuscript.
+    %
+    We have carefully revised the manuscript according to your comments.
+    %
+    We have revised our manuscript according to your kindly suggestions.
+    %
+    Please see the detailed responses below.
+    %
+    We have highlighted our modification point by point in the annotated version of the manuscript by red squares.
+\end{reply}
+
+\begin{point}
+    In general, the paper was well written and organized with good structure and clear narratives. Just some minor language errors like line Page 8, Line 208, "In active graph neurons" =\textgreater "Inactive graph neurons".
+\end{point}
+
+% R2Q1
+\begin{reply}
+    Thank you for pointing them out.
+    %
+    We feel really sorry for our carelessness.
+    %
+    We have proofread our revised manuscript carefully to eliminate such language errors as much as we can.
+\end{reply}
+
+% R2Q2
+\begin{point}
+    I was impressed by the way that authors categorize layers and operators in GNNs, very clear and instructive.
+    
+    It is also pretty neat to divide layer time complexity into two buckets: vertex calculation and edge calculation. The data model pretty well summarizes mainstream GNN layer architectures. And this analysis is very insightful for layer profiling.
+    
+    And the experimental evaluation were done over 6 large graph-structured datasets.
+\end{point}
+
+\begin{reply}
+    Thank you very much for your appreciation.	
+\end{reply}
+
+% R2Q3
+\begin{point}
+    While, one major drawback is that I did not clearly see the analysis complexity v.s. accuracy. For example, in Figure 19 and 20, I did not see network accuracy from those 4 GNNs. There is always tradeoff between model complexity and model performance, and in some scenarios where high complexity is allowed, a sophisticated model of more powerful representation capability is still needed.
+\end{point}
+
+\begin{reply}
 \end{reply}
 
 \end{document}
