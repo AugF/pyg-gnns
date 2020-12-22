@@ -100,7 +100,7 @@ Thus, the computational costs of the GAT layer 0 and the GAT layer 1 should incr
 
 For GaAN, it is also based on the multi-head mechanism.
 %
-Its time complexity shoud be affected by $dim(\boldsymbol{h}^1_x)$ ($d^0_{out} = d^1_{in} = dim(\boldsymbol{h}^1_x)$), $d_a$, $d_v$, $d_m$, and the number of heads $K$.
+Its time complexity should be affected by $dim(\boldsymbol{h}^1_x)$ ($d^0_{out} = d^1_{in} = dim(\boldsymbol{h}^1_x)$), $d_a$, $d_v$, $d_m$, and the number of heads $K$.
 %
 \figurename~\ref{fig:exp_hyperparameter_on_vertex_edge_phase_time_gaan} demonstrates that the training time increased linearly with the hyper-parameters, except for $dim(\boldsymbol{h}^1_x)$.
 As $dim(\boldsymbol{h}^1_x)$ increased, the training time increased first slightly and then linearly.
@@ -125,13 +125,63 @@ As the hidden vectors $\MyVec{h}^1_x$ consumed a small proportion of memory in G
     \label{fig:exp_hyperparameter_memory_usage}
 \end{figure}
 
+% added by wangyupan, 2020-12-22 ----start----
+In deep learning, accuracy is also an important indicator that algorithm engineers care about.
+%
+We adopted a unified standard (section \ref{sec:hyper-parameters}) to evaluate the effect of hyper-parameters on accuracy.
+%
+\figurename~\ref{fig:exp_hyperparameter_accuracy} shows how the accuracy varies with hyper-parameters.
+%
+For all models, we found that different datasets had different curve changes, that was, different datasets had different sensitivity to hyper-parameter changes.
+%
+This was because different datasets had different characteristics, which lead to different learning difficulties.
+%
+
+Except for the effect of the number of heads on GAT and the effect of $d_a$, $d_v$, $d_m$, the number of heads $K$ on GaAN, we found the same phenomena:
+the accuracy of the model was often low when hyper-parameters were low. When a certain threshold was reached, the accuracy began to fall within the range of fluctuations.
+%
+We conducted additional experiments for these exceptions. Taking the effect of the number of heads on GAT as an example, 
+\figurename~\ref{fig:exp_hyperparameter_accuracy_gat_small_info} shows the trend is similar to the phenomena discussed above when $d_{head}$ is adjusted to a smaller value such as 2 and 4.
+%
+This phenomenon showed some relationship between accuracy and model complexity.
+%
+When the hyper-parameter value was very small, the model complexity was often low, which limited the expressive ability of the model.
+%
+In this case, accuracy and model complexity were positively related.
+%
+However, when the hyper-parameter increased to a certain threshold, the model had sufficient learning ability, and the relationship between accuracy and model complexity was no longer certain.
+% added by wangyupan, 2020-12-22 ----end----
+
+\begin{figure}[H]
+    \centering
+    \subfloat[GCN]{\includegraphics[width=0.25\columnwidth]{figs/experiments/exp_hyperparameter_on_accuracy_gcn.pdf}}
+    \subfloat[GGNN]{\includegraphics[width=0.25\columnwidth]{figs/experiments/exp_hyperparameter_on_accuracy_ggnn.pdf}}\\
+    \subfloat[GAT]{\includegraphics[width=0.5\columnwidth]{figs/experiments/exp_hyperparameter_on_accuracy_gat.pdf}}\\
+    \subfloat[GaAN]{\includegraphics[width=0.75\columnwidth]{figs/experiments/exp_hyperparameter_on_accuracy_gaan.pdf}}
+    \caption{Effects of hyper-parameters on accuracy of four models.}
+    \label{fig:exp_hyperparameter_accuracy}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\columnwidth]{figs/experiments/exp_hyperparameter_on_accuracy_gat_small_info.pdf}
+    \caption{Effects of the number of heads on GAT ($d_{head}$=2,4)}
+    \label{fig:exp_hyperparameter_accuracy_gat_small_info}
+\end{figure}
+
 \paragraph{Summary}
 
-The complexity analysis in \tablename~\ref{tab:gnn_overview_edge} and \tablename~\ref{tab:gnn_overview_vertex} is valid.
+The complexity analysis in \tablename~\ref{tab:gnn_overview_edge} and \tablename~\ref{tab:gnn_overview_vertex} was valid.
 %
-Fixing other hyper-parameters, each hyper-parameter itself affects the training time and the memory usage of a GNN Layer \emph{in a linear way}.
+Fixing other hyper-parameters, each hyper-parameter itself affected the training time and the memory usage of a GNN Layer \emph{in a linear way}.
 %
-Algorithm engineers can adjust hyper-parameters according to the time complexity to avoid explosive growth in the training time and memory usage.
+Algorithm engineers could adjust hyper-parameters according to the time complexity to avoid explosive growth in the training time and memory usage.
+%
+% added by wangyupan, 2020-12-22 ----start----
+There was no definite relationship between accuracy and hyper-parameters. 
+%
+To obtain the optimal model, hyper-parameters needed to be manually adjusted by algorithm engineers.
+% added by wangyupan, 2020-12-22 ----end----
 
 \subsection{Training Time Breakdown}
 \label{sec:training_time_breakdown}
