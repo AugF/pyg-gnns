@@ -2,14 +2,28 @@
 \label{sec:experiment_results}
 
 We answer the four questions in Section~\ref{sec:experimental_scheme} one by one with experiments.
-Without otherwise mentioned, the reported training time per epoch was the average wall-clock training time of 50 epochs, excluding abnormal epochs \footnote{During the training of some epochs, there were extra profiling overheads from NVIDIA Nsight Systems and GC pauses from the Python interpreter that significantly increased the training time. We denoted the 25\% and 75\% quantiles of the training time of 50 epochs as Q1 and Q3, respectively. We regarded the epochs with the training time \emph{outside} the range of $[Q1 - 1.5 * (Q3-Q1), Q3 + 1.5 * (Q3-Q1)]$ as abnormal epochs.}.
+%
+Without otherwise mentioned, the reported training time per epoch was the average wall-clock training time of 50 epochs, excluding abnormal epochs.
+%
+During the training of some epochs, there were extra profiling overheads from NVIDIA Nsight Systems and GC pauses from the Python interpreter that significantly increased the training time.
+%
+We denoted the 25\% and 75\% quantiles of the training time of 50 epochs as Q1 and Q3, respectively.
+%
+We regarded the epochs with the training time \emph{outside} the range of $[Q1 - 1.5 * (Q3-Q1), Q3 + 1.5 * (Q3-Q1)]$ as abnormal epochs.
 
 \subsection{Effects of Hyper-parameters on Performance}
 \label{sec:effects_of_hyper-parameters_on_performance}
 
+The hyper-parameters of a GNN (such as the dimensions of hidden vectors and the number of heads) determined the model complexity of the GNN.
+%
+They affected the training/inference time, memory usage, and accuracy of the GNN at the same time.
+
+
+\paragraph{Effects on Training/Inference Time}
+
 According to \tablename~\ref{tab:gnn_overview_edge} and \tablename~\ref{tab:gnn_overview_vertex}, the time complexity of the messaging function $\phi^l$ and the updating function $\gamma^l$ are linear to each hyper-parameter separately.
 %
-If we increase one of the hyper-parameters and fix the others, the training time should increase linearly.
+If we increase one of the hyper-parameters and fix the others, the training/inference time should increase linearly in theory.
 
 To verify the time complexity analysis in \tablename~\ref{tab:gnn_overview_edge} and \tablename~\ref{tab:gnn_overview_vertex}, we first compared the training time of the four GNNs in \figurename~\ref{fig:exp_absolute_training_time}.
 %
@@ -28,17 +42,11 @@ The ranking was consistent with the time complexity analysis.
     \includegraphics[width=0.3\textwidth]{figs/experiments/exp_absolute_training_time_comparison_amazon-computers.pdf}
     \includegraphics[width=0.3\textwidth]{figs/experiments/exp_absolute_training_time_comparison_flickr.pdf}
     \includegraphics[width=0.3\textwidth]{figs/experiments/exp_absolute_training_time_comparison_com-amazon.pdf}
-    %\subfloat[\label{fig:exp_absolute_training_time_pubmed}]{\includegraphics[width=0.32\textwidth]{figs/experiments/exp_absolute_training_time_comparison_pubmed.pdf}}
-    %\subfloat[\label{fig:exp_absolute_training_time_amazon-photo}]{\includegraphics[width=0.32\textwidth]{figs/experiments/exp_absolute_training_time_comparison_amazon-photo.pdf}}
-    %\subfloat[\label{fig:exp_absolute_training_time_coauthor-physics}]{\includegraphics[width=0.32\textwidth]{figs/experiments/exp_absolute_training_time_comparison_coauthor-physics.pdf}} \\
-    %\subfloat[\label{fig:exp_absolute_training_time_amazon-computers}]{\includegraphics[width=0.32\textwidth]{figs/experiments/exp_absolute_training_time_comparison_amazon-computers.pdf}}
-    %\subfloat[\label{fig:exp_absolute_training_time_flickr}]{\includegraphics[width=0.32\textwidth]{figs/experiments/exp_absolute_training_time_comparison_flickr.pdf}}
-    %\subfloat[\label{fig:exp_absolute_training_time_com-amazon}]{\includegraphics[width=0.32\textwidth]{figs/experiments/exp_absolute_training_time_comparison_com-amazon.pdf}}
     \caption{Distribution of the wall-clock training time of 50 epoches on different datasets. GaAN crashed due to out of memory exception on the \texttt{cph} dataset.}
     \label{fig:exp_absolute_training_time}
 \end{figure}
 
-To further evaluate effects of hyper-parameters on performance, we measured the training time of each GNN with varying hyper-parameters in \figurename~\ref{fig:exp_hyperparameter_on_vertex_edge_phase_time_gcn} to \figurename~\ref{fig:exp_hyperparameter_on_vertex_edge_phase_time_gaan}.
+To further evaluate effects of hyper-parameters on training time, we measured the training time of each GNN with varying hyper-parameters in \figurename~\ref{fig:exp_hyperparameter_on_vertex_edge_phase_time_gcn} to \figurename~\ref{fig:exp_hyperparameter_on_vertex_edge_phase_time_gaan}.
 
 \begin{figure}[H]
     \centering
@@ -109,7 +117,9 @@ When the values of hyper-parameters were too low, GNN training could not make fu
 %
 When the values of hyper-parameters became high enough, training time increased linearly, supporting the time complexity analysis.
 
-We further measured the effects of the hyper-parameters on the peak GPU memory usage in \figurename~\ref{fig:exp_hyperparameter_memory_usage}.
+\paragraph{Effects on Peak Memory Usage}
+
+We further measured the effects of the hyper-parameters on the peak GPU memory usage during training in \figurename~\ref{fig:exp_hyperparameter_memory_usage}.
 %
 The memory usage also increased linearly as the hyper-parameters increased for all GNNs, except for GaAN on $dim(\MyVec{h}^1_x)$.
 %
@@ -121,20 +131,41 @@ As the hidden vectors $\MyVec{h}^1_x$ consumed a small proportion of memory in G
     \subfloat[GGNN]{\includegraphics[width=0.25\columnwidth]{figs/experiments/exp_hyperparameter_on_memory_usage_ggnn.pdf}}\\
     \subfloat[GAT]{\includegraphics[width=0.5\columnwidth]{figs/experiments/exp_hyperparameter_on_memory_usage_gat.pdf}}\\
     \subfloat[GaAN]{\includegraphics[width=0.75\columnwidth]{figs/experiments/exp_hyperparameter_on_memory_usage_gaan.pdf}}
-    \caption{Effects of hyper-parameters on the peak GPU memory usage during the training, excluding the memory used by the dataset and the model parameters.}
+    \caption{Effects of hyper-parameters on the peak GPU memory usage during training, excluding the memory used by the dataset and the model parameters.}
     \label{fig:exp_hyperparameter_memory_usage}
 \end{figure}
 
-% added by wangyupan, 2020-12-22 ----start----
-In deep learning, accuracy is also an important indicator that algorithm engineers care about.
+\paragraph{Effects on Accuracy}
+
+The relationship between hyper-parameters of GNNs (i.e., model complexity) and accuracy is very complicated, and there is no clear theoretical analysis yet.
 %
-We adopted a unified standard (section \ref{sec:hyper-parameters}) to evaluate the effect of hyper-parameters on accuracy.
+Generally speaking, higher model complexity can bring stronger expressive ability and may bring higher accuracy, but it also increases the risk of overfitting.
 %
-\figurename~\ref{fig:exp_hyperparameter_accuracy} shows how the accuracy varies with hyper-parameters.
+To evaluate the effects of hyper-parameters on accuracy, we measured the accuracy of the four typical GNNs under different hyper-parameters.
 %
-For all models, we found that different datasets had different curve changes, that was, different datasets had different sensitivity to hyper-parameter changes.
+\figurename~\ref{fig:exp_hyperparameter_accuracy} shows the experimental results.
+
+For GCN, the accuracy was sensitive to the dimension of hidden vectors $dim(\MyVec{h}^1_x)$.
 %
-This was because different datasets had different characteristics, which lead to different learning difficulties.
+As $dim(\MyVec{h}^1_x)$ increased, the accuracy first increased quickly and then stabilized when $dim(\MyVec{h}_x^1) \geq 8$.
+%
+For GGNN, its accuracy curves showed similar trends as GCN.
+%
+However, GGNN was more sensitive to $dim(\MyVec{h}_x^1)$ than GCN and the accuracy even decreased when $dim(\MyVec{h}_x^1) \geq 1024$.
+%
+Since GGNN had high model complexity (with 13 weight matrices/vectors to train), GGNN might occur overfitting in those cases.
+%%%% TODO %%%%
+
+
+%In deep learning, accuracy is also an important indicator that algorithm engineers care about.
+%
+%We adopted a unified standard (section \ref{sec:hyper-parameters}) to evaluate the effect of hyper-parameters on accuracy.
+%
+%\figurename~\ref{fig:exp_hyperparameter_accuracy} shows how the accuracy varies with hyper-parameters.
+%
+%For all models, we found that different datasets had different curve changes, that was, different datasets had different sensitivity to hyper-parameter changes.
+%
+%This was because different datasets had different characteristics, which lead to different learning difficulties.
 %
 
 Except for the effect of the number of heads on GAT and the effect of $d_a$, $d_v$, $d_m$, the number of heads $K$ on GaAN, we found the same phenomena:
@@ -154,11 +185,11 @@ However, when the hyper-parameter increased to a certain threshold, the model ha
 
 \begin{figure}[H]
     \centering
-    \subfloat[GCN]{\includegraphics[width=0.25\columnwidth]{figs/experiments/exp_hyperparameter_on_accuracy_gcn.pdf}}
-    \subfloat[GGNN]{\includegraphics[width=0.25\columnwidth]{figs/experiments/exp_hyperparameter_on_accuracy_ggnn.pdf}}\\
-    \subfloat[GAT]{\includegraphics[width=0.5\columnwidth]{figs/experiments/exp_hyperparameter_on_accuracy_gat.pdf}}\\
-    \subfloat[GaAN]{\includegraphics[width=0.75\columnwidth]{figs/experiments/exp_hyperparameter_on_accuracy_gaan.pdf}}
-    \caption{Effects of hyper-parameters on accuracy of four models.}
+    \subfloat[GCN]{\includegraphics[width=0.3\columnwidth]{figs/experiments/exp_hyperparameter_on_accuracy_gcn.pdf}}
+    \subfloat[GGNN]{\includegraphics[width=0.3\columnwidth]{figs/experiments/exp_hyperparameter_on_accuracy_ggnn.pdf}}\\
+    \subfloat[GAT]{\includegraphics[width=0.6\columnwidth]{figs/experiments/exp_hyperparameter_on_accuracy_gat.pdf}}\\
+    \subfloat[GaAN]{\includegraphics[width=0.85\columnwidth]{figs/experiments/exp_hyperparameter_on_accuracy_gaan.pdf}}
+    \caption{Effects of hyper-parameters on accuracy of the typical GNNs.}
     \label{fig:exp_hyperparameter_accuracy}
 \end{figure}
 
