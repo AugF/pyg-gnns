@@ -82,18 +82,12 @@ For GGNN, we set $dim(\boldsymbol{h}^0_x) = dim(\boldsymbol{h}^1_x) = dim(\bolds
 We used 8 heads in the both GaAN layers with $d_a=d_v=8$, and $d_m=64$.
 
 % added by wangyupan, 2020-12-21 ----start----
-In the precision experiment of hyper-parameters, we used the same training procedure for all the models. 
+We used Adam \cite{diederik2015_adam} with a learning rate of 0.01 and a weight decay of 1e-5.
 %
-That was, we used the same optimizer (Adam \cite{diederik2015_adam} with a learning rate of 0.01 and L2 regularization of 1e-5), 
-same initialization (weights initialized according to \cite{xavier2010_glorot}, biases initialized with zeros), same maximum epochs, and same early stopping criterion according to \cite{shchur2018_pitfall_of_gnn}. 
+We initialized weights using initialization described in \cite{xavier2010_glorot} and initialized bias with zeros.
 %
-We trained for a maximum of 100k epochs. 
-%
-If total validation loss (loss on the data plus regularization loss) did not improve for 50 epochs, we would stop training. 
-%
-We reset the state of the weights of the step with the lowest validation loss and got the reported test accuracy.
-%
-Besides, in the precision experiment of sampling techniques, we selected the network structure corresponding to the highest accuracy in the hyperparameter experiment for each dataset of each model.
+In the accuracy experiment of hyper-parameters, we trained all models for a maximum of 10k epochs and used early stopping criterion according to \cite{shchur2018_pitfall_of_gnn}.
+We stopped training if the validation loss did not improve for 50 epochs. We reported the test accuracy of the epoch with the lowest validation loss.
 % added by wangyupan, 2020-12-21 ----end----
 
 \paragraph{Sampling Techniques}
