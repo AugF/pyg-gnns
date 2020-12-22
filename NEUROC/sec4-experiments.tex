@@ -574,11 +574,18 @@ To reduce the memory usage of GNN training, optimizations should focus on reduci
 \end{figure}
 
 For the inference stage, we did the same experiment as above. The experimental results were as follows:
-\begin{itemize}
-    \item \figurename~\ref{fig:exp_inference_full_memory_usage_stage_amp} shows the peak memory usage of each phase during inference stage.
-    \figurename~\ref{fig:exp_inference_full_memory_expansion_ratio} compares MER of different GNNs on inference stage. We found that 
-    \item
-\end{itemize}
+%
+\figurename~\ref{fig:exp_inference_full_memory_usage_stage_amp} shows the peak memory usage of each phase during inference stage.  
+%
+Compared with the results of training stage in \figurename~\ref{fig:exp_memory_usage_stage_amp}, the peak memory usage of inference stage was significantly lower.
+%
+This was because the inference stage didn't require backward propagation and the peak memory was only determined by the temporary variables generated during the computation.
+%
+
+\figurename~\ref{fig:exp_inference_full_memory_expansion_ratio} compares MER of different GNNs on inference stage. 
+%
+We found that the performance of GNNs on all datasets was consistent with the training stage (\figurename~\ref{fig:exp_memory_expansion_ratio}). 
+%
 
 
 % added by wangyunpan, 2020-12-22 ----end----
