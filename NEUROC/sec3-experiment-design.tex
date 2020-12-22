@@ -81,14 +81,17 @@ For GGNN, we set $dim(\boldsymbol{h}^0_x) = dim(\boldsymbol{h}^1_x) = dim(\bolds
 %
 We used 8 heads in the both GaAN layers with $d_a=d_v=8$, and $d_m=64$.
 
-% added by wangyupan, 2020-12-21 ----start----
-We used Adam \cite{diederik2015_adam} with a learning rate of 0.01 and a weight decay of 1e-5.
+We used Adam \cite{diederik2015_adam} as the gradient descent optimizer with a learning rate of 0.01 and a weight decay of 1e-5.
 %
-We initialized weights using initialization described in \cite{xavier2010_glorot} and initialized bias with zeros.
+We initialized weights in GNNs using the method described in \cite{xavier2010_glorot} and initialized bias as zeros.
 %
-In the accuracy experiment of hyper-parameters, we trained all models for a maximum of 10k epochs and used early stopping criterion according to \cite{shchur2018_pitfall_of_gnn}.
-We stopped training if the validation loss did not improve for 50 epochs. We reported the test accuracy of the epoch with the lowest validation loss.
-% added by wangyupan, 2020-12-21 ----end----
+Without otherwise mentioned, in the experiments related to accuracy evaluation, we trained all GNNs for a maximum of 100k epochs and used the early stopping criterion according to \cite{shchur2018_pitfall_of_gnn}:
+%
+the training was stopped if the validation loss did not improve for 50 epochs.
+%
+We chose the model parameters that achieved the lowest validation loss as the final model parameters.
+%
+The accuracy on the test set was evaluated with the final model.
 
 \paragraph{Sampling Techniques}
 
