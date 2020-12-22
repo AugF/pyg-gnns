@@ -59,6 +59,8 @@ Unless otherwise specified, we stored the dataset and the model parameters on th
 The GNN training was conducted also on the GPU side.
 
 \paragraph{Hyper-parameters}
+\label{sec:hyper-parameters}
+
 We use $dim(\boldsymbol{x})$ to denote the dimension of a vector $\boldsymbol{x}$.
 %
 We picked the hyper-parameters of GNNs according to their popularity in their references \cite{kipf2017_gcn, li2015_ggnn, huang2018_gat, zhang2018_gaan}.
@@ -82,8 +84,8 @@ We used 8 heads in the both GaAN layers with $d_a=d_v=8$, and $d_m=64$.
 % added by wangyupan, 2020-12-21 ----start----
 In the precision experiment of hyper-parameters, we used the same training procedure for all the models. 
 %
-That is, we used the same optimizer(Adam \cite{diederik2015_adam} with a learning rate of 0.01 and L2 regularization of 1e-5), 
-same initialization(weights initialized according to \cite{xavier2010_glorot}, biases initialized with zeros), same maximum epochs, and same early stopping criterion according to \cite{shchur2018_pitfall_of_gnn}. 
+That was, we used the same optimizer (Adam \cite{diederik2015_adam} with a learning rate of 0.01 and L2 regularization of 1e-5), 
+same initialization (weights initialized according to \cite{xavier2010_glorot}, biases initialized with zeros), same maximum epochs, and same early stopping criterion according to \cite{shchur2018_pitfall_of_gnn}. 
 %
 We trained for a maximum of 100k epochs. 
 %
@@ -123,7 +125,7 @@ The answers to those questions will give us a more comprehensive view of perform
           %
           The hyper-parameters affect the processing time per epoch and the peak memory usage during training and inference.
           %
-          To evaluate their effects, we measured how the training time per epoch and the peak memory usage (of the GPU) changed as we increased the values of the hyper-parameters.
+          To evaluate their effects, we measured how the training time per epoch, the peak memory usage (of the GPU), and the accuracy changed as we increased the values of the hyper-parameters.
           %
           Through the experiments, we verified the validity of the time complexity analysis in \tablename~\ref{tab:gnn_overview_edge} and \tablename~\ref{tab:gnn_overview_vertex}.
           %
