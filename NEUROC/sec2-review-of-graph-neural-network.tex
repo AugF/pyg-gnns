@@ -561,4 +561,58 @@ Given a training graph $\mathcal{G}$, it partitions $\mathcal{G}$ into several d
 %
 For each mini-batch, it randomly pick $N$ clusters to form the sampled subgraph, where $N$ is the hyper-parameter.
 
+In the implementation in PyG, the model parameters of GNNs resid on the GPU side and the input graph resides on the host side.
+%
+To process an epoch, PyG samples the original graph in the main memory and generates several batches for the epoch.
+%
+For each batch, PyG sends the sampled subgraph to the GPU, propagates the feature vectors of the sampled subgraph from the input layer to the prediction layer, calculates the gradients on the subgraph, and updates the model parameters based on the gradients directly on the GPU.
+%
+With the sampling techniques, the model parameters are updated by a stochastic gradient descent optimizer.
+%
+PyG conducts the evaluation phase every several epochs or batches (either on the CPU side or the GPU side) to determine whether to stop the training.
+
+
+\subsection{Inference with GNNs}
+
+The model parameters of a GNN are stored in the weight vectors/matrices of the prediction layer and the messaging/aggregation/updating functions of each GNN layer.
+%
+When we want to perform inference on a new graph based on a trained GNN, the structure of the GNN needs to be adjusted, but the hyper-parameters and the model parameters of the GNN remain unchanged.
+%
+The number of graph neurons in each GNN layer has to be adjusted to $|\mathcal{V}|$ of the new graph.
+%
+The connections of graph neurons between GNN layers also needs to be adjusted according to the edge set of the new graph.
+
+During inference, input feature vectors of the new graph are propagated forward from the input layer to the prediction layer to give out predicted labels.
+%
+The workflow of inference is the same as the workflow of the \emph{forward} phase during training.
+%
+The only difference from the forward phase is that there is no need to cache intermediate calculation results during inference, because inference does not need to prepare for gradient calculation.
+
+Inference methods can be divided into two types based on the range of input graphs involved in inference: full-batch inference and sample-based inference.
+%
+The full-batch inference performs inference on the whole input graph at once.
+%
+It can make full use of the computing power of GPUs, bringing high computation efficiency.
+%
+The full-batch inference is suitable for small graphs that the GPU memory can hold all feature vectors, models, and intermediate results.
+
+Different from the full-batch inference, the sample-based inference only predicts labels for part of vertices/edges each time, limiting the GPU memory usage during inference.
+%
+It first samples a subgraph related to inference from the input graph and then performs the full-batch inference on the sampled subgraph.
+%
+The sampling method depends on the prediction task.
+%
+Taking the node classification scenario as an example, if there are $L$ GNN layers in the GNN, the hidden vector outputted by the last GNN layer of each vertex $\MyVec{h}^L_x$ is only related to the $L$-hop neighborhood of $v_x$.
+%
+Thus, if we want to predict labels for a group of vertices, we only need to sample a subgraph that contains $L$-hop neighborhoods of all given vertices.
+%
+The sample-based inference is suitable for processing big graphs.
+%
+It stores the whole input graph and its feature vectors in the main memory.
+%
+It processes the whole graph in batches.
+%
+The subgraph of each batch is sampled on the CPU side and sent to the GPU side to perform inference.
+%
+By using small batch sizes, the peak memory usage during inference can be limited under the GPU memory capacity.
 
