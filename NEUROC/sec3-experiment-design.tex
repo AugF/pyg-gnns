@@ -160,13 +160,13 @@ The answers to those questions will give us a more comprehensive view of perform
           %
           Reducing its memory usage will enable us to train GNNs on bigger graphs under the same memory capacity.
 
-    \item[Q4] \emph{Can sampling techniques remove performance bottlenecks in GNN training? Does the use of sampling techniques in training affect the test accuracy?} (Section~\ref{sec:effects_of_sampling_techniques_on_performance})
+    \item[Q4] \emph{Can sampling techniques remove performance bottlenecks in GNN training? Does the use of sampling techniques in training affect the model accuracy?} (Section~\ref{sec:effects_of_sampling_techniques_on_performance})
 
-          Theoretically, sampling techniques can significantly reduce the number of graph neurons that participate in the training/inference of a batch.
+          Theoretically, sampling techniques can significantly reduce the number of graph neurons that participate in the training of a batch.
           %
           Consequently, the processing time and memory usage per batch should also decrease.
           %
-          The test accuracy of GNNs may also be affected.
+          The model accuracy of GNNs may also be affected.
           %
           To validate effectiveness of sampling techniques, we measured the training time, peak memory usage and test accuracy under different batch sizes.
           %
