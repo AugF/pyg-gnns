@@ -761,3 +761,66 @@ However, small batch sizes could not make full use of the computing power of a G
 With big batch sizes, the current implementation of the sampling techniques in PyG was inefficient.
 %
 The time spent on the sampling phase and the data transferring phase even exceeded the training phase.
+
+% added by wangyunpan, 2020-12-23, ----start----
+\paragraph{Effects on Accuracy}
+%
+We were also concerned about whether the accuracy would be significantly dropped after the use of sampling techniques
+and the effect of batch size of accuracy.
+%
+For all datasets and sampling techniques, we had done experiments where the accuracy of GNNs varied with the batch size
+and compared them with the experimental results of full-batch training.
+%
+In order to make the results more reliable, we had selected the optimal network structure for each GNN experiment under each dataset.
+%
+The optimal network structure is taken from the result corresponding to the highest accuracy in the hyperparameter experiment.
+%
+The highest accuracy under different learning rates was selected as the final accuracy result.
+%
+\figurename~\ref{fig:fig:exp_sampling_relative_batch_size_accuracy} shows the results (we only shows two datasets, amc and fli).
+%
+
+%
+With the change of batch size, the accuracy relationship between GNNs is roughly the same.
+%
+For example, for neigbor sampler, the relationship between GNNs on \texttt{amc} was GCN < GGNN < GAT < GaAN and the relationship on \texttt{amc} was GCN > GGNN > GAT> GaAN.
+%
+But there was also a little exceptions (cluster sampler on \textt{amc}, relative batch size was 50\%).
+%
+To a certain extent, the increase of batch size could bring benefits to all GNNs.
+%
+However, for different datasets, the accuracy relationship between GNNs was not constant.
+%
+And this relationship was not related to model complexity.
+%
+In other words, it was not that the higher the algorithm complexity, the higher the corresponding accuracy.
+%
+For a specific dataset, in order to obtain high accuracy, the best model could only be selected by constantly trying various models.
+%
+
+When the batch size was small, as the batch size increased, the accuracy and the batch size would be positively correlated. 
+%
+However, when the batch size increases to a certain extent, there was no direct relationship between accuracy and batch size.
+%
+In other words, for sampling techniques, the batch size corresponding to the best accuracy may not be the maximum value, but may be another value. 
+%
+This phenomenon is consistent with the results in \cite{zeng2020_graphsaint}.
+
+%
+After using the sampling techniques, the optimal accuracy of some GNNs on certain datasets exceeded the accuracy of the full-batch training (neigbbor sampler on \texttt{amc}).
+%
+This showed that the application of sampling technology was very meaningful, because it may brought certain benefits to accuracy.
+%
+Different sampling techniques bring different gains to GNNs.
+%
+\begin{figure}[H]
+    \centering
+    \subfloat[Neighbor sampler on \texttt{amc}]{\includegraphics[height=5cm]{figs/experiments/exp_graphsage_sampling_accuracy_on_amc.pdf}}
+    \subfloat[Neighbor sampler on \texttt{fli}]{\includegraphics[height=5cm]{figs/experiments/exp_graphsage_sampling_accuracy_on_fli.pdf}} \\
+    \subfloat[Cluster sampler on \texttt{amc}]{\includegraphics[height=5cm]{figs/experiments/exp_cluster_sampling_accuracy_on_amc.pdf}}
+    \subfloat[Cluster sampler on \texttt{fli}]{\includegraphics[height=5cm]{figs/experiments/exp_cluster_sampling_accuracy_on_fli.pdf}}
+    \caption{Test Accuracy under different batch sizes. FULL means that the full graph participates in the training.}
+    \label{fig:exp_sampling_relative_batch_size_accuracy}
+\end{figure}
+
+% added by wangyunpan, 2020-12-23, ----end----
