@@ -20,6 +20,9 @@
 \usepackage{lscape}
 \usepackage{xcolor}
 \usepackage{float}
+\usepackage{subfig}
+\usepackage{graphicx}
+\usepackage{framed}
 % Vector
 \newcommand{\MyVec}[1]{\boldsymbol{#1}}
 % Matrix
@@ -28,6 +31,10 @@
 \newcommand{\hvec}[1]{\hat{\boldsymbol{h}}_{#1}}
 % Model parameters
 \newcommand{\Param}[1]{\textcolor{blue}{#1}}
+
+\newenvironment{myquote}%
+{\begin{leftbar}\begin{quote}}
+{\end{quote}\end{leftbar}}
 
 
 % import Eq and Section references from the main manuscript where needed
@@ -166,17 +173,17 @@ In the annotated version, changes corresponding to each point are all highlighte
     %
     We first introduce the concept of sub-layer in Section 2.2 ``Graph Neuron and Message-passing Model'' as:
     %
-    \begin{quote}
+    \begin{myquote}
         Some complex GNNs like GAT [6] and GaAN [7] use more than one message passing phase in each GNN layer.
         %
         We regard every message passing phase in a GNN layer as a \emph{sub-layer}.
         %
         We will give out more details on sub-layers when we introduce GAT.
-    \end{quote}
+    \end{myquote}
     %
     We then use GAT as an example to elaborate on the concept of sub-layers in Section 2.3 ``Representative GNNs'' as:
     %
-    \begin{quote}
+    \begin{myquote}
         \newcommand{\GATCalcWeight}{\exp(LeakyReLU(\Param{\MyVec{a}}^T[\hvec{y}[k] \parallel \hvec{x}[k]]))}
         Each GAT layer consists of a vertex pre-processing phase and two sub-layers (i.e., message-passing phases).
         
@@ -207,7 +214,7 @@ In the annotated version, changes corresponding to each point are all highlighte
                 \MyVec{h}^{l+1}_x = \MyVec{h}^{l,1}_x &= \gamma^{l,1}(\MyVec{h}^{l,0}, \MyVec{s}^{l,1}_x) = \delta(\MyVec{s}^{l,1}_x).
             \end{aligned}
         \end{equation}
-    \end{quote}  
+    \end{myquote}  
 \end{reply}
 
 % R1Q2
@@ -217,9 +224,9 @@ In the annotated version, changes corresponding to each point are all highlighte
 
 \begin{reply}
 	Thank you for pointing out our shortcomings. Computer vision is indeed another important application area of graph neural networks. We have added the mentioned references in the INTRODUCTION section in the revised manuscript. We quote the related sentence below:
-    \begin{quote}
+    \begin{myquote}
          The powerful expression ability makes GNNs achieve good accuracy in not only graph analytical tasks [8, 9, 10] (like node classification and link prediction) but also computer vision tasks (like human-object interaction [11], human parsing [12], and video object segmentation [13]).
-    \end{quote}
+    \end{myquote}
 \end{reply}
 
 % R1Q3
@@ -258,12 +265,12 @@ There are some grammar errors and typos:
 
 \begin{reply}
     
-    We appreciate your comment.
+    Thank you for pointing the problem out.
     %
-    We have enlarged Figure 6 and Figure 7 in the revised manuscript.
+    Besides Figure 6 and Figure 7, we have adjusted all the figures in the revised manuscript to make sure that font sizes in figures are no less than the font size of figure captions.
     %
-    Besides them, we have also enlarged fonts in other figures in the manuscript, to make sure that font sizes in figures are no less than the font size of figure captions.
-
+    To make the figures more easy to read, we also splitted Figure 6 and Figure 7 into five figures (Figure 6 to 10) in the revised manuscript to enlarge the subfigures.
+    
 \end{reply}
 
 % R1Q5
@@ -359,6 +366,25 @@ There are some grammar errors and typos:
 \end{point}
 
 \begin{reply}
+    Thanks very much for your valuable suggestions.
+    %
+    The model complexity directly affected both the accuracy and the training time.
+    %
+    In order to analyze the relationship between model complexity and accuracy, we conducted two kinds of extra experiments in the revised manuscript: (1) how the hyper-parameters of the GNNs (like the dimension of hidden vectors and the number of heads) affected the accuracy of GNNs; (2) how the batch size in the sampling methods affected the accuracy of GNNs.
+
+    In this reply, we focus on the first kind of experiments.
+    %
+    We will introduce our results of the second kind of experiments in the next reply.
+
+    In the revised manuscript, we added an extra paragraph ``Effects on Accuracy'' at the end of Section 4.1 ``Effects of Hyper-parameters on Performance'' to analyze how the hyper-parameters affect the accuracy.
+    %
+    We had two main findings: (1) the accuracy of GNNs was much more sensitive to the dimension of hidden vectors $dim(\MyVec{h}^1_x)$ (for GCN/GGNN/GaAN) and the dimension of each head $d_{head}$ (for GAT) than the other hyper-parameters; (2) the relative accuracy between the four typical GNNs varied greatly with different datasets.
+    %
+    We quote the related paragraphs from the revised manuscript below:
+
+    \begin{myquote}
+            %%% TO ADD QUOTE %%%
+    \end{myquote}
 \end{reply}
 
 \begin{point}
