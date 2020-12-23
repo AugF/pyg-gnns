@@ -688,7 +688,7 @@ According to the experimental results in Section~\ref{sec:training_time_breakdow
 
 Since the size of sampled subgraph was much smaller than the original graph, it might affect the accuracy of the trained GNNs.
 %
-To find out how the batch size affected the accuracy, we trained GNNs under different batch sizes and compared their accuracy with the full-batch training in \figurename~\ref{fig:exp_sampling_relative_batch_size_accuracy}.
+To find out how the batch size affected the accuracy, we trained GNNs under different batch sizes and compared their accuracy with the full-batch training in \figurename~\ref{fig:exp_sampling_relative_batch_size_accuracy_graphsage} and \figurename~\ref{fig:exp_sampling_relative_batch_size_accuracy_cluster}.
 %
 The experiemental results on other datasets were similar.
 %
@@ -698,14 +698,23 @@ For each dataset and each GNN, we chose the hyper-parameters that achieved the h
 
 \begin{figure}[H]
     \centering
-    \subfloat[Neighbor sampler on \texttt{amc}]{\includegraphics[height=5cm]{figs/experiments/exp_graphsage_sampling_accuracy_on_amc.pdf}}
-    \subfloat[Neighbor sampler on \texttt{fli}]{\includegraphics[height=5cm]{figs/experiments/exp_graphsage_sampling_accuracy_on_fli.pdf}} \\
-    \subfloat[Cluster sampler on \texttt{amc}]{\includegraphics[height=5cm]{figs/experiments/exp_cluster_sampling_accuracy_on_amc.pdf}}
-    \subfloat[Cluster sampler on \texttt{fli}]{\includegraphics[height=5cm]{figs/experiments/exp_cluster_sampling_accuracy_on_fli.pdf}}
-    \caption{Test Accuracy under different batch sizes. FULL means that the full graph participates in the training.}
-    \label{fig:exp_sampling_relative_batch_size_accuracy}
+    \subfloat[\texttt{amp}]{\includegraphics[width=2in]{figs/experiments/exp_graphsage_sampling_accuracy_on_amp.pdf}}
+    \subfloat[\texttt{amc}]{\includegraphics[width=2in]{figs/experiments/exp_graphsage_sampling_accuracy_on_amc.pdf}}
+    \subfloat[\texttt{fli}]{\includegraphics[width=2in]{figs/experiments/exp_graphsage_sampling_accuracy_on_fli.pdf}}
+    \caption{Test accuracy under different batch sizes of the neighbor sampler. FULL means that the full graph participated in the training.}
+    \label{fig:exp_sampling_relative_batch_size_accuracy_graphsage}
 \end{figure}
 
+\begin{figure}[H]
+    \centering
+    \subfloat[\texttt{amp}]{\includegraphics[width=2in]{figs/experiments/exp_cluster_sampling_accuracy_on_amp.pdf}}
+    \subfloat[\texttt{amc}]{\includegraphics[width=2in]{figs/experiments/exp_cluster_sampling_accuracy_on_amc.pdf}}
+    \subfloat[\texttt{fli}]{\includegraphics[width=2in]{figs/experiments/exp_cluster_sampling_accuracy_on_fli.pdf}}
+    \caption{Test accuracy under different batch sizes of the cluster sampler. FULL means that the full graph participated in the training.}
+    \label{fig:exp_sampling_relative_batch_size_accuracy_cluster}
+\end{figure}
+
+The relationship between the batch size and the accuracy was complex.
 %
 With the change of batch size, the accuracy relationship between GNNs is roughly the same.
 %
