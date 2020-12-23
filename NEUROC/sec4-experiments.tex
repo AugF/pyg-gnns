@@ -151,44 +151,28 @@ As $dim(\MyVec{h}^1_x)$ increased, the accuracy first increased quickly and then
 %
 For GGNN, its accuracy curves showed similar trends as GCN.
 %
-However, GGNN was more sensitive to $dim(\MyVec{h}_x^1)$ than GCN and the accuracy even decreased when $dim(\MyVec{h}_x^1) \geq 1024$.
+However, GGNN was more sensitive to $dim(\MyVec{h}_x^1)$ than GCN.
+%
+Its accuracy even decreased when $dim(\MyVec{h}_x^1) \geq 1024$.
 %
 Since GGNN had high model complexity (with 13 weight matrices/vectors to train), GGNN might occur overfitting in those cases.
-%%%% TODO %%%%
-
-
-%In deep learning, accuracy is also an important indicator that algorithm engineers care about.
 %
-%We adopted a unified standard (section \ref{sec:hyper-parameters}) to evaluate the effect of hyper-parameters on accuracy.
+For GAT, its accuracy was more sensitive to the dimension of each head $d_{head}$ than the number of heads.
 %
-%\figurename~\ref{fig:exp_hyperparameter_accuracy} shows how the accuracy varies with hyper-parameters.
+For GaAN, only $dim(\MyVec{h}_x^1)$ showed obvious impacts on accuracy.
 %
-%For all models, we found that different datasets had different curve changes, that was, different datasets had different sensitivity to hyper-parameter changes.
+The experimental results indicated the accuracy of the GNNs was often low when $dim(\MyVec{h}_x^1)$ (for GCN/GGNN/GaAN) or $d_{head}$ (for GAT) was small.
 %
-%This was because different datasets had different characteristics, which lead to different learning difficulties.
+In those cases, the low model complexity limited the expressive power of the GNNs.
 %
-
-Except for the effect of the number of heads on GAT and the effect of $d_a$, $d_v$, $d_m$, the number of heads $K$ on GaAN, we found the same phenomena:
-the accuracy of the model was often low when hyper-parameters were low. When a certain threshold was reached, the accuracy began to fall within the range of fluctuations.
-%
-We conducted additional experiments for these exceptions. Taking the effect of the number of heads on GAT as an example, 
-\figurename~\ref{fig:exp_hyperparameter_accuracy_gat_small_info} shows the trend is similar to the phenomena discussed above when $d_{head}$ is adjusted to a smaller value such as 2 and 4.
-%
-This phenomenon showed some relationship between accuracy and model complexity.
-%
-When the hyper-parameter value was very small, the model complexity was often low, which limited the expressive ability of the model.
-%
-In this case, accuracy and model complexity were positively related.
-%
-However, when the hyper-parameter increased to a certain threshold, the model had sufficient learning ability, and the relationship between accuracy and model complexity was no longer certain.
-% added by wangyupan, 2020-12-22 ----end----
+As $dim(\MyVec{h}_x^1)$ or $d_{head}$ increased to a certain threshold, the GNNs had sufficient learning ability to achieve stable accuracy.
 
 \begin{figure}[H]
     \centering
     \subfloat[GCN]{\includegraphics[width=0.3\columnwidth]{figs/experiments/exp_hyperparameter_on_accuracy_gcn.pdf}}
     \subfloat[GGNN]{\includegraphics[width=0.3\columnwidth]{figs/experiments/exp_hyperparameter_on_accuracy_ggnn.pdf}}\\
     \subfloat[GAT]{\includegraphics[width=0.6\columnwidth]{figs/experiments/exp_hyperparameter_on_accuracy_gat.pdf}}\\
-    \subfloat[GaAN]{\includegraphics[width=0.85\columnwidth]{figs/experiments/exp_hyperparameter_on_accuracy_gaan.pdf}}
+    \subfloat[GaAN]{\includegraphics[width=0.9\columnwidth]{figs/experiments/exp_hyperparameter_on_accuracy_gaan.pdf}}
     \caption{Effects of hyper-parameters on accuracy of the typical GNNs.}
     \label{fig:exp_hyperparameter_accuracy}
 \end{figure}
@@ -200,6 +184,29 @@ However, when the hyper-parameter increased to a certain threshold, the model ha
     \label{fig:exp_hyperparameter_accuracy_gat_small_info}
 \end{figure}
 
+\figurename~\ref{fig:exp_hyperparameter_on_accuracy_alg_contrast} compares the best accuracy that each GNN achieved on different datasets.
+%
+The best accuracy that the four GNNs achieved was very close.
+%
+It was also close to the accuracy reported in their original references \cite{kipf2017_gcn,li2015_ggnn,huang2018_gat,zhang2018_gaan}.
+%
+There was no clear winner in terms of accuracy.
+%
+The relative accuracy between GNNs varied greatly with different datasets.
+%
+GaAN achieved the highest accuracy in three out of five datasets.
+%
+GCN also achieved the highest or second highest accuracy in three out of five datasets, though its model was simplest.
+%
+It indicated that simple GNN models (such as GCN) could still achieve good accuracy with proper hyper-parameter settings.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=3in]{figs/experiments/exp_hyperparameter_on_accuracy_alg_contrast.pdf}
+    \caption{Best accuracy that each GNN achieved on different datasets.}
+    \label{fig:exp_hyperparameter_on_accuracy_alg_contrast}
+\end{figure}
+
 \paragraph{Summary}
 
 The complexity analysis in \tablename~\ref{tab:gnn_overview_edge} and \tablename~\ref{tab:gnn_overview_vertex} was valid.
@@ -208,11 +215,9 @@ Fixing other hyper-parameters, each hyper-parameter itself affected the training
 %
 Algorithm engineers could adjust hyper-parameters according to the time complexity to avoid explosive growth in the training time and memory usage.
 %
-% added by wangyupan, 2020-12-22 ----start----
-There was no definite relationship between accuracy and hyper-parameters. 
+The accuracy of GNNs was much more sensitive to the dimension of hidden vectors/heads than the other hyper-parameters.
 %
-To obtain the optimal model, hyper-parameters needed to be manually adjusted by algorithm engineers.
-% added by wangyupan, 2020-12-22 ----end----
+The relative accuracy between GNNs varied greatly with different datasets.
 
 \subsection{Training Time Breakdown}
 \label{sec:training_time_breakdown}
