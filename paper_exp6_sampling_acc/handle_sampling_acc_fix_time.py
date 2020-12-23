@@ -32,40 +32,22 @@ datasets_maps = {
 
 xticklabels = ['1%', '3%', '6%', '10%', '25%', '50%']
 
-dir_in = "log_fix_time"
-dir_out = "res_fix_time"
+dir_in = "log_fix_time_new"
+dir_out = "sampling_acc_time_figs"
 
-for data in datasets:
-    if not os.path.exists(dir_out + "/" + data):
-        os.makedirs(dir_out + "/" + data)
-        
-"""
-目标：绘制不同BatchSize下，精度随Batch Nums的变化结果
-
-数据收集：
-算法, 采样方法，数据集，time/acc
-
-绘制图像：
-算法+采样方法+time/acc
-df.index: 图像的横坐标
-df.columns: 图像中的不同的线(不同的BatchSize)
-"""
-
+if not os.path.exists(dir_out):
+    os.makedirs(dir_out)
+    
 max_accs = pd.read_csv("/home/wangzhaokang/wangyunpan/gnns-project/pyg-gnns/paper_exp5_paras_acc/acc_res/alg_acc.csv", index_col=0)
 
-for data in datasets:
-    for alg in algs:
-        for mode in modes:
-            flag = False
+for mode in ["cluster"]:
+    for alg in ["gcn"]:
+        for data in ["amazon-computers"]:
             # 将数据存储到csv文件
             df_times, df_accs = {}, {}
             if mode == "cluster":
                 for i, cs in enumerate(cluster_batchs):
                     file_path = os.path.join(dir_in, '_'.join([mode, alg, data, str(cs)]) + ".log")
-                    if not os.path.exists(file_path):
-                        flag = True
-                        break
-                    print(file_path)
                     df_times[xticklabels[i]], df_accs[xticklabels[i]] = [], []
                     # 读取日志文件，获取bs_times, bs_accs: dims=100
                     with open(file_path) as f:
@@ -77,9 +59,6 @@ for data in datasets:
             elif mode == "graphsage":
                 for i, gs in enumerate(graphsage_batchs[data]):
                     file_path = os.path.join(dir_in, '_'.join([mode, alg, data, str(gs)]) + ".log")
-                    if not os.path.exists(file_path):
-                        flag = True
-                        break
                     df_times[xticklabels[i]], df_accs[xticklabels[i]] = [], []
                     # 读取日志文件，获取bs_times, bs_accs: dims=100
                     with open(file_path) as f:
@@ -89,24 +68,21 @@ for data in datasets:
                                 df_accs[xticklabels[i]].append(float(match_line.group(1)))
                                 df_times[xticklabels[i]].append(float(match_line.group(2)))
             
-            # full    
-            # 画精度关于时间的图像
             fig, ax = plt.subplots()
-            ax.set_ylabel('Accucary')
-            ax.set_xlabel("Time (s)")
-            
             category_colors = plt.get_cmap('RdYlGn')(
             np.linspace(0.15, 0.85, len(xticklabels)))   
             
-            max_len = 0
+            min_len = np.inf
             for key, c in zip(xticklabels, category_colors):
                 ax.plot(df_times[key], df_accs[key], color=c, label=key)
-                max_len = max(max_len, len(df_times[key]))
+                min_len = min(min_len, len(df_times[key]))
                 
-            ax.plot(range(max_len), [max_accs.loc[datasets_maps[data], alg]] * max_len, linestyle='--')
+            ax.set_ylabel('Accucary')
+            ax.set_xlabel("Time (s)")
+            ax.plot(range(min_len), [max_accs.loc[datasets_maps[data], alg]] * min_len, linestyle='--')
             ax.legend()
             fig.tight_layout() # 防止重叠
-            fig.savefig(dir_out + "/"  + data + "/" + alg + "_" + mode + "_accs_times.png")
+            fig.savefig(dir_out + "/"  + mode + "_" + alg + "_" + data + "_accs_times.png")
             plt.close()    
             
 

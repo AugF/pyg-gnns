@@ -101,9 +101,6 @@ elif args.mode == 'graphsage':
                                num_workers=args.num_workers) # inductive learning
 loader_time = time.time() - loader_time
 
-#t1 = data.edge_index.numpy()
-#np.save("amp_graph.npy", t1)
-
 # 3. set model
 if args.model == 'gcn':
     # 预先计算edge_weight出来

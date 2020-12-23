@@ -32,49 +32,44 @@ datasets_maps = {
 
 fix_times = {
     'pubmed': 1000,
-    'coauthor-physics': 1000,
-    'flickr': 1750,
-    'amazon-photo': 1000,
-    'amazon-computers': 1400
+    'coauthor-physics': 2000,
+    'flickr': 2000,
+    'amazon-photo': 4000,
+    'amazon-computers': 4000
 }
 
-dir_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "log_fix_time_new")
+dir_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "log_fix_time_12_22")
 if not os.path.exists(dir_path):
     os.makedirs(dir_path)
 
-for i, mode in enumerate(['cluster', 'graphsage']):
+for i, mode in enumerate(['graphsage']):
     sh_commands = []
-    for alg in algs:
-        for data in small_datasets:
-            paras = str(config_paras.loc[datasets_maps[data], alg]).split('_')
-            if alg in ["gcn", "ggnn"]:
-                config_str = f"--hidden_dims {paras[0]}"
-            elif alg == "gat":
-                config_str = f"--heads {paras[0]} --head_dims {paras[1]}"
-            elif alg == "gaan":
-                config_str = f"--heads {paras[0]} --d_v {paras[1]} --d_a {paras[1]} --d_m {paras[1]} --hidden_dims {paras[2]}"
-            if mode == 'cluster':
-                cmd = "python -u /home/wangzhaokang/wangyunpan/gnns-project/pyg-gnns/main_sampling_batch_acc_cum_fix_time.py --epochs 10000 --mode {} --model {} --data {} --device cuda:{} --batch_partitions {} {} --fix_time {} >>{} 2>&1"
-                for cs in cluster_batchs:
-                    file_path = os.path.join(dir_path, '_'.join([mode, alg, data, str(cs)]) + '.log')
-                    if os.path.exists(file_path):
-                        continue
-                    print(file_path)
-                    sh_commands.append(cmd.format(mode, alg, data, i, str(cs), config_str, fix_times[data], file_path))
-                full_log = os.path.join(dir_path, '_'.join([mode, alg, data, 'full']) + '.log')
-                full_sh = f"python -u /home/wangzhaokang/wangyunpan/gnns-project/pyg-gnns/main_full_batch_acc_cum.py --runs 1 --epochs 1000 --mode {mode} --model {alg} --data {data} --device cuda:{i} {config_str} >>{full_log} 2>&1"
-                sh_commands.append(full_sh)
-            else:
-                cmd = "python -u /home/wangzhaokang/wangyunpan/gnns-project/pyg-gnns/main_sampling_batch_acc_cum_fix_time.py --epochs 10000 --mode {} --model {} --data {} --device cuda:{} --batch_size {} {} --fix_time {} >>{} 2>&1"
-                for gs in graphsage_batchs[data]:
-                    file_path = os.path.join(dir_path, '_'.join([mode, alg, data, str(gs)]) + '.log')
-                    if os.path.exists(file_path):
-                        continue
-                    print(file_path)
-                    sh_commands.append(cmd.format(mode, alg, data, i, str(gs), config_str, fix_times[data], file_path))
-                full_log = os.path.join(dir_path, '_'.join([mode, alg, data, 'full']) + '.log')
-                full_sh = f"python -u /home/wangzhaokang/wangyunpan/gnns-project/pyg-gnns/main_full_batch_acc_cum.py --runs 1 --epochs 1000 --mode {mode} --model {alg} --data {data} --device cuda:{i} {config_str} >>{full_log} 2>&1"
-                sh_commands.append(full_sh)
-    with open("sh_" + mode + "_fix_time_new.sh", "w") as f:
+    for lr in [0.1]:
+        for alg in ["gcn"]:
+            for data in ["amazon-photo", "amazon-computers"]:
+                paras = str(config_paras.loc[datasets_maps[data], alg]).split('_')
+                if alg in ["gcn", "ggnn"]:
+                    config_str = f"--hidden_dims {paras[0]}"
+                elif alg == "gat":
+                    config_str = f"--heads {paras[0]} --head_dims {paras[1]}"
+                elif alg == "gaan":
+                    config_str = f"--heads {paras[0]} --d_v {paras[1]} --d_a {paras[1]} --d_m {paras[1]} --hidden_dims {paras[2]}"
+                if mode == 'cluster':
+                    cmd = "python -u /home/wangzhaokang/wangyunpan/gnns-project/pyg-gnns/main_sampling_batch_acc_cum_fix_time.py --epochs 10000 --lr {} --mode {} --model {} --data {} --device cuda:{} --batch_partitions {} {} --fix_time {} >>{} 2>&1"
+                    for cs in cluster_batchs:
+                        file_path = os.path.join(dir_path, '_'.join([mode, alg, data, str(cs)]) + '.log')
+                        if os.path.exists(file_path):
+                            continue
+                        print(file_path)
+                        sh_commands.append(cmd.format(str(lr), mode, alg, data, i, str(cs), config_str, fix_times[data], file_path))
+                else:
+                    cmd = "python -u /home/wangzhaokang/wangyunpan/gnns-project/pyg-gnns/main_sampling_batch_acc_cum_fix_time.py --epochs 10000 --lr {} --mode {} --model {} --data {} --device cuda:{} --batch_size {} {} --fix_time {} >>{} 2>&1"
+                    for gs in graphsage_batchs[data]:
+                        file_path = os.path.join(dir_path, '_'.join([mode, alg, data, str(gs)]) + '.log')
+                        if os.path.exists(file_path):
+                            continue
+                        print(file_path)
+                        sh_commands.append(cmd.format(str(lr), mode, alg, data, i, str(gs), config_str, fix_times[data], file_path))
+    with open("sh_" + mode + "_fix_time_12_22.sh", "w") as f:
         for sh in sh_commands:
             f.write(sh + '\n')

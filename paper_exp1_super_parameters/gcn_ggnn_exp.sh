@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-dir_config="dir_gcn_ggnn_qdrep"
-dir_sqlite="dir_gcn_ggnn_sqlite"
+dir_config="dir_gcn_ggnn_inference_qdrep"
+dir_sqlite="dir_gcn_ggnn_inference_sqlite"
 
 if [ ! -d ${dir_config} ]
 then
@@ -27,7 +27,7 @@ do
             if [ -f "${dir_config}/config0_${model}_${data}_${hd}.qdrep" ]; then # 断点续传
                 continue
             fi
-            nsys profile -t cuda,osrt,nvtx -o "${dir_config}/config0_${model}_${data}_${hd}" -w true python ../main.py --dataset ${data} --model ${model} --hidden_dims ${hd}
+            nsys profile -t cuda,osrt,nvtx -o "${dir_config}/config0_${model}_${data}_${hd}" -w true python ../main_inference.py --dataset ${data} --model ${model} --hidden_dims ${hd}
             nsys-exporter -s "${dir_config}/config0_${model}_${data}_${hd}.qdrep" "${dir_sqlite}/config0_${model}_${data}_${hd}.sqlite"
         done
     done

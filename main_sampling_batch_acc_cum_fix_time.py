@@ -87,6 +87,8 @@ if dataset_info[0] in small_datasets and len(dataset_info) > 1:
     
 # 2. set sampling
 # 2.1 test_data
+subgraph_loader = NeighborSampler(data.edge_index, sizes=[-1], batch_size=1024,
+                                  shuffle=False, num_workers=args.num_workers)
 
 # 2.2 train_data: 为了统一对比，这里的结果为Transductive
 if args.mode == 'cluster':
@@ -144,6 +146,21 @@ def test():
         accs.append(acc)
     return accs
 
+@torch.no_grad()
+def test_sampling():  # Inference should be performed on the full graph.
+    t0 = time.time()
+    model.eval()
+    out = model.inference(data.x, subgraph_loader)
+
+    y_true = data.y.cpu()
+    y_pred = out.argmax(dim=-1)
+    t1 = time.time()
+    
+    accs = []
+    for mask in [data.train_mask, data.val_mask, data.test_mask]:
+        correct = y_pred[mask].eq(y_true[mask]).sum().item()
+        accs.append(correct / mask.sum().item())
+    return accs
 
 def train(optimizer, t0, bs_count, best_val_acc, test_acc):
     model.train()
@@ -172,7 +189,10 @@ def train(optimizer, t0, bs_count, best_val_acc, test_acc):
             optimizer.step()
             # 指定batch size下，进行汇报时间和精度
             bs_count += 1
-            accs = test()
+            if args.dataset == "coauthor-physics":
+                accs = test_sampling()
+            else:
+                accs = test()
             if accs[1] >= best_val_acc:
                 best_val_acc = accs[1]
                 test_acc = accs[2]

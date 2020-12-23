@@ -53,7 +53,7 @@ def pics_gat(dir_in="acc_res", dir_out="acc_res"):
         df = pd.read_csv(dir_in + f"/gat_heads_{hd}.csv", index_col=0)
         df.index = xticklabels
         ax = axes[i]
-        ax.set_ylabel('Test Accuracy', fontsize=12)
+        ax.set_ylabel('Accuracy', fontsize=12)
         ax.set_ylim(0.4, 1)
         ax.set_xlabel(xlabels[i], fontsize=12)
         ax.set_xticks(list(range(len(xticklabels))))
@@ -61,11 +61,11 @@ def pics_gat(dir_in="acc_res", dir_out="acc_res"):
         markers = 'oD^sdp'
         for j, c in enumerate(df.columns[:-1]):
             ax.plot(df.index, df[c], marker=markers[j], label=c)
-        ax.legend(ncol=1, fontsize='xx-small')
+        ax.legend()
     fig.tight_layout() 
     fig.savefig(dir_out + "/" + file_prefix + f"gat_small_info.png")
     fig.savefig(dir_out + "/" + file_prefix + f"gat_small_info.pdf")
     plt.close()
 
-# save_acc_to_csv()
-pics_gat(dir_in="acc_res", dir_out="paras_figs")
+save_acc_to_csv()
+pics_gat()

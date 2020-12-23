@@ -30,24 +30,22 @@ datasets_maps = {
     'com-amazon': 'cam'
 }
 
-xticklabels = ['1%', '3%', '6%', '10%', '25%', '50%', 'FULL']
+xticklabels = ['1%', '3%', '6%', '10%', '25%', '50%']
 
-dir_in = "log_fix_time"
+dir_in = "log_fix_time_new"
 dir_out = "res_convergence_validation"
 
 for data in datasets:
     for model in models:
-        if not os.path.exists(f"{dir_out}/{model}/{data}"):
-            os.makedirs(f"{dir_out}/{model}/{data}")
+        if not os.path.exists(f"{dir_out}/{dir_in}"):
+            os.makedirs(f"{dir_out}/{dir_in}")
         for mode in modes:
-            print(data, model, mode)
             # 将数据存储到csv文件
             if mode == "cluster":
                 for i, cs in enumerate(cluster_batchs):
                     file_path = os.path.join(dir_in, '_'.join([mode, model, data, str(cs)]) + ".log")
                     if not os.path.exists(file_path):
                         continue
-                    print(file_path)
                     train_acc, val_acc = [], []
                     # 读取日志文件，获取bs_times, bs_accs: dims=100
                     with open(file_path) as f:
@@ -67,15 +65,15 @@ for data in datasets:
                         ax.plot(x, accs[i], color=c, label=labels[i])
                     ax.legend()
                     fig.tight_layout() 
-                    fig_path = '_'.join([mode, model, data, str(cs)]) + '_cluster.png'
-                    fig.savefig(f"acc_fig/{model}/{data}/{fig_path}")
+                    fig_path = '_'.join([mode, model, data, str(cs)]) + '.png'
+                    print(file_path)
+                    fig.savefig(f"{dir_out}/{dir_in}/{fig_path}")
                                          
             elif mode == "graphsage":
                 for i, gs in enumerate(graphsage_batchs[data]):
                     file_path = os.path.join(dir_in, '_'.join([mode, model, data, str(gs)]) + ".log")
                     if not os.path.exists(file_path):
                         continue
-                    print(file_path)
                     train_acc, val_acc = [], []
                     # 读取日志文件，获取bs_times, bs_accs: dims=100
                     with open(file_path) as f:
@@ -95,5 +93,6 @@ for data in datasets:
                         ax.plot(x, accs[i], color=c, label=labels[i])
                     ax.legend()
                     fig.tight_layout() 
-                    fig_path = '_'.join([mode, model, data, str(cs)]) + '_graphsage.png'
-                    fig.savefig(f"{dir_out}/{model}/{data}/{fig_path}")
+                    fig_path = '_'.join([mode, model, data, str(gs)]) + '.png'
+                    print(file_path)
+                    fig.savefig(f"{dir_out}/{dir_in}/{fig_path}")

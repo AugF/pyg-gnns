@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 plt.style.use("ggplot")
-plt.rcParams["font.size"] = 12
+# plt.rcParams["font.size"] = 12
 plt.rcParams['text.latex.preamble']=[r"\usepackage{amsmath}"]
 
 datasets = ["amazon-photo", "pubmed", "amazon-computers", "coauthor-physics", "flickr", "com-amazon"]
@@ -219,24 +219,28 @@ def pics_gaan(dir_in="early_stopping1/acc_res", dir_out="early_stopping1/acc_res
     file_prefix = "exp_hyperparameter_on_accuracy_"
     xticklabels = [['1', '2', '4', '8', '16', '32', '64', '128', '256', '512', '1024', '2048'],
                    ['1', '2', '4', '8', '16', '32', '64', '128', '256'], ['1', '2', '4', '8', '16']]
-    xlabels = [r"Hidden Vector Dimension $dim(\mathbf{h}^1)$ (#Head=4, $d_a=d_v=d_m$=32)", r"$d_a, d_v, d_m$(#Head=4, $dim(\mathbf{h}^1)$=64)",  r"#Head ($dim(\mathbf{h}^1)$=64, $d_a=d_v=d_m$=32)"]
-   
+    xlabels = ["Dimension of Hidden Vectors\n" + r"$dim(\mathbf{h}^1_x)$ (#Head=4, $d_a=d_v=d_m$=32)", r"$d_a, d_v, d_m$" + "\n" + r"(#Head=4, $dim(\mathbf{h}^1_x)$=64)",  "#Head\n" + r"($dim(\mathbf{h}^1)$=64, $d_a=d_v=d_m$=32)"]
+  
+    fig, axes = plt.subplots(1, 3, figsize=(7, 7/3), sharey=True, tight_layout=True) 
+    # plt.rcParams["font.size"] = 8
     for i, mode in enumerate(['hds', 'ds', 'heads']):
         df = pd.read_csv(dir_in + "/gaan_" + mode + ".csv", index_col=0)
         df.index = xticklabels[i]
-        fig, ax = plt.subplots()
-        ax.set_ylabel('Accuracy')
-        ax.set_ylim(0, 1)
-        ax.set_xlabel(xlabels[i])
+        ax = axes[i]
+        if i == 0:
+            ax.set_ylabel('Test Accuracy', fontsize=9)
+        ax.set_ylim(0.4, 1)
+        ax.set_xlabel(xlabels[i], fontsize=9)
         ax.set_xticks(list(range(len(xticklabels[i]))))
-        ax.set_xticklabels(xticklabels[i])
+        ax.set_xticklabels(xticklabels[i], fontsize=6.5, rotation=30)
         markers = 'oD^sdp'
         for j, c in enumerate(df.columns[:-1]):
-            df[c].plot(ax=ax, marker=markers[j], label=c, rot=0)
-        ax.legend()
-        fig.tight_layout() 
-        fig.savefig(dir_out + "/" + file_prefix + "gaan_" + mode + ".png")
-        plt.close()
+            ax.plot(df.index, df[c], marker=markers[j], markersize=4, label=c)
+        ax.legend(loc="center right", ncol=2, fontsize="x-small")
+    fig.tight_layout() 
+    fig.savefig(dir_out + "/" + file_prefix + "gaan.png")
+    fig.savefig(dir_out + "/" + file_prefix + "gaan.pdf")
+    plt.close()
 
 
 # 纵向结果对比
@@ -278,8 +282,8 @@ def get_alg_contrast(dir_in="early_stopping2/acc_res", dir_out="early_stopping2/
     pd.DataFrame(acc_maxv, index=datasets_map[:-1]).to_csv(dir_out + "/max_acc.csv")
     print(acc_maxv)
     
-save_acc_to_csv("./")
-pics_gcn_ggnn(dir_in="acc_res", dir_out="acc_res")
-pics_gat(dir_in="acc_res", dir_out="acc_res")
-pics_gaan(dir_in="acc_res", dir_out="acc_res")
-get_alg_contrast(dir_in="acc_res", dir_out="acc_res")
+# save_acc_to_csv("./")
+# pics_gcn_ggnn(dir_in="acc_res", dir_out="acc_res")
+# pics_gat(dir_in="acc_res", dir_out="acc_res")
+pics_gaan(dir_in="acc_res", dir_out="paras_figs")
+# get_alg_contrast(dir_in="acc_res", dir_out="acc_res")

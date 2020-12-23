@@ -10,7 +10,7 @@ plt.rcParams['text.latex.preamble']=[r"\usepackage{amsmath}"]
 
 modes = ["cluster", "graphsage"]
 algs = ["gcn", "ggnn", "gat", "gaan"]
-datasets = ["amazon-photo", "coauthor-physics", "amazon-computers", "pubmed", "flickr"]
+datasets = ["amazon-photo", "pubmed", "amazon-computers", "coauthor-physics", "flickr"]
 cluster_batchs = [15, 45, 90, 150, 375, 750]
 
 graphsage_batchs = {
@@ -37,6 +37,9 @@ dir_out = "res_fix_time_new"
 
 if not os.path.exists(dir_out + "/res_csv"):
     os.makedirs(dir_out + "/res_csv")
+
+if not os.path.exists(dir_out + "/res_fig"):
+    os.makedirs(dir_out + "/res_fig")
         
 def get_full_acc():
     df = {}
@@ -96,11 +99,15 @@ for mode in modes:
                     df_accs[data].append(acc)
         df = pd.DataFrame(df_accs)
         df.index = xticklabels
-        df.to_csv(dir_out + "/res_csv/" + mode + "_" + alg + ".csv")
+        df.to_csv(dir_out + "/res_csv/" + alg + "_" + mode + ".csv")
         
-        print(df)
         fig, ax = plt.subplots()
         ax.set_ylabel("Accuracy")
         ax.set_xlabel("Relative Batch Size (%)")
         
+        markers = 'oD^sdp'
+        for i, c in enumerate(df.columns):
+            ax.plot(xticklabels, df[c], marker=markers[i], label=datasets_maps[c])
+        ax.legend()
+        fig.savefig(dir_out + "/res_fig/" + alg + "_" + mode + ".png")        
             

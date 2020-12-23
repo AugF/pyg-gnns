@@ -87,7 +87,7 @@ for data in datasets:
             if flag: continue
 
             # 获取full
-            file_path = file_path = os.path.join("batch_acc_cum_fix_batch", '_'.join([mode, alg, data]) + "_full.log")
+            file_path = os.path.join("batch_acc_cum_fix_batch", '_'.join([mode, alg, data]) + "_full.log")
             # 读取日志文件，获取bs_times, bs_accs: dims=100
             with open(file_path) as f:
                 df_times['FULL'], df_accs['FULL'] = [], []
