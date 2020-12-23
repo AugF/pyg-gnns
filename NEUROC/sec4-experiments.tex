@@ -688,13 +688,11 @@ According to the experimental results in Section~\ref{sec:training_time_breakdow
 
 Since the size of sampled subgraph was much smaller than the original graph, it might affect the accuracy of the trained GNNs.
 %
-To find out how the batch size affected the accuracy, we trained GNNs under different batch sizes and compared their accuracy with the full-batch training in \figurename~\ref{fig:exp_sampling_relative_batch_size_accuracy_graphsage} and \figurename~\ref{fig:exp_sampling_relative_batch_size_accuracy_cluster}.
+To find out how the batch size affected the accuracy, we trained GNNs under different batch sizes.
 %
-The experiemental results on other datasets were similar.
+\figurename~\ref{fig:exp_sampling_relative_batch_size_accuracy_graphsage} and \figurename~\ref{fig:exp_sampling_relative_batch_size_accuracy_cluster} compare their accuracy with the cases that we used the full graph participated in the training.
 %
-We used the same hyper-parameters for the sample-based training and the full-batch training.
-%
-For each dataset and each GNN, we chose the hyper-parameters that achieved the highest accuracy for the full-batch training, according to the experimental results in Section~\ref{sec:effects_of_hyper-parameters_on_performance}.
+For each dataset and each GNN, we chose the hyper-parameters that achieved the highest accuracy according to the experimental results in Section~\ref{sec:effects_of_hyper-parameters_on_performance}.
 
 \begin{figure}[H]
     \centering
