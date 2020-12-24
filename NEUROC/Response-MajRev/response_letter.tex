@@ -296,12 +296,27 @@ There are some grammar errors and typos:
         
         \item In Section 4.2 ``Time Breakdown Analysis'', we have additionally conducted the time breakdown analysis for GNN inference.
         %
-        We find that the performance characteristics of GNN inference are similar to GNN training.
+        We conducted the same set of experiments as in the training time anlaysis.
         %
-        The performance bottenecks in GNN inference are also similar to the bottlenecks in training.
+        We found that the performance characteristics of GNN inference were very similar to GNN training.
         %
-        Therefore, we focus on discussing the differences between GNN training and inference in the revised manuscript.
-        
+        The processing time breakdowns on the layer level, step level and operator level of training and inference were all highly similar, as shown in Figure~\ref{} of the response.
+        %
+        Based on the time breakdown analysis, we concluded that the performance bottenecks of GNN training and inference were same.
+        %
+        The difference between training and inference process was mainly reflected in the elapsed time.
+        %
+        Given the same dataset and the same GNN, the inference time was only XX\% of the training time, as compared in Figure~\ref{} of the response.
+        %
+        The training process of each epoch consisted of three phases: forward propagation, backward propagation and evaluation.
+        %
+        The evaluation phase conducted inference for the vertices in the evaluation set.
+        %
+        Under the semi-supervised learning setting, the graph neurons of the whole graph participated in inference, but only the labels of the veritces in the evaluation set were used to calculate accuracy.
+        %
+        Therefore, the elapsed time of the evaluation phase was very close to the elapsed time of inference.
+
+
         \item In Section 4.3 ``Memory Usage Analysis'', we have additionally conducted the memory usage analysis for GNN inference.
         %
         We find that ... 
