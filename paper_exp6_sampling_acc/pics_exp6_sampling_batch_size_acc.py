@@ -94,25 +94,29 @@ def pics_relative_batch_acc():
         for data in datasets:
             df = pd.read_csv(dir_out + "/" + mode + "_" + data + ".csv", index_col=0)
     
-            locations = [-1.5, -0.5, 0.5, 1.5]
-            x = np.arange(len(xticklabels))
-            width = 0.2
-            colors = plt.get_cmap('Paired')(np.linspace(0.15, 0.85, len(locations)))
+            #locations = [-1.5, -0.5, 0.5, 1.5]
+            #x = np.arange(len(xticklabels))
+            #width = 0.2
+            
+            #colors = plt.get_cmap('Paired')(np.linspace(0.15, 0.85, len(locations)))
+            markers = "oD^sdp"
 
-            fig, ax = plt.subplots(figsize=(7, 6))
-            rects = []
+            fig, ax = plt.subplots(figsize=(7/3, 6/3), tight_layout=True)
+            #rects = []
             for i, c in enumerate(df.columns):
-                rects.append(ax.bar(x + locations[i] * width, list(df[c]) + [df_full.loc[datasets_maps[data], c]], width, label=algorithms[c], color=colors[i]))
+            #   rects.append(ax.bar(x + locations[i] * width, list(df[c]) + [df_full.loc[datasets_maps[data], c]], width, label=algorithms[c], color=colors[i]))
+                ax.plot(xticklabels, list(df[c]) + [df_full.loc[datasets_maps[data], c]], markersize=4, marker=markers[i], label=algorithms[c])
 
-            for r in rects:
-                ax = autolabel(r, ax)
+            #for r in rects:
+            #   ax = autolabel(r, ax)
 
-            ax.set_xlabel("Dataset")
-            ax.set_ylabel("Test Accuracy")
-            ax.set_ylim(0.4, 1.1)
-            ax.set_xticklabels([''] + xticklabels)
-
-            ax.legend(loc="upper right", ncol=4, fontsize="medium")
+            ax.set_xlabel("Relative Batch Size (%)", fontsize=10)
+            ax.set_ylabel("Test Accuracy", fontsize=10)
+            ax.set_ylim(0.4, 1)
+            ax.set_xticklabels(xticklabels, fontsize=8, rotation=30)
+            
+            ax.legend(fontsize="x-small", ncol=2)
+            #ax.legend(loc="upper right", ncol=4, fontsize="medium")
             # ax.legend()
             fig.savefig(dir_out + f"/exp_{mode}_sampling_accuracy_on_{datasets_maps[data]}.png")
             fig.savefig(dir_out + f"/exp_{mode}_sampling_accuracy_on_{datasets_maps[data]}.pdf")
@@ -128,6 +132,15 @@ def autolabel(rects, ax):
                     f"{height:.2f}", fontsize=10, rotation=90,  horizontalalignment='center')
     return ax
 
+
+def save_sampling_max():
+    """
+    todo
+    """
+    for data in datasets:
+        for mode in modes:
+            df = pd.read_csv(dir_out + "/" + mode + "_" + data + ".csv", index_col=0)
+            pass
 
 if __name__ == "__main__":
     # save_acc_to_file()  
