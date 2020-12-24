@@ -311,10 +311,46 @@ There are some grammar errors and typos:
     To discuss the efficiency of GNN inference on GPUs, we have added performance bottleneck analysis on GNN inference in every subsection of Section 4 ``Evaluation Results and Analysis'':
    
 
-    In Section 4.1 ``Effects of Hyper-parameters on Performance'', we have additionally measured how the inference time and the peak memory usage changed as we increased the values of the hyper-parameters.
+    In Section 4.1 ``Effects of Hyper-parameters on Performance'', we have additionally measured how the time and the peak memory usage changed as we increased the values of the hyper-parameters during \emph{inference}.
     %
-    We find that ...
-    %%% TODO %%%
+    \begin{itemize}
+    \item For all GNNs, we found that the effects of hyper-parameters on the \emph{inference time} were the same as the training time.
+        %
+        Taking GGNN as an example, Figure~\ref{fig:compare_effect_of_hyperparameter_on_time} in the response (Figure X and Figure X in the revised manuscript) compares the effects of the hidden vector dimension $dim(\MyVec{h}^1_x)$ on training/inference time.
+        %
+        As $dim(\MyVec{h}^1_x)$ increased, the vertex/edge calculation time of training time and inference time both grew linearly when the values of hyper-parameters were large enough.
+        %
+        We observed similar phenomena with the other GNNs.
+        %
+        The results indicated that the time complexity analysis of GNNs were applicable to both training and inference.
+        
+        \begin{figure}[H]
+            \centering
+             \subfloat[Training]{\includegraphics[width=0.7\textwidth]{../figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_ggnn.pdf}}\\
+            \subfloat[Inference]{\includegraphics[width=0.7\textwidth]{../figs/experiments/exp_hyperparameter_on_inference_vertex_edge_phase_time_ggnn.pdf}}
+            \caption{Effects of hyper-parameters on the vertex/edge calculation time of GGNN.}
+            \label{fig:compare_effect_of_hyperparameter_on_time}
+        \end{figure}
+        
+        \item For all GNNs, we found that the effects of hyper-parameters on inference memory usage were also same as training.
+        %
+        Taking GAT as an example, Figure~\ref{fig:compare_effect_of_hyperparameter_on_memory_usage} in the response (Figure X and Figure X in the revised manuscript) compares the peak memory usage during training and inference under different values of hyper-parameters.
+        %
+        The trends of the curves in Figure~\ref{fig:compare_effect_of_hyperparameter_on_memory_usage_training} and Figure~\ref{fig:compare_effect_of_hyperparameter_on_memory_usage_inference} were highly similar.
+        %
+        The memory usage of training and inference \emph{both} grew linearly as the dimension of each head and the number of heads increased.
+        %
+        We observed similar phenomena with the other GNNs.
+        %
+        \begin{figure}[H]
+            \centering
+            \subfloat[Training\label{fig:compare_effect_of_hyperparameter_on_memory_usage_training}]{\includegraphics[width=0.6\textwidth]{../figs/experiments/exp_hyperparameter_on_memory_usage_gat.pdf}}\\
+            \subfloat[Inference\label{fig:compare_effect_of_hyperparameter_on_memory_usage_inference}]{\includegraphics[width=0.6\textwidth]{../figs/experiments/exp_hyperparameter_on_inference_memory_usage_gat.pdf}}
+            \caption{Effects of hyper-parameters on peak memory usage of GAT.}
+            \label{fig:compare_effect_of_hyperparameter_on_memory_usage}
+        \end{figure}
+        
+    \end{itemize}
         
     In Section 4.2 ``Time Breakdown Analysis'', we have additionally conducted the time breakdown analysis for GNN inference.
     %

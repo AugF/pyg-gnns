@@ -19,13 +19,13 @@ The hyper-parameters of a GNN (such as the dimensions of hidden vectors and the 
 They affected the training/inference time, memory usage, and accuracy of the GNN at the same time.
 
 
-\paragraph{Effects on Training/Inference Time}
+\paragraph{Effects on Training Time}
 
 According to \tablename~\ref{tab:gnn_overview_edge} and \tablename~\ref{tab:gnn_overview_vertex}, the time complexity of the messaging function $\phi^l$ and the updating function $\gamma^l$ are linear to each hyper-parameter separately.
 %
 If we increase one of the hyper-parameters and fix the others, the training/inference time should increase linearly in theory.
 
-To verify the time complexity analysis in \tablename~\ref{tab:gnn_overview_edge} and \tablename~\ref{tab:gnn_overview_vertex}, we first compared the training time of the four GNNs in \figurename~\ref{fig:exp_absolute_training_time}.
+To verify the time complexity analysis in \tablename~\ref{tab:gnn_overview_edge} and \tablename~\ref{tab:gnn_overview_vertex}, we first compared the \emph{training} time of the four GNNs in \figurename~\ref{fig:exp_absolute_training_time}.
 %
 The ranking of the training time was GaAN $\gg$ GAT $>$ GGNN $>$ GCN in all cases.
 %
@@ -51,28 +51,28 @@ To further evaluate effects of hyper-parameters on training time, we measured th
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.6\textwidth]{figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gcn.pdf}
-    \caption{Effects of hyper-parameters on the vertex/edge calculation time of GCN.}
+    \caption{Effects of hyper-parameters on the vertex/edge calculation time of GCN during training.}
     \label{fig:exp_hyperparameter_on_vertex_edge_phase_time_gcn}
 \end{figure}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.6\textwidth]{figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_ggnn.pdf}
-    \caption{Effects of hyper-parameters on the vertex/edge calculation time of GGNN.}
+    \caption{Effects of hyper-parameters on the vertex/edge calculation time of GGNN during training.}
     \label{fig:exp_hyperparameter_on_vertex_edge_phase_time_ggnn}
 \end{figure}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.6\textwidth]{figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gat.pdf}
-    \caption{Effects of hyper-parameters on the vertex/edge calculation time of GAT.}
+    \caption{Effects of hyper-parameters on the vertex/edge calculation time of GAT during training.}
     \label{fig:exp_hyperparameter_on_vertex_edge_phase_time_gat}
 \end{figure}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_gaan.pdf}
-    \caption{Effects of hyper-parameters on the vertex/edge calculation time of GaAN.}
+    \caption{Effects of hyper-parameters on the vertex/edge calculation time of GaAN during training.}
     \label{fig:exp_hyperparameter_on_vertex_edge_phase_time_gaan}
 \end{figure}
 
@@ -117,6 +117,26 @@ When the values of hyper-parameters were too low, GNN training could not make fu
 %
 When the values of hyper-parameters became high enough, training time increased linearly, supporting the time complexity analysis.
 
+\paragraph{Effects on Inference Time}
+
+For all GNNs, we found that the effects of hyper-parameters on the inference time were the same as the training time.
+%
+Taking GGNN as an exmple, \figurename~\ref{fig:exp_hyperparameter_on_inference_vertex_edge_phase_time_ggnn} shows the effects of hyper-parameters on the inference time of GGNN.
+%
+By cross-comparing \figurename~\ref{fig:exp_hyperparameter_on_inference_vertex_edge_phase_time_ggnn} and \figurename~\ref{fig:exp_hyperparameter_on_vertex_edge_phase_time_ggnn}, the effects of hyper-parameters on inference time and training time were the same: as $dim(\MyVec{h}^1_x)$ increased, the vertex and edge calculation time both grew linearly when $dim(\MyVec{h}^1_x)$ was large enough.
+%
+For the other GNNs, we observed similar phenomena.
+%
+The results indicated that the complexity analysis presented in \tablename~\ref{tab:gnn_overview_edge} and \tablename~\ref{tab:gnn_overview_vertex} were also applicable to inference.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{figs/experiments/exp_hyperparameter_on_inference_vertex_edge_phase_time_ggnn.pdf}
+    \caption{Effects of hyper-parameters on the vertex/edge calculation time of GGNN during inference.}
+    \label{fig:exp_hyperparameter_on_inference_vertex_edge_phase_time_ggnn}
+\end{figure}
+
+
 \paragraph{Effects on Peak Memory Usage}
 
 We further measured the effects of the hyper-parameters on the peak GPU memory usage during training in \figurename~\ref{fig:exp_hyperparameter_memory_usage}.
@@ -124,15 +144,30 @@ We further measured the effects of the hyper-parameters on the peak GPU memory u
 The memory usage also increased linearly as the hyper-parameters increased for all GNNs, except for GaAN on $dim(\MyVec{h}^1_x)$.
 %
 As the hidden vectors $\MyVec{h}^1_x$ consumed a small proportion of memory in GaAN, the growth in the memory usage was not noticeable until $dim(\boldsymbol{h}^1_x)$ was large enough.
+%
+The effects of the hyper-parameters on inference memory usage were the same as training.
+%
+Taking GAT as an example, the peak memory usage during inference grew linearly as the values of hyper-parameters increased, as shown in \figurename~\ref{fig:exp_inference_hyperparameter_memory_usage_gat}.
+%
+By cross-comparing \figurename~\ref{fig:exp_inference_hyperparameter_memory_usage_gat} and \figurename~\ref{fig:exp_hyperparameter_memory_usage_gat}, the hyper-parameters affected the peak memory usage of training and inference in the same way.
+%
+For the other GNNs, we observed similar phenomena.
 
 \begin{figure}[H]
     \centering
     \subfloat[GCN]{\includegraphics[width=0.25\columnwidth]{figs/experiments/exp_hyperparameter_on_memory_usage_gcn.pdf}}
     \subfloat[GGNN]{\includegraphics[width=0.25\columnwidth]{figs/experiments/exp_hyperparameter_on_memory_usage_ggnn.pdf}}\\
-    \subfloat[GAT]{\includegraphics[width=0.5\columnwidth]{figs/experiments/exp_hyperparameter_on_memory_usage_gat.pdf}}\\
+    \subfloat[GAT\label{fig:exp_hyperparameter_memory_usage_gat}]{\includegraphics[width=0.5\columnwidth]{figs/experiments/exp_hyperparameter_on_memory_usage_gat.pdf}}\\
     \subfloat[GaAN]{\includegraphics[width=0.75\columnwidth]{figs/experiments/exp_hyperparameter_on_memory_usage_gaan.pdf}}
     \caption{Effects of hyper-parameters on the peak GPU memory usage during training, excluding the memory used by the dataset and the model parameters.}
     \label{fig:exp_hyperparameter_memory_usage}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\columnwidth]{figs/experiments/exp_hyperparameter_on_inference_memory_usage_gat.pdf}
+    \caption{Effects of hyper-parameters on the peak GPU memory usage during inference of GAT, excluding the memory used by the dataset and the model parameters.}
+    \label{fig:exp_inference_hyperparameter_memory_usage_gat}
 \end{figure}
 
 \paragraph{Effects on Accuracy}
@@ -209,15 +244,17 @@ It indicated that simple GNN models (such as GCN) could still achieve good accur
 
 \paragraph{Summary}
 
-The complexity analysis in \tablename~\ref{tab:gnn_overview_edge} and \tablename~\ref{tab:gnn_overview_vertex} was valid.
+The complexity analysis in \tablename~\ref{tab:gnn_overview_edge} and \tablename~\ref{tab:gnn_overview_vertex} was valid for both training and inference.
 %
 Fixing other hyper-parameters, each hyper-parameter itself affected the training time and the memory usage of a GNN Layer \emph{in a linear way}.
 %
-Algorithm engineers could adjust hyper-parameters according to the time complexity to avoid explosive growth in the training time and memory usage.
+Algorithm engineers could adjust hyper-parameters according to the time complexity to avoid explosive growth in the training/inference time and memory usage.
 %
 The accuracy of GNNs was much more sensitive to the dimension of hidden vectors/heads than the other hyper-parameters.
 %
 The relative accuracy between GNNs varied greatly with different datasets.
+%
+There was no clear winner for all datasets.
 
 \subsection{Training Time Breakdown}
 \label{sec:training_time_breakdown}
