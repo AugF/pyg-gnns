@@ -318,9 +318,13 @@ There are some grammar errors and typos:
         
     In Section 4.2 ``Time Breakdown Analysis'', we have additionally conducted the time breakdown analysis for GNN inference.
     %
-    We conducted the same set of experiments as in the training time anlaysis.
+    We found that the performance characteristics of GNN inference were similar to GNN training.
     %
-    We found that the performance characteristics of GNN inference were very similar to GNN training.
+    Figure~\ref{fig:compare_layer_level_time_breakdown} of the response (Figure X in the revised manuscript) compares the time breakdowns of GCN on the layer level.
+    %
+    It indicates that the time breakdowns on the layer level were very similar between inference and training.
+    %
+    Figure~\ref{fig:compare_effect_of_degree}
     %
     The processing time breakdowns of GCN on the layer level, step level and operator level of training and inference were all highly similar, as shown in Figure~\ref{fig:compare_layer_level_time_breakdown} to Figure~\ref{fig:compare_basic_operators} of the response.
     %
@@ -342,7 +346,7 @@ There are some grammar errors and typos:
       
     \begin{figure}[H]
         \subfloat[Training]{\includegraphics[width=0.5\columnwidth]{../figs/experiments/exp_layer_time_proportion_gcn.pdf}}
-       % \subfloat[Inference]{\includegraphics[width=0.5\columnwidth]{../figs/experiments/exp_inference_full_layer_time_proportion_gcn.pdf}}
+        \subfloat[Inference]{\includegraphics[width=0.5\columnwidth]{../figs/experiments/exp_inference_full_layer_time_proportion_gcn.pdf}}
         \caption{Time break down on the layer level of GCN.}
         \label{fig:compare_layer_level_time_breakdown}
     \end{figure}
@@ -356,14 +360,14 @@ There are some grammar errors and typos:
      
     \begin{figure}[H]
             \subfloat[Training]{\includegraphics[width=0.5\columnwidth]{../figs/experiments/exp_edge_calc_decomposition_gcn.pdf}}
-            %\subfloat[Inference]{\includegraphics[width=0.5\columnwidth]{../figs/experiments/exp_inference_full_edge_calc_decomposition_gcn.pdf}}
+            \subfloat[Inference]{\includegraphics[width=0.5\columnwidth]{../figs/experiments/exp_inference_full_edge_calc_decomposition_gcn.pdf}}
             \caption{Time breakdown of the edge calculation stage of GCN.}
             \label{fig:compare_time_breakdown_of_edge_calculation}
      \end{figure}
      
      \begin{figure}[H]
              \subfloat[Training]{\includegraphics[width=0.5\columnwidth]{../figs/experiments/exp_top_basic_ops_gcn.pdf}}
-             %\subfloat[Inference]{\includegraphics[width=0.5\columnwidth]{../figs/experiments/exp_inference_full_top_basic_ops_gcn.pdf}}
+             \subfloat[Inference]{\includegraphics[width=0.5\columnwidth]{../figs/experiments/exp_inference_full_top_basic_ops_gcn.pdf}}
              \caption{Top 5 time-consuming basic operators of GCN. The time proportion of each basic operator was averaged over all datasets with the error bar indicating the maximum and the minimum.}
              \label{fig:compare_basic_operators}
       \end{figure}
