@@ -23,6 +23,7 @@
 \usepackage{subfig}
 \usepackage{graphicx}
 \usepackage{framed}
+\usepackage[colorlinks=true]{hyperref}
 % Vector
 \newcommand{\MyVec}[1]{\boldsymbol{#1}}
 % Matrix
@@ -32,9 +33,31 @@
 % Model parameters
 \newcommand{\Param}[1]{\textcolor{blue}{#1}}
 
-\newenvironment{myquote}%
-{\begin{leftbar}\begin{quote}}
-{\end{quote}\end{leftbar}}
+\usepackage{blindtext}
+\usepackage[most]{tcolorbox} 
+\definecolor{block-gray}{gray}{0.95}
+
+
+\newtcolorbox{zitat}[2][]{%
+    colback=block-gray,
+    grow to right by=-10mm,
+    grow to left by=-10mm, 
+    boxrule=0pt,
+    boxsep=0pt,
+    breakable,
+    enhanced jigsaw,
+    borderline west={4pt}{0pt}{gray},
+    title={#2\par},
+    colbacktitle={block-gray},
+    coltitle={black},
+    fonttitle={\large\bfseries},
+    attach title to upper={},
+    #1,
+}
+
+\newenvironment{myquote}[1]%
+{\vspace{0.5em}\begin{zitat}{#1}}
+{\end{zitat}\vspace{0.5em}}
 
 
 % import Eq and Section references from the main manuscript where needed
@@ -173,7 +196,7 @@ In the annotated version, changes corresponding to each point are all highlighte
     %
     We first introduce the concept of sub-layer in Section 2.2 ``Graph Neuron and Message-passing Model'' as:
     %
-    \begin{myquote}
+    \begin{myquote}{Section 2.2}
         Some complex GNNs like GAT [6] and GaAN [7] use more than one message passing phase in each GNN layer.
         %
         We regard every message passing phase in a GNN layer as a \emph{sub-layer}.
@@ -183,7 +206,7 @@ In the annotated version, changes corresponding to each point are all highlighte
     %
     We then use GAT as an example to elaborate on the concept of sub-layers in Section 2.3 ``Representative GNNs'' as:
     %
-    \begin{myquote}
+    \begin{myquote}{Section 2.3}
         \newcommand{\GATCalcWeight}{\exp(LeakyReLU(\Param{\MyVec{a}}^T[\hvec{y}[k] \parallel \hvec{x}[k]]))}
         Each GAT layer consists of a vertex pre-processing phase and two sub-layers (i.e., message-passing phases).
         
@@ -214,7 +237,7 @@ In the annotated version, changes corresponding to each point are all highlighte
                 \MyVec{h}^{l+1}_x = \MyVec{h}^{l,1}_x &= \gamma^{l,1}(\MyVec{h}^{l,0}, \MyVec{s}^{l,1}_x) = \delta(\MyVec{s}^{l,1}_x).
             \end{aligned}
         \end{equation}
-    \end{myquote}  
+    \end{myquote}
 \end{reply}
 
 % R1Q2
@@ -224,7 +247,7 @@ In the annotated version, changes corresponding to each point are all highlighte
 
 \begin{reply}
 	Thank you for pointing out our shortcomings. Computer vision is indeed another important application area of graph neural networks. We have added the mentioned references in the INTRODUCTION section in the revised manuscript. We quote the related sentence below:
-    \begin{myquote}
+    \begin{myquote}{Section 1}
          The powerful expression ability makes GNNs achieve good accuracy in not only graph analytical tasks [8, 9, 10] (like node classification and link prediction) but also computer vision tasks (like human-object interaction [11], human parsing [12], and video object segmentation [13]).
     \end{myquote}
 \end{reply}
@@ -286,47 +309,98 @@ There are some grammar errors and typos:
     In the revised manuscript, we have added a new subsection (Section 2.5 ``Inference with GNNs'') in the revised manuscript to briefly review how to perform inference with GNNs.
     %
     To discuss the efficiency of GNN inference on GPUs, we have added performance bottleneck analysis on GNN inference in every subsection of Section 4 ``Evaluation Results and Analysis'':
+   
+
+    In Section 4.1 ``Effects of Hyper-parameters on Performance'', we have additionally measured how the inference time and the peak memory usage changed as we increased the values of the hyper-parameters.
     %
-    \begin{enumerate}
-
-        \item In Section 4.1 ``Effects of Hyper-parameters on Performance'', we have additionally measured how the inference time and the peak memory usage changed as we increased the values of the hyper-parameters.
-        %
-        We find that ...
-        %%% TODO %%%
+    We find that ...
+    %%% TODO %%%
         
-        \item In Section 4.2 ``Time Breakdown Analysis'', we have additionally conducted the time breakdown analysis for GNN inference.
-        %
-        We conducted the same set of experiments as in the training time anlaysis.
-        %
-        We found that the performance characteristics of GNN inference were very similar to GNN training.
-        %
-        The processing time breakdowns on the layer level, step level and operator level of training and inference were all highly similar, as shown in Figure~\ref{} of the response.
-        %
-        Based on the time breakdown analysis, we concluded that the performance bottenecks of GNN training and inference were same.
-        %
-        The difference between training and inference process was mainly reflected in the elapsed time.
-        %
-        Given the same dataset and the same GNN, the inference time was only XX\% of the training time, as compared in Figure~\ref{} of the response.
-        %
-        The training process of each epoch consisted of three phases: forward propagation, backward propagation and evaluation.
-        %
-        The evaluation phase conducted inference for the vertices in the evaluation set.
-        %
-        Under the semi-supervised learning setting, the graph neurons of the whole graph participated in inference, but only the labels of the veritces in the evaluation set were used to calculate accuracy.
-        %
-        Therefore, the elapsed time of the evaluation phase was very close to the elapsed time of inference.
+    In Section 4.2 ``Time Breakdown Analysis'', we have additionally conducted the time breakdown analysis for GNN inference.
+    %
+    We conducted the same set of experiments as in the training time anlaysis.
+    %
+    We found that the performance characteristics of GNN inference were very similar to GNN training.
+    %
+    The processing time breakdowns of GCN on the layer level, step level and operator level of training and inference were all highly similar, as shown in Figure~\ref{fig:compare_layer_level_time_breakdown} to Figure~\ref{fig:compare_basic_operators} of the response.
+    %
+    We observed similar phenomena in other GNNs.
+    %
+    Based on the time breakdown analysis, we concluded that the performance bottenecks of GNN training and inference were same.
+    %
+    The difference between training and inference process was mainly reflected in the elapsed time.
+    %
+    Given the same dataset and the same GNN, the inference time was only XX\% of the training time, as compared in Figure~\ref{} of the response.
+    %
+    The training process of each epoch consisted of three phases: forward propagation, backward propagation and evaluation.
+    %
+    The evaluation phase conducted inference for the vertices in the evaluation set.
+    %
+    Under the semi-supervised learning setting, the graph neurons of the whole graph participated in inference, but only the predicted labels of the veritces in the evaluation set were used to calculate accuracy.
+    %
+    Therefore, the elapsed time of the evaluation phase was very close to the elapsed time of inference.
+      
+    \begin{figure}[H]
+        \subfloat[Training]{\includegraphics[width=0.5\columnwidth]{../figs/experiments/exp_layer_time_proportion_gcn.pdf}}
+       % \subfloat[Inference]{\includegraphics[width=0.5\columnwidth]{../figs/experiments/exp_inference_full_layer_time_proportion_gcn.pdf}}
+        \caption{Time break down on the layer level of GCN.}
+        \label{fig:compare_layer_level_time_breakdown}
+    \end{figure}
+    
+    \begin{figure}[H]
+            \subfloat[Training]{\includegraphics[width=0.5\columnwidth]{../figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_gcn.pdf}}
+            %\subfloat[Inference]{\includegraphics[width=0.5\columnwidth]{../figs/experiments/exp_inference_full_avg_degree_on_vertex_edge_cal_time_gcn.pdf}}
+            \caption{Effects of the average degree on the time proportion of the edge/vertex calculation of GCN. Graphs were generated by fixing the number of vertices as 50,000.}
+            \label{fig:compare_effect_of_degree}
+     \end{figure}
+     
+    \begin{figure}[H]
+            \subfloat[Training]{\includegraphics[width=0.5\columnwidth]{../figs/experiments/exp_edge_calc_decomposition_gcn.pdf}}
+            %\subfloat[Inference]{\includegraphics[width=0.5\columnwidth]{../figs/experiments/exp_inference_full_edge_calc_decomposition_gcn.pdf}}
+            \caption{Time breakdown of the edge calculation stage of GCN.}
+            \label{fig:compare_time_breakdown_of_edge_calculation}
+     \end{figure}
+     
+     \begin{figure}[H]
+             \subfloat[Training]{\includegraphics[width=0.5\columnwidth]{../figs/experiments/exp_top_basic_ops_gcn.pdf}}
+             %\subfloat[Inference]{\includegraphics[width=0.5\columnwidth]{../figs/experiments/exp_inference_full_top_basic_ops_gcn.pdf}}
+             \caption{Top 5 time-consuming basic operators of GCN. The time proportion of each basic operator was averaged over all datasets with the error bar indicating the maximum and the minimum.}
+             \label{fig:compare_basic_operators}
+      \end{figure}
+     
 
+     In Section 4.3 ``Memory Usage Analysis'', we have additionally conducted the memory usage analysis for GNN inference and added related discussion in XXX.
+     %
+     Figure~\ref{fig:compare_memory_expasion_ratio} in the response (Figure X in the revised manuscript) compares the memory expansion ratios of typical GNNs during training and inference.
+     %
+     For GCN, the memory expansion ratios (MER) of training and inference were nearly same since GCN did not cache intermediate results during training.
+     %
+     For GGNN, the MERs of inference were 45\% to 83\% of training.
+     %
+     For GAT, the MERs of inference were 52\% to 61\% of training.
+     %
+     For GaAN, the MERs of inference were 37\% to 69\% of training.
+     %
+     Though the MERs of GGNN/GAT/GaAN decreased significantly compared with training, the values of MERs were still high.
+     %
+     The high memory usage still prevented us inferencing on big graphs.
+     
+     
 
-        \item In Section 4.3 ``Memory Usage Analysis'', we have additionally conducted the memory usage analysis for GNN inference.
-        %
-        We find that ... 
-        %%% TODO %%%
+     
+     \begin{figure}[H]
+        \subfloat[Training]{\includegraphics[width=0.5\columnwidth]{../figs/experiments/exp_memory_expansion_ratio.pdf}}
+        \subfloat[Inference]{\includegraphics[width=0.5\columnwidth]{../figs/experiments/exp_inference_full_memory_expansion_ratio.pdf}}
+        \caption{Memory expansion ratios of typical GNNs.}
+        \label{fig:compare_memory_expasion_ratio}
+     \end{figure}
+     
+     %%% TODO %%%
 
-        \item In Section 4.4 ``Effects of Sampling Techniques on Performance'', we have additionally evaluated the performance bottlenecks in sample-based GNN inference.
-        %
-        We find that ...
-        %%% TODO %%%
-    \end{enumerate}
+     In Section 4.4 ``Effects of Sampling Techniques on Performance'', we have additionally evaluated the performance bottlenecks in sample-based GNN inference.
+     %
+     We find that ...
+     %%% TODO %%%
 
 \end{reply}
 
@@ -397,7 +471,7 @@ There are some grammar errors and typos:
     %
     We quote the related paragraphs from the revised manuscript below:
 
-    \begin{myquote}
+    \begin{myquote}{Test}
             %%% TO ADD QUOTE %%%
     \end{myquote}
 \end{reply}
