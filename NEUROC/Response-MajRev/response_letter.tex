@@ -308,125 +308,169 @@ There are some grammar errors and typos:
     %
     In the revised manuscript, we have added a new subsection (Section 2.5 ``Inference with GNNs'') in the revised manuscript to briefly review how to perform inference with GNNs.
     %
-    To discuss the efficiency of GNN inference on GPUs, we have added performance bottleneck analysis on GNN inference in every subsection of Section 4 ``Evaluation Results and Analysis'':
+    To discuss the efficiency of GNN inference on GPUs, we have added corresponding analysis on GNN inference in every subsection of Section 4 ``Evaluation Results and Analysis''.
+    %
+    Below, we introduce our main findings subsection by subsection.
    
+    \paragraph{Section 4.1 ''Effects of Hyper-parameters on Performance''}
 
     In Section 4.1 ``Effects of Hyper-parameters on Performance'', we have additionally measured how the time and the peak memory usage changed as we increased the values of the hyper-parameters during \emph{inference}.
+    
+    
+    For all GNNs, we found that the effects of hyper-parameters on the \emph{inference time} were the same as the training time.
     %
-    \begin{itemize}
-    \item For all GNNs, we found that the effects of hyper-parameters on the \emph{inference time} were the same as the training time.
-        %
-        Taking GGNN as an example, Figure~\ref{fig:compare_effect_of_hyperparameter_on_time} in the response (Figure X and Figure X in the revised manuscript) compares the effects of the hidden vector dimension $dim(\MyVec{h}^1_x)$ on training/inference time.
-        %
-        As $dim(\MyVec{h}^1_x)$ increased, the vertex/edge calculation time of training time and inference time both grew linearly when the values of hyper-parameters were large enough.
-        %
-        We observed similar phenomena with the other GNNs.
-        %
-        The results indicated that the time complexity analysis of GNNs were applicable to both training and inference.
+    Taking GGNN as an example, Figure~\ref{fig:compare_effect_of_hyperparameter_on_time} in the response (Figure X and Figure X in the revised manuscript) compares the effects of the hidden vector dimension $dim(\MyVec{h}^1_x)$ on training/inference time.
+    %
+    As $dim(\MyVec{h}^1_x)$ increased, the vertex/edge calculation time of training time and inference time both grew linearly when the values of hyper-parameters were large enough.
+    %
+    We observed similar phenomena with the other GNNs.
+    %
+    The results indicated that the time complexity analysis of GNNs were applicable to both training and inference.
         
-        \begin{figure}[H]
+    \begin{figure}[H]
             \centering
              \subfloat[Training]{\includegraphics[width=0.7\textwidth]{../figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_ggnn.pdf}}\\
             \subfloat[Inference]{\includegraphics[width=0.7\textwidth]{../figs/experiments/exp_hyperparameter_on_inference_vertex_edge_phase_time_ggnn.pdf}}
             \caption{Effects of hyper-parameters on the vertex/edge calculation time of GGNN.}
             \label{fig:compare_effect_of_hyperparameter_on_time}
-        \end{figure}
+    \end{figure}
         
-        \item For all GNNs, we found that the effects of hyper-parameters on inference memory usage were also same as training.
+    For all GNNs, we found that the effects of hyper-parameters on inference memory usage were also same as training.
+    %
+    Taking GAT as an example, Figure~\ref{fig:compare_effect_of_hyperparameter_on_memory_usage} in the response (Figure X and Figure X in the revised manuscript) compares the peak memory usage during training and inference under different values of hyper-parameters.
         %
-        Taking GAT as an example, Figure~\ref{fig:compare_effect_of_hyperparameter_on_memory_usage} in the response (Figure X and Figure X in the revised manuscript) compares the peak memory usage during training and inference under different values of hyper-parameters.
+    The trends of the curves in Figure~\ref{fig:compare_effect_of_hyperparameter_on_memory_usage_training} and Figure~\ref{fig:compare_effect_of_hyperparameter_on_memory_usage_inference} were highly similar.
         %
-        The trends of the curves in Figure~\ref{fig:compare_effect_of_hyperparameter_on_memory_usage_training} and Figure~\ref{fig:compare_effect_of_hyperparameter_on_memory_usage_inference} were highly similar.
+    The memory usage of training and inference \emph{both} grew linearly as the dimension of each head and the number of heads increased.
         %
-        The memory usage of training and inference \emph{both} grew linearly as the dimension of each head and the number of heads increased.
+    We observed similar phenomena with the other GNNs.
         %
-        We observed similar phenomena with the other GNNs.
-        %
-        \begin{figure}[H]
+    \begin{figure}[H]
             \centering
             \subfloat[Training\label{fig:compare_effect_of_hyperparameter_on_memory_usage_training}]{\includegraphics[width=0.6\textwidth]{../figs/experiments/exp_hyperparameter_on_memory_usage_gat.pdf}}\\
             \subfloat[Inference\label{fig:compare_effect_of_hyperparameter_on_memory_usage_inference}]{\includegraphics[width=0.6\textwidth]{../figs/experiments/exp_hyperparameter_on_inference_memory_usage_gat.pdf}}
             \caption{Effects of hyper-parameters on peak memory usage of GAT.}
             \label{fig:compare_effect_of_hyperparameter_on_memory_usage}
-        \end{figure}
-        
-    \end{itemize}
-        
-    In Section 4.2 ``Time Breakdown Analysis'', we have additionally conducted the time breakdown analysis for GNN inference.
-    %
-    We found that the performance characteristics of GNN inference were similar to GNN training.
-    %
-    Figure~\ref{fig:compare_layer_level_time_breakdown} of the response (Figure X in the revised manuscript) compares the time breakdowns of GCN on the layer level.
-    %
-    It indicates that the time breakdowns on the layer level were very similar between inference and training.
-    %
-    Figure~\ref{fig:compare_effect_of_degree}
-    %
-    The processing time breakdowns of GCN on the layer level, step level and operator level of training and inference were all highly similar, as shown in Figure~\ref{fig:compare_layer_level_time_breakdown} to Figure~\ref{fig:compare_basic_operators} of the response.
-    %
-    We observed similar phenomena in other GNNs.
-    %
-    Based on the time breakdown analysis, we concluded that the performance bottenecks of GNN training and inference were same.
-    %
-    The difference between training and inference process was mainly reflected in the elapsed time.
-    %
-    Given the same dataset and the same GNN, the inference time was only XX\% of the training time, as compared in Figure~\ref{} of the response.
-    %
-    The training process of each epoch consisted of three phases: forward propagation, backward propagation and evaluation.
-    %
-    The evaluation phase conducted inference for the vertices in the evaluation set.
-    %
-    Under the semi-supervised learning setting, the graph neurons of the whole graph participated in inference, but only the predicted labels of the veritces in the evaluation set were used to calculate accuracy.
-    %
-    Therefore, the elapsed time of the evaluation phase was very close to the elapsed time of inference.
-      
-    \begin{figure}[H]
-        \subfloat[Training]{\includegraphics[width=0.5\columnwidth]{../figs/experiments/exp_layer_time_proportion_gcn.pdf}}
-        \subfloat[Inference]{\includegraphics[width=0.5\columnwidth]{../figs/experiments/exp_inference_full_layer_time_proportion_gcn.pdf}}
-        \caption{Time break down on the layer level of GCN.}
-        \label{fig:compare_layer_level_time_breakdown}
     \end{figure}
+        
+    \paragraph{Section 4.2 ``Time Breakdown Analysis''}    
+    In Section 4.2 ``Time Breakdown Analysis'', we have additionally conducted the time breakdown analysis for GNN inference, in order to find out its performance bottlenecks.
+
+    We found that the performance characteristics of GNN inference were highly similar to GNN training on the \emph{layer} level and the \emph{step} level.
+    %
+    In this reply, we used GCN as an example.
+    %
+    We made similar observations about the other GNNs.
+    %
+    Figure~\ref{fig:compare_layer_level_time_breakdown} in the response compares the time breakdowns of GCN on the layer level of training and inference.
+    %
+    The time breakdowns on the layer level were very similar between inference and training.
+    %
+    Figure~\ref{fig:compare_effect_of_degree} in the response compares the effects of the average degree on the proportion of edge/vertex calculation time during training and inference.
+    %
+    The curves in the two sub-figures of Figure~\ref{fig:compare_effect_of_degree} show very similar trends.
+    %
+    The results indicated that the edge calculation dominated both the training and inference time.
+    %
+    Figure~\ref{fig:compare_time_breakdown_of_edge_calculation} in the response further compares the time breakdowns on the step level of the edge calculation stage of GCN.
+    %
+    The proportion of each step was very similar in training and inference.
+    %
+    Therefore, \emph{the performance bottlenecks of training and inference were same on the layer level and step level}.
     
     \begin{figure}[H]
-            \subfloat[Training]{\includegraphics[width=0.5\columnwidth]{../figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_gcn.pdf}}
-            \subfloat[Inference]{\includegraphics[width=0.5\columnwidth]{../figs/experiments/exp_inference_full_avg_degree_on_vertex_edge_cal_time_gcn.pdf}}
-            \caption{Effects of the average degree on the time proportion of the edge/vertex calculation of GCN. Graphs were generated by fixing the number of vertices as 50,000.}
-            \label{fig:compare_effect_of_degree}
-     \end{figure}
-     
+            \subfloat[Training]{\includegraphics[width=0.5\columnwidth]{../figs/experiments/exp_layer_time_proportion_gcn.pdf}}
+            \subfloat[Inference]{\includegraphics[width=0.5\columnwidth]{../figs/experiments/exp_inference_full_layer_time_proportion_gcn.pdf}}
+            \caption{Time breakdowns on the layer level of GCN.}
+            \label{fig:compare_layer_level_time_breakdown}
+    \end{figure}
+    %
     \begin{figure}[H]
-            \subfloat[Training]{\includegraphics[width=0.5\columnwidth]{../figs/experiments/exp_edge_calc_decomposition_gcn.pdf}}
-            \subfloat[Inference]{\includegraphics[width=0.5\columnwidth]{../figs/experiments/exp_inference_full_edge_calc_decomposition_gcn.pdf}}
-            \caption{Time breakdown of the edge calculation stage of GCN.}
-            \label{fig:compare_time_breakdown_of_edge_calculation}
-     \end{figure}
-     
-     \begin{figure}[H]
-             \subfloat[Training]{\includegraphics[width=0.5\columnwidth]{../figs/experiments/exp_top_basic_ops_gcn.pdf}}
-             \subfloat[Inference]{\includegraphics[width=0.5\columnwidth]{../figs/experiments/exp_inference_full_top_basic_ops_gcn.pdf}}
-             \caption{Top 5 time-consuming basic operators of GCN. The time proportion of each basic operator was averaged over all datasets with the error bar indicating the maximum and the minimum.}
-             \label{fig:compare_basic_operators}
-      \end{figure}
-     
-
-     In Section 4.3 ``Memory Usage Analysis'', we have additionally conducted the memory usage analysis for GNN inference and added related discussion in XXX.
+                \subfloat[Training\label{fig:compare_effect_of_degree_training}]{\includegraphics[width=0.5\columnwidth]{../figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_gcn.pdf}}
+                \subfloat[Inference\label{fig:compare_effect_of_degree_inference}]{\includegraphics[width=0.5\columnwidth]{../figs/experiments/exp_inference_full_avg_degree_on_vertex_edge_cal_time_gcn.pdf}}
+                \caption{Effects of the average degree on the proportion of the edge/vertex calculation time of GCN. Graphs were generated by fixing the number of vertices as 50,000.}
+                \label{fig:compare_effect_of_degree}
+    \end{figure}
+    %
+    \begin{figure}[H]
+                \subfloat[Training]{\includegraphics[width=0.5\columnwidth]{../figs/experiments/exp_edge_calc_decomposition_gcn.pdf}}
+                \subfloat[Inference]{\includegraphics[width=0.5\columnwidth]{../figs/experiments/exp_inference_full_edge_calc_decomposition_gcn.pdf}}
+                \caption{Time breakdowns on the step level of the edge calculation stage of GCN.}
+                \label{fig:compare_time_breakdown_of_edge_calculation}
+    \end{figure}
+    
+    The main differences between training and inference were reflected in two aspects: the wall-clock time and the top time-consuming basic operators.
+    
+    Figure~\ref{fig:compare_wall_clock_time_of_training_and_inference} in the response (Figure X in the revised manuscript) compares the wall-clock training/inference time on the \texttt{amp}, \texttt{amc}, and \texttt{fli} datasets.
+    %
+    The results on the other datasets were similar.
+    %
+    Since the inference only conducted the forward propagation from the input layer to the prediction layer, the time of inference was very close to the time of the forward phase in training.
+    %
+    The inference time was only 34\% (GCN), 32\% (GGNN), 25\% (GAT), and 32\% (GaAN) of the training time for the four GNNs, averaged over datasets.
+    
+    \begin{figure}[H]
+        \centering
+        \subfloat[\texttt{amc}]{\includegraphics[width=0.3\columnwidth]{../figs/experiments/exp_time_comparison_between_training_inference_amazon-computers.pdf}}
+        \subfloat[\texttt{amp}]{\includegraphics[width=0.3\columnwidth]{../figs/experiments/exp_time_comparison_between_training_inference_amazon-photo.pdf}}
+        \subfloat[\texttt{fli}]{\includegraphics[width=0.3\columnwidth]{../figs/experiments/exp_time_comparison_between_training_inference_flickr.pdf}}
+        \caption{Wall-clock training/inference time on different datasets.}
+        \label{fig:compare_wall_clock_time_of_training_and_inference}
+    \end{figure}
+    
+    The top time-consuming basic operators of training and inference showed a certain degree of difference.
+    %
+    In All GNNs, some of the top time-consuming operators during training were replaced by new operators in inference.
+    %
+    Figure~\ref{fig:compare_top_time_consuming_basic_operators} in the response compares the top 5 time-consuming basic operators in training and inference.
+    %
+    For GCN, the \texttt{index} operator that was used in the prediction layer became the new top 5 time-consuming operator, replacing the \texttt{gather} operator used in the backward phase in training.
+    %
+    The basic operators related to the edge calculation (\texttt{scatter\_add}, \texttt{index\_select}, and \texttt{mul}) still consumed the majority of the inference time.
+    %
+    For GGNN, \texttt{index} operator in the prediction layer also became one of the top 5 time-consuming basic operators.
+    %
+    Due to the high time complexity of the vertex updating function $\gamma$ in GGNN, the basic operators related to the vertex calculation stage (\texttt{mm} and \texttt{thnn\_fused\_gru\_cell}) still consumed near half of the inference time.
+    %
+    For GAT, the \texttt{input\_put\_impl} operator (used in the backward phase) in Figure~\ref{fig:compare_top_time_consuming_basic_operators}e was replaced by the \texttt{scatter\_add} operator in Figure~\ref{fig:compare_top_time_consuming_basic_operators}f.
+    %
+    The \texttt{scatter\_add} operator was still related to the edge calculation step.
+    %
+    For GaAN, the \texttt{mm} operator of GaAN was replaced by the \texttt{cat} operator used in the vertex updating function.
+    
+    Comparing the top basic operator distribution, GNN training and inference had common performance bottlenecks on the operator level.
+    %
+    The matrix multiplication \texttt{mm} and the element-wise multiplication \texttt{mul} operators were the common time-consuming operators, making GNN training and inference \emph{both suitable for GPUs}.
+    %
+    The basic operators related to the collection and aggregation steps in the edge calculation consumed consumed non-trivial time in both training and inference.
+    
+    \begin{figure}[H]
+        \centering
+        \subfloat[GCN, Training]{\includegraphics[width=0.35\columnwidth]{../figs/experiments/exp_top_basic_ops_gcn.pdf}}
+         \subfloat[GCN, Inference]{\includegraphics[width=0.35\columnwidth]{../figs/experiments/exp_inference_full_top_basic_ops_gcn.pdf}}\\
+        \subfloat[GGNN, Training]{\includegraphics[width=0.35\columnwidth]{../figs/experiments/exp_top_basic_ops_ggnn.pdf}}
+         \subfloat[GGNN, Inference]{\includegraphics[width=0.35\columnwidth]{../figs/experiments/exp_inference_full_top_basic_ops_ggnn.pdf}}\\
+        \subfloat[GAT, Training]{\includegraphics[width=0.35\columnwidth]{../figs/experiments/exp_top_basic_ops_gat.pdf}}
+         \subfloat[GAT, Inference]{\includegraphics[width=0.35\columnwidth]{../figs/experiments/exp_inference_full_top_basic_ops_gat.pdf}}\\
+        \subfloat[GaAN, Training]{\includegraphics[width=0.35\columnwidth]{../figs/experiments/exp_top_basic_ops_gaan.pdf}}
+         \subfloat[GaAN, Inference]{\includegraphics[width=0.35\columnwidth]{../figs/experiments/exp_inference_full_top_basic_ops_gaan.pdf}}\\
+         
+         \caption{Top 5 time-consuming basic operators of typical GNNs. The time proportion of each basic operator was averaged over all datasets with the error bar indicating the maximum and the minimum.}
+         \label{fig:compare_top_time_consuming_basic_operators}
+         
+    \end{figure}
+    
+    \paragraph{Section 4.3 ``Memory Usage Analysis''}
+         
+     In Section 4.3 ``Memory Usage Analysis'', we have additionally conducted the memory usage analysis for GNN inference and added related discussion.
      %
      Figure~\ref{fig:compare_memory_expasion_ratio} in the response (Figure X in the revised manuscript) compares the memory expansion ratios of typical GNNs during training and inference.
      %
-     For GCN, the memory expansion ratios (MER) of training and inference were nearly same since GCN did not cache intermediate results during training.
+     Since no intermediate results had to be cached during inference, the memory expansion ratios of inference were much less than training for GGNN, GAT, and GaAN.
      %
-     For GGNN, the MERs of inference were 45\% to 83\% of training.
+     The MERs of inference were 45\% to 83\% (GGNN), 52\% to 61\% (GAT), and 37\% to 69\% (GaAN) of training.
      %
-     For GAT, the MERs of inference were 52\% to 61\% of training.
-     %
-     For GaAN, the MERs of inference were 37\% to 69\% of training.
-     %
-     Though the MERs of GGNN/GAT/GaAN decreased significantly compared with training, the values of MERs were still high.
-     %
-     The high memory usage still prevented us inferencing on big graphs.
-     
-     
-
+     However, the values of MERs were still high, disallowing inferencing with big graphs.
      
      \begin{figure}[H]
         \subfloat[Training]{\includegraphics[width=0.5\columnwidth]{../figs/experiments/exp_memory_expansion_ratio.pdf}}
@@ -436,6 +480,8 @@ There are some grammar errors and typos:
      \end{figure}
      
      %%% TODO %%%
+     
+     \paragraph{Section 4.4 ``Effects of Sampling Techniques on Performance''}
 
      In Section 4.4 ``Effects of Sampling Techniques on Performance'', we have additionally evaluated the performance bottlenecks in sample-based GNN inference.
      %
@@ -492,7 +538,7 @@ There are some grammar errors and typos:
 % R2Q3
 \begin{point}
     While, one major drawback is that I did not clearly see the analysis complexity v.s. accuracy. For example, in Figure 19 and 20, I did not see network accuracy from those 4 GNNs. There is always tradeoff between model complexity and model performance, and in some scenarios where high complexity is allowed, a sophisticated model of more powerful representation capability is still needed.
-\end{point}gg
+\end{point}
 
 \begin{reply}
     Thanks very much for your valuable suggestions.
