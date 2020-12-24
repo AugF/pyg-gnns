@@ -152,37 +152,37 @@ In the annotated version, changes corresponding to each point are all highlighte
     \begin{table}[H]
         \footnotesize
         \centering
-    \begin{tabular}{p{3em}lp{35em}}
-        \toprule
-        Category & Symbol & Meaning \\
-        \midrule
-        \multirow[c]{4}{3em}{Graph Structure}& $\mathcal{G}=(\mathcal{V}, \mathcal{E})$ & The simple undirected input graph with the vertex set $\mathcal{V}$ and the edge set $\mathcal{E}$. \\
-        & $v_x$ & The $x$-th vertex of the input graph. \\
-        & $e_{x,y}$ & The edge pointing from $v_x$ to $v_y$ of the input graph. \\
-        & $\mathcal{N}(v_x)$ & The adjacency set of $v_x$ in the input graph. \\ 
-        & $\bar{d}$ & The average degree of the input graph. \\ \midrule
-        \multirow[c]{6}{3em}{GNN Definition}& $L$ & The number of GNN layers. \\
-        & $K$ & The number of heads in a GNN layer. \\
-        & $\phi^l$ & The messaging function of the GNN layer $l$. \\
-        & $\Sigma^l$ & The aggregation function of the GNN layer $l$. \\
-        & $\gamma^l$ & The vertex updating function of the GNN layer $l$. \\ 
-        & $\phi^{l,i}$ / $\Sigma^{l,i}$ / $\gamma^{l,i}$ & The messaging/aggregation/updating function of the $i$-th sub-layer of the GNN layer  $l$.\\
-        & $\textcolor{blue}{\boldsymbol{W}^l, \boldsymbol{W}^{(k)}/\boldsymbol{b}, \boldsymbol{a}}$ & The matrices/vectors represented by the blue characters are the weight matrices/vectors that need to be learned in the GNN. \\  \midrule
-        \multirow[c]{8}{3em}{Vector}& $\boldsymbol{v}_x$ & The feature vector of the vertex $v_x$. \\
-        & $\boldsymbol{e}_{x,y}$ & The feature vector of the edge $e_{x,y}$.  \\
-        & $\boldsymbol{h}_x^{l}$ &  The {input} hidden vector of the graph neuron corresponding to $v_x$ in the GNN layer $l$. \\
-        & $\boldsymbol{h}_x^{l+1}$ &  The {output} hidden vector of the graph neuron corresponding to $v_x$ in the GNN layer $l$.\\
-        & $\boldsymbol{m}_{x,y}^l$ & The message vector of the edge $e_{x,y}$ outputted by $\phi^l$ of the GNN layer $l$. \\
-        & $\boldsymbol{s}_{x}^l$ & The aggregated vector of the vertex $v_x$ outputted by $\Sigma^l$ of the GNN layer $l$. \\
-        & $\boldsymbol{h}_{x}^{l,i}$ / $\boldsymbol{m}_{x,y}^{l,i}$ / $\boldsymbol{s}_{x}^{l,i}$ & The hidden/message/aggregated vector of the vertex $v_x$ outputted by $\gamma^{l,i}$/$\phi^{l,i}$/$\Sigma^{l,i}$ of the $i$-th sub-layer of the GNN layer $l$. \\
-        & $d^l_{in}$, $d^l_{out}$ &  The dimension of the input/output hidden vectors of the GNN layer $l$. \\
-        & $dim(\MyVec{x})$ & The dimension of a vector $\MyVec{x}$. \\
-        \bottomrule
-    \end{tabular}
+        \begin{tabular}{p{3em}lp{35em}}
+            \toprule
+            Category & Symbol & Meaning \\
+            \midrule
+            \multirow[c]{4}{3em}{Graph Structure}& $\mathcal{G}=(\mathcal{V}, \mathcal{E})$ & The simple undirected input graph with the vertex set $\mathcal{V}$ and the edge set $\mathcal{E}$. \\
+            & $v_x$ & The $x$-th vertex of the input graph. \\
+            & $e_{y,x}$ & The edge pointing from $v_y$ to $v_x$ of the input graph. \\
+            & $\mathcal{N}(v_x)$ & The adjacency set of $v_x$ in the input graph. \\ 
+            & $\bar{d}$ & The average degree of the input graph. \\ \midrule
+            \multirow[c]{6}{3em}{GNN Definition}& $L$ & The number of GNN layers. \\
+            & $K$ & The number of heads in a GNN layer. \\
+            & $\phi^l$ & The messaging function of the GNN layer $l$. \\
+            & $\Sigma^l$ & The aggregation function of the GNN layer $l$. \\
+            & $\gamma^l$ & The vertex updating function of the GNN layer $l$. \\ 
+            & $\phi^{l,i}$ / $\Sigma^{l,i}$ / $\gamma^{l,i}$ & The messaging/aggregation/updating function of the $i$-th sub-layer of the GNN layer  $l$.\\
+            & $\textcolor{blue}{\boldsymbol{W}^l, \boldsymbol{W}^{(k)}/\boldsymbol{b}, \boldsymbol{a}}$ & The matrices/vectors represented by the blue characters are the weight matrices/vectors that need to be learned in the GNN. \\  \midrule
+            \multirow[c]{8}{3em}{Vector}& $\boldsymbol{v}_x$ & The feature vector of the vertex $v_x$. \\
+            & $\boldsymbol{e}_{y,x}$ & The feature vector of the edge $e_{y,x}$.  \\
+            & $\boldsymbol{h}_x^{l}$ &  The {input} hidden vector of the graph neuron corresponding to $v_x$ in the GNN layer $l$. \\
+            & $\boldsymbol{h}_x^{l+1}$ &  The {output} hidden vector of the graph neuron corresponding to $v_x$ in the GNN layer $l$.\\
+            & $\boldsymbol{m}_{y,x}^l$ & The message vector of the edge $e_{y,x}$ outputted by $\phi^l$ of the GNN layer $l$. \\
+            & $\boldsymbol{s}_{x}^l$ & The aggregated vector of the vertex $v_x$ outputted by $\Sigma^l$ of the GNN layer $l$. \\
+            & $\boldsymbol{h}_{x}^{l,i}$ / $\boldsymbol{m}_{y,x}^{l,i}$ / $\boldsymbol{s}_{x}^{l,i}$ & The hidden/message/aggregated vector of the vertex $v_x$ outputted by $\gamma^{l,i}$/$\phi^{l,i}$/$\Sigma^{l,i}$ of the $i$-th sub-layer of the GNN layer $l$. \\
+            & $d^l_{in}$, $d^l_{out}$ &  The dimension of the input/output hidden vectors of the GNN layer $l$. \\
+            & $dim(\MyVec{x})$ & The dimension of a vector $\MyVec{x}$. \\
+            \bottomrule
+        \end{tabular}
 \end{table}
 
     
-    In the revised manuscript, we use $e_{x,y}$ to represent an edge and use $\boldsymbol{e}_{x,y}$ to represent its input feature vector.
+    In the revised manuscript, we use $e_{y,x}$ to represent an edge and use $\boldsymbol{e}_{y,x}$ to represent its input feature vector.
     %
     The input feature vectors of all edges are same for all GNN layers.
     %

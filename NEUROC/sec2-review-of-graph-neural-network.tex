@@ -6,9 +6,9 @@ In this section, we formally define the graph neural networks and briefly survey
 %
 We denote a simple \emph{undirected} graph $\mathcal{G}$ as $\mathcal{G}=(\mathcal{V}, \mathcal{E})$, where $\mathcal{V}$ and $\mathcal{E}$ are the vertex set and the edge set of $\mathcal{G}$, respectively.
 %
-We use $v_x$ $(0 \leq x < |\mathcal{V}|)$ to denote a vertex and $e_{x,y}=(v_x, v_y)$ to denote the edge pointing from $v_x$ to $v_y$.
+We use $v_x$ $(0 \leq x < |\mathcal{V}|)$ to denote a vertex and $e_{y,x}=(v_y, v_x)$ to denote the edge pointing from $v_y$ to $v_x$.
 %
-The adjacency set of $v_x$ is $\mathcal{N}(v_x)=\{v|(v_x, v) \in \mathcal{E}\}$.
+The adjacency set of $v_x$ is $\mathcal{N}(v_x)=\{v|(v, v_x) \in \mathcal{E}\}$.
 %
 We denote a \emph{vector} with a bold lower case letter like $\boldsymbol{h}$ and a \emph{matri}x with a bold upper case letter like $\boldsymbol{W}$.
 %
@@ -27,7 +27,7 @@ We use blue characters $\Param{\MyVec{w}}$/$\Param{\MyMat{W}}$ to denote weight 
         \midrule
         \multirow[c]{4}{3em}{Graph Structure}& $\mathcal{G}=(\mathcal{V}, \mathcal{E})$ & The simple undirected input graph with the vertex set $\mathcal{V}$ and the edge set $\mathcal{E}$. \\
         & $v_x$ & The $x$-th vertex of the input graph. \\
-        & $e_{x,y}$ & The edge pointing from $v_x$ to $v_y$ of the input graph. \\
+        & $e_{y,x}$ & The edge pointing from $v_y$ to $v_x$ of the input graph. \\
         & $\mathcal{N}(v_x)$ & The adjacency set of $v_x$ in the input graph. \\ 
         & $\bar{d}$ & The average degree of the input graph. \\ \midrule
         \multirow[c]{6}{3em}{GNN Definition}& $L$ & The number of GNN layers. \\
@@ -38,12 +38,12 @@ We use blue characters $\Param{\MyVec{w}}$/$\Param{\MyMat{W}}$ to denote weight 
         & $\phi^{l,i}$ / $\Sigma^{l,i}$ / $\gamma^{l,i}$ & The messaging/aggregation/updating function of the $i$-th sub-layer of the GNN layer  $l$.\\
         & $\textcolor{blue}{\boldsymbol{W}^l, \boldsymbol{W}^{(k)}/\boldsymbol{b}, \boldsymbol{a}}$ & The matrices/vectors represented by the blue characters are the weight matrices/vectors that need to be learned in the GNN. \\  \midrule
         \multirow[c]{8}{3em}{Vector}& $\boldsymbol{v}_x$ & The feature vector of the vertex $v_x$. \\
-        & $\boldsymbol{e}_{x,y}$ & The feature vector of the edge $e_{x,y}$.  \\
+        & $\boldsymbol{e}_{y,x}$ & The feature vector of the edge $e_{y,x}$.  \\
         & $\boldsymbol{h}_x^{l}$ &  The {input} hidden vector of the graph neuron corresponding to $v_x$ in the GNN layer $l$. \\
         & $\boldsymbol{h}_x^{l+1}$ &  The {output} hidden vector of the graph neuron corresponding to $v_x$ in the GNN layer $l$.\\
-        & $\boldsymbol{m}_{x,y}^l$ & The message vector of the edge $e_{x,y}$ outputted by $\phi^l$ of the GNN layer $l$. \\
+        & $\boldsymbol{m}_{y,x}^l$ & The message vector of the edge $e_{y,x}$ outputted by $\phi^l$ of the GNN layer $l$. \\
         & $\boldsymbol{s}_{x}^l$ & The aggregated vector of the vertex $v_x$ outputted by $\Sigma^l$ of the GNN layer $l$. \\
-        & $\boldsymbol{h}_{x}^{l,i}$ / $\boldsymbol{m}_{x,y}^{l,i}$ / $\boldsymbol{s}_{x}^{l,i}$ & The hidden/message/aggregated vector of the vertex $v_x$ outputted by $\gamma^{l,i}$/$\phi^{l,i}$/$\Sigma^{l,i}$ of the $i$-th sub-layer of the GNN layer $l$. \\
+        & $\boldsymbol{h}_{x}^{l,i}$ / $\boldsymbol{m}_{y,x}^{l,i}$ / $\boldsymbol{s}_{x}^{l,i}$ & The hidden/message/aggregated vector of the vertex $v_x$ outputted by $\gamma^{l,i}$/$\phi^{l,i}$/$\Sigma^{l,i}$ of the $i$-th sub-layer of the GNN layer $l$. \\
         & $d^l_{in}$, $d^l_{out}$ &  The dimension of the input/output hidden vectors of the GNN layer $l$. \\
         & $dim(\MyVec{x})$ & The dimension of a vector $\MyVec{x}$. \\
         \bottomrule
@@ -65,7 +65,7 @@ In the inpug layer, A GNN receives a graph $\mathcal{G}$ as the input.
 %
 Every vertex $v_x$ in $\mathcal{G}$ is attached with a feature vector $\boldsymbol{v}_x$ to describe the properties of the vertex.
 %
-Every edge $e_{x,y}$ of $\mathcal{G}$ may also be attached with a feature vector $\boldsymbol{e}_{x,y}$.
+Every edge $e_{y,x}$ of $\mathcal{G}$ may also be attached with a feature vector $\boldsymbol{e}_{y,x}$.
 %
 The input layer of a GNN receives feature vectors from all vertices and passes the feature vectors to the first GNN layer (i.e. GNN layer 0).
 
@@ -94,7 +94,7 @@ GNN layers are \emph{sparsely} connected with the input layer and other GNN laye
     %
     The connections between the first GNN layer and the input layer  are determined by the topology of $\mathcal{G}$.
     %
-    The graph neuron of $v_x$ in the first GNN layer is connected with the input unit of $v_y$  in the input layer only if there is an edge $e_{x,y}$ between $v_x$ and $v_y$ in $\mathcal{G}$.
+    The graph neuron of $v_x$ in the first GNN layer is connected with the input unit of $v_y$  in the input layer only if there is an edge $e_{y,x}$ between $v_y$ and $v_x$ in $\mathcal{G}$.
     %
     Since most real-world graphs are very \emph{sparse} (i.e. $|\mathcal{E}| \ll |\mathcal{V}|^2$), the connections between the first GNN layer and the input layer are also sparse, different from the traditional neural networks.
     
