@@ -335,11 +335,11 @@ It holds the edge set of the graph.
 %
 The two columns of the edge index store the source and the target vertex IDs of each edge.
 %
-The collection step copies the hidden vectors from the previous GNN layer $\MyVec{h}^l_x$ and $\MyVec{h}^l_y$ to the both endpoints of each edge $e_{x,y}$ in the edge index, forming the parameter tensor $[\MyVec{h}^l_x, \MyVec{h}^l_{y}, \MyVec{e}_{x,y}]$ of the messaging function $\phi^l$.
+The collection step copies the hidden vectors from the previous GNN layer $\MyVec{h}^l_y$ and $\MyVec{h}^l_x$ to the both endpoints of each edge $e_{y,x}$ in the edge index, forming the parameter tensor $[\MyVec{h}^l_{y}, \MyVec{h}^l_{x}, \MyVec{e}_{y,x}]$ of the messaging function $\phi^l$.
 %
 This step only involves data movement.
 %
-The messaging step calls the messaging function $\phi^l$ on all edges to get message vectors $\MyVec{m}^l_{x,y}$.
+The messaging step calls the messaging function $\phi^l$ on all edges to get message vectors $\MyVec{m}^l_{y,x}$.
 %
 The aggregation step aggregates the message vectors with the same target vertex into an aggregated vector $\MyVec{s}^l_x$.
 %
@@ -470,7 +470,7 @@ The aggregation step suffered from data synchronization and non-regular data acc
 \paragraph{Inference Time Breakdown Analysis}
 We conducted the same experiments in the inference stage as above.
 %
-The results of layer level experiment, step Level in edge Calculation experiment and operator Level experiment were in general consistent with those in the Training stage.
+The results of layer level experiment, step Level in edge calculation experiment and operator Level experiment were in general consistent with those in the Training stage.
 %
 The performance bottleneck analysis in the Training stage can also be applied to the inference stage.
 % added by wangyunpan, 2020-12-22 ----end----
@@ -626,7 +626,7 @@ To reduce the memory usage of GNN training, optimizations should focus on reduci
 \begin{figure}[H]
     \centering
     \includegraphics[height=5cm]{figs/experiments/exp_inference_full_memory_usage_stage_amp.pdf}
-    \caption{Memory usage of each phase during the GNN training. Dataset: \texttt{amp}.}
+    \caption{Memory usage of each phase during the GNN inference. Dataset: \texttt{amp}.}
     \label{fig:exp_inference_full_memory_usage_stage_amp}
 \end{figure}
 
@@ -642,7 +642,7 @@ To reduce the memory usage of GNN training, optimizations should focus on reduci
 \begin{figure}[H]
     \centering
     \includegraphics[height=5cm]{figs/experiments/exp_inference_full_memory_expansion_ratio_input_feature_dimension_com-amazon_expansion_ratio.pdf}
-    \caption{Memory expansion ratio under different dimensions of input feature vectors. Dataset: \texttt{cam}.}
+    \caption{Memory expansion ratio under different dimensions of input feature vectors during inference. Dataset: \texttt{cam}.}
     \label{fig:exp_inference_full_memory_expension_ratio_input_feature_dimension}
 \end{figure}
 

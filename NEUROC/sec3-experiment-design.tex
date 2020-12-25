@@ -17,7 +17,7 @@ We implemented all GNNs with PyG 1.5.0\footnote{https://pytorch-geometric.readth
 
 \paragraph{Datasets}
 
-We used six real-world graph datasets as listed in \tablename~\ref{tab:dataset_overview} that were popular in the GNN accuracy evaluation \cite{yang2016_revisiting_semisupervised, zeng2020_graphsaint, shchur2018_pitfall_of_gnn}.
+We used six real-world graph datasets as listed in \tablename~\ref{tab:dataset_overview} that were popular in the GNN accuracy evaluation \cite{chen2018_fastgcn, zeng2020_graphsaint, shchur2018_pitfall_of_gnn}.
 %
 For directed graphs, PyG converts them into undirected ones during data loading.
 %
@@ -47,7 +47,7 @@ For \texttt{fli}, we used 50\%/25\%/25\% of the samples as the training/evaluati
         \toprule
         Dataset                                                 & $|\mathcal{V}|$ & $|\mathcal{E}|$ & $\bar{d}$ & $dim(\boldsymbol{v})$ & \#Class & Directed \\
         \midrule
-        pubmed (\texttt{pub}) \cite{yang2016_revisiting_semisupervised}  & 19,717          & 44,324          & 4.5       & 500                   & 3       & Yes      \\
+        pubmed (\texttt{pub}) \cite{chen2018_fastgcn}  & 19,717          & 44,324          & 4.5       & 500                   & 3       & Yes      \\
         amazon-photo (\texttt{amp}) \cite{shchur2018_pitfall_of_gnn}     & 7,650           & 119,081         & 31.1      & 745                   & 8       & Yes      \\
         amazon-computers (\texttt{amc}) \cite{shchur2018_pitfall_of_gnn} & 13,752          & 245,861         & 35.8      & 767                   & 10      & Yes      \\
         coauthor-physics (\texttt{cph}) \cite{shchur2018_pitfall_of_gnn} & 34,493          & 247,962         & 14.4      & 8415                  & 5       & Yes      \\
