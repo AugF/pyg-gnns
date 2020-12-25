@@ -770,66 +770,6 @@ According to the experimental results in Section~\ref{sec:training_time_breakdow
     \label{fig:exp_sampling_minibatch_degrees_distribution}
 \end{figure}
 
-\subsubsection{Effects on Accuracy}
-
-Since the size of the sampled subgraph was much smaller than the original graph, the accuracy of the GNN models got by sampling techniques might be different from the full-batch training.
-%
-To find out how the batch size affected the test accuracy, we trained GNNs with different batch sizes.
-%
-\figurename~\ref{fig:exp_sampling_relative_batch_size_accuracy_graphsage} (in the reply) and \figurename~\ref{fig:exp_sampling_relative_batch_size_accuracy_cluster} (in the reply) compare the test accuracy achieved by sampling techniques with the test accuracy of the full-batch training.
-%
-For each combination of dataset and GNN, we chose the hyper-parameters that achieved the highest accuracy according to the experimental results in Section 4.1.
-
-\begin{figure}[H]
-    \centering
-    \subfloat[\texttt{amp}]{\includegraphics[width=2in]{figs/experiments/exp_graphsage_sampling_accuracy_on_amp.pdf}}
-    \subfloat[\texttt{amc}]{\includegraphics[width=2in]{figs/experiments/exp_graphsage_sampling_accuracy_on_amc.pdf}}
-    \subfloat[\texttt{fli}]{\includegraphics[width=2in]{figs/experiments/exp_graphsage_sampling_accuracy_on_fli.pdf}}
-    \caption{Test accuracy under different batch sizes of the neighbor sampler. FULL means that the full graph participated in the training.}
-    \label{fig:exp_sampling_relative_batch_size_accuracy_graphsage}
-\end{figure}
-
-\begin{figure}[H]
-    \centering
-    \subfloat[\texttt{amp}\label{fig:exp_cluster_sampling_accuracy_on_amp}]{\includegraphics[width=2in]{figs/experiments/exp_cluster_sampling_accuracy_on_amp.pdf}}
-    %
-    \subfloat[\texttt{amc}\label{fig:exp_cluster_sampling_accuracy_on_amc}]{\includegraphics[width=2in]{figs/experiments/exp_cluster_sampling_accuracy_on_amc.pdf}}
-    %
-    \subfloat[\texttt{fli}\label{fig:exp_cluster_sampling_accuracy_on_fli}]{\includegraphics[width=2in]{figs/experiments/exp_cluster_sampling_accuracy_on_fli.pdf}}
-    \caption{Test accuracy under different batch sizes of the cluster sampler. FULL means that the full graph participated in the training.}
-    \label{fig:exp_sampling_relative_batch_size_accuracy_cluster}
-\end{figure}
-
-The experimental results confirmed the effectiveness of the sampling methods in terms of accuracy.
-%
-When the relative batch size was greater than or equal to 3\%, the test accuracy of the GNNs trained with sampling was close to the accuracy obtained by full-batch training.
-%
-In most cases, the accuracy achieved by the sampling techniques was slightly lower than the full-batch training.
-%
-However, there were some exceptions (like GaAN in \figurename~\ref{fig:exp_cluster_sampling_accuracy_on_amp} and \figurename~\ref{fig:exp_cluster_sampling_accuracy_on_amc} in the reply) that the accuracy achieved by sampling was even higher.
-
-The relationships between batch size and test accuracy were complex.
-%
-A larger batch size did not always bring higher accuracy.
-%
-For example, the accuracy of GaAN in \figurename~\ref{fig:exp_cluster_sampling_accuracy_on_amp} (in the reply) and GGNN in \figurename~\ref{fig:exp_cluster_sampling_accuracy_on_fli} (in the reply) decreased as the batch size increased.
-%
-A smaller batch size sometimes could achieve higher accuracy.
-%
-For example, GAT achieved a higher accuracy with 1\% relative batch size than the full-batch training in \figurename~\ref{fig:exp_cluster_sampling_accuracy_on_amc} (in the reply).
-%
-Given a sampling method, we found that the optimal batch size highly depended on the dataset and the GNN algorithm.
-%
-Our observations were similar to [31].
-%
-How to automatically select a proper batch size is a topic worth further studying.
-
-Among the two sampling methods, the performance of the cluster sampler was stabler than the neighbor sampler.
-%
-With the cluster sampler, the test accuracy of different GNNs was very close to the accuracy of full-batch training.
-%
-With the neighbor sampler, the test accuracy of different GNNs showed more obvious differences.
-
 \subsubsection{Performance Bottlenecks Analysis}
 
 To find out performance bottlenecks of the sampling techniques, we decomposed the training/inference time per batch into three phases: \emph{sampling} on the CPU side, \emph{transferring} sampled subgraphs from the CPU side to the GPU side, and \emph{training/inference} with the sampled subgraphs on the GPU side.
@@ -957,3 +897,63 @@ Improving its efficiency could significantly reduce the inference time.
    \caption{Inference time per batch breakdown under different batch sizes.}
    \label{fig:time_breakdown_of_inference_sampler}
 \end{figure}
+
+\subsubsection{Effects on Accuracy}
+
+Since the size of the sampled subgraph was much smaller than the original graph, the accuracy of the GNN models got by sampling techniques might be different from the full-batch training.
+%
+To find out how the batch size affected the test accuracy, we trained GNNs with different batch sizes.
+%
+\figurename~\ref{fig:exp_sampling_relative_batch_size_accuracy_graphsage} (in the reply) and \figurename~\ref{fig:exp_sampling_relative_batch_size_accuracy_cluster} (in the reply) compare the test accuracy achieved by sampling techniques with the test accuracy of the full-batch training.
+%
+For each combination of dataset and GNN, we chose the hyper-parameters that achieved the highest accuracy according to the experimental results in Section 4.1.
+
+\begin{figure}[H]
+    \centering
+    \subfloat[\texttt{amp}]{\includegraphics[width=2in]{figs/experiments/exp_graphsage_sampling_accuracy_on_amp.pdf}}
+    \subfloat[\texttt{amc}]{\includegraphics[width=2in]{figs/experiments/exp_graphsage_sampling_accuracy_on_amc.pdf}}
+    \subfloat[\texttt{fli}]{\includegraphics[width=2in]{figs/experiments/exp_graphsage_sampling_accuracy_on_fli.pdf}}
+    \caption{Test accuracy under different batch sizes of the neighbor sampler. FULL means that the full graph participated in the training.}
+    \label{fig:exp_sampling_relative_batch_size_accuracy_graphsage}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \subfloat[\texttt{amp}\label{fig:exp_cluster_sampling_accuracy_on_amp}]{\includegraphics[width=2in]{figs/experiments/exp_cluster_sampling_accuracy_on_amp.pdf}}
+    %
+    \subfloat[\texttt{amc}\label{fig:exp_cluster_sampling_accuracy_on_amc}]{\includegraphics[width=2in]{figs/experiments/exp_cluster_sampling_accuracy_on_amc.pdf}}
+    %
+    \subfloat[\texttt{fli}\label{fig:exp_cluster_sampling_accuracy_on_fli}]{\includegraphics[width=2in]{figs/experiments/exp_cluster_sampling_accuracy_on_fli.pdf}}
+    \caption{Test accuracy under different batch sizes of the cluster sampler. FULL means that the full graph participated in the training.}
+    \label{fig:exp_sampling_relative_batch_size_accuracy_cluster}
+\end{figure}
+
+The experimental results confirmed the effectiveness of the sampling methods in terms of accuracy.
+%
+When the relative batch size was greater than or equal to 3\%, the test accuracy of the GNNs trained with sampling was close to the accuracy obtained by full-batch training.
+%
+In most cases, the accuracy achieved by the sampling techniques was slightly lower than the full-batch training.
+%
+However, there were some exceptions (like GaAN in \figurename~\ref{fig:exp_cluster_sampling_accuracy_on_amp} and \figurename~\ref{fig:exp_cluster_sampling_accuracy_on_amc} in the reply) that the accuracy achieved by sampling was even higher.
+
+The relationships between batch size and test accuracy were complex.
+%
+A larger batch size did not always bring higher accuracy.
+%
+For example, the accuracy of GaAN in \figurename~\ref{fig:exp_cluster_sampling_accuracy_on_amp} (in the reply) and GGNN in \figurename~\ref{fig:exp_cluster_sampling_accuracy_on_fli} (in the reply) decreased as the batch size increased.
+%
+A smaller batch size sometimes could achieve higher accuracy.
+%
+For example, GAT achieved a higher accuracy with 1\% relative batch size than the full-batch training in \figurename~\ref{fig:exp_cluster_sampling_accuracy_on_amc} (in the reply).
+%
+Given a sampling method, we found that the optimal batch size highly depended on the dataset and the GNN algorithm.
+%
+Our observations were similar to [31].
+%
+How to automatically select a proper batch size is a topic worth further studying.
+
+Among the two sampling methods, the performance of the cluster sampler was stabler than the neighbor sampler.
+%
+With the cluster sampler, the test accuracy of different GNNs was very close to the accuracy of full-batch training.
+%
+With the neighbor sampler, the test accuracy of different GNNs showed more obvious differences.
