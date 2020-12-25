@@ -256,7 +256,7 @@ The relative accuracy between GNNs varied greatly with different datasets.
 %
 There was no clear winner for all datasets.
 
-\subsection{Training Time Breakdown}
+\subsection{Training/Inference Time Breakdown}
 \label{sec:training_time_breakdown}
 
 To find out which stage/step dominated the training time, we decomposed the training time and analyzed performance bottlenecks level by level.
@@ -466,14 +466,90 @@ The collection step suffered from lots of data movement.
 %
 The aggregation step suffered from data synchronization and non-regular data access.
 
-% added by wangyunpan, 2020-12-22 ----start----
-\paragraph{Inference Time Breakdown Analysis}
-We conducted the same experiments in the inference stage as above.
+
+\subsubsection{Performance Bottlenecks in Inference}
 %
-The results of layer level experiment, step Level in edge calculation experiment and operator Level experiment were in general consistent with those in the Training stage.
+We also did all the above experiments for Inference.
 %
-The performance bottleneck analysis in the Training stage can also be applied to the inference stage.
-% added by wangyunpan, 2020-12-22 ----end----
+We found that the performance characteristics of GNN inference were highly similar to training on the \emph{layer} level and the \emph{step} level.
+%
+Here, we used GCN as an example. 
+%
+We made similar observations for all GNNs. 
+%
+\figurename~\ref{fig:inference_analysis_on_layer_edge_level_of_gcn} shows the results of GCN inference on the \emph{layer} level and the \emph{step} level.
+%
+Compared to the training time breakdown of GCN \figurename~\ref{fig:exp_vertex_edge_cal_proportion}(a), 
+\figurename~\ref{fig:exp_avg_degree_on_vertex_edge_cal_time}(a), and \figurename~\ref{fig:exp_edge_calc_decomposition}(a),
+we could conclude that the time breakdowns were very similar.
+
+% GCN Inference结果对比图
+\begin{figure}[H]
+    \centering
+    \subfloat[\emph{layer} level]{\includegraphics[width=0.3\columnwidth]{figs/experiments/exp_inference_full_avg_degree_on_vertex_edge_cal_time_gcn.pdf}}
+    \subfloat[the effect of average degree]{\includegraphics[width=0.3\columnwidth]{figs/experiments/exp_inference_full_avg_degree_on_vertex_edge_cal_time_gcn.pdf}}
+    \subfloat[\emph{edge} level]{\includegraphics[width=0.3\columnwidth]{figs/experiments/exp_inference_full_edge_calc_decomposition_gcn.pdf}}
+    \caption{Time breakdowns on the layer level and edge level, and the effect of average degree on the edge/vertex calculation of GCN Inference.}
+    \label{fig:inference_analysis_on_layer_edge_level_of_gcn}
+\end{figure}
+
+% 绝对时间对比图
+\begin{figure}[H]
+    \centering
+    \subfloat[\texttt{amc}]{\includegraphics[width=0.3\columnwidth]{figs/experiments/exp_time_comparison_between_training_inference_amazon-computers.pdf}}
+    \subfloat[\texttt{amp}]{\includegraphics[width=0.3\columnwidth]{figs/experiments/exp_time_comparison_between_training_inference_amazon-photo.pdf}}
+    \subfloat[\texttt{fli}]{\includegraphics[width=0.3\columnwidth]{figs/experiments/exp_time_comparison_between_training_inference_flickr.pdf}}
+    \caption{Wall-clock training/inference time on different datasets.}
+    \label{fig:compare_wall_clock_time_of_training_and_inference}
+\end{figure}
+
+The main differences between training and inference were reflected in two aspects: the wall-clock time and the top time-consuming basic operators.
+%
+The inference time was much less than the training time.
+%
+Figure~\ref{fig:compare_wall_clock_time_of_training_and_inference} in the response (Figure X in the revised manuscript) compares the wall-clock time of training and inference on the \texttt{amp}, \texttt{amc}, and \texttt{fli} datasets.
+%
+The results on the other datasets were similar.
+%
+Since the inference only conducted the forward propagation from the input layer to the prediction layer, the time of inference was very close to the time of the forward phase in training.
+%
+The inference time was 34\% (GCN), 32\% (GGNN), 25\% (GAT), and 32\% (GaAN) of the training time, averaged over all datasets.
+
+The top time-consuming basic operators of training and inference also showed a certain degree of difference.
+%
+Some of the top time-consuming operators during training were replaced by new operators in inference.
+%
+Figure~\ref{fig:exp_inference_top_basic_ops} in the response compares the top 5 time-consuming basic operators in inference.
+%
+For GCN, the \texttt{index} operator used in the prediction layer became the new top 5 time-consuming operator, replacing the \texttt{gather} operator used in the backward phase in training.
+%
+%    The basic operators related to the edge calculation (\texttt{scatter\_add}, \texttt{index\_select}, and \texttt{mul}) still consumed the majority of the inference time.
+%
+For GGNN, \texttt{index} operator in the prediction layer also became one of the top 5 time-consuming basic operators.
+%
+%    Due to the high time complexity of the vertex updating function $\gamma$ in GGNN, the basic operators related to the vertex calculation stage (\texttt{mm} and \texttt{thnn\_fused\_gru\_cell}) still consumed near half of the inference time.
+%
+For GAT, the \texttt{input\_put\_impl} operator (used in the backward phase) in Figure~\ref{fig:exp_top_basic_ops}(c) was replaced by the \texttt{scatter\_add} operator used in the forward edge calculation in Figure~\ref{fig:exp_inference_top_basic_ops}(c).
+%
+%    The \texttt{scatter\_add} operator was related to the edge calculation step.
+%
+For GaAN, the \texttt{mm} operator was replaced by the \texttt{cat} operator used in the vertex updating function.
+
+Although some specific time-consuming operators were different, the performance bottlenecks on the operator level were same for training and inference.
+%
+The matrix multiplication \texttt{mm} and the element-wise multiplication \texttt{mul} operators were still time-consuming for inference, making GNN inference also {suitable for GPUs}.
+%
+The basic operators related to the collection and aggregation steps in the edge calculation still consumed non-trivial time in inference.
+
+\begin{figure}[H]
+    \centering
+    \subfloat[GCN]{\includegraphics[height=4cm]{figs/experiments/exp_inference_full_top_basic_ops_gcn.pdf}}
+    \subfloat[GGNN]{\includegraphics[height=4cm]{figs/experiments/exp_inference_full_top_basic_ops_ggnn.pdf}}\\
+    \subfloat[GAT]{\includegraphics[height=4cm]{figs/experiments/exp_inference_full_top_basic_ops_gat.pdf}}
+    \subfloat[GaAN]{\includegraphics[height=4cm]{figs/experiments/exp_inference_full_top_basic_ops_gaan.pdf}}
+    \caption{Top 5 time-consuming basic operators of typical GNNs. The time proportion of each basic operator was averaged over all datasets with the error bar indicating the maximum and the minimum.}
+    \label{fig:exp_inference_top_basic_ops}
+\end{figure}
 
 \subsection{Memory Usage Analysis}
 \label{sec:memory_usage_analysis}
