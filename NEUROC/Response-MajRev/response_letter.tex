@@ -23,7 +23,8 @@
 \usepackage{subfig}
 \usepackage{graphicx}
 \usepackage{framed}
-\usepackage[colorlinks=true]{hyperref}
+\usepackage{soul}
+\usepackage[colorlinks=true, linkcolor=blue]{hyperref}
 % Vector
 \newcommand{\MyVec}[1]{\boldsymbol{#1}}
 % Matrix
@@ -121,15 +122,13 @@ TODO
 \end{point}
 
 \begin{reply}
-    Thank you for your positive comments on our manuscript.
+    Thank you for your kindly comments on our manuscript.
     %
-    We have carefully revised the manuscript according to your comments. 
+    We have carefully revised the manuscript according to your suggestions. 
     %
-    Based on the suggestions, we have made an extensive modification on the revised manuscript.
+    Please see the replies below.
     %
-    Please see the detailed responses below.
-    %
-    The changes corresponding to each issue were highlighted by red squares in the annotated version of our manuscript.
+    The changes corresponding to each point are highlighted by red squares in the annotated version of our revised manuscript.
 
 \end{reply}
 
@@ -592,13 +591,9 @@ There are some grammar errors and typos:
 \begin{reply}
     Thank you for your positive comments on our manuscript.
     %
-    We have carefully revised the manuscript according to your comments.
+    We have carefully revised the manuscript according to your kindly comments and suggestions in the following points.
     %
-    We have revised our manuscript according to your kindly suggestions.
-    %
-    Please see the detailed responses below.
-    %
-    We have highlighted our modification point by point in the annotated version of the manuscript by red squares.
+    We highlight our modifications with red squares point by point in the annotated version of the revised manuscript.
 \end{reply}
 
 \begin{point}
@@ -607,11 +602,9 @@ There are some grammar errors and typos:
 
 % R2Q1
 \begin{reply}
-    Thank you for pointing them out.
-    %
     We feel really sorry for our carelessness.
     %
-    We have proofread our revised manuscript carefully to eliminate such language errors as much as we can.
+    We have proofread our revised manuscript to eliminate such language errors as much as we can.
 \end{reply}
 
 % R2Q2
@@ -635,47 +628,98 @@ There are some grammar errors and typos:
 \begin{reply}
     Thanks very much for your valuable suggestions.
     %
-    The model complexity directly affected both the accuracy and the training time.
+    The model complexity directly affects both the accuracy and the training time.
     %
-    In order to analyze the relationship between model complexity and accuracy, we conducted two kinds of extra experiments in the revised manuscript: (1) how the hyper-parameters of the GNNs (like the dimension of hidden vectors and the number of heads) affected the accuracy of GNNs (in Section 4.1); (2) how the batch size in the sampling methods affected the accuracy of GNNs (in Section 4.4).
-
-    In this reply, we focus on the first kind of experiments added in Section 4.1.
-    %
-    We will introduce our results of the second kind of experiments in the next reply.
-
-    Hyper-parameters determined the model complexity of a GNN.
-    %
-    Generally speaking, higher values of hyper-parameters brought higher model complexity, affecting model accuracy.
-    %
-    In the revised manuscript, we added extra paragraphs ``Effects on Accuracy'' at the end of Section 4.1 ``Effects of Hyper-parameters on Performance'' to analyze how the hyper-parameters affect the accuracy.
-    %
-    We had two main findings.
-    %
-    First, the accuracy of GNNs was much more sensitive to the dimension of hidden vectors $dim(\MyVec{h}^1_x)$ (for GCN/GGNN/GaAN) and the dimension of each head $d_{head}$ (for GAT) than the other hyper-parameters.
-    %
-    Second, the relative accuracy between the four typical GNNs varied greatly with different datasets.
-    %
-    We quote the related paragraphs from the revised manuscript below.
-
-    \begin{myquote}{Section 4.1 ``Effects of Hyper-parameters on Performance''}
-    %
-    \emph{Effects on Accuracy}.
-    %
-    The relationship between hyper-parameters of GNNs (i.e., model complexity) and accuracy is very complicated, and there is no clear theoretical analysis yet.
-    %
-    Generally speaking, higher model complexity can bring powerful representation capability and may bring higher accuracy, but it also increases the risk of overfitting.
-    %
-    To evaluate the effects of hyper-parameters on accuracy, we measured the accuracy of the four typical GNNs under different hyper-parameters.
-    %
-    \figurename~\ref{fig:exp_hyperparameter_accuracy} shows the experimental results.
+    In order to analyze the relationship between model complexity and accuracy, we have conducted two kinds of extra experiments in the revised manuscript: (1) how the hyper-parameters of the GNNs (like the dimension of hidden vectors and the number of heads) affect the accuracy of GNNs (in Section 4.1); (2) how the batch size in the sampling methods affects the accuracy of GNNs (in Section 4.4).
     
-    For GCN, the accuracy was sensitive to the dimension of hidden vectors $dim(\MyVec{h}^1_x)$.
+    We have added more dataset description related to accuracy evaluation in Section 3.1 ``Experimental Setting''.
+    %
+    Newly added sentences are marked with underlines in the following quotation.
+    
+    \begin{myquote}{Section 3.1 ``Experimental Setting''}
+    \emph{Datasets}.
+    %
+    We used six real-world graph datasets as listed in \tablename~\ref{tab:dataset_overview} (in the reply) that were popular in the GNN evaluation [33,31,34].
+    %
+    For directed graphs, PyG converts them into undirected ones during data loading.
+    %
+    Thus, the average degree of a directed graph $\bar{d}=\frac{2|\mathcal{E}|}{|\mathcal{V}|}$.
+    %
+    For an undirected graph, the average degree is defined as $\bar{d}=\frac{|\mathcal{E}|}{|\mathcal{V}|}$.
+    %
+    \ul{For the \texttt{cam} dataset, its vertices were not associated with feature vectors}.
+    %
+    \ul{Thus, we generated random dense feature vectors for it and excluded it from accuracy evaluation}.
+    %
+    \ul{For \texttt{amp}, \texttt{amc}, \texttt{cph}, and \texttt{cam}, we used 70\%/15\%/15\% of the vertices as the training/evaluation/test set, respectively}.
+    %
+    \ul{For \texttt{pub}, we used 500/1000 vertices as the evaluation/test set and the remained as the training set according to [28]}.
+    %
+    \ul{For \texttt{fli}, we used 50\%/25\%/25\% of the samples as the training/evaluation/test set according to [31]}.
+    %
+    We also used random graphs generated by the R-MAT graph generator [35] in some experiments, to explore the effects of graph topological characteristics (like average degrees) on performance bottlenecks.
+    %
+    Input feature vectors of random graphs were random dense vectors with the dimension of 32.
+    %
+    Vertices of random graphs were classified into 10 classes randomly.
+    
+    \begin{table}[H]
+        \centering
+        \begin{tabular}{cccccccc}
+            \toprule
+            Dataset                                                 & $|\mathcal{V}|$ & $|\mathcal{E}|$ & $\bar{d}$ & $dim(\boldsymbol{v})$ & \#Class & Directed \\
+            \midrule
+            pubmed (\texttt{pub}) [28]  & 19,717          & 44,324          & 4.5       & 500                   & 3       & Yes      \\
+            amazon-photo (\texttt{amp}) [34]     & 7,650           & 119,081         & 31.1      & 745                   & 8       & Yes      \\
+            amazon-computers (\texttt{amc}) [34] & 13,752          & 245,861         & 35.8      & 767                   & 10      & Yes      \\
+            coauthor-physics (\texttt{cph}) [34] & 34,493          & 247,962         & 14.4      & 8415                  & 5       & Yes      \\
+            flickr (\texttt{fli}) [31]                 & 89,250          & 899,756         & 10.1      & 500                   & 7       & No       \\
+            com-amazon (\texttt{cam}) [36]               & 334,863         & 925,872         & 2.8       & 32                    & 10      & No       \\
+            \bottomrule
+        \end{tabular}
+        \caption{Dataset overview. $\bar{d}$ represents the average vertex degree. $dim(\boldsymbol{v})$ is the dimension of the input feature vector.}
+        \label{tab:dataset_overview}
+    \end{table}
+
+    \end{myquote}
+
+    In this reply, we focus on the experiments related to hyper-parameters in Section 4.1.
+    %
+    We introduce the experimental results of the sampling techniques in Section 4.4 in the next reply.
+
+    Hyper-parameters determine the model complexity of a GNN.
+    %
+    Generally speaking, higher values of hyper-parameters bring higher model complexity and increase representation capability.
+    %
+    In the revised manuscript, we add a new subsection Section 4.1.4 ``Effects on Accuracy'' at the end of Section 4.1 ``Effects of Hyper-parameters on Performance'' to analyze how hyper-parameters affect the accuracy.
+    %
+    We have two main findings.
+    %
+    First, the accuracy of GNNs is much more sensitive to the dimension of hidden vectors $dim(\MyVec{h}^1_x)$ (for GCN/GGNN/GaAN) and the dimension of each head $d_{head}$ (for GAT) than the other hyper-parameters.
+    %
+    Second, the relative accuracy of the four typical GNNs varies greatly with different datasets.
+    %
+    We quote from Section 4.1.4 of the revised manuscript to present our results.
+
+    \begin{myquote}{Section 4.1.4 ``Effects on Accuracy''}
+    %
+    The values of hyper-parameters determined the model complexity of a GNN.
+    %
+    The relationship between model complexity and accuracy was complex.
+    %
+    %As far as we know, there is little theoretical analysis yet.
+    %
+    Generally speaking, higher model complexity brought more powerful representation capability and might bring higher accuracy, but it also increased the risk of overfitting.
+    
+    To evaluate the effects of hyper-parameters on accuracy, we measured the accuracy of the typical GNNs with varying hyper-parameters.
+    %
+    \figurename~\ref{fig:exp_hyperparameter_accuracy} (in the reply) shows the experimental results.
+    %
+    For GCN, its accuracy was sensitive to the dimension of hidden vectors $dim(\MyVec{h}^1_x)$.
     %
     As $dim(\MyVec{h}^1_x)$ increased, the accuracy first increased quickly and then stabilized when $dim(\MyVec{h}_x^1) \geq 8$.
     %
-    For GGNN, its accuracy curves showed similar trends as GCN.
-    %
-    However, GGNN was more sensitive to $dim(\MyVec{h}_x^1)$ than GCN.
+    For GGNN, its accuracy curves showed similar trends as GCN, but GGNN was more sensitive to $dim(\MyVec{h}_x^1)$ than GCN.
     %
     Its accuracy even decreased when $dim(\MyVec{h}_x^1) \geq 1024$.
     %
@@ -685,11 +729,11 @@ There are some grammar errors and typos:
     %
     For GaAN, only $dim(\MyVec{h}_x^1)$ showed obvious impacts on accuracy.
     %
-    The experimental results indicated the accuracy of the GNNs was often low when $dim(\MyVec{h}_x^1)$ (for GCN/GGNN/GaAN) or $d_{head}$ (for GAT) was small.
+    The experimental results indicated that the accuracy of the GNNs was often low when $dim(\MyVec{h}_x^1)$ (for GCN/GGNN/GaAN) or $d_{head}$ (for GAT) was too low.
     %
-    In those cases, the low model complexity limited the expressive power of the GNNs.
+    %The low model complexity limited the representation capability of the GNNs.
     %
-    As $dim(\MyVec{h}_x^1)$ or $d_{head}$ increased to a certain threshold, the GNNs had sufficient learning ability to achieve stable accuracy.
+    As $dim(\MyVec{h}_x^1)$ or $d_{head}$ increased to a certain threshold, the GNNs gained sufficient learning ability to achieve stable accuracy.
     
     \begin{figure}[H]
         \centering
@@ -708,21 +752,25 @@ There are some grammar errors and typos:
         %\label{fig:exp_hyperparameter_accuracy_gat_small_info}
     %\end{figure}
     
-    \figurename~\ref{fig:exp_hyperparameter_on_accuracy_alg_contrast} compares the best accuracy that each GNN achieved on different datasets.
+    \figurename~\ref{fig:exp_hyperparameter_on_accuracy_alg_contrast} (in the reply) further compares the best accuracy that each GNN could achieve on different datasets.
     %
-    The best accuracy that the four GNNs achieved was very close.
+    The best accuracy of the typical GNNs was very close.
     %
+<<<<<<< HEAD
     It was also close to the accuracy reported in their original references [34, 31].
+=======
+    It was also close to the accuracy reported in their original references [1, 4, 6, 7].
+>>>>>>> 861253e (更新Reviewer2)
     %
-    There was no clear winner in terms of accuracy.
+    The results indicated that there was no clear winner.
     %
     The relative accuracy between GNNs varied greatly with different datasets.
     %
     GaAN achieved the highest accuracy in three out of five datasets.
     %
-    GCN also achieved the highest or second highest accuracy in three out of five datasets, though its model was simplest.
+    GCN achieved the highest or second highest accuracy in three out of five datasets, though its model was simplest.
     %
-    It indicated that simple GNN models (such as GCN) could still achieve good accuracy with proper hyper-parameter settings.
+    Simple GNN models (such as GCN) could still achieve good accuracy with proper hyper-parameter settings.
     
     \begin{figure}[H]
         \centering
@@ -741,7 +789,7 @@ There are some grammar errors and typos:
 
 \begin{reply}
 
-    Thank you for your insightful comment and valuable suggestion.
+    Thanks for the insightful comment and valuable suggestion.
     %
     The sampling methods indeed affect the test accuracy of GNN models [5, 28, 26, 31].% 这里加几个sample方法的文献
     %
