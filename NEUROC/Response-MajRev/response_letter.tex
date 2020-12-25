@@ -756,11 +756,8 @@ There are some grammar errors and typos:
     %
     The best accuracy of the typical GNNs was very close.
     %
-<<<<<<< HEAD
+    %
     It was also close to the accuracy reported in their original references [34, 31].
-=======
-    It was also close to the accuracy reported in their original references [1, 4, 6, 7].
->>>>>>> 861253e (更新Reviewer2)
     %
     The results indicated that there was no clear winner.
     %
@@ -791,9 +788,9 @@ There are some grammar errors and typos:
 
     Thanks for the insightful comment and valuable suggestion.
     %
-    The sampling methods indeed affect the test accuracy of GNN models [5, 28, 26, 31].% 这里加几个sample方法的文献
+    The sampling methods indeed affect the test accuracy of GNN models [5, 28, 26, 31].
     %
-    Without sampling, the GNN models are trained in a \emph{batch} gradient descent manner.
+    Without sampling, the GNN models are trained with a \emph{batch} gradient descent manner.
     %
     With sampling, the GNN models are trained with \emph{mini-bach} stochastic gradient descent.
     %
@@ -805,23 +802,23 @@ There are some grammar errors and typos:
     %
     In each batch, only the neurons corresponding to the vertices appearing in the sampled subgraph will be activated.
     %
-    The model parameters were updated according to the gradients calculated on the sampled subgraph in each batch.
+    The model parameters are updated according to the gradients calculated on the sampled subgraph in each batch.
     %
-    Thus, the achieved model accuracy may be different from the full-graph training.
+    Thus, the test accuracy of the models trained with sampling techniques may be different from the full-graph training.
     
-    To discuss how the sampling methods affect model accuracy, we have added a new subsection Section 4.2.2 ``Effects on Accuracy'' in Section 4.4 ``Effects of Sampling Techniques'' in the revised manuscript.
+    To discuss how the sampling techniques affect model accuracy, we have added a new subsection Section 4.2.2 ``Effects on Accuracy'' in Section 4.4 ``Effects of Sampling Techniques'' in the revised manuscript.
     %
-    We quote the added content below.
+    We quote from Section 4.4.2 of the revised manuscript to present our results.
     
     \begin{myquote}{Section 4.4.2 ``Effects on Accuracy''}
     
-    Since the size of the sampled subgraph was much smaller than the original graph, the model accuracy got by sampling techniques might be different from the full-batch training.
+    Since the size of the sampled subgraph was much smaller than the original graph, the accuracy of the GNN models got by sampling techniques might be different from the full-batch training.
     %
     To find out how the batch size affected the test accuracy, we trained GNNs with different batch sizes.
     %
     \figurename~\ref{fig:exp_sampling_relative_batch_size_accuracy_graphsage} (in the reply) and \figurename~\ref{fig:exp_sampling_relative_batch_size_accuracy_cluster} (in the reply) compare the test accuracy achieved by sampling techniques with the test accuracy of the full-batch training.
     %
-    For each dataset and each GNN, we chose the hyper-parameters that achieved the highest accuracy according to the experimental results in Section 4.1.
+    For each combination of dataset and GNN, we chose the hyper-parameters that achieved the highest accuracy according to the experimental results in Section 4.1.
     
     \begin{figure}[H]
         \centering
