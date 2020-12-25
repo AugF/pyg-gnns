@@ -40,8 +40,8 @@
 
 \newtcolorbox{zitat}[2][]{%
     colback=block-gray,
-    grow to right by=-5mm,
-    grow to left by=-5mm, 
+    grow to right by=-0mm,
+    grow to left by=-0mm, 
     boxrule=0pt,
     boxsep=0pt,
     breakable,
@@ -518,6 +518,8 @@ There are some grammar errors and typos:
          
      In the end of Section 4.3, we added a new paragraph ``Memory Usage of Inference'' to compare the memory usage of inference and training.
      %
+     
+     %
      Figure~\ref{fig:compare_memory_expasion_ratio} in the response (Figure X in the revised manuscript) compares the memory expansion ratios of typical GNNs during training and inference.
      %
      Since no intermediate results had to be cached during inference of GGNN, GAT, and GaAN, the memory expansion ratios of inference were much less than training for the three GNNs.
@@ -691,10 +693,10 @@ There are some grammar errors and typos:
     
     \begin{figure}[H]
         \centering
-        \subfloat[GCN]{\includegraphics[width=0.3\columnwidth]{../figs/experiments/exp_hyperparameter_on_accuracy_gcn.pdf}}
-        \subfloat[GGNN]{\includegraphics[width=0.3\columnwidth]{../figs/experiments/exp_hyperparameter_on_accuracy_ggnn.pdf}}\\
-        \subfloat[GAT]{\includegraphics[width=0.6\columnwidth]{../figs/experiments/exp_hyperparameter_on_accuracy_gat.pdf}}\\
-        \subfloat[GaAN]{\includegraphics[width=0.9\columnwidth]{../figs/experiments/exp_hyperparameter_on_accuracy_gaan.pdf}}
+        \subfloat[GCN]{\includegraphics[width=0.4\columnwidth]{../figs/experiments/exp_hyperparameter_on_accuracy_gcn.pdf}}
+        \subfloat[GGNN]{\includegraphics[width=0.4\columnwidth]{../figs/experiments/exp_hyperparameter_on_accuracy_ggnn.pdf}}\\
+        \subfloat[GAT]{\includegraphics[width=0.8\columnwidth]{../figs/experiments/exp_hyperparameter_on_accuracy_gat.pdf}}\\
+        \subfloat[GaAN]{\includegraphics[width=1.0\columnwidth]{../figs/experiments/exp_hyperparameter_on_accuracy_gaan.pdf}}
         \caption{Effects of hyper-parameters on accuracy of the typical GNNs.}
         \label{fig:exp_hyperparameter_accuracy}
     \end{figure}
@@ -724,7 +726,7 @@ There are some grammar errors and typos:
     
     \begin{figure}[H]
         \centering
-        \includegraphics[width=3in]{../figs/experiments/exp_hyperparameter_on_accuracy_alg_contrast.pdf}
+        \includegraphics[width=3.5in]{../figs/experiments/exp_hyperparameter_on_accuracy_alg_contrast.pdf}
         \caption{Best accuracy that each GNN achieved on different datasets.}
         \label{fig:exp_hyperparameter_on_accuracy_alg_contrast}
     \end{figure}
@@ -741,7 +743,88 @@ There are some grammar errors and typos:
 
     Thank you for your insightful comment and valuable suggestion.
     %
+    The sampling methods indeed affect the test accuracy of GNN models \cite{}.% 这里加几个sample方法的文献
+    %
+    Without sampling, the GNN models are trained in a \emph{batch} gradient descent manner.
+    %
+    With sampling, the GNN models are trained with \emph{mini-bach} stochastic gradient descent.
+    %
+    The structure of the GNN remains unchanged between batches.
+    %
+    Each GNN layer always consists of $|\mathcal{V}|$ graph neurons, where $|\mathcal{V}|$ is the number of vertices in the graph.
+    %
+    But the numbers of \emph{activated} graph neurons are different for different batches.
+    %
+    In each batch, only the neurons corresponding to the vertices appearing in the sampled subgraph will be activated.
+    %
+    The model parameters were updated according to the gradients calculated on the sampled subgraph in each batch.
+    %
+    Thus, the achieved model accuracy may be different from the full-graph training.
     
+    To discuss how the sampling methods affect model accuracy, we have added a new subsection Section 4.2.2 ``Effects on Accuracy'' in Section 4.4 ``Effects of Sampling Techniques'' in the revised manuscript.
+    %
+    We quote the added content below.
+    
+    \begin{myquote}{Section 4.4.2 ``Effects on Accuracy''}
+    
+    Since the size of the sampled subgraph was much smaller than the original graph, the model accuracy got by sampling techniques might be different from the full-batch training.
+    %
+    To find out how the batch size affected the test accuracy, we trained GNNs with different batch sizes.
+    %
+    \figurename~\ref{fig:exp_sampling_relative_batch_size_accuracy_graphsage} (in the reply) and \figurename~\ref{fig:exp_sampling_relative_batch_size_accuracy_cluster} (in the reply) compare the test accuracy achieved by sampling techniques with the test accuracy of the full-batch training.
+    %
+    For each dataset and each GNN, we chose the hyper-parameters that achieved the highest accuracy according to the experimental results in Section 4.1.
+    
+    \begin{figure}[H]
+        \centering
+        \subfloat[\texttt{amp}]{\includegraphics[width=2in]{../figs/experiments/exp_graphsage_sampling_accuracy_on_amp.pdf}}
+        \subfloat[\texttt{amc}]{\includegraphics[width=2in]{../figs/experiments/exp_graphsage_sampling_accuracy_on_amc.pdf}}
+        \subfloat[\texttt{fli}]{\includegraphics[width=2in]{../figs/experiments/exp_graphsage_sampling_accuracy_on_fli.pdf}}
+        \caption{Test accuracy under different batch sizes of the neighbor sampler. FULL means that the full graph participated in the training.}
+        \label{fig:exp_sampling_relative_batch_size_accuracy_graphsage}
+    \end{figure}
+    
+    \begin{figure}[H]
+        \centering
+        \subfloat[\texttt{amp}\label{fig:exp_cluster_sampling_accuracy_on_amp}]{\includegraphics[width=2in]{../figs/experiments/exp_cluster_sampling_accuracy_on_amp.pdf}}
+        %
+        \subfloat[\texttt{amc}\label{fig:exp_cluster_sampling_accuracy_on_amc}]{\includegraphics[width=2in]{../figs/experiments/exp_cluster_sampling_accuracy_on_amc.pdf}}
+        %
+        \subfloat[\texttt{fli}\label{fig:exp_cluster_sampling_accuracy_on_fli}]{\includegraphics[width=2in]{../figs/experiments/exp_cluster_sampling_accuracy_on_fli.pdf}}
+        \caption{Test accuracy under different batch sizes of the cluster sampler. FULL means that the full graph participated in the training.}
+        \label{fig:exp_sampling_relative_batch_size_accuracy_cluster}
+    \end{figure}
+    
+    The experimental results confirmed the effectiveness of the sampling methods in terms of accuracy.
+    %
+    When the relative batch size was greater than or equal to 3\%, the test accuracy of the GNNs trained with sampling was close to the accuracy obtained by full-batch training.
+    %
+    In most cases, the accuracy achieved by the sampling techniques was slightly lower than the full-batch training.
+    %
+    However, there were some exceptions (like GaAN in \figurename~\ref{fig:exp_cluster_sampling_accuracy_on_amp} and \figurename~\ref{fig:exp_cluster_sampling_accuracy_on_amc} in the reply) that the accuracy achieved by sampling was even higher.
+    
+    The relationships between batch size and test accuracy were complex.
+    %
+    A larger batch size did not always bring higher accuracy.
+    %
+    For example, the accuracy of GaAN in \figurename~\ref{fig:exp_cluster_sampling_accuracy_on_amp} (in the reply) and GGNN in \figurename~\ref{fig:exp_cluster_sampling_accuracy_on_fli} (in the reply) decreased as the batch size increased.
+    %
+    A smaller batch size sometimes could achieve higher accuracy.
+    %
+    For example, GAT achieved a higher accuracy with 1\% relative batch size than the full-batch training in \figurename~\ref{fig:exp_cluster_sampling_accuracy_on_amc} (in the reply).
+    %
+    Given a sampling method, we found that the optimal batch size highly depended on the dataset and the GNN algorithm.
+    %
+    Our observations were similar to [31].
+    %
+    How to automatically select a proper batch size is a topic worth further studying.
+    
+    Among the two sampling methods, the performance of the cluster sampler was stabler than the neighbor sampler.
+    %
+    With the cluster sampler, the test accuracy of different GNNs was very close to the accuracy of full-batch training.
+    %
+    With the neighbor sampler, the test accuracy of different GNNs showed more obvious differences.
+    \end{myquote}
     
 \end{reply}
 
@@ -751,6 +834,21 @@ There are some grammar errors and typos:
 
 \begin{reply}
 
+    We are grateful for your insightful suggestion.
+    %
+    As suggested, we additionally evaluated the effects of model complexity on accuracy in Section 4.1 ``Effects of Hyper-parameters on Performance'' in the revised manuscript.
+    %
+    We added experimental results on how the hyper-parameters of GNNs affected the accuracy.
+    %
+    Since different GNNs had different model complexity, we further compared the test accuracy of different GNNs on the same dataset.
+    %
+    More details are available in the reply to Reviewer Point P2.4.
+    
+    We also additionally evaluated the effects of sampling techniques on accuracy in Section 4.4 ``Effects of Sampling Techniques'' in the revised manuscript.
+    %
+    We presented the experimental results in a new subsection Section 4.4.2 ``Effects on Accuracy''.
+    %
+    More details are available in the reply to Reviewer Point P2.5.
 \end{reply}
 
 \end{document}
