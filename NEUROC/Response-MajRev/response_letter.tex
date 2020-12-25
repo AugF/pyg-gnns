@@ -110,7 +110,7 @@ In the annotated version, changes corresponding to each point are all highlighte
 
 \subsection*{Summary of Changes}
 
-%%%% TODO %%%
+TODO
 
 % Let's start point-by-point with Reviewer 1
 \reviewersection
@@ -547,24 +547,26 @@ There are some grammar errors and typos:
      %
      Figure~\ref{fig:sampled_graph_size} (Figure X in the revised manuscript) shows how the relative batch size ($\frac{|\mathcal{V}_{predict}|}{|\mathcal{V}|}$) affected the average degree and the number of edges of the sampled subgraphs during inference.
      %
-     When the relative batch size was 10\%, the number of edges in the sampled subgraphs were close to the number of edges in the whole graph.
+     When the relative batch size was 10\%, the number of edges in the sampled subgraphs were close to the number of edges in the whole graph in most datasets.
      %
-     In order to limit the memory usage during inference, the batch size used in inference should be very small.
+     In order to limit the memory usage during inference, the batch size used should be very small.
      
      \begin{figure}[H]
         \centering
-        \includegraphics[width=0.6\columnwidth]{../figs/experiments/exp_inference_graph_info_edges}
-        \caption{Number of edges in the sampled subgraphs produced by the inference sampler under different relative batch sizes.}
+        \subfloat[Average degree]{    \includegraphics[width=0.5\columnwidth]{../figs/experiments/exp_inference_sampling_graph_info_inference_sampler_avg_degrees.pdf}}
+        \subfloat[Number of edges]{    \includegraphics[width=0.5\columnwidth]{../figs/experiments/exp_inference_sampling_graph_info_inference_sampler_edges.pdf}}
+        
+        \caption{Characteristics of the sampled subgraphs produced by the inference sampler under different relative batch sizes.}
         \label{fig:sampled_graph_size}
      \end{figure}
      
-     When the batch size was small, the overheads brought by sampling and data transfering from CPU to GPU became obvious.
+     However, the overheads brought by sampling and data transfering from CPU to GPU became obvious when the batch size was small.
      %
-     Figure~\ref{fig:time_breakdown_of_inference_sampler} (Figure X in the revised manuscript) shows the time breakdown of sample-based inference on different datasets.
+     Figure~\ref{fig:time_breakdown_of_inference_sampler} (Figure X in the revised manuscript) shows the time breakdowns of sample-based inference on different datasets.
      %
-     On the \texttt{amp} and \texttt{cam} datasets, the sampling time could account for near half of the total inference time.
+     On the \texttt{amp} and \texttt{cam} datasets, the sampling time even accounted for near half of the total inference time.
      %
-     The current implementation of inference sampling in PyG was also inefficient.
+     The results indicated that the current implementation of inference sampler in PyG was also inefficient.
      %
      Improving its efficiency could significantly reduce the inference time.
      
