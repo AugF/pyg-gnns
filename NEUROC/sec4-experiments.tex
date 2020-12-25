@@ -183,7 +183,7 @@ Generally speaking, higher model complexity brought more powerful representation
 
 To evaluate the effects of hyper-parameters on accuracy, we measured the accuracy of the typical GNNs with varying hyper-parameters.
 %
-\figurename~\ref{fig:exp_hyperparameter_accuracy} (in the reply) shows the experimental results.
+\figurename~\ref{fig:exp_hyperparameter_accuracy} shows the experimental results.
 %
 For GCN, its accuracy was sensitive to the dimension of hidden vectors $dim(\MyVec{h}^1_x)$.
 %
@@ -904,7 +904,7 @@ Since the size of the sampled subgraph was much smaller than the original graph,
 %
 To find out how the batch size affected the test accuracy, we trained GNNs with different batch sizes.
 %
-\figurename~\ref{fig:exp_sampling_relative_batch_size_accuracy_graphsage} (in the reply) and \figurename~\ref{fig:exp_sampling_relative_batch_size_accuracy_cluster} (in the reply) compare the test accuracy achieved by sampling techniques with the test accuracy of the full-batch training.
+\figurename~\ref{fig:exp_sampling_relative_batch_size_accuracy_graphsage} and \figurename~\ref{fig:exp_sampling_relative_batch_size_accuracy_cluster} compare the test accuracy achieved by sampling techniques with the test accuracy of the full-batch training.
 %
 For each combination of dataset and GNN, we chose the hyper-parameters that achieved the highest accuracy according to the experimental results in Section 4.1.
 
@@ -934,17 +934,17 @@ When the relative batch size was greater than or equal to 3\%, the test accuracy
 %
 In most cases, the accuracy achieved by the sampling techniques was slightly lower than the full-batch training.
 %
-However, there were some exceptions (like GaAN in \figurename~\ref{fig:exp_cluster_sampling_accuracy_on_amp} and \figurename~\ref{fig:exp_cluster_sampling_accuracy_on_amc} in the reply) that the accuracy achieved by sampling was even higher.
+However, there were some exceptions (like GaAN in \figurename~\ref{fig:exp_cluster_sampling_accuracy_on_amp} and \figurename~\ref{fig:exp_cluster_sampling_accuracy_on_amc}) that the accuracy achieved by sampling was even higher.
 
 The relationships between batch size and test accuracy were complex.
 %
 A larger batch size did not always bring higher accuracy.
 %
-For example, the accuracy of GaAN in \figurename~\ref{fig:exp_cluster_sampling_accuracy_on_amp} (in the reply) and GGNN in \figurename~\ref{fig:exp_cluster_sampling_accuracy_on_fli} (in the reply) decreased as the batch size increased.
+For example, the accuracy of GaAN in \figurename~\ref{fig:exp_cluster_sampling_accuracy_on_amp} and GGNN in \figurename~\ref{fig:exp_cluster_sampling_accuracy_on_fli} decreased as the batch size increased.
 %
 A smaller batch size sometimes could achieve higher accuracy.
 %
-For example, GAT achieved a higher accuracy with 1\% relative batch size than the full-batch training in \figurename~\ref{fig:exp_cluster_sampling_accuracy_on_amc} (in the reply).
+For example, GAT achieved a higher accuracy with 1\% relative batch size than the full-batch training in \figurename~\ref{fig:exp_cluster_sampling_accuracy_on_amc}.
 %
 Given a sampling method, we found that the optimal batch size highly depended on the dataset and the GNN algorithm.
 %
