@@ -1,7 +1,7 @@
 \section{Evaluation Results and Analysis}
 \label{sec:experiment_results}
 
-We answer the four questions in Section~\ref{sec:experimental_scheme} one by one with experiments.
+We answered the four questions in Section~\ref{sec:experimental_scheme} one by one with experiments.
 %
 Without otherwise mentioned, the reported training time per epoch was the average wall-clock training time of 50 epochs, excluding abnormal epochs.
 %
@@ -100,13 +100,13 @@ According to the time complexity analysis, if we fixed other hyper-parameters bu
 
 For GAT, we modified the number of heads $K$ and the dimension of each head $d_{head}$ in the GAT layer 0.
 %
-The dimension of $\MyVec{h}^1_x$ is determined as $dim(\boldsymbol{h}^1_x) = K d_{head}$.
+The dimension of $\MyVec{h}^1_x$ was determined as $dim(\boldsymbol{h}^1_x) = K d_{head}$.
 %
 Thus, the computational costs of the GAT layer 0 and the GAT layer 1 should increase linearly with $K$ and $d_{head}$ separately. 
 %
 \figurename~\ref{fig:exp_hyperparameter_on_vertex_edge_phase_time_gat} confirms the theoretical analysis.
 
-For GaAN, it is also based on the multi-head mechanism.
+For GaAN, it was also based on the multi-head mechanism.
 %
 Its time complexity should be affected by $dim(\boldsymbol{h}^1_x)$ ($d^0_{out} = d^1_{in} = dim(\boldsymbol{h}^1_x)$), $d_a$, $d_v$, $d_m$, and the number of heads $K$.
 %
@@ -680,7 +680,7 @@ It indicated that \emph{the intermediate results of the edge calculation stage d
     \label{fig:exp_memory_expansion_ratio_input_graph_number_of_vertices_fixed_edge}
 \end{figure}
 
-\paragraph{Summary of Memory Usage}
+\paragraph{Summary of Memory Usage in Training}
 %
 The \emph{high} memory expansion ratio severely restricted the data scalability of GNN training.
 %
@@ -749,7 +749,7 @@ The number of vertices and the average degree of the sampled subgraphs increased
     \label{fig:exp_sampling_minibatch_graph_info}
 \end{figure}
 
-The average degree of the sampled subgraph was \emph{much lower} than the average degree of the original graph, especially when the relative batch size is low.
+The average degree of the sampled subgraph was \emph{much lower} than the average degree of the original graph, especially when the relative batch size was low.
 %
 Taking the neighbor sampler with the relative batch size of 6\% as an example, the average degree of the \texttt{amp} dataset was 31.1, but the average degree of the sampled subgraph was only 5.8.
 %
@@ -844,7 +844,7 @@ The training time of GaAN increased only when $|\mathcal{V}| \geq 4000$.
     \label{fig:exp_small_graph_train_time}
 \end{figure}
 
-\paragraph{Summary of Sampling Techniques}
+\paragraph{Summary of Sampling Techniques in Training}
 
 The sampled subgraphs had lower average degrees than the original graph.
 %
@@ -906,7 +906,7 @@ To find out how the batch size affected the test accuracy, we trained GNNs with 
 %
 \figurename~\ref{fig:exp_sampling_relative_batch_size_accuracy_graphsage} and \figurename~\ref{fig:exp_sampling_relative_batch_size_accuracy_cluster} compare the test accuracy achieved by sampling techniques with the test accuracy of the full-batch training.
 %
-For each combination of dataset and GNN, we chose the hyper-parameters that achieved the highest accuracy according to the experimental results in Section 4.1.
+For each combination of dataset and GNN, we chose the hyper-parameters that achieved the highest accuracy according to the experimental results in Section 4.1.4.
 
 \begin{figure}[H]
     \centering
@@ -957,3 +957,4 @@ Among the two sampling methods, the performance of the cluster sampler was stabl
 With the cluster sampler, the test accuracy of different GNNs was very close to the accuracy of full-batch training.
 %
 With the neighbor sampler, the test accuracy of different GNNs showed more obvious differences.
+

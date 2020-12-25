@@ -160,17 +160,17 @@ The answers to those questions will give us a more comprehensive view of perform
           %
           We discussed the differences in performance characteristics between training and inference.
 
-    \item[Q3] \emph{Which consumes most of memory in GNN training?} (Section~\ref{sec:memory_usage_analysis})
+    \item[Q3] \emph{Which consumes most of memory in GNN training and inference?} (Section~\ref{sec:memory_usage_analysis})
 
           The limited memory capacity of a GPU prevents us from training GNNs on big graphs.
           %
-          We measured the peak memory usage during GNN training under different graph scales, input feature dimensions, and average degrees.
+          We measured the peak memory usage during GNN training/inference under different graph scales, input feature dimensions, and average degrees.
           %
           Based on the results, we analyzed which was the most memory-consuming component in a GNN.
           %
           Reducing its memory usage will enable us to train GNNs on bigger graphs under the same memory capacity.
 
-    \item[Q4] \emph{Can sampling techniques remove performance bottlenecks in GNN training? Does the use of sampling techniques in training affect the model accuracy?} (Section~\ref{sec:effects_of_sampling_techniques_on_performance})
+    \item[Q4] \emph{Can sampling techniques remove performance bottlenecks in GNN training? What is the performance bottleneck of sample-based inference? Does the use of sampling techniques in training affect the model accuracy? } (Section~\ref{sec:effects_of_sampling_techniques_on_performance})
 
           Theoretically, sampling techniques can significantly reduce the number of graph neurons that participate in the training of a batch.
           %
@@ -184,5 +184,6 @@ The answers to those questions will give us a more comprehensive view of perform
           %
           If they are not effective, we want to find out which impairs its efficiency.
           %
+          % TODO: 补充Sample-based Inference的介绍
 
 \end{itemize}
