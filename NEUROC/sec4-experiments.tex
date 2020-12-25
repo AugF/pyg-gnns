@@ -695,49 +695,25 @@ Fixing the GNN structure and the hyper-parameters, increasing the dimension of i
 %
 To reduce the memory usage of GNN training, optimizations should focus on reducing memory footprints of the edge calculation stage.
 
-% added by wangyunpan, 2020-12-22 ----start----
-\paragraph{Inference Stage Memory Usage Analysis}
+\subsubsection{Memory Usage of Inference}
 
-% 不同点: phase
+Figure~\ref{fig:exp_inference_memory_expansion_ratio} shows the memory expansion ratios of typical GNNs during inference.
+%
+Since no intermediate results had to be cached during inference of GGNN, GAT, and GaAN,
+the memory expansion ratios of inference were much less than training for the three GNNs (\figurename~\ref{fig:exp_memory_expansion_ratio}).
+%
+The MERs of inference were 45\% to 83\% (GGNN), 52\% to 61\% (GAT), and 37\% to 69\% (GaAN) of training.
+%
+However, the MERs were still high, disallowing inferencing with big graphs.
+%
+To handle big graphs, sample-based inference was necessary.
+
 \begin{figure}[H]
-    \centering
-    \includegraphics[height=5cm]{figs/experiments/exp_inference_full_memory_usage_stage_amp.pdf}
-    \caption{Memory usage of each phase during the GNN inference. Dataset: \texttt{amp}.}
-    \label{fig:exp_inference_full_memory_usage_stage_amp}
+   \centering
+   \subfloat{\includegraphics[width=0.5\columnwidth]{figs/experiments/exp_inference_full_memory_expansion_ratio.pdf}}
+   \caption{Memory expansion ratios of typical GNNs in Inference.}
+   \label{fig:exp_inference_memory_expansion_ratio}
 \end{figure}
-
-% 不同点： 膨胀比例
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.5\columnwidth]{figs/experiments/exp_inference_full_memory_expansion_ratio.pdf}
-    \caption{Memory expansion ratios of typical GNNs.}
-    \label{fig:exp_inference_full_memory_expansion_ratio}
-\end{figure}
-
-% 不同点: input feature dims
-\begin{figure}[H]
-    \centering
-    \includegraphics[height=5cm]{figs/experiments/exp_inference_full_memory_expansion_ratio_input_feature_dimension_com-amazon_expansion_ratio.pdf}
-    \caption{Memory expansion ratio under different dimensions of input feature vectors during inference. Dataset: \texttt{cam}.}
-    \label{fig:exp_inference_full_memory_expension_ratio_input_feature_dimension}
-\end{figure}
-
-For the inference stage, we did the same experiment as above. The experimental results were as follows:
-%
-\figurename~\ref{fig:exp_inference_full_memory_usage_stage_amp} shows the peak memory usage of each phase during inference stage.  
-%
-Compared with the results of training stage in \figurename~\ref{fig:exp_memory_usage_stage_amp}, the peak memory usage of inference stage was significantly lower.
-%
-This was because the inference stage didn't require backward propagation and the peak memory was only determined by the temporary variables generated during the computation.
-%
-
-\figurename~\ref{fig:exp_inference_full_memory_expansion_ratio} compares MER of different GNNs on inference stage. 
-%
-We found that The performance of GNNs on all datasets was consistent with the training stage in \figurename~\ref{fig:exp_memory_expansion_ratio}, but the corresponding values were lower.
-%
-
-%
-% added by wangyunpan, 2020-12-22 ----end----
 
 \subsection{Effects of Sampling Techniques on Performance}
 \label{sec:effects_of_sampling_techniques_on_performance}
@@ -943,3 +919,44 @@ With big batch sizes, the current implementation of the sampling techniques in P
 %
 The time spent on the sampling phase and the data transferring phase even exceeded the training phase.
 
+\subsubsection{Performance Bottlenecks in Inference}
+
+Sample-based inference was an effective technique to handle big graphs.
+%
+Taking the node classification task as an example, to predict labels for a given set of vertices $\mathcal{V}_{predict}$, the inference sampler sampled a subgraph containing complete $L$-hop neighborhoods of all vertices in $\mathcal{V}_{predict}$, where $L$ was the number of GNN layers.
+%
+Since the real-world graphs often had small-world property, the size of the sampled subgraph increased quickly as the number of vertices in $\mathcal{V}_{predict}$ (i.e., batch size) increased.
+%
+Figure~\ref{fig:sampled_graph_size} (Figure X in the revised manuscript) shows how the relative batch size ($\frac{|\mathcal{V}_{predict}|}{|\mathcal{V}|}$) affected the average degree and the number of edges of the sampled subgraphs during inference.
+%
+When the relative batch size was 10\%, the number of edges in the sampled subgraphs were close to the number of edges in the whole graph in most datasets.
+%
+In order to limit the memory usage during inference, the batch size used should be very small.
+
+\begin{figure}[H]
+   \centering
+   \subfloat[Average degree]{\includegraphics[width=0.5\columnwidth]{figs/experiments/exp_inference_sampling_graph_info_inference_sampler_avg_degrees.pdf}}
+   \subfloat[Number of edges]{\includegraphics[width=0.5\columnwidth]{figs/experiments/exp_inference_sampling_graph_info_inference_sampler_edges.pdf}}
+   
+   \caption{Characteristics of the sampled subgraphs produced by the inference sampler under different relative batch sizes.}
+   \label{fig:sampled_graph_size}
+\end{figure}
+
+However, the overheads brought by sampling and data transfering from CPU to GPU became obvious when the batch size was small.
+%
+Figure~\ref{fig:time_breakdown_of_inference_sampler} shows the time breakdowns of sample-based inference on different datasets.
+%
+On the \texttt{amp} and \texttt{cam} datasets, the sampling time even accounted for near half of the total inference time.
+%
+The results indicated that the current implementation of inference sampler in PyG was also inefficient.
+%
+Improving its efficiency could significantly reduce the inference time.
+
+
+\begin{figure}[H]
+   \centering
+   \subfloat[Batch Size = 1024]{\includegraphics[width=0.5\columnwidth]{figs/experiments/exp_inference_sampling_fix_batch_size_train_time_stack_1024.pdf}}
+   \subfloat[Batch Size = 2048]{\includegraphics[width=0.5\columnwidth]{figs/experiments/exp_inference_sampling_fix_batch_size_train_time_stack_2048.pdf}}
+   \caption{Inference time per batch breakdown under different batch sizes.}
+   \label{fig:time_breakdown_of_inference_sampler}
+\end{figure}
