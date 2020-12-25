@@ -172,21 +172,24 @@ For the other GNNs, we observed similar phenomena.
 
 \subsubsection{Effects on Accuracy}
 
-The relationship between hyper-parameters of GNNs (i.e., model complexity) and accuracy is very complicated, and there is no clear theoretical analysis yet.
 %
-Generally speaking, higher model complexity can bring powerful representation capability and may bring higher accuracy, but it also increases the risk of overfitting.
+The values of hyper-parameters determined the model complexity of a GNN.
 %
-To evaluate the effects of hyper-parameters on accuracy, we measured the accuracy of the four typical GNNs under different hyper-parameters.
+The relationship between model complexity and accuracy was complex.
 %
-\figurename~\ref{fig:exp_hyperparameter_accuracy} shows the experimental results.
+%As far as we know, there is little theoretical analysis yet.
+%
+Generally speaking, higher model complexity brought more powerful representation capability and might bring higher accuracy, but it also increased the risk of overfitting.
 
-For GCN, the accuracy was sensitive to the dimension of hidden vectors $dim(\MyVec{h}^1_x)$.
+To evaluate the effects of hyper-parameters on accuracy, we measured the accuracy of the typical GNNs with varying hyper-parameters.
+%
+\figurename~\ref{fig:exp_hyperparameter_accuracy} (in the reply) shows the experimental results.
+%
+For GCN, its accuracy was sensitive to the dimension of hidden vectors $dim(\MyVec{h}^1_x)$.
 %
 As $dim(\MyVec{h}^1_x)$ increased, the accuracy first increased quickly and then stabilized when $dim(\MyVec{h}_x^1) \geq 8$.
 %
-For GGNN, its accuracy curves showed similar trends as GCN.
-%
-However, GGNN was more sensitive to $dim(\MyVec{h}_x^1)$ than GCN.
+For GGNN, its accuracy curves showed similar trends as GCN, but GGNN was more sensitive to $dim(\MyVec{h}_x^1)$ than GCN.
 %
 Its accuracy even decreased when $dim(\MyVec{h}_x^1) \geq 1024$.
 %
@@ -196,11 +199,11 @@ For GAT, its accuracy was more sensitive to the dimension of each head $d_{head}
 %
 For GaAN, only $dim(\MyVec{h}_x^1)$ showed obvious impacts on accuracy.
 %
-The experimental results indicated the accuracy of the GNNs was often low when $dim(\MyVec{h}_x^1)$ (for GCN/GGNN/GaAN) or $d_{head}$ (for GAT) was small.
+The experimental results indicated that the accuracy of the GNNs was often low when $dim(\MyVec{h}_x^1)$ (for GCN/GGNN/GaAN) or $d_{head}$ (for GAT) was too low.
 %
-In those cases, the low model complexity limited the expressive power of the GNNs.
+%The low model complexity limited the representation capability of the GNNs.
 %
-As $dim(\MyVec{h}_x^1)$ or $d_{head}$ increased to a certain threshold, the GNNs had sufficient learning ability to achieve stable accuracy.
+As $dim(\MyVec{h}_x^1)$ or $d_{head}$ increased to a certain threshold, the GNNs gained sufficient learning ability to achieve stable accuracy.
 
 \begin{figure}[H]
     \centering
@@ -212,28 +215,22 @@ As $dim(\MyVec{h}_x^1)$ or $d_{head}$ increased to a certain threshold, the GNNs
     \label{fig:exp_hyperparameter_accuracy}
 \end{figure}
 
-%\begin{figure}[H]
-    %\centering
-    %\includegraphics[width=0.5\columnwidth]{figs/experiments/exp_hyperparameter_on_accuracy_gat_small_info.pdf}
-    %\caption{Effects of the number of heads on GAT ($d_{head}$=2,4)}
-    %\label{fig:exp_hyperparameter_accuracy_gat_small_info}
-%\end{figure}
-
-\figurename~\ref{fig:exp_hyperparameter_on_accuracy_alg_contrast} compares the best accuracy that each GNN achieved on different datasets.
+\figurename~\ref{fig:exp_hyperparameter_on_accuracy_alg_contrast} further compares the best accuracy that each GNN could achieve on different datasets.
 %
-The best accuracy that the four GNNs achieved was very close.
+The best accuracy of the typical GNNs was very close.
 %
-It was also close to the accuracy reported in their original references \cite{shchur2018_pitfall_of_gnn, zeng2020_graphsaint}.
 %
-There was no clear winner in terms of accuracy.
+It was also close to the accuracy reported in their original references [34, 31].
+%
+The results indicated that there was no clear winner.
 %
 The relative accuracy between GNNs varied greatly with different datasets.
 %
 GaAN achieved the highest accuracy in three out of five datasets.
 %
-GCN also achieved the highest or second highest accuracy in three out of five datasets, though its model was simplest.
+GCN achieved the highest or second highest accuracy in three out of five datasets, though its model was simplest.
 %
-It indicated that simple GNN models (such as GCN) could still achieve good accuracy with proper hyper-parameter settings.
+Simple GNN models (such as GCN) could still achieve good accuracy with proper hyper-parameter settings.
 
 \begin{figure}[H]
     \centering
@@ -775,13 +772,13 @@ According to the experimental results in Section~\ref{sec:training_time_breakdow
 
 \subsubsection{Effects on Accuracy}
 
-Since the size of sampled subgraph was much smaller than the original graph, it might affect the accuracy of the trained GNNs.
+Since the size of the sampled subgraph was much smaller than the original graph, the accuracy of the GNN models got by sampling techniques might be different from the full-batch training.
 %
-To find out how the batch size affected the accuracy, we trained GNNs under different batch sizes.
+To find out how the batch size affected the test accuracy, we trained GNNs with different batch sizes.
 %
-\figurename~\ref{fig:exp_sampling_relative_batch_size_accuracy_graphsage} and \figurename~\ref{fig:exp_sampling_relative_batch_size_accuracy_cluster} compare their accuracy with the cases that we used the full graph participated in the training.
+\figurename~\ref{fig:exp_sampling_relative_batch_size_accuracy_graphsage} (in the reply) and \figurename~\ref{fig:exp_sampling_relative_batch_size_accuracy_cluster} (in the reply) compare the test accuracy achieved by sampling techniques with the test accuracy of the full-batch training.
 %
-For each dataset and each GNN, we chose the hyper-parameters that achieved the highest accuracy according to the experimental results in Section~\ref{sec:effects_of_hyper-parameters_on_performance}.
+For each combination of dataset and GNN, we chose the hyper-parameters that achieved the highest accuracy according to the experimental results in Section 4.1.
 
 \begin{figure}[H]
     \centering
@@ -803,35 +800,35 @@ For each dataset and each GNN, we chose the hyper-parameters that achieved the h
     \label{fig:exp_sampling_relative_batch_size_accuracy_cluster}
 \end{figure}
 
-The experimental results confirmed the effectiveness of the sampling methods in terms of model accuracy.
+The experimental results confirmed the effectiveness of the sampling methods in terms of accuracy.
 %
-When the relative batch size was greater than or equal to 3\%, the accuracy of the model trained by sampling was close to the accuracy obtained by full-graph training.
+When the relative batch size was greater than or equal to 3\%, the test accuracy of the GNNs trained with sampling was close to the accuracy obtained by full-batch training.
 %
-In most cases, the accuracy achieved by the sampling methods was slightly lower than the full-graph training.
+In most cases, the accuracy achieved by the sampling techniques was slightly lower than the full-batch training.
 %
-However, there were some exceptions (like GaAN in \figurename~\ref{fig:exp_cluster_sampling_accuracy_on_amp} and \figurename~\ref{fig:exp_cluster_sampling_accuracy_on_amc}), the accuracy achieved by sampling methods was even higher.
+However, there were some exceptions (like GaAN in \figurename~\ref{fig:exp_cluster_sampling_accuracy_on_amp} and \figurename~\ref{fig:exp_cluster_sampling_accuracy_on_amc} in the reply) that the accuracy achieved by sampling was even higher.
 
-The relationships between batch size and accuracy were complex.
+The relationships between batch size and test accuracy were complex.
 %
-A large batch size did not always bring high accuracy.
+A larger batch size did not always bring higher accuracy.
 %
-For example, the accuracy of GaAN in \figurename~\ref{fig:exp_cluster_sampling_accuracy_on_amp} and GGNN in \figurename~\ref{fig:exp_cluster_sampling_accuracy_on_fli} decreased as the batch size increased.
+For example, the accuracy of GaAN in \figurename~\ref{fig:exp_cluster_sampling_accuracy_on_amp} (in the reply) and GGNN in \figurename~\ref{fig:exp_cluster_sampling_accuracy_on_fli} (in the reply) decreased as the batch size increased.
 %
-A small batch size sometimes could achieve higher accuracy.
+A smaller batch size sometimes could achieve higher accuracy.
 %
-For example, in \figurename~\ref{fig:exp_cluster_sampling_accuracy_on_amc}, the accuracy of GAT under 1\% relative batch size was even higher than the accuracy of the full-graph training.
+For example, GAT achieved a higher accuracy with 1\% relative batch size than the full-batch training in \figurename~\ref{fig:exp_cluster_sampling_accuracy_on_amc} (in the reply).
 %
 Given a sampling method, we found that the optimal batch size highly depended on the dataset and the GNN algorithm.
 %
-Our observations were similar to \cite{zeng2020_graphsaint}.
+Our observations were similar to [31].
 %
-How to automatically select the proper batch size is a topic worth further studying.
+How to automatically select a proper batch size is a topic worth further studying.
 
 Among the two sampling methods, the performance of the cluster sampler was stabler than the neighbor sampler.
 %
-With the cluster sampler, the model accuracy of different GNNs was very close to the accuracy of full-graph training.
+With the cluster sampler, the test accuracy of different GNNs was very close to the accuracy of full-batch training.
 %
-With the neighbor sampler, the model accuracy of different GNNs showed more obvious differences.
+With the neighbor sampler, the test accuracy of different GNNs showed more obvious differences.
 
 \subsubsection{Performance Bottlenecks Analysis}
 
