@@ -19,7 +19,7 @@ The hyper-parameters of a GNN (such as the dimensions of hidden vectors and the 
 They affected the training/inference time, memory usage, and accuracy of the GNN at the same time.
 
 
-\paragraph{Effects on Training Time}
+\subsubsection{Effects on Training Time}
 
 According to \tablename~\ref{tab:gnn_overview_edge} and \tablename~\ref{tab:gnn_overview_vertex}, the time complexity of the messaging function $\phi^l$ and the updating function $\gamma^l$ are linear to each hyper-parameter separately.
 %
@@ -117,7 +117,7 @@ When the values of hyper-parameters were too low, GNN training could not make fu
 %
 When the values of hyper-parameters became high enough, training time increased linearly, supporting the time complexity analysis.
 
-\paragraph{Effects on Inference Time}
+\subsubsection{Effects on Inference Time}
 
 For all GNNs, we found that the effects of hyper-parameters on the inference time were the same as the training time.
 %
@@ -137,7 +137,7 @@ The results indicated that the complexity analysis presented in \tablename~\ref{
 \end{figure}
 
 
-\paragraph{Effects on Peak Memory Usage}
+\subsubsection{Effects on Peak Memory Usage}
 
 We further measured the effects of the hyper-parameters on the peak GPU memory usage during training in \figurename~\ref{fig:exp_hyperparameter_memory_usage}.
 %
@@ -170,7 +170,7 @@ For the other GNNs, we observed similar phenomena.
     \label{fig:exp_inference_hyperparameter_memory_usage_gat}
 \end{figure}
 
-\paragraph{Effects on Accuracy}
+\subsubsection{Effects on Accuracy}
 
 The relationship between hyper-parameters of GNNs (i.e., model complexity) and accuracy is very complicated, and there is no clear theoretical analysis yet.
 %
