@@ -40,8 +40,8 @@
 
 \newtcolorbox{zitat}[2][]{%
     colback=block-gray,
-    grow to right by=-10mm,
-    grow to left by=-10mm, 
+    grow to right by=-5mm,
+    grow to left by=-5mm, 
     boxrule=0pt,
     boxsep=0pt,
     breakable,
@@ -50,7 +50,7 @@
     title={#2\par},
     colbacktitle={block-gray},
     coltitle={black},
-    fonttitle={\large\bfseries},
+    fonttitle={\bfseries},
     attach title to upper={},
     #1,
 }
@@ -547,16 +547,97 @@ There are some grammar errors and typos:
 
     In this reply, we focus on the first kind of experiments added in Section 4.1.
     %
-    We will introduce our results of the second kind of experiments in the nextR reply.
+    We will introduce our results of the second kind of experiments in the next reply.
 
-    In the revised manuscript, we added an extra paragraph ``Effects on Accuracy'' at the end of Section 4.1 ``Effects of Hyper-parameters on Performance'' to analyze how the hyper-parameters affect the accuracy.
+    Hyper-parameters determined the model complexity of a GNN.
     %
-    We had two main findings: (1) the accuracy of GNNs was much more sensitive to the dimension of hidden vectors $dim(\MyVec{h}^1_x)$ (for GCN/GGNN/GaAN) and the dimension of each head $d_{head}$ (for GAT) than the other hyper-parameters; (2) the relative accuracy between the four typical GNNs varied greatly with different datasets.
+    Generally speaking, higher values of hyper-parameters brought higher model complexity, affecting model accuracy.
     %
-    We quote the related paragraphs from the revised manuscript below:
+    In the revised manuscript, we added extra paragraphs ``Effects on Accuracy'' at the end of Section 4.1 ``Effects of Hyper-parameters on Performance'' to analyze how the hyper-parameters affect the accuracy.
+    %
+    We had two main findings.
+    %
+    First, the accuracy of GNNs was much more sensitive to the dimension of hidden vectors $dim(\MyVec{h}^1_x)$ (for GCN/GGNN/GaAN) and the dimension of each head $d_{head}$ (for GAT) than the other hyper-parameters.
+    %
+    Second, the relative accuracy between the four typical GNNs varied greatly with different datasets.
+    %
+    We quote the related paragraphs from the revised manuscript below.
 
-    \begin{myquote}{To add the source from manuscript}
-            %%% TO ADD QUOTE %%%
+    \begin{myquote}{Section 4.1 ``Effects of Hyper-parameters on Performance''}
+    %
+    \emph{Effects on Accuracy}.
+    %
+    The relationship between hyper-parameters of GNNs (i.e., model complexity) and accuracy is very complicated, and there is no clear theoretical analysis yet.
+    %
+    Generally speaking, higher model complexity can bring powerful representation capability and may bring higher accuracy, but it also increases the risk of overfitting.
+    %
+    To evaluate the effects of hyper-parameters on accuracy, we measured the accuracy of the four typical GNNs under different hyper-parameters.
+    %
+    \figurename~\ref{fig:exp_hyperparameter_accuracy} shows the experimental results.
+    
+    For GCN, the accuracy was sensitive to the dimension of hidden vectors $dim(\MyVec{h}^1_x)$.
+    %
+    As $dim(\MyVec{h}^1_x)$ increased, the accuracy first increased quickly and then stabilized when $dim(\MyVec{h}_x^1) \geq 8$.
+    %
+    For GGNN, its accuracy curves showed similar trends as GCN.
+    %
+    However, GGNN was more sensitive to $dim(\MyVec{h}_x^1)$ than GCN.
+    %
+    Its accuracy even decreased when $dim(\MyVec{h}_x^1) \geq 1024$.
+    %
+    Since GGNN had high model complexity (with 13 weight matrices/vectors to train), GGNN might occur overfitting in those cases.
+    %
+    For GAT, its accuracy was more sensitive to the dimension of each head $d_{head}$ than the number of heads.
+    %
+    For GaAN, only $dim(\MyVec{h}_x^1)$ showed obvious impacts on accuracy.
+    %
+    The experimental results indicated the accuracy of the GNNs was often low when $dim(\MyVec{h}_x^1)$ (for GCN/GGNN/GaAN) or $d_{head}$ (for GAT) was small.
+    %
+    In those cases, the low model complexity limited the expressive power of the GNNs.
+    %
+    As $dim(\MyVec{h}_x^1)$ or $d_{head}$ increased to a certain threshold, the GNNs had sufficient learning ability to achieve stable accuracy.
+    
+    \begin{figure}[H]
+        \centering
+        \subfloat[GCN]{\includegraphics[width=0.3\columnwidth]{../figs/experiments/exp_hyperparameter_on_accuracy_gcn.pdf}}
+        \subfloat[GGNN]{\includegraphics[width=0.3\columnwidth]{../figs/experiments/exp_hyperparameter_on_accuracy_ggnn.pdf}}\\
+        \subfloat[GAT]{\includegraphics[width=0.6\columnwidth]{../figs/experiments/exp_hyperparameter_on_accuracy_gat.pdf}}\\
+        \subfloat[GaAN]{\includegraphics[width=0.9\columnwidth]{../figs/experiments/exp_hyperparameter_on_accuracy_gaan.pdf}}
+        \caption{Effects of hyper-parameters on accuracy of the typical GNNs.}
+        \label{fig:exp_hyperparameter_accuracy}
+    \end{figure}
+    
+    %\begin{figure}[H]
+        %\centering
+        %\includegraphics[width=0.5\columnwidth]{figs/experiments/exp_hyperparameter_on_accuracy_gat_small_info.pdf}
+        %\caption{Effects of the number of heads on GAT ($d_{head}$=2,4)}
+        %\label{fig:exp_hyperparameter_accuracy_gat_small_info}
+    %\end{figure}
+    
+    \figurename~\ref{fig:exp_hyperparameter_on_accuracy_alg_contrast} compares the best accuracy that each GNN achieved on different datasets.
+    %
+    The best accuracy that the four GNNs achieved was very close.
+    %
+    It was also close to the accuracy reported in their original references [1][4][6][7].
+    %
+    There was no clear winner in terms of accuracy.
+    %
+    The relative accuracy between GNNs varied greatly with different datasets.
+    %
+    GaAN achieved the highest accuracy in three out of five datasets.
+    %
+    GCN also achieved the highest or second highest accuracy in three out of five datasets, though its model was simplest.
+    %
+    It indicated that simple GNN models (such as GCN) could still achieve good accuracy with proper hyper-parameter settings.
+    
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=3in]{../figs/experiments/exp_hyperparameter_on_accuracy_alg_contrast.pdf}
+        \caption{Best accuracy that each GNN achieved on different datasets.}
+        \label{fig:exp_hyperparameter_on_accuracy_alg_contrast}
+    \end{figure}
+    
+
     \end{myquote}
 \end{reply}
 
@@ -565,6 +646,10 @@ There are some grammar errors and typos:
 \end{point}
 
 \begin{reply}
+
+    Thank you for your insightful comment and valuable suggestion.
+    %
+    
     
 \end{reply}
 
