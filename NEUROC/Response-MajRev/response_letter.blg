@@ -1,11 +1,12 @@
 This is BibTeX, Version 0.99d (TeX Live 2019/W32TeX)
 Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
 The top-level auxiliary file: response_letter.aux
+I found no \citation commands---while reading file response_letter.aux
 I found no \bibdata command---while reading file response_letter.aux
 I found no \bibstyle command---while reading file response_letter.aux
-You've used 4 entries,
+You've used 0 entries,
             0 wiz_defined-function locations,
-            87 strings with 583 characters,
+            83 strings with 504 characters,
 and the built_in function-call counts, 0 in all, are:
 = -- 0
 > -- 0
@@ -44,4 +45,4 @@ warning$ -- 0
 while$ -- 0
 width$ -- 0
 write$ -- 0
-(There were 2 error messages)
+(There were 3 error messages)
