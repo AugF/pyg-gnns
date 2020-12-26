@@ -78,8 +78,7 @@
 \renewcommand{\thepoint}{P\,\thereviewer.\arabic{point}} 
 
 % command declarations for reviewer points and our responses
-\newcommand{\reviewersection}{\stepcounter{reviewer} \bigskip \hrule
-                  \section*{Reviewer \thereviewer}}
+\newcommand{\reviewersection}{\stepcounter{reviewer} \bigskip \hrule \setcounter{figure}{0}\section*{Reviewer \thereviewer}}
 
 \newenvironment{point}
    {\refstepcounter{point} \bigskip \noindent {\textbf{Reviewer~Point~\thepoint} } ---\ \begin{sf}}
@@ -95,6 +94,9 @@
 \newcommand{\shortreply}[2][]{\medskip \noindent \textbf{Reply}:\  #2
 	\ifthenelse{\equal{#1}{}}{}{ \hfill \footnotesize (#1)}%
 	\medskip}
+
+% Numbering figures according to reviewers
+\renewcommand{\thefigure}{\thereviewer{}.\arabic{figure}}
 
 \begin{document}
 
@@ -153,39 +155,39 @@ TODO
     
     In order to facilitate readers to quickly locate the meaning of  symbols, we have added Table~\ref{tab:symbols} at the beginning of Section 2 ``Review of Graph Neural Networks'' in the revised manuscript.
     
-    \begin{table}[H]
-        \footnotesize
-        \caption{Frequently-used Symbols}
-        \label{tab:symbols}
-        \centering
-        \begin{tabular}{p{3em}lp{35em}}
-            \toprule
-            Category & Symbol & Meaning \\
-            \midrule
-            \multirow[c]{4}{3em}{Graph Structure}& $\mathcal{G}=(\mathcal{V}, \mathcal{E})$ & The simple undirected input graph with the vertex set $\mathcal{V}$ and the edge set $\mathcal{E}$. \\
-            & $v_x$ & The $x$-th vertex of the input graph. \\
-            & $e_{y,x}$ & The edge pointing from $v_y$ to $v_x$ of the input graph. \\
-            & $\mathcal{N}(v_x)$ & The adjacency set of $v_x$ in the input graph. \\ 
-            & $\bar{d}$ & The average degree of the input graph. \\ \midrule
-            \multirow[c]{6}{3em}{GNN Definition}& $L$ & The number of GNN layers. \\
-            & $K$ & The number of heads in a GNN layer. \\
-            & $\phi^l$ & The messaging function of the GNN layer $l$. \\
-            & $\Sigma^l$ & The aggregation function of the GNN layer $l$. \\
-            & $\gamma^l$ & The vertex updating function of the GNN layer $l$. \\ 
-            & $\phi^{l,i}$ / $\Sigma^{l,i}$ / $\gamma^{l,i}$ & The messaging/aggregation/updating function of the $i$-th sub-layer of the GNN layer  $l$.\\
-            & $\textcolor{blue}{\boldsymbol{W}^l, \boldsymbol{W}^{(k)}/\boldsymbol{b}, \boldsymbol{a}}$ & The matrices/vectors represented by the blue characters are the weight matrices/vectors that need to be learned in the GNN. \\  \midrule
-            \multirow[c]{8}{3em}{Vector}& $\boldsymbol{v}_x$ & The feature vector of the vertex $v_x$. \\
-            & $\boldsymbol{e}_{y,x}$ & The feature vector of the edge $e_{y,x}$.  \\
-            & $\boldsymbol{h}_x^{l}$ &  The {input} hidden vector of the graph neuron corresponding to $v_x$ in the GNN layer $l$. \\
-            & $\boldsymbol{h}_x^{l+1}$ &  The {output} hidden vector of the graph neuron corresponding to $v_x$ in the GNN layer $l$.\\
-            & $\boldsymbol{m}_{y,x}^l$ & The message vector of the edge $e_{y,x}$ outputted by $\phi^l$ of the GNN layer $l$. \\
-            & $\boldsymbol{s}_{x}^l$ & The aggregated vector of the vertex $v_x$ outputted by $\Sigma^l$ of the GNN layer $l$. \\
-            & $\boldsymbol{h}_{x}^{l,i}$ / $\boldsymbol{m}_{y,x}^{l,i}$ / $\boldsymbol{s}_{x}^{l,i}$ & The hidden/message/aggregated vector of the vertex $v_x$ outputted by $\gamma^{l,i}$/$\phi^{l,i}$/$\Sigma^{l,i}$ of the $i$-th sub-layer of the GNN layer $l$. \\
-            & $d^l_{in}$, $d^l_{out}$ &  The dimension of the input/output hidden vectors of the GNN layer $l$. \\
-            & $dim(\MyVec{x})$ & The dimension of a vector $\MyVec{x}$. \\
-            \bottomrule
-        \end{tabular}
-\end{table}
+%    \begin{table}[H]
+%        \footnotesize
+%        \caption{Frequently-used Symbols}
+%        \label{tab:symbols}
+%        \centering
+%        \begin{tabular}{p{3em}lp{35em}}
+%            \toprule
+%            Category & Symbol & Meaning \\
+%            \midrule
+%            \multirow[c]{4}{3em}{Graph Structure}& $\mathcal{G}=(\mathcal{V}, \mathcal{E})$ & The simple undirected input graph with the vertex set $\mathcal{V}$ and the edge set $\mathcal{E}$. \\
+%            & $v_x$ & The $x$-th vertex of the input graph. \\
+%            & $e_{y,x}$ & The edge pointing from $v_y$ to $v_x$ of the input graph. \\
+%            & $\mathcal{N}(v_x)$ & The adjacency set of $v_x$ in the input graph. \\ 
+%            & $\bar{d}$ & The average degree of the input graph. \\ \midrule
+%            \multirow[c]{6}{3em}{GNN Definition}& $L$ & The number of GNN layers. \\
+%            & $K$ & The number of heads in a GNN layer. \\
+%            & $\phi^l$ & The messaging function of the GNN layer $l$. \\
+%            & $\Sigma^l$ & The aggregation function of the GNN layer $l$. \\
+%            & $\gamma^l$ & The vertex updating function of the GNN layer $l$. \\ 
+%            & $\phi^{l,i}$ / $\Sigma^{l,i}$ / $\gamma^{l,i}$ & The messaging/aggregation/updating function of the $i$-th sub-layer of the GNN layer  $l$.\\
+%            & $\textcolor{blue}{\boldsymbol{W}^l, \boldsymbol{W}^{(k)}/\boldsymbol{b}, \boldsymbol{a}}$ & The matrices/vectors represented by the blue characters are the weight matrices/vectors that need to be learned in the GNN. \\  \midrule
+%            \multirow[c]{8}{3em}{Vector}& $\boldsymbol{v}_x$ & The feature vector of the vertex $v_x$. \\
+%            & $\boldsymbol{e}_{y,x}$ & The feature vector of the edge $e_{y,x}$.  \\
+%            & $\boldsymbol{h}_x^{l}$ &  The {input} hidden vector of the graph neuron corresponding to $v_x$ in the GNN layer $l$. \\
+%            & $\boldsymbol{h}_x^{l+1}$ &  The {output} hidden vector of the graph neuron corresponding to $v_x$ in the GNN layer $l$.\\
+%            & $\boldsymbol{m}_{y,x}^l$ & The message vector of the edge $e_{y,x}$ outputted by $\phi^l$ of the GNN layer $l$. \\
+%            & $\boldsymbol{s}_{x}^l$ & The aggregated vector of the vertex $v_x$ outputted by $\Sigma^l$ of the GNN layer $l$. \\
+%            & $\boldsymbol{h}_{x}^{l,i}$ / $\boldsymbol{m}_{y,x}^{l,i}$ / $\boldsymbol{s}_{x}^{l,i}$ & The hidden/message/aggregated vector of the vertex $v_x$ outputted by $\gamma^{l,i}$/$\phi^{l,i}$/$\Sigma^{l,i}$ of the $i$-th sub-layer of the GNN layer $l$. \\
+%            & $d^l_{in}$, $d^l_{out}$ &  The dimension of the input/output hidden vectors of the GNN layer $l$. \\
+%            & $dim(\MyVec{x})$ & The dimension of a vector $\MyVec{x}$. \\
+%            \bottomrule
+%        \end{tabular}
+%\end{table}
 
 \end{reply}
 
@@ -270,13 +272,17 @@ There are some grammar errors and typos:
     
     \item In Section 4.2 ``Time Breakdown Analysis'', we additionaly conduct time breakdown analysis for GNN inference and compare the similarites and differences between training and inference.
     %
-    As for the similarities, we find that the performance characteristics of inference are highly similar to training on the layer level and the step level of edge calculation.
+    As for the similarities, we find that the performance characteristics of inference and training are highly similar on the layer level and the step level of edge calculation.
     %
     The edge calculation stage is the main performance bottleneck for both training and inference.
     %
-    The specific performance bottlenecks of the edge calculation stage depend on the time complexity of the messaging function $\phi$ of the GNN.
+    %The specific performance bottlenecks of the edge calculation stage depend on the time complexity of the messaging function $\phi$ of the GNN.
     %
-    The differences between training and inference were mainly reflected in two aspects: the elapsed time and the top time-consuming basic operators.
+    As for the differences, training and inference are different mainly in two aspects: the elapsed time and the top time-consuming basic operators.
+    %
+    The inference time is much less than the training time.
+    %
+    The top time-consuming basic operators used in the backward phase of training are replaced by the basic operators used in the prediction layer of inference.
     %
     The inference time is 34\% (GCN), 32\% (GGNN), 25\% (GAT), and 32\% (GaAN) of the training time on average, as shown in Figure~\ref{fig:compare_wall_clock_time_of_training_and_inference}.
     %
@@ -311,13 +317,13 @@ There are some grammar errors and typos:
     %
     We find that the memory usage of inference also mainly comes from the edge calculation stage, same as training.
     %
-    Compared with training, the memory expansion ratios of inference are much less, as shown by Figure~\ref{fig:compare_memory_expasion_ratio}.
+    However, the memory expansion ratios of inference are much less than training.
     %
-    The memory expansion ratios of inference are 45\% to 83\% (GGNN), 52\% to 61\% (GAT), and 37\% to 69\% (GaAN) of training.
+    The memory expansion ratios of inference are 45\% to 83\% (GGNN), 52\% to 61\% (GAT), and 37\% to 69\% (GaAN) of training, as indicated by Figure~\ref{fig:compare_memory_expasion_ratio}.
     %
     GGNN, GAT and GaAN have to cache some intermediate results during training, the memory space of those results is saved during inference.
     %
-    However, the memory expansion ratios of inference are still high, preventing us from inferencing on big graphs.
+    However, the memory expansion ratios of inference are still high, preventing us from inferencing with big graphs.
     %
     More details are available in Section 4.3.2 ``Memory Usage of Inference'' in the revised manuscript.
     
@@ -330,14 +336,19 @@ There are some grammar errors and typos:
     
     \item In Section 4.4 ``Effects of Sampling Techniques on Performance'', we additionally conduct experiments to analyze performance bottlenecks in sample-based inference.
     %
+    We find that the batch size used in inference should be smaller than training to avoid the out of memory exception on the GPU side.
+    %
+    The current implementation of the sampler used in inference in PyG is still inefficient.
+    %
+    The overheads of sampling and data transfering are significant in the total inference time.
+    %
     Under the same batch size, we find that the subgraph sampler used in inference tends to produce larger subgraphs than the neighbor sampler used in training.
     %
-    Thus, the batch size used in inference should be small to avoid the out of memory exception on the GPU side.
-    However, the overheads brought by sampling and data transfering from CPU to GPU become obvious when the batch size was small.
+    Thus, the batch size must be small to avoid the out of memory exception on the GPU side.
+    %
+    At the same time, the overheads brought by sampling and data transfering from CPU to GPU become obvious when the batch size was small.
     %
     They account for near half of the total inference time on the \texttt{amp} and \texttt{cam} datasets, as shown in Figure~\ref{fig:time_breakdown_of_inference_sampler}.
-    %
-    The results indicate that the current implementation of inference sampler in PyG is still inefficient.
     %
     We present more details of our experimental analysis in the ``Inference Time'' paragraph of Section 4.4.3 ``Performance Bottlenecks in Inference''
     
@@ -417,13 +428,15 @@ There are some grammar errors and typos:
     %
     Figure~\ref{fig:effect_of_hyper_parameter_on_accuracy_of_gaan} shows the results of GaAN.
     %
-    More results are available in Section 4.1.4 ``Effects on Accuracy'' in the revised manuscript.
-    %
-    The accuracy of the four GNNs is low when the dimensions are very low ($\leq 8$).
+    The accuracy of GaAN is low when the dimensions are very low ($\leq 8$).
     %
     As the dimensions increase to a certain threshold, the GNNs gain sufficient representation capability to achieve good accuracy.
     %
-    But very high dimensions ($\geq 2048$) are also harmful to accuracy in some cases, as they increase the risk of overfitting.
+    But high dimensions ($\geq 2048$) are also harmful to accuracy on the \texttt{amp} dataset, as they increase the risk of overfitting.
+    %
+    The results of the other GNNs are available in Section 4.1.4 ``Effects on Accuracy'' in the revised manuscript.
+    %
+   
     
     \begin{figure}[h]
         \includegraphics[width=1.0\columnwidth]{../figs/experiments/exp_hyperparameter_on_accuracy_gaan.pdf}
@@ -434,15 +447,15 @@ There are some grammar errors and typos:
    
     Second, the relative accuracy between the four GNNs varies greatly with different datasets.
     %
+    There is no clear winner.
+    %
     We compare the best accuracy that each GNN achives on every dataset in Figure~\ref{fig:exp_hyperparameter_on_accuracy_alg_contrast}.
     %
     The best accuracy of the four GNNs are very close.
     %
     It is also close to the accuracy reported in [\cite{shchur2018_pitfall_of_gnn, zeng2020_graphsaint}].
     %
-    There is no clear winner in terms of accuracy.
-    %
-    GaAN that has the highest complexity performs slightly better than the other GNNs.
+    GaAN that has the highest complexity performs slightly better than the other GNNs, winning three out of five datasets.
     %
     Simple GNN models (such as GCN) can still achieve good acuuracy with proper hyper-parameter settings.
     
@@ -466,31 +479,35 @@ There are some grammar errors and typos:
 
     Thanks for the insightful comment.
     %
-    %The sampling methods indeed affect the test accuracy of GNN models [\cite{hamilton2017_graphsage, chiang2019_cluster_gcn, zeng2020_graphsaint}].
+    The sampling methods indeed affect the test accuracy of GNN models [\cite{hamilton2017_graphsage, chiang2019_cluster_gcn, zeng2020_graphsaint}].
     %
-    With or without the sampling methods, the structure of the GNN remains the same, but the gradients of the model parameters are calculated differently, affecting the accuracy of the GNN model.
+    %With or without the sampling methods, the structure of the GNN remains the same, but the gradients of the model parameters are calculated differently, affecting the accuracy of the GNN model.
     %
-    With sampling, each GNN layer still consists of $|\mathcal{V}|$ graph neurons ($|\mathcal{V}|$ is the number of vertices in the graph), but only graph neurons corresponding to the vertices in the sampled subgraph are activated.
+    %With sampling, each GNN layer still consists of $|\mathcal{V}|$ graph neurons ($|\mathcal{V}|$ is the number of vertices in the graph), but only graph neurons corresponding to the vertices in the sampled subgraph are activated.
     %
-    Thus, the model parameters are updated according to the gradients calculated on the sampled subgraph, instead of the whole graph.
+    %Thus, the model parameters are updated according to the gradients calculated on the sampled subgraph, instead of the whole graph.
     %
-    In other words, the GNN models are trained in a \emph{batch} gradient descent manner (i.e., full-batch training) without sampling.
+    %In other words, the GNN models are trained in a \emph{batch} gradient descent manner (i.e., full-batch training) without sampling.
     %
-    With sampling, the GNN models are trained with \emph{mini-bach} stochastic gradient descent.
-    
+    %With sampling, the GNN models are trained with \emph{mini-bach} stochastic gradient descent.
+    %
     To find out how the sampling techniques affect accuracy, we train the four typical GNNs with different batch sizes and compare the accuracy with the full-batch training.
     %
     For each combination of dataset and GNN, we use the hyper-parameters that achieve the highest accuracy under the full-batch training.
     %
-    Figure~\ref{fig:exp_sampling_relative_batch_size_accuracy_graphsage}  and Figure~\ref{fig:exp_sampling_relative_batch_size_accuracy_cluster} shows the accuracy comparisons of the two typical sampling methods under different batch sizes.
-    %
-    Results of the other datasets are available in Section 4.4.4 ``Effects on Accuracy'' in the revised manuscript.
-    %
     In most cases, the test accuracy of the sampling methods is just slightly lower than the accuracy of the full-batch training when the relative batch size $\geq 3\%$.
     %
-    In several cases (like GaAN in Figure~\ref{fig:exp_graphsage_sampling_accuracy_on_amp} and Figure~\ref{fig:exp_graphsage_sampling_accuracy_on_amc}), the accuracy of the neighbor sampler was even higher than the full-batch training.
-    %
+<<<<<<< HEAD
+    Results of the other datasets are available in Section 4.4.4 ``Effects on Accuracy'' in the revised manuscript.
+=======
     Among the two sampling methods, the performance of the cluster sampler is stabler than the neighbor sampler.
+>>>>>>> 3435efcb48f13b9e2f85632d89f8b383c4fe20a7
+    %
+    Figure~\ref{fig:exp_sampling_relative_batch_size_accuracy_graphsage}  and Figure~\ref{fig:exp_sampling_relative_batch_size_accuracy_cluster} shows the accuracy comparisons of the two typical sampling methods under different batch sizes.
+    %
+    The results of the other datasets are available in Section 4.4.3 ``Effects on Accuracy'' in the revised manuscript.
+    %
+    In several cases (like GaAN in Figure~\ref{fig:exp_graphsage_sampling_accuracy_on_amp} and Figure~\ref{fig:exp_graphsage_sampling_accuracy_on_amc}), the accuracy of the neighbor sampler was even higher than the full-batch training.
     %
     The test accuracy of the cluster sampler is close to the accuracy of full-batch training, while the test accuracy of the neighbor sampler shows more obvious differences for different GNNs.
         
