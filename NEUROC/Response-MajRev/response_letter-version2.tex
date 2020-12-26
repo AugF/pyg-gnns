@@ -272,13 +272,17 @@ There are some grammar errors and typos:
     
     \item In Section 4.2 ``Time Breakdown Analysis'', we additionaly conduct time breakdown analysis for GNN inference and compare the similarites and differences between training and inference.
     %
-    As for the similarities, we find that the performance characteristics of inference are highly similar to training on the layer level and the step level of edge calculation.
+    As for the similarities, we find that the performance characteristics of inference and training are highly similar on the layer level and the step level of edge calculation.
     %
     The edge calculation stage is the main performance bottleneck for both training and inference.
     %
-    The specific performance bottlenecks of the edge calculation stage depend on the time complexity of the messaging function $\phi$ of the GNN.
+    %The specific performance bottlenecks of the edge calculation stage depend on the time complexity of the messaging function $\phi$ of the GNN.
     %
-    The differences between training and inference were mainly reflected in two aspects: the elapsed time and the top time-consuming basic operators.
+    As for the differences, training and inference are different mainly in two aspects: the elapsed time and the top time-consuming basic operators.
+    %
+    The inference time is much less than the training time.
+    %
+    The top time-consuming basic operators used in the backward phase of training are replaced by the basic operators used in the prediction layer of inference.
     %
     The inference time is 34\% (GCN), 32\% (GGNN), 25\% (GAT), and 32\% (GaAN) of the training time on average, as shown in Figure~\ref{fig:compare_wall_clock_time_of_training_and_inference}.
     %
@@ -313,13 +317,13 @@ There are some grammar errors and typos:
     %
     We find that the memory usage of inference also mainly comes from the edge calculation stage, same as training.
     %
-    Compared with training, the memory expansion ratios of inference are much less, as shown by Figure~\ref{fig:compare_memory_expasion_ratio}.
+    However, the memory expansion ratios of inference are much less than training.
     %
-    The memory expansion ratios of inference are 45\% to 83\% (GGNN), 52\% to 61\% (GAT), and 37\% to 69\% (GaAN) of training.
+    The memory expansion ratios of inference are 45\% to 83\% (GGNN), 52\% to 61\% (GAT), and 37\% to 69\% (GaAN) of training, as indicated by Figure~\ref{fig:compare_memory_expasion_ratio}.
     %
     GGNN, GAT and GaAN have to cache some intermediate results during training, the memory space of those results is saved during inference.
     %
-    However, the memory expansion ratios of inference are still high, preventing us from inferencing on big graphs.
+    However, the memory expansion ratios of inference are still high, preventing us from inferencing with big graphs.
     %
     More details are available in Section 4.3.2 ``Memory Usage of Inference'' in the revised manuscript.
     
@@ -332,14 +336,19 @@ There are some grammar errors and typos:
     
     \item In Section 4.4 ``Effects of Sampling Techniques on Performance'', we additionally conduct experiments to analyze performance bottlenecks in sample-based inference.
     %
+    We find that the batch size used in inference should be smaller than training to avoid the out of memory exception on the GPU side.
+    %
+    The current implementation of the sampler used in inference in PyG is still inefficient.
+    %
+    The overheads of sampling and data transfering are significant in the total inference time.
+    %
     Under the same batch size, we find that the subgraph sampler used in inference tends to produce larger subgraphs than the neighbor sampler used in training.
     %
-    Thus, the batch size used in inference should be small to avoid the out of memory exception on the GPU side.
-    However, the overheads brought by sampling and data transfering from CPU to GPU become obvious when the batch size was small.
+    Thus, the batch size must be small to avoid the out of memory exception on the GPU side.
+    %
+    At the same time, the overheads brought by sampling and data transfering from CPU to GPU become obvious when the batch size was small.
     %
     They account for near half of the total inference time on the \texttt{amp} and \texttt{cam} datasets, as shown in Figure~\ref{fig:time_breakdown_of_inference_sampler}.
-    %
-    The results indicate that the current implementation of inference sampler in PyG is still inefficient.
     %
     We present more details of our experimental analysis in the ``Inference Time'' paragraph of Section 4.4.3 ``Performance Bottlenecks Analysis''
     
@@ -419,13 +428,15 @@ There are some grammar errors and typos:
     %
     Figure~\ref{fig:effect_of_hyper_parameter_on_accuracy_of_gaan} shows the results of GaAN.
     %
-    More results are available in Section 4.1.4 ``Effects on Accuracy'' in the revised manuscript.
-    %
-    The accuracy of the four GNNs is low when the dimensions are very low ($\leq 8$).
+    The accuracy of GaAN is low when the dimensions are very low ($\leq 8$).
     %
     As the dimensions increase to a certain threshold, the GNNs gain sufficient representation capability to achieve good accuracy.
     %
-    But very high dimensions ($\geq 2048$) are also harmful to accuracy in some cases, as they increase the risk of overfitting.
+    But high dimensions ($\geq 2048$) are also harmful to accuracy on the \texttt{amp} dataset, as they increase the risk of overfitting.
+    %
+    The results of the other GNNs are available in Section 4.1.4 ``Effects on Accuracy'' in the revised manuscript.
+    %
+   
     
     \begin{figure}[h]
         \includegraphics[width=1.0\columnwidth]{../figs/experiments/exp_hyperparameter_on_accuracy_gaan.pdf}
@@ -436,15 +447,15 @@ There are some grammar errors and typos:
    
     Second, the relative accuracy between the four GNNs varies greatly with different datasets.
     %
+    There is no clear winner.
+    %
     We compare the best accuracy that each GNN achives on every dataset in Figure~\ref{fig:exp_hyperparameter_on_accuracy_alg_contrast}.
     %
     The best accuracy of the four GNNs are very close.
     %
     It is also close to the accuracy reported in [\cite{shchur2018_pitfall_of_gnn, zeng2020_graphsaint}].
     %
-    There is no clear winner in terms of accuracy.
-    %
-    GaAN that has the highest complexity performs slightly better than the other GNNs.
+    GaAN that has the highest complexity performs slightly better than the other GNNs, winning three out of five datasets.
     %
     Simple GNN models (such as GCN) can still achieve good acuuracy with proper hyper-parameter settings.
     
@@ -484,15 +495,15 @@ There are some grammar errors and typos:
     %
     For each combination of dataset and GNN, we use the hyper-parameters that achieve the highest accuracy under the full-batch training.
     %
-    Figure~\ref{fig:exp_sampling_relative_batch_size_accuracy_graphsage}  and Figure~\ref{fig:exp_sampling_relative_batch_size_accuracy_cluster} shows the accuracy comparisons of the two typical sampling methods under different batch sizes.
-    %
-    Results of the other datasets are available in Section 4.4.3 ``Effects on Accuracy'' in the revised manuscript.
-    %
     In most cases, the test accuracy of the sampling methods is just slightly lower than the accuracy of the full-batch training when the relative batch size $\geq 3\%$.
     %
-    In several cases (like GaAN in Figure~\ref{fig:exp_graphsage_sampling_accuracy_on_amp} and Figure~\ref{fig:exp_graphsage_sampling_accuracy_on_amc}), the accuracy of the neighbor sampler was even higher than the full-batch training.
-    %
     Among the two sampling methods, the performance of the cluster sampler is stabler than the neighbor sampler.
+    %
+    Figure~\ref{fig:exp_sampling_relative_batch_size_accuracy_graphsage}  and Figure~\ref{fig:exp_sampling_relative_batch_size_accuracy_cluster} shows the accuracy comparisons of the two typical sampling methods under different batch sizes.
+    %
+    The results of the other datasets are available in Section 4.4.3 ``Effects on Accuracy'' in the revised manuscript.
+    %
+    In several cases (like GaAN in Figure~\ref{fig:exp_graphsage_sampling_accuracy_on_amp} and Figure~\ref{fig:exp_graphsage_sampling_accuracy_on_amc}), the accuracy of the neighbor sampler was even higher than the full-batch training.
     %
     The test accuracy of the cluster sampler is close to the accuracy of full-batch training, while the test accuracy of the neighbor sampler shows more obvious differences for different GNNs.
         
