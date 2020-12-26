@@ -121,7 +121,7 @@ Specifically, we added experiments on how the hyper-parameters of GNNs affect th
 %
 We presented the time breakdown analysis of GNN inference in Section 4.2.4.
 %
-We also presented the memory usage analysis of GNN inference in Section 4.3.2., and the performance bottlenecks of sample-based inference were analyzed in Section 4.4.2.
+We also presented the memory usage analysis of GNN inference in Section 4.3., and the performance bottlenecks of sample-based inference were analyzed in Section 4.4.2.
 
 \item According to the reviewer 2's comments, we have added an evaluation on how the model complexity and the sampling techniques affect the accuracy of GNNs.
 %
@@ -129,7 +129,7 @@ Specifically, we evaluated the effects of hyper-parameters of GNNs on accuracy i
 %
 We also compared the accuracy of the four typical GNNs in that section.
 %
-Finally, we analyzed the effects of the sampling techniques on accuracy in Section 4.4.3.
+Finally, we analyzed the effects of the sampling techniques on accuracy in Section 4.4.4.
 
 \item We have adjusted the abstract, Section 1 ``Introduction'', and Section 5 ``Insights'' according to the new findings on inference time and accuracy.
 
@@ -152,7 +152,7 @@ We then respond to all reviewers point by point as follows.
 
 % R1Q0
 \begin{point}
-    The authors conduct an empirical analysis of performance bottlenecks in graph neural network training. The authors identify the edge-related calculation is the performance bottleneck. Experimental of several GNN variants, such as GCN, GGNNNN, GAT and GaAN on six real-world graph datasets verify the importance of the findings. The experimental analysis is sufficient. However, there are some tiny issues in this paper.
+    The authors conduct an empirical analysis of performance bottlenecks in graph neural network training. The authors identify the edge-related calculation is the performance bottleneck. Experimental of several GNN variants, such as GCN, GGNNNN, GAT and GaAN on six real-world graph datasets verify the importance of the findings. The experimental analysis is sufficient. However, there are some tiny issues in this paper.
 \end{point}
 
 \begin{reply}
@@ -165,7 +165,7 @@ We then respond to all reviewers point by point as follows.
 
 % R1Q1
 \begin{point}
-	There are lots of symbols in this paper. Some symbols are reused and confusing, such as s denotes sub-layers or edge features.
+	There are lots of symbols in this paper. Some symbols are reused and confusing, such as s denotes sub-layers or edge features.
 \end{point}
 
 % Our reply
@@ -235,9 +235,9 @@ We then respond to all reviewers point by point as follows.
 \begin{point}
 There are some grammar errors and typos:
 \\
-  - `Take the demo GNN in Figure 1(a) as  the example.'
+  - `Take the demo GNN in Figure 1(a) as  the example.'
 \\
- - `to calculate the  output hidden vector $h^{l+1}$ of the current layer l, i.e., $h^{l+1}$ = $\gamma^l(h^l,s^l)$ The end-to-end training requires…'
+ - `to calculate the  output hidden vector $h^{l+1}$ of the current layer l, i.e., $h^{l+1}$ = $\gamma^l(h^l,s^l)$ The end-to-end training requires…'
 \\
  - `Implementing it with the specially optimized basic operators on the GPU is a potential optimization'
 \\
@@ -356,7 +356,7 @@ There are some grammar errors and typos:
     %
     However, the memory expansion ratios of inference are still high, preventing us from inferencing with big graphs.
     %
-    More details are available in Section 4.3.2 ``Memory Usage of Inference'' in the revised manuscript.
+    More details are available in Section 4.3 ``Memory Usage of Inference'' in the revised manuscript.
     
     \begin{figure}[h]
         \subfloat[Training]{\includegraphics[width=0.5\columnwidth]{../figs/experiments/exp_memory_expansion_ratio.pdf}}
@@ -398,7 +398,7 @@ There are some grammar errors and typos:
 \reviewersection
 
 \begin{point}
-    In the paper, authors accomplished a unique study and analysis on GNN models training complexity.  The articles first review and development history of GNNs and creatively model all architectures as input layers, intermediate layers of graph neurons and prediction layers. And they quantitatively summarize the time and space complexity of 4 representative GNNs, including graph convolution, gated recurrent graph net, graph attention net and GraphSage. Most importantly, the article first break down complexity into operator level and offered analysis of good granularity, giving reader more guidance in future study. At last, the solid experiments included the study of effects of hyper-parameters and a comparison of two major sampling techniques: neighbor sampling and cluster sampling.
+    In the paper, authors accomplished a unique study and analysis on GNN models training complexity.  The articles first review and development history of GNNs and creatively model all architectures as input layers, intermediate layers of graph neurons and prediction layers. And they quantitatively summarize the time and space complexity of 4 representative GNNs, including graph convolution, gated recurrent graph net, graph attention net and GraphSage. Most importantly, the article first break down complexity into operator level and offered analysis of good granularity, giving reader more guidance in future study. At last, the solid experiments included the study of effects of hyper-parameters and a comparison of two major sampling techniques: neighbor sampling and cluster sampling.
 \end{point}
 
 \begin{reply}
