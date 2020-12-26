@@ -33,7 +33,7 @@
 
 \begin{frontmatter}
 
-	\title{Empirical Analysis of Performance Bottlenecks in Graph Neural Network Training with GPUs}
+	\title{Empirical Analysis of Performance Bottlenecks in Graph Neural Network Training and Inference with GPUs}
     \author{Zhaokang Wang, Yunpan Wang, Chunfeng Yuan, Rong Gu$^*$ \corref{correspondingauthor1}, Yihua Huang$^*$ \corref{correspondingauthor2}}
     \cortext[correspondingauthor]{Corresponding authors with equal contribution}
     \ead{\{wangzhaokang, wangyp\}@smail.nju.edu.cn, \{cfyuan, gurong, yhuang\}@nju.edu.cn}
@@ -42,7 +42,7 @@
 	\begin{abstract}
 		The graph neural network (GNN) has become a popular research area for its state-of-the-art performance in many graph analysis tasks. 
 		Recently, various graph neural network libraries have emerged.They make the development of GNNs convenient, but their performance on large datasets is not satisfying. 
-		In this work, we analyze the performance bottleneck in training GNN with GPUs empirically. 
+		In this work, we analyze the performance bottleneck in training/inferring GNN with GPUs empirically. 
 		A GNN layer can be decomposed into two parts: the vertex and the edge calculation parts. 
 		According to their computational complexity, we select four representative GNNs (GCN, GGNN, GAT, GaAN) for evaluation. 
 		We breakdown their training time and memory usage, evaluate the effects of hyper-parameters, and assess the efficiency of the sampling techniques.

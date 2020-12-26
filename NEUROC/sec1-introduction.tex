@@ -17,38 +17,38 @@ They find that the GNN inference is more cache-friendly than the traditional gra
 They verify the effectiveness of the kernel fusion optimization in reducing the time of inference.
 Nevertheless, they only analyze the inference stage, ignoring the effects of the backpropagation during the training.
 
-To explore the essential performance bottleneck in the GNN training, we conduct a range of experimental analysis in deep in this work. 
-We focus on the efficiency bottleneck of GNN training instead of accuracy. 
+To explore the essential performance bottleneck in the GNN training/inference, we conduct a range of experimental analysis in deep in this work. 
+We focus on the efficiency bottleneck of GNN training/inference.
 We model the GNNs with the message-passing framework that decomposes a GNN layer into two parts: the vertex calculation and the edge calculation.  
 According to the time complexity of the two parts, we classify the typical GNNs into four quadrants(\{high, low\} complexity $\times$ \{vertex, edge\} calculation).
 We choose GCN \cite{kipf2017_gcn}, GGNN \cite{li2015_ggnn}, GAT \cite{huang2018_gat} and GaAN \cite{zhang2018_gaan} as representative GNNs of the four quadrants.
 
 We implement them with PyG and evaluate their efficiency with six real-world datasets on a GPU.
-We identify the most time-consuming stage in the GNN training by decomposing the training time per epoch from the layer level to the operator level.
-We also analyze the memory usage during the training to discover the main factor that limits the data scalability of GNN training on GPUs. 
+We identify the most time-consuming stage in the GNN training/inference by decomposing the training/inference time per epoch from the layer level to the operator level.
+We also analyze the memory usage during the training/inference to discover the main factor that limits the data scalability of GNN training/inference on GPUs. 
 Finally, we evaluate whether or not the sampling techniques affect the performance bottleneck. 
 The key findings and insights are summarized below.
 
 \begin{itemize}
-    \item \textbf{The training time and the memory usage of a GNN layer is mainly affected by the dimensions of the input/output hidden feature vectors.}
-    Fixing other hyper-parameters, the training time and the memory usage of a GNN layer increase linearly as the input/output dimensions.
+    \item \textbf{The training/inference time and the memory usage of a GNN layer is mainly affected by the dimensions of the input/output hidden feature vectors.}
+    Fixing other hyper-parameters, the training/inference time and the memory usage of a GNN layer increase linearly as the input/output dimensions.
     \item \textbf{The edge-related calculation is the performance bottleneck for most GNNs.}
-    For GNNs with high edge calculation complexity, most of the training time is spent on conducting the messaging function for every edge. 
-    For GNNs with low edge calculation complexity, the message collection and aggregation consumes most of the training time.
-    \item \textbf{The high memory usage of the edge calculation is the main factor limiting the data scalability of GNN training.}
+    For GNNs with high edge calculation complexity, most of the training/inference time is spent on conducting the messaging function for every edge. 
+    For GNNs with low edge calculation complexity, the message collection and aggregation consumes most of the training/inference time.
+    \item \textbf{The high memory usage of the edge calculation is the main factor limiting the data scalability of GNN training/inference.}
     The edge calculation generates and caches many intermediate results. 
     They are an order of magnitude larger than the dataset itself. 
-    As GPUs have limited on-chip memory, the high memory consumption prevents us from training big graphs on GNNs.
-    \item \textbf{The sampling techniques can significantly reduce training time and memory usage.}
+    As GPUs have limited on-chip memory, the high memory consumption prevents us from training/inferring big graphs on GNNs.
+    \item \textbf{The sampling techniques can significantly reduce training/inference time and memory usage.}
     They are essential for training big graphs on GPUs. 
     However, the existing implementation is still inefficient. 
-    Under big batch sizes, the time spent on the sampling may exceed the time spent on the training. 
+    Under big batch sizes, the time spent on the sampling may exceed the time spent on the training/inference. 
     Under small batch sizes, the sampled graphs are also small, wasting the computing power of GPUs.
 \end{itemize}
 
 Based on the insights, we provide several potential optimization directions:
 \begin{itemize}
-      \item To reduce training time, \textbf{optimizations should focus on improving the efficiency of the edge calculation}. 
+      \item To reduce training/inference time, \textbf{optimizations should focus on improving the efficiency of the edge calculation}. 
       One may consider developing optimized operators for the messaging step that is the major source of computing costs in the edge calculation.
        Fusing operators of the collection step, messaging function and the aggregation step together is another way to reduce the overheads in the edge calculation.
       \item To reduce memory usage, \textbf{optimizations should focus on reducing the intermediate results in the edge calculation}. 
@@ -56,7 +56,7 @@ Based on the insights, we provide several potential optimization directions:
       \item To improve the efficiency of the sampling techniques, \textbf{one may consider overlapping the sampling on the CPU side with the training on the GPU side.} 
       Choosing a proper batch size automatically is another potential optimization.
 \end{itemize}
-We hope that our analysis can help the developers of the GNN libraries/systems have a better understanding of the characteristics of GNN training and propose more targeted optimizations.
+We hope that our analysis can help the developers of the GNN libraries/systems have a better understanding of the characteristics of GNN training/inference and propose more targeted optimizations.
 
 \paragraph{Outline}
 We briefly survey the typical GNNs in Section~\ref{sec:review_of_gnns}.
