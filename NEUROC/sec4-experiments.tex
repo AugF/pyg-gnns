@@ -368,7 +368,7 @@ For GCN and GGNN with the low edge complexity, the proportions of the steps were
 %
 Since the messaging function $\phi^l$ of GGNN used the pre-computed $\MyVec{\hat{h}}^l_y$ as the message vector directly, the time spent on the messaging step of GGNN was negligible.
 %
-Although the collecting step did not conduct any computation and only involved data movement, it occupied noticeable execution time in the four GNNs.
+Although the collecting step did not conduct any computation and only involved data movement, it occupied a noticeable execution time in the four GNNs.
 
 The results indicate that \emph{the performance bottlenecks of the edge calculation stage depend on the complexity of the messaging function $\phi$}.
 %
@@ -507,7 +507,7 @@ For GCN, the \texttt{index} operator used in the prediction layer became the new
 %
 %    The basic operators related to the edge calculation (\texttt{scatter\_add}, \texttt{index\_select}, and \texttt{mul}) still consumed the majority of the inference time.
 %
-For GGNN, \texttt{index} operator in the prediction layer also became a time-consuming basic operators.
+For GGNN, \texttt{index} operator in the prediction layer also became a time-consuming basic operator.
 %
 %    Due to the high time complexity of the vertex updating function $\gamma$ in GGNN, the basic operators related to the vertex calculation stage (\texttt{mm} and \texttt{thnn\_fused\_gru\_cell}) still consumed near half of the inference time.
 %
@@ -962,7 +962,7 @@ The sampled subgraphs produced by the neighbor sampler and the cluster sampler h
 %
 With small batch sizes, the sampling techniques could significantly reduce the training/inference time per batch and the peak memory usage.
 %
-However, the batch size should be small to limit the memory usage, especially for inference.
+However, the batch size should be small to limit memory usage, especially for inference.
 %
 The current implementation of the sampling techniques in PyG was inefficient to handle small batches.
 %

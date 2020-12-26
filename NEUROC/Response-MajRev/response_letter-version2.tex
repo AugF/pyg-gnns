@@ -115,29 +115,27 @@ In the following, we first summarize the major changes we made.
 \subsection*{Summary of Changes}
 
 \begin{enumerate}
-\item According to Reviewer 1's comments, we have added experiments on the performance bottleneck analysis of GNN inference.
+\item According to reviewer 1's comments, we have added experiments on the performance bottleneck analysis of GNN inference.
 %
-We added experiments on how the hyper-parameters of GNNs affect the elapsed time and the memory usage of inference in Section 4.1.2 ``Effects on Inference Time'' and Section 4.1.3 ``Effects on Peak Memory Usage'', respectively.
+Specifically, we added experiments on how the hyper-parameters of GNNs affect the elapsed time and the memory usage of inference in Section 4.1.2 ``Effects on Inference Time'' and Section 4.1.3 ``Effects on Peak Memory Usage'', respectively.
 %
-We added time breakdown analysis of GNN inference in Section 4.2.4.
+We presented the time breakdown analysis of GNN inference in Section 4.2.4.
 %
-We also presented the memory usage analysis of GNN inference in Section 4.3.2.
-%
-The performance bottlenecks of sample-based inference were analyzed in Section 4.4.2.
+We also presented the memory usage analysis of GNN inference in Section 4.3.2., and the performance bottlenecks of sample-based inference were analyzed in Section 4.4.2.
 
-\item According to the Reviewer 2's comments, we have added experiments on how the model complexity and the sampling techniques affect the accuracy of GNNs.
+\item According to the reviewer 2's comments, we have added an evaluation on how the model complexity and the sampling techniques affect the accuracy of GNNs.
 %
 Specifically, we evaluated the effects of hyper-parameters of GNNs on accuracy in Section 4.1.4.
 %
 We also compared the accuracy of the four typical GNNs in that section.
 %
-We analyzed the effects of the sampling techniques on accuracy in Section 4.4.3.
+Finally, we analyzed the effects of the sampling techniques on accuracy in Section 4.4.3.
 
 \item We have adjusted the abstract, Section 1 ``Introduction'', and Section 5 ``Insights'' according to the new findings on inference time and accuracy.
 
 \item We have polished the presentation of our manuscript.
 %
-We unified the symbol usage through the manuscript and added a table to summarize the frequently-used symbols.
+We unified the symbol usage through the manuscript and added a table to summarize the frequently-used symbols as suggested by reviewer 1.
 %
 We improved the description of the sub-layer concept in Section 2.1 and Section 2.2.
 %
@@ -146,7 +144,7 @@ We also replotted some figures to improve readability.
 
 \end{enumerate}
 
-We then respond to the concerns of reviewers point by point as follows.
+We then respond to all reviewers point by point as follows.
 
 
 % Let's start point-by-point with Reviewer 1
@@ -158,7 +156,7 @@ We then respond to the concerns of reviewers point by point as follows.
 \end{point}
 
 \begin{reply}
-    Thank you for your kindly comments on our manuscript.
+    Thank you for your comments on our manuscript.
     %
     We have revised the manuscript according to your suggestions. 
     %
@@ -186,7 +184,7 @@ We then respond to the concerns of reviewers point by point as follows.
     %
     As for edges and their feature vectors, we use $e_{y,x}$ to represent an edge pointing from $v_y$ to $v_x$ and we use $\boldsymbol{e}_{y,x}$ to represent its feature vector.
     
-    In order to facilitate readers to quickly locate the meaning of  symbols, we have added Table 1 at the beginning of Section 2 ``Review of Graph Neural Networks'' in the revised manuscript.
+    In order to facilitate readers to quickly locate the meaning of symbols, we have added Table 1 at the beginning of Section 2 ``Review of Graph Neural Networks'' in the revised manuscript.
     
 %    \begin{table}[H]
 %        \footnotesize
@@ -230,7 +228,7 @@ We then respond to the concerns of reviewers point by point as follows.
 \end{point}
 
 \begin{reply}
-	Thank you for pointing out missing references. Computer vision is indeed an important application area of graph neural networks. We have added the mentioned references in Section 1 ``Introduction'' in the revised manuscript.
+	Thank you for pointing out the missing references. Computer vision is indeed an important application area of graph neural networks. We have added the mentioned references in Section 1 ``Introduction'' in the revised manuscript.
 \end{reply}
 
 % R1Q3
@@ -256,7 +254,7 @@ There are some grammar errors and typos:
     %
     We have also unified the tenses of the sentences in Section 3 ``Evaluation Design'' and Section 4 ``Evaluation Results and Analysis''.
     %
-    Specifically, we use the past tense to describe experimental methods, results and what they indicate.
+    Specifically, we use the past tense to describe experimental methods, results, and what they indicate.
     %
     We use the present tense in the sentences that FigureX or Table X is the subject of the sentences.
 
@@ -287,7 +285,7 @@ There are some grammar errors and typos:
     %
     The efficiency of inference (including inference time and memory usage) is indeed important for deep learning researchers and engineers.
     %
-    We add brief description on GNN inference in Section 2.5 ``Inference with GNNs'' in the revised manuscript.
+    We add a brief description of GNN inference in Section 2.5 ``Inference with GNNs'' in the revised manuscript.
     %
     As suggested, we also use the same methodology as the training phase to analyze the performance bottlenecks in the inference phase and we add corresponding experimental results in every subsection of Section 4 ``Evaluation Results and Analysis''.
     %
@@ -303,7 +301,7 @@ There are some grammar errors and typos:
     %
     We present specific experimental results in Section 4.1.2 ``Effects on Inference'' in the revised manuscript.
     
-    \item In Section 4.2 ``Time Breakdown Analysis'', we additionaly conduct time breakdown analysis for GNN inference and compare the similarites and differences between training and inference.
+    \item In Section 4.2 ``Time Breakdown Analysis'', we additionally conduct time breakdown analysis for GNN inference and compare the similarities and differences between training and inference.
     %
     As for the similarities, we find that the performance characteristics of inference and training are highly similar on the layer level and the step level of edge calculation.
     %
@@ -325,7 +323,7 @@ There are some grammar errors and typos:
     %
     For example, Figure~\ref{fig:compare_top_basic_operators} shows that the \texttt{gather} operator used in the backward phase of training is replaced by the \texttt{index} operator used in the prediction layer of GCN.
     %
-    Though the the top time-consuming basic operators are changed, they still indicates that GPUs are suitable for conducting GNN inference.
+    Though the top time-consuming basic operators are changed, they still indicate that GPUs are suitable for conducting GNN inference.
     %
     We present more details of time breakdown analysis on GNN inference in Section 4.2.4 ``Performance Bottlenecks in Inference'' in the revised manuscript.
         
@@ -346,9 +344,9 @@ There are some grammar errors and typos:
         \label{fig:compare_top_basic_operators}
     \end{figure}
     
-    \item In Section 4.3 ``Memory Usage Analysis'', we conduct extra experiments to evaluate the peak memory usage during inference.
+    \item In Section 4.3 ``Memory Usage Analysis'', we conduct a group of experiments to evaluate the peak memory usage during inference.
     %
-    We find that the memory usage of inference also mainly comes from the edge calculation stage, same as training.
+    We find that the memory usage of inference also mainly comes from the edge calculation stage, the same as training.
     %
     However, the memory expansion ratios of inference are much less than training.
     %
@@ -373,13 +371,13 @@ There are some grammar errors and typos:
     %
     The current implementation of the sampler used in inference in PyG is still inefficient.
     %
-    The overheads of sampling and data transfering are significant in the total inference time.
+    The overheads of sampling and data transferring are significant in the total inference time.
     %
     Under the same batch size, we find that the subgraph sampler used in inference tends to produce larger subgraphs than the neighbor sampler used in training.
     %
     Thus, the batch size must be small to avoid the out of memory exception on the GPU side.
     %
-    At the same time, the overheads brought by sampling and data transfering from CPU to GPU become obvious when the batch size was small.
+    At the same time, the overheads brought by sampling and data transferring from CPU to GPU become obvious when the batch size was small.
     %
     They account for near half of the total inference time on the \texttt{amp} and \texttt{cam} datasets, as shown in Figure~\ref{fig:time_breakdown_of_inference_sampler}.
     %
@@ -406,7 +404,7 @@ There are some grammar errors and typos:
 \begin{reply}
     Thank you for your positive comments on our manuscript.
     %
-    We have carefully revised the manuscript according to your kindly comments and suggestions in the following points.
+    We have carefully revised the manuscript according to your comments and suggestions in the following points.
     %
     %We highlight our modifications with red squares point by point in the annotated version of the revised manuscript.
 \end{reply}
@@ -480,7 +478,7 @@ There are some grammar errors and typos:
    
     Second, the relative accuracy between the four GNNs varies greatly with different datasets.
     %
-    There is no clear winner.
+    There is no absolute winner.
     %
     We compare the best accuracy that each GNN achives on every dataset in Figure~\ref{fig:exp_hyperparameter_on_accuracy_alg_contrast}.
     %
@@ -490,7 +488,7 @@ There are some grammar errors and typos:
     %
     GaAN that has the highest complexity performs slightly better than the other GNNs, winning three out of five datasets.
     %
-    Simple GNN models (such as GCN) can still achieve good acuuracy with proper hyper-parameter settings.
+    Simple GNN models (such as GCN) can still achieve good accuracy with proper hyper-parameter settings.
     
     \begin{figure}[h]
         \centering
@@ -530,13 +528,13 @@ There are some grammar errors and typos:
     %
     In most cases, the test accuracy of the sampling methods is just slightly lower than the accuracy of the full-batch training when the relative batch size $\geq 3\%$.
     %
-    Among the two sampling methods, the performance of the cluster sampler is stabler than the neighbor sampler.
+    Among the two sampling methods, the performance of the cluster sampler is more stable than the neighbor sampler.
     %
     Figure~\ref{fig:exp_sampling_relative_batch_size_accuracy_graphsage}  and Figure~\ref{fig:exp_sampling_relative_batch_size_accuracy_cluster} shows the accuracy comparisons of the two typical sampling methods under different batch sizes.
     %
     The results of the other datasets are available in Section 4.4.3 ``Effects on Accuracy'' in the revised manuscript.
     %
-    In several cases (like GaAN in Figure~\ref{fig:exp_graphsage_sampling_accuracy_on_amp} and Figure~\ref{fig:exp_graphsage_sampling_accuracy_on_amc}), the accuracy of the neighbor sampler was even higher than the full-batch training.
+    In several cases (like GaAN in Figure~\ref{fig:exp_graphsage_sampling_accuracy_on_amp} and Figure~\ref{fig:exp_graphsage_sampling_accuracy_on_amc}), the accuracy of the neighbor sampler is even higher than the full-batch training.
     %
     The test accuracy of the cluster sampler is close to the accuracy of full-batch training, while the test accuracy of the neighbor sampler shows more obvious differences for different GNNs.
         
@@ -563,11 +561,11 @@ There are some grammar errors and typos:
     
     The results indicate that the relationships between batch size and test accuracy are complex, especially for the neighbor sampler.
     %
-    A larger batch size does not always bring higher accuracy, like GAT in Figure~\ref{fig:exp_graphsage_sampling_accuracy_on_fli}. 
+    Larger batch size does not always bring higher accuracy, like GAT in Figure~\ref{fig:exp_graphsage_sampling_accuracy_on_fli}. 
     %
     Our observations are similar to [\cite{zeng2020_graphsaint}].
     %
-    How to automatically select a proper batch size is a topic worth studying.
+    We believe that how to automatically select a proper batch size is a topic worth studying.
 \end{reply}
 
 \begin{point}
@@ -578,7 +576,7 @@ There are some grammar errors and typos:
 
     We are grateful for your insightful suggestion.
     %
-    As suggested, we additionally evaluate the effects of model complexity on accuracy in Section 4.1 ``Effects of Hyper-parameters on Performance'' in the revised manuscript.
+    Followed your suggestion, we additionally evaluate the effects of model complexity on accuracy in Section 4.1 ``Effects of Hyper-parameters on Performance'' in the revised manuscript.
     %
     We add discussion on how the hyper-parameters of GNNs affect the accuracy.
     %
