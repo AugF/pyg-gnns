@@ -881,6 +881,8 @@ However, the overheads brought by sampling and data transferring from CPU to GPU
 %
 Figure~\ref{fig:time_breakdown_of_inference_sampler} shows the time breakdowns of sample-based inference on different datasets.
 %
+The 
+%
 On the \texttt{amp} and \texttt{cam} datasets, the sampling time even accounted for near half of the total inference time.
 %
 The results indicated that the current implementation of inference sampler in PyG was also inefficient.
@@ -960,12 +962,11 @@ With the neighbor sampler, the test accuracy of different GNNs showed more obvio
 % 
 The sampled subgraphs produced by the neighbor sampler and the cluster sampler had lower average degrees than the original graph.
 %
-With small batch sizes, the sampling techniques could significantly reduce the training/inference time per batch and the peak memory usage.
+With small batch sizes, the sampling techniques could significantly reduce the peak memory usage per batch.
 %
-However, the batch size should be small to limit the memory usage, especially for inference.
-%
-The current implementation of the sampling techniques in PyG was inefficient to handle small batches.
-%
-Small batches could not make full use of the computing power of a GPU.
+However, the current implementation of the sampling techniques in PyG was inefficient to handle small batches.
 %
 The time spent on the sampling phase and the data transferring phase could even exceed the training/inference phase.
+%
+Small batches could not make full use of the computing power of a GPU either.
+
