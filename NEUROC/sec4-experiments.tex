@@ -727,7 +727,7 @@ To reduce the memory usage of GNN training and inference, optimizations should f
 \subsection{Effects of Sampling Techniques on Performance}
 \label{sec:effects_of_sampling_techniques_on_performance}
 
-With the sampling techniques, GNNs were trained and inferred in a mini-batch manner.
+With the sampling techniques, GNNs were trained and performed inference in a mini-batch manner.
 %
 Each epoch was decomposed into many batches.
 %
@@ -952,7 +952,7 @@ Our observations were similar to \cite{zeng2020_graphsaint}.
 %
 How to automatically select a proper batch size is a topic worth further studying.
 
-Among the two sampling methods, the performance of the cluster sampler was stabler than the neighbor sampler.
+Among the two sampling methods, the performance of the cluster sampler was more stable than the neighbor sampler.
 %
 With the cluster sampler, the test accuracy of different GNNs was very close to the accuracy of full-batch training.
 %
