@@ -104,9 +104,9 @@
 % General intro text goes here
 We thank the reviewers for their critical assessment and insightful comments on our work.
 %
-We have made extensive modifications to our manuscript.
+We have made extensive modifications to our manuscript, including adding more experiments and improving the presentation.
 %
-In the following we address their concerns point by point.
+In the following, we first summarize the major changes we made.
 %
 %We also prepare an \emph{annotated version} for our revised manuscript.
 %
@@ -114,7 +114,40 @@ In the following we address their concerns point by point.
 
 \subsection*{Summary of Changes}
 
-TODO
+\begin{enumerate}
+\item According to Reviewer 1's comments, we have added experiments on the performance bottleneck analysis of GNN inference.
+%
+We added experiments on how the hyper-parameters of GNNs affect the elapsed time and the memory usage of inference in Section 4.1.2 ``Effects on Inference Time'' and Section 4.1.3 ``Effects on Peak Memory Usage'', respectively.
+%
+We added time breakdown analysis of GNN inference in Section 4.2.4.
+%
+We also presented the memory usage analysis of GNN inference in Section 4.3.2.
+%
+The performance bottlenecks of sample-based inference were analyzed in Section 4.4.2.
+
+\item According to the Reviewer 2's comments, we have added experiments on how the model complexity and the sampling techniques affect the accuracy of GNNs.
+%
+Specifically, we evaluated the effects of hyper-parameters of GNNs on accuracy in Section 4.1.4.
+%
+We also compared the accuracy of the four typical GNNs in that section.
+%
+We analyzed the effects of the sampling techniques on accuracy in Section 4.4.3.
+
+\item We have adjusted the abstract, Section 1 ``Introduction'', and Section 5 ``Insights'' according to the new findings on inference time and accuracy.
+
+\item We have polished the presentation of our manuscript.
+%
+We unified the symbol usage through the manuscript and added a table to summarize the frequently-used symbols.
+%
+We improved the description of the sub-layer concept in Section 2.1 and Section 2.2.
+%
+We also replotted some figures to improve readability.
+
+
+\end{enumerate}
+
+We then respond to the concerns of reviewers point by point as follows.
+
 
 % Let's start point-by-point with Reviewer 1
 \reviewersection
@@ -153,7 +186,7 @@ TODO
     %
     As for edges and their feature vectors, we use $e_{y,x}$ to represent an edge pointing from $v_y$ to $v_x$ and we use $\boldsymbol{e}_{y,x}$ to represent its feature vector.
     
-    In order to facilitate readers to quickly locate the meaning of  symbols, we have added Table~\ref{tab:symbols} at the beginning of Section 2 ``Review of Graph Neural Networks'' in the revised manuscript.
+    In order to facilitate readers to quickly locate the meaning of  symbols, we have added Table 1 at the beginning of Section 2 ``Review of Graph Neural Networks'' in the revised manuscript.
     
 %    \begin{table}[H]
 %        \footnotesize
@@ -532,7 +565,7 @@ There are some grammar errors and typos:
     %
     A larger batch size does not always bring higher accuracy, like GAT in Figure~\ref{fig:exp_graphsage_sampling_accuracy_on_fli}. 
     %
-    Our observations are similar to \cite{zeng2020_graphsaint}.
+    Our observations are similar to [\cite{zeng2020_graphsaint}].
     %
     How to automatically select a proper batch size is a topic worth studying.
 \end{reply}
@@ -547,13 +580,17 @@ There are some grammar errors and typos:
     %
     As suggested, we additionally evaluate the effects of model complexity on accuracy in Section 4.1 ``Effects of Hyper-parameters on Performance'' in the revised manuscript.
     %
-    We add experimental results on how the hyper-parameters of GNNs affect the accuracy.
+    We add discussion on how the hyper-parameters of GNNs affect the accuracy.
     %
     We also compare the test accuracy of different GNN models on the same dataset.
     
     We also additionally evaluate the effects of sampling techniques on accuracy in Section 4.4 ``Effects of Sampling Techniques'' in the revised manuscript.
     %
+<<<<<<< HEAD
     We presented the experimental results in a new subsection Section 4.4.4 ``Effects on Accuracy''.
+=======
+    We present the experimental results and related discussion in a new subsection Section 4.4.3 ``Effects on Accuracy''.
+>>>>>>> 3d975b2 (更新response.)
 \end{reply}
 
 \bibliographystyle{elsarticle}
