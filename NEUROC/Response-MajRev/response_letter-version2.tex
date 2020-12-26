@@ -24,7 +24,8 @@
 \usepackage{graphicx}
 \usepackage{framed}
 \usepackage{soul}
-\usepackage[colorlinks=true, linkcolor=blue]{hyperref}
+\usepackage[colorlinks=true, linkcolor=blue, citecolor=black]{hyperref}
+\usepackage{natbib}
 % Vector
 \newcommand{\MyVec}[1]{\boldsymbol{#1}}
 % Matrix
@@ -216,7 +217,7 @@ There are some grammar errors and typos:
     %
     We feel sorry for our carelessness.
     %
-    We have proofread our revised manuscript to eliminate grammar errors and typos as much as we can.
+    We have proofread our revised manuscript to eliminate grammar errors and typos.
     %
     We have also unified the tenses of the sentences in Section 3 ``Evaluation Design'' and Section 4 ``Evaluation Results and Analysis''.
     %
@@ -251,286 +252,104 @@ There are some grammar errors and typos:
     %
     The efficiency of inference (including inference time and memory usage) is indeed important for deep learning researchers and engineers.
     %
-    In the revised manuscript, we have added a new subsection (Section 2.5 ``Inference with GNNs'') to briefly review how to perform inference with GNNs.
+    We add brief description on GNN inference in Section 2.5 ``Inference with GNNs'' in the revised manuscript.
     %
-    We quote the added subsection below.
+    As suggested, we also use the same methodology as the training phase to analyze the performance bottlenecks in the inference phase and we add corresponding experimental results in every subsection of Section 4 ``Evaluation Results and Analysis''.
+    %
+    \begin{enumerate}
     
-    \begin{myquote}{Section 2.5 ``Inference with GNNs''}
-    The model parameters of a GNN consist of the weight vectors/matrices in the prediction layer and the messaging/aggregation/updating functions of each GNN layer.
+    \item In Section 4.1 ``Effects of Hyper-parameters on Performance'', we conduct extra experiments on how the hyper-parameters of GNNs affect the time and peak memory usage of inference.
     %
-    For transductive learning, the input graphs of training and inference are same.
+    We find that the effects of hyper-parameters on the inference time and memory usage are the same as the training time.
     %
-    The structure of the GNN does not need to adjust. 
+    When the other hyper-parameters are fixed, each hyper-parameter itself affects the training time and memory usage in a linear way.
     %
-    For inductive learning, the input graphs used in training and inference are different.
+    The complexity analysis of GNNs holds for both training and inference.
     %
-    When we want to perform inference on a new graph with a pre-trained GNN, the structure of the GNN needs to be adjusted, but the hyper-parameters and the model parameters of the GNN remain unchanged.
-    %
-    The number of graph neurons in each GNN layer has to be adjusted to $|\mathcal{V}|$ of the new graph.
-    %
-    The connections of graph neurons between GNN layers are also adjusted according to the edge set of the new graph.
-    %
-    During inference, input feature vectors of the input graph are propagated forward from the input layer to the prediction layer to give out predicted labels.
+    We present specific experimental results in Section 4.1.2 ``Effects on Inference'' in the revised manuscript.
     
-    When the memory capacity of the GPU is large enough to hold all of the input graph and intermediate results during inference, the inference can produce predicted labels for all vertices and edges at once, making full use of the computing power of the GPU.
+    \item In Section 4.2 ``Time Breakdown Analysis'', we additionaly conduct time breakdown analysis for GNN inference and compare the similarites and differences between training and inference.
     %
-    When the memory capacity is not large enough, the sampling technique must be adopted.
-    
-    The sample-based inference splits the test set into several batches.
+    As for the similarities, we find that the performance characteristics of inference are highly similar to training on the layer level and the step level of edge calculation.
     %
-    For each batch, the sample-based inference samples a subgraph related to the batch from the input graph.
+    The edge calculation stage is the main performance bottleneck for both training and inference.
     %
-    It performs inference on the sampled subgraph to produce predicted labels for the batch.
+    The specific performance bottlenecks of the edge calculation stage depend on the time complexity of the messaging function $\phi$ of the GNN.
     %
-    Since the sampled subgraph is usually much smaller than the original input graph, the memory usage during inference is limited.
+    The differences between training and inference were mainly reflected in two aspects: the elapsed time and the top time-consuming basic operators.
     %
-    The sampling method depends on the prediction task.
+    The inference time is 34\% (GCN), 32\% (GGNN), 25\% (GAT), and 32\% (GaAN) of the training time on average, as shown in Figure~\ref{fig:compare_wall_clock_time_of_training_and_inference}.
     %
-    Taking the node classification task as an example, if there are $L$ GNN layers in the GNN, the hidden vector outputted by the last GNN layer of each vertex $\MyVec{h}^L_x$ is only related to the $L$-hop neighborhood of $v_x$.
+    Since the inference only conducted the forward propagation from the input layer to the prediction layer, the inference time is very close to the time of the forward phase in training.
     %
-    Thus, if we want to predict labels for a group of vertices, we only need to sample a subgraph that contains $L$-hop neighborhoods of all given vertices.
-    
-    The implementation of sample-based inference in PyG stores the whole input graph and its feature vectors in the main memory.
+    For the top time-consuming basic operators, some top operators from the backward phase in training are replaced by operators from the prediction layer in inference.
     %
-    In the node classification task, it splits the vertices in the test set into batches accoding to a given batch size.
+    For example, Figure~\ref{fig:compare_top_basic_operators} shows that the \texttt{gather} operator used in the backward phase of training is replaced by the \texttt{index} operator used in the prediction layer of GCN.
     %
-    The subgraph corresponding to each batch is sampled on the CPU side and sent to the GPU side to perform inference.
+    Though the the top time-consuming basic operators are changed, they still indicates that GPUs are suitable for conducting GNN inference.
     %
-    %By using small batch sizes, the peak memory usage during inference can be limited under the GPU memory capacity.
-    
-%    The sample-based inference is also suitable for the online inference scenario that the topology of the graph evolves over time.
-    %
-%    When a graph update arrives, the subgraph affected by the update is sampled and inferences are only performed on the sampled subgraph.it. that are affected by , avoiding conducting repeated inferences for the whole graph.
-    \end{myquote}
-    
-    
-    
-    
-    To discuss the efficiency of GNN inference on GPUs, we have added corresponding analysis in every subsection of Section 4 ``Evaluation Results and Analysis''.
-    %
-    Below, we introduce our main findings subsection by subsection.
-   
-    \paragraph{Section 4.1 ``Effects of Hyper-parameters on Performance''}
-
-    We added paragraphs ``Effects on Inference Time'' in the middle of Section 4.1 to discuss how the time and the peak memory usage of inference changed as we increased the values of the hyper-parameters.
-    
-    
-    For all GNNs, we found that the effects of hyper-parameters on the \emph{inference time} were the same as the training time.
-    %
-    Taking GGNN as an example, Figure~\ref{fig:compare_effect_of_hyperparameter_on_time} in the response (Figure X and Figure X in the revised manuscript) shows the effects of the hidden vector dimension $dim(\MyVec{h}^1_x)$ on training/inference time.
-    %
-    When $dim(\MyVec{h}^1_x)$ was large enough, the vertex/edge calculation time of training time and inference time both grew linearly with $dim(\MyVec{h}^1_x)$.
-    %
-    We observed similar phenomena in the other GNNs.
-    %
-    The results indicated that the time complexity analysis of GNNs were applicable to both training and inference.
+    We present more details of time breakdown analysis on GNN inference in Section 4.2.4 ``Performance Bottlenecks in Inference'' in the revised manuscript.
         
-    \begin{figure}[H]
-            \centering
-             \subfloat[Training]{\includegraphics[width=0.7\textwidth]{../figs/experiments/exp_hyperparameter_on_vertex_edge_phase_time_ggnn.pdf}}\\
-            \subfloat[Inference]{\includegraphics[width=0.7\textwidth]{../figs/experiments/exp_hyperparameter_on_inference_vertex_edge_phase_time_ggnn.pdf}}
-            \caption{Effects of hyper-parameters on the vertex/edge calculation time of GGNN.}
-            \label{fig:compare_effect_of_hyperparameter_on_time}
-    \end{figure}
-        
-    The effects of hyper-parameters on inference memory usage were also same as training.
-    %
-    Taking GAT as an example, Figure~\ref{fig:compare_effect_of_hyperparameter_on_memory_usage} in the response (Figure X and Figure X in the revised manuscript) shows the peak memory usage during training and inference under different values of hyper-parameters.
-        %
-    The trends of the curves in Figure~\ref{fig:compare_effect_of_hyperparameter_on_memory_usage_training} and Figure~\ref{fig:compare_effect_of_hyperparameter_on_memory_usage_inference} were highly similar.
-        %
-    The memory usage of training and inference \emph{both} grew linearly as the dimension of each head and the number of heads increased.
-        %
-    We observed similar phenomena in the other GNNs.
-        %
-    \begin{figure}[H]
-            \centering
-            \subfloat[Training\label{fig:compare_effect_of_hyperparameter_on_memory_usage_training}]{\includegraphics[width=0.6\textwidth]{../figs/experiments/exp_hyperparameter_on_memory_usage_gat.pdf}}\\
-            \subfloat[Inference\label{fig:compare_effect_of_hyperparameter_on_memory_usage_inference}]{\includegraphics[width=0.6\textwidth]{../figs/experiments/exp_hyperparameter_on_inference_memory_usage_gat.pdf}}
-            \caption{Effects of hyper-parameters on peak memory usage of GAT.}
-            \label{fig:compare_effect_of_hyperparameter_on_memory_usage}
-    \end{figure}
-        
-    \paragraph{Section 4.2 ``Time Breakdown Analysis''}    
-    We have added a new subsection Section 4.2.4 ``Performance Bottlenecks in Inference'' in Section 4.2 to conduct time breakdown analysis for GNN inference and compare the differences between training and inference.
-
-    We found that the performance characteristics of GNN inference were highly similar to training on the \emph{layer} level and the \emph{step} level.
-    %
-    In this reply, we used GCN as an example.
-    %
-    We made similar observations in the other GNNs.
-    %
-    Figure~\ref{fig:compare_layer_level_time_breakdown} in the response compares the time breakdowns of GCN on the layer level of training and inference.
-    %
-    The time breakdowns were very similar.
-    %
-    Figure~\ref{fig:compare_effect_of_degree} in the response compares the effects of the average degree on the edge/vertex calculation time during training and inference.
-    %
-    The curves in the two sub-figures of Figure~\ref{fig:compare_effect_of_degree} have similar trends.
-    %
-    \emph{The edge calculation stage dominated both the training and inference time}.
-    %
-    Figure~\ref{fig:compare_time_breakdown_of_edge_calculation} in the response further compares the time breakdowns on the step level of the edge calculation stage.
-    %
-    The proportion of each step was very similar between training and inference.
-    %
-    The results indicated that \emph{the performance bottlenecks of training and inference were same on the layer level and step level}.
-
-    
-    \begin{figure}[H]
-            \subfloat[Training]{\includegraphics[width=0.5\columnwidth]{../figs/experiments/exp_layer_time_proportion_gcn.pdf}}
-            \subfloat[Inference]{\includegraphics[width=0.5\columnwidth]{../figs/experiments/exp_inference_full_layer_time_proportion_gcn.pdf}}
-            \caption{Time breakdowns on the layer level of GCN.}
-            \label{fig:compare_layer_level_time_breakdown}
-    \end{figure}
-    %
-    \begin{figure}[H]
-                \subfloat[Training\label{fig:compare_effect_of_degree_training}]{\includegraphics[width=0.5\columnwidth]{../figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_gcn.pdf}}
-                \subfloat[Inference\label{fig:compare_effect_of_degree_inference}]{\includegraphics[width=0.5\columnwidth]{../figs/experiments/exp_inference_full_avg_degree_on_vertex_edge_cal_time_gcn.pdf}}
-                \caption{Effects of the average degree on the edge/vertex calculation time of GCN. Graphs were generated by fixing the number of vertices as 50,000.}
-                \label{fig:compare_effect_of_degree}
-    \end{figure}
-    %
-    \begin{figure}[H]
-                \subfloat[Training]{\includegraphics[width=0.5\columnwidth]{../figs/experiments/exp_edge_calc_decomposition_gcn.pdf}}
-                \subfloat[Inference]{\includegraphics[width=0.5\columnwidth]{../figs/experiments/exp_inference_full_edge_calc_decomposition_gcn.pdf}}
-                \caption{Time breakdowns on the step level of the edge calculation stage of GCN.}
-                \label{fig:compare_time_breakdown_of_edge_calculation}
-    \end{figure}
-    
-    The main differences between training and inference were reflected in two aspects: the wall-clock time and the top time-consuming basic operators.
-    
-    The inference time was much less than the training time.
-    %
-    Figure~\ref{fig:compare_wall_clock_time_of_training_and_inference} in the response (Figure X in the revised manuscript) compares the wall-clock time of training and inference on the \texttt{amp}, \texttt{amc}, and \texttt{fli} datasets.
-    %
-    The results on the other datasets were similar.
-    %
-    Since the inference only conducted the forward propagation from the input layer to the prediction layer, the time of inference was very close to the time of the forward phase in training.
-    %
-    The inference time was 34\% (GCN), 32\% (GGNN), 25\% (GAT), and 32\% (GaAN) of the training time, averaged over all datasets.
-    
-    \begin{figure}[H]
+    \begin{figure}[h]
         \centering
         \subfloat[\texttt{amc}]{\includegraphics[width=0.3\columnwidth]{../figs/experiments/exp_time_comparison_between_training_inference_amazon-computers.pdf}}
         \subfloat[\texttt{amp}]{\includegraphics[width=0.3\columnwidth]{../figs/experiments/exp_time_comparison_between_training_inference_amazon-photo.pdf}}
         \subfloat[\texttt{fli}]{\includegraphics[width=0.3\columnwidth]{../figs/experiments/exp_time_comparison_between_training_inference_flickr.pdf}}
-        \caption{Wall-clock training/inference time on different datasets.}
+        \caption{Comparison of wall-clock training time and inference time on different datasets.}
         \label{fig:compare_wall_clock_time_of_training_and_inference}
     \end{figure}
     
-    The top time-consuming basic operators of training and inference also showed a certain degree of difference.
-    %
-    Some of the top time-consuming operators during training were replaced by new operators in inference.
-    %
-    Figure~\ref{fig:compare_top_time_consuming_basic_operators} in the response (Figure X in the revised manuscript) compares the top 5 time-consuming basic operators in training and inference.
-    %
-    For GCN, the \texttt{index} operator used in the prediction layer became the new top 5 time-consuming operator, replacing the \texttt{gather} operator used in the backward phase in training.
-    %
-%    The basic operators related to the edge calculation (\texttt{scatter\_add}, \texttt{index\_select}, and \texttt{mul}) still consumed the majority of the inference time.
-    %
-    For GGNN, \texttt{index} operator in the prediction layer also became one of the top 5 time-consuming basic operators.
-    %
-%    Due to the high time complexity of the vertex updating function $\gamma$ in GGNN, the basic operators related to the vertex calculation stage (\texttt{mm} and \texttt{thnn\_fused\_gru\_cell}) still consumed near half of the inference time.
-    %
-    For GAT, the \texttt{input\_put\_impl} operator (used in the backward phase) in Figure~\ref{fig:compare_top_time_consuming_basic_operators}e was replaced by the \texttt{scatter\_add} operator used in the forward edge calculation in Figure~\ref{fig:compare_top_time_consuming_basic_operators}f.
-    %
-%    The \texttt{scatter\_add} operator was related to the edge calculation step.
-    %
-    For GaAN, the \texttt{mm} operator was replaced by the \texttt{cat} operator used in the vertex updating function.
-    
-    Although some specific time-consuming operators were different, the performance bottlenecks on the operator level were same for training and inference.
-    %
-    The matrix multiplication \texttt{mm} and the element-wise multiplication \texttt{mul} operators were still time-consuming for inference, making GNN inference also {suitable for GPUs}.
-    %
-    The basic operators related to the collection and aggregation steps in the edge calculation still consumed non-trivial time in inference.
-    
-    \begin{figure}[H]
+    \begin{figure}[h]
         \centering
-        \subfloat[GCN, Training]{\includegraphics[width=0.35\columnwidth]{../figs/experiments/exp_top_basic_ops_gcn.pdf}}
-         \subfloat[GCN, Inference]{\includegraphics[width=0.35\columnwidth]{../figs/experiments/exp_inference_full_top_basic_ops_gcn.pdf}}\\
-        \subfloat[GGNN, Training]{\includegraphics[width=0.35\columnwidth]{../figs/experiments/exp_top_basic_ops_ggnn.pdf}}
-         \subfloat[GGNN, Inference]{\includegraphics[width=0.35\columnwidth]{../figs/experiments/exp_inference_full_top_basic_ops_ggnn.pdf}}\\
-        \subfloat[GAT, Training]{\includegraphics[width=0.35\columnwidth]{../figs/experiments/exp_top_basic_ops_gat.pdf}}
-         \subfloat[GAT, Inference]{\includegraphics[width=0.35\columnwidth]{../figs/experiments/exp_inference_full_top_basic_ops_gat.pdf}}\\
-        \subfloat[GaAN, Training]{\includegraphics[width=0.35\columnwidth]{../figs/experiments/exp_top_basic_ops_gaan.pdf}}
-         \subfloat[GaAN, Inference]{\includegraphics[width=0.35\columnwidth]{../figs/experiments/exp_inference_full_top_basic_ops_gaan.pdf}}\\
-         
-         \caption{Top 5 time-consuming basic operators of typical GNNs. The time proportion of each basic operator was averaged over all datasets with the error bar indicating the maximum and the minimum.}
-         \label{fig:compare_top_time_consuming_basic_operators}
-         
+        \subfloat[Training]{\includegraphics[width=0.4\columnwidth]{../figs/experiments/exp_top_basic_ops_gcn.pdf}}
+        \subfloat[Inference]{\includegraphics[width=0.4\columnwidth]{../figs/experiments/exp_inference_full_top_basic_ops_gcn.pdf}}
+        \caption{Top 5 time-consuming basic operators of GCN. The time proportion of each basic operator is averaged over all datasets with the error bar indicating the maximum and the minimum.}
+        \label{fig:compare_top_basic_operators}
     \end{figure}
     
-    \paragraph{Section 4.3 ``Memory Usage Analysis''}
-         
-     In the end of Section 4.3, we added a new paragraph ``Memory Usage of Inference'' to compare the memory usage of inference and training.
-     %
-     
-     %
-     Figure~\ref{fig:compare_memory_expasion_ratio} in the response (Figure X in the revised manuscript) compares the memory expansion ratios of typical GNNs during training and inference.
-     %
-     Since no intermediate results had to be cached during inference of GGNN, GAT, and GaAN, the memory expansion ratios of inference were much less than training for the three GNNs.
-     %
-     The MERs of inference were 45\% to 83\% (GGNN), 52\% to 61\% (GAT), and 37\% to 69\% (GaAN) of training.
-     %
-     However, the MERs were still high, disallowing inferencing with big graphs.
-     %
-     To handle big graphs, sample-based inference was necessary.
-     
-     \begin{figure}[H]
-%        \subfloat[Training]{\includegraphics[width=0.5\columnwidth]{imagefile}}
-     \end{figure}
-     
-     \begin{figure}[H]
+    \item In Section 4.3 ``Memory Usage Analysis'', we conduct extra experiments to evaluate the peak memory usage during inference.
+    %
+    We find that the memory usage of inference also mainly comes from the edge calculation stage, same as training.
+    %
+    Compared with training, the memory expansion ratios of inference are much less, as shown by Figure~\ref{fig:compare_memory_expasion_ratio}.
+    %
+    The memory expansion ratios of inference are 45\% to 83\% (GGNN), 52\% to 61\% (GAT), and 37\% to 69\% (GaAN) of training.
+    %
+    GGNN, GAT and GaAN have to cache some intermediate results during training, the memory space of those results is saved during inference.
+    %
+    However, the memory expansion ratios of inference are still high, preventing us from inferencing on big graphs.
+    %
+    More details are available in Section 4.3.2 ``Memory Usage of Inference'' in the revised manuscript.
+    
+    \begin{figure}[h]
         \subfloat[Training]{\includegraphics[width=0.5\columnwidth]{../figs/experiments/exp_memory_expansion_ratio.pdf}}
         \subfloat[Inference]{\includegraphics[width=0.5\columnwidth]{../figs/experiments/exp_inference_full_memory_expansion_ratio.pdf}}
         \caption{Memory expansion ratios of typical GNNs.}
         \label{fig:compare_memory_expasion_ratio}
-     \end{figure}
-     
-     \paragraph{Section 4.4 ``Effects of Sampling Techniques on Performance''}
-     %
-     In Section 4.4, we added a new subsection  Section 4.4.4 ``Performance Bottlenecks in Inference'' to discuss the performance bottlenecks in sample-based inference.
-     
-     Sample-based inference was an effective technique to handle big graphs.
-     %
-     Taking the node classification task as an example, to predict labels for a given set of vertices $\mathcal{V}_{predict}$, the inference sampler sampled a subgraph containing complete $L$-hop neighborhoods of all vertices in $\mathcal{V}_{predict}$, where $L$ was the number of GNN layers.
-     %
-     Since the real-world graphs often had small-world property, the size of the sampled subgraph increased quickly as the number of vertices in $\mathcal{V}_{predict}$ (i.e., batch size) increased.
-     %
-     Figure~\ref{fig:sampled_graph_size} (Figure X in the revised manuscript) shows how the relative batch size ($\frac{|\mathcal{V}_{predict}|}{|\mathcal{V}|}$) affected the average degree and the number of edges of the sampled subgraphs during inference.
-     %
-     When the relative batch size was 10\%, the number of edges in the sampled subgraphs were close to the number of edges in the whole graph in most datasets.
-     %
-     In order to limit the memory usage during inference, the batch size used should be very small.
-     
-     \begin{figure}[H]
-        \centering
-        \subfloat[Average degree]{    \includegraphics[width=0.5\columnwidth]{../figs/experiments/exp_inference_sampling_graph_info_inference_sampler_avg_degrees.pdf}}
-        \subfloat[Number of edges]{    \includegraphics[width=0.5\columnwidth]{../figs/experiments/exp_inference_sampling_graph_info_inference_sampler_edges.pdf}}
-        
-        \caption{Characteristics of the sampled subgraphs produced by the inference sampler under different relative batch sizes.}
-        \label{fig:sampled_graph_size}
-     \end{figure}
-     
-     However, the overheads brought by sampling and data transfering from CPU to GPU became obvious when the batch size was small.
-     %
-     Figure~\ref{fig:time_breakdown_of_inference_sampler} (Figure X in the revised manuscript) shows the time breakdowns of sample-based inference on different datasets.
-     %
-     On the \texttt{amp} and \texttt{cam} datasets, the sampling time even accounted for near half of the total inference time.
-     %
-     The results indicated that the current implementation of inference sampler in PyG was also inefficient.
-     %
-     Improving its efficiency could significantly reduce the inference time.
-     
-     
-     \begin{figure}[H]
-        \centering
-        \subfloat[Batch Size = 1024]{\includegraphics[width=0.5\columnwidth]{../figs/experiments/exp_inference_sampling_fix_batch_size_train_time_stack_1024.pdf}}
-        \subfloat[Batch Size = 2048]{\includegraphics[width=0.5\columnwidth]{../figs/experiments/exp_inference_sampling_fix_batch_size_train_time_stack_2048.pdf}}
-        \caption{Inference time per batch breakdown under different batch sizes.}
-        \label{fig:time_breakdown_of_inference_sampler}
-     \end{figure}
+    \end{figure}
+    
+    \item In Section 4.4 ``Effects of Sampling Techniques on Performance'', we additionally conduct experiments to analyze performance bottlenecks in sample-based inference.
+    %
+    Under the same batch size, we find that the subgraph sampler used in inference tends to produce larger subgraphs than the neighbor sampler used in training.
+    %
+    Thus, the batch size used in inference should be small to avoid the out of memory exception on the GPU side.
+    However, the overheads brought by sampling and data transfering from CPU to GPU become obvious when the batch size was small.
+    %
+    They account for near half of the total inference time on the \texttt{amp} and \texttt{cam} datasets, as shown in Figure~\ref{fig:time_breakdown_of_inference_sampler}.
+    %
+    The results indicate that the current implementation of inference sampler in PyG is still inefficient.
+    %
+    We present more details of our experimental analysis in the ``Inference Time'' paragraph of Section 4.4.3 ``Performance Bottlenecks Analysis''
+    
+     \begin{figure}[h]
+            \centering           
+            \includegraphics[width=0.5\columnwidth]{../figs/experiments/exp_inference_sampling_fix_batch_size_train_time_stack_2048.pdf}
+            \caption{Inference time per batch breakdown under the batch size of 2048.}
+            \label{fig:time_breakdown_of_inference_sampler}
+    \end{figure}
+    
+    \end{enumerate}
+    
 \end{reply}
 
 % Begin a new reviewer section
@@ -554,9 +373,9 @@ There are some grammar errors and typos:
 
 % R2Q1
 \begin{reply}
-    We feel really sorry for our carelessness.
+    We feel sorry for our carelessness.
     %
-    We have proofread our revised manuscript to eliminate such language errors as much as we can.
+    We have proofread our revised manuscript to eliminate such language errors.
 \end{reply}
 
 % R2Q2
@@ -569,7 +388,7 @@ There are some grammar errors and typos:
 \end{point}
 
 \begin{reply}
-    Thank you very much for your appreciation.	
+    Thank you for the positive comment.
 \end{reply}
 
 % R2Q3
@@ -578,158 +397,65 @@ There are some grammar errors and typos:
 \end{point}
 
 \begin{reply}
-    Thanks very much for your valuable suggestions.
+    Thank you for the valuable suggestions.
     %
-    The model complexity directly affects both the accuracy and the training time.
+    The model complexity directly affects the accuracy.
     %
-    In order to analyze the relationship between model complexity and accuracy, we have conducted two kinds of extra experiments in the revised manuscript: (1) how the hyper-parameters of the GNNs (like the dimension of hidden vectors and the number of heads) affect the accuracy of GNNs (in Section 4.1); (2) how the batch size in the sampling methods affects the accuracy of GNNs (in Section 4.4).
+    In order to analyze the relationship between model complexity and accuracy, we have conducted two kinds of extra experiments in the revised manuscript: (1) how the hyper-parameters of the GNNs (like the dimension of hidden vectors and the number of heads) affect the accuracy of GNNs (in Section 4.1.4); (2) how the batch size in the sampling methods affects the accuracy of GNNs (in Section 4.4.3).
+    %
+    In this reply, we focus on the first kind of experiments.
+    %
+    We focus on the second kind of experiments in the next reply.
     
-    We have added more dataset description related to accuracy evaluation in Section 3.1 ``Experimental Setting''.
+    The hyper-parameters determine the model complexity of GNNs and thus affect accuracy.
     %
-    Newly added sentences are marked with underlines in the following quotation.
-    
-    \begin{myquote}{Section 3.1 ``Experimental Setting''}
-    \emph{Datasets}.
-    %
-    We used six real-world graph datasets as listed in \tablename~\ref{tab:dataset_overview} (in the reply) that were popular in the GNN evaluation [28,31,34,36].
-    %
-    For directed graphs, PyG converts them into undirected ones during data loading.
-    %
-    Thus, the average degree of a directed graph $\bar{d}=\frac{2|\mathcal{E}|}{|\mathcal{V}|}$.
-    %
-    For an undirected graph, the average degree is defined as $\bar{d}=\frac{|\mathcal{E}|}{|\mathcal{V}|}$.
-    %
-    \ul{For the \texttt{cam} dataset, its vertices were not associated with feature vectors}.
-    %
-    \ul{Thus, we generated random dense feature vectors for it and excluded it from accuracy evaluation}.
-    %
-    \ul{For \texttt{amp}, \texttt{amc}, \texttt{cph}, and \texttt{cam}, we used 70\%/15\%/15\% of the vertices as the training/evaluation/test set, respectively}.
-    %
-    \ul{For \texttt{pub}, we used 500/1000 vertices as the evaluation/test set and the remained as the training set according to [28]}.
-    %
-    \ul{For \texttt{fli}, we used 50\%/25\%/25\% of the samples as the training/evaluation/test set according to [31]}.
-    %
-    We also used random graphs generated by the R-MAT graph generator [35] in some experiments, to explore the effects of graph topological characteristics (like average degrees) on performance bottlenecks.
-    %
-    Input feature vectors of random graphs were random dense vectors with the dimension of 32.
-    %
-    Vertices of random graphs were classified into 10 classes randomly.
-    
-    \begin{table}[H]
-        \centering
-        \begin{tabular}{cccccccc}
-            \toprule
-            Dataset                                                 & $|\mathcal{V}|$ & $|\mathcal{E}|$ & $\bar{d}$ & $dim(\boldsymbol{v})$ & \#Class & Directed \\
-            \midrule
-            pubmed (\texttt{pub}) [28]  & 19,717          & 44,324          & 4.5       & 500                   & 3       & Yes      \\
-            amazon-photo (\texttt{amp}) [34]     & 7,650           & 119,081         & 31.1      & 745                   & 8       & Yes      \\
-            amazon-computers (\texttt{amc}) [34] & 13,752          & 245,861         & 35.8      & 767                   & 10      & Yes      \\
-            coauthor-physics (\texttt{cph}) [34] & 34,493          & 247,962         & 14.4      & 8415                  & 5       & Yes      \\
-            flickr (\texttt{fli}) [31]                 & 89,250          & 899,756         & 10.1      & 500                   & 7       & No       \\
-            com-amazon (\texttt{cam}) [36]               & 334,863         & 925,872         & 2.8       & 32                    & 10      & No       \\
-            \bottomrule
-        \end{tabular}
-        \caption{Dataset overview. $\bar{d}$ represents the average vertex degree. $dim(\boldsymbol{v})$ is the dimension of the input feature vector.}
-        \label{tab:dataset_overview}
-    \end{table}
-
-    \end{myquote}
-
-    In this reply, we focus on the experiments related to hyper-parameters in Section 4.1.
-    %
-    We introduce the experimental results of the sampling techniques in Section 4.4 in the next reply.
-
-    Hyper-parameters determine the model complexity of a GNN.
-    %
-    Generally speaking, higher values of hyper-parameters bring higher model complexity and increase representation capability.
-    %
-    In the revised manuscript, we add a new subsection Section 4.1.4 ``Effects on Accuracy'' at the end of Section 4.1 ``Effects of Hyper-parameters on Performance'' to analyze how hyper-parameters affect the accuracy.
+    To find out the effects of hyper-parameters, we measure and compare the test accuracy of the four GNNs trained with different hyper-parameters.
     %
     We have two main findings.
-    %
-    First, the accuracy of GNNs is much more sensitive to the dimension of hidden vectors $dim(\MyVec{h}^1_x)$ (for GCN/GGNN/GaAN) and the dimension of each head $d_{head}$ (for GAT) than the other hyper-parameters.
-    %
-    Second, the relative accuracy of the four typical GNNs varies greatly with different datasets.
-    %
-    We quote from Section 4.1.4 of the revised manuscript to present our results.
-
-    \begin{myquote}{Section 4.1.4 ``Effects on Accuracy''}
-    %
-    The values of hyper-parameters determined the model complexity of a GNN.
-    %
-    The relationship between model complexity and accuracy was complex.
-    %
-    %As far as we know, there is little theoretical analysis yet.
-    %
-    Generally speaking, higher model complexity brought more powerful representation capability and might bring higher accuracy, but it also increased the risk of overfitting.
     
-    To evaluate the effects of hyper-parameters on accuracy, we measured the accuracy of the typical GNNs with varying hyper-parameters.
+    First, the accuracy of GNNs is much more sensitive to the dimension of hidden vectors (for GCN/GGNN/GaAN) and the dimension of each head (for GAT) than the other hyper-parameters.
     %
-    \figurename~\ref{fig:exp_hyperparameter_accuracy} (in the reply) shows the experimental results.
+    Figure~\ref{fig:effect_of_hyper_parameter_on_accuracy_of_gaan} shows the results of GaAN.
     %
-    For GCN, its accuracy was sensitive to the dimension of hidden vectors $dim(\MyVec{h}^1_x)$.
+    More results are available in Section 4.1.4 ``Effects on Accuracy'' in the revised manuscript.
     %
-    As $dim(\MyVec{h}^1_x)$ increased, the accuracy first increased quickly and then stabilized when $dim(\MyVec{h}_x^1) \geq 8$.
+    The accuracy of the four GNNs is low when the dimensions are very low ($\leq 8$).
     %
-    For GGNN, its accuracy curves showed similar trends as GCN, but GGNN was more sensitive to $dim(\MyVec{h}_x^1)$ than GCN.
+    As the dimensions increase to a certain threshold, the GNNs gain sufficient representation capability to achieve good accuracy.
     %
-    Its accuracy even decreased when $dim(\MyVec{h}_x^1) \geq 1024$.
-    %
-    Since GGNN had high model complexity (with 13 weight matrices/vectors to train), GGNN might occur overfitting in those cases.
-    %
-    For GAT, its accuracy was more sensitive to the dimension of each head $d_{head}$ than the number of heads.
-    %
-    For GaAN, only $dim(\MyVec{h}_x^1)$ showed obvious impacts on accuracy.
-    %
-    The experimental results indicated that the accuracy of the GNNs was often low when $dim(\MyVec{h}_x^1)$ (for GCN/GGNN/GaAN) or $d_{head}$ (for GAT) was too low.
-    %
-    %The low model complexity limited the representation capability of the GNNs.
-    %
-    As $dim(\MyVec{h}_x^1)$ or $d_{head}$ increased to a certain threshold, the GNNs gained sufficient learning ability to achieve stable accuracy.
+    But very high dimensions ($\geq 2048$) are also harmful to accuracy in some cases, as they increase the risk of overfitting.
     
-    \begin{figure}[H]
-        \centering
-        \subfloat[GCN]{\includegraphics[width=0.4\columnwidth]{../figs/experiments/exp_hyperparameter_on_accuracy_gcn.pdf}}
-        \subfloat[GGNN]{\includegraphics[width=0.4\columnwidth]{../figs/experiments/exp_hyperparameter_on_accuracy_ggnn.pdf}}\\
-        \subfloat[GAT]{\includegraphics[width=0.8\columnwidth]{../figs/experiments/exp_hyperparameter_on_accuracy_gat.pdf}}\\
-        \subfloat[GaAN]{\includegraphics[width=1.0\columnwidth]{../figs/experiments/exp_hyperparameter_on_accuracy_gaan.pdf}}
-        \caption{Effects of hyper-parameters on accuracy of the typical GNNs.}
-        \label{fig:exp_hyperparameter_accuracy}
+    \begin{figure}[h]
+        \includegraphics[width=1.0\columnwidth]{../figs/experiments/exp_hyperparameter_on_accuracy_gaan.pdf}
+        \caption{Effects of hyper-parameters on accuracy of GaAN.}
+        \label{fig:effect_of_hyper_parameter_on_accuracy_of_gaan}
+   
     \end{figure}
+   
+    Second, the relative accuracy between the four GNNs varies greatly with different datasets.
+    %
+    We compare the best accuracy that each GNN achives on every dataset in Figure~\ref{fig:exp_hyperparameter_on_accuracy_alg_contrast}.
+    %
+    The best accuracy of the four GNNs are very close.
+    %
+    It is also close to the accuracy reported in [\cite{shchur2018_pitfall_of_gnn, zeng2020_graphsaint}].
+    %
+    There is no clear winner in terms of accuracy.
+    %
+    GaAN that has the highest complexity performs slightly better than the other GNNs.
+    %
+    Simple GNN models (such as GCN) can still achieve good acuuracy with proper hyper-parameter settings.
     
-    %\begin{figure}[H]
-        %\centering
-        %\includegraphics[width=0.5\columnwidth]{figs/experiments/exp_hyperparameter_on_accuracy_gat_small_info.pdf}
-        %\caption{Effects of the number of heads on GAT ($d_{head}$=2,4)}
-        %\label{fig:exp_hyperparameter_accuracy_gat_small_info}
-    %\end{figure}
-    
-    \figurename~\ref{fig:exp_hyperparameter_on_accuracy_alg_contrast} (in the reply) further compares the best accuracy that each GNN could achieve on different datasets.
-    %
-    The best accuracy of the typical GNNs was very close.
-    %
-    %
-    It was also close to the accuracy reported in their original references [34, 31].
-    %
-    The results indicated that there was no clear winner.
-    %
-    The relative accuracy between GNNs varied greatly with different datasets.
-    %
-    GaAN achieved the highest accuracy in three out of five datasets.
-    %
-    GCN achieved the highest or second highest accuracy in three out of five datasets, though its model was simplest.
-    %
-    Simple GNN models (such as GCN) could still achieve good accuracy with proper hyper-parameter settings.
-    
-    \begin{figure}[H]
+    \begin{figure}[h]
         \centering
         \includegraphics[width=3.5in]{../figs/experiments/exp_hyperparameter_on_accuracy_alg_contrast.pdf}
-        \caption{Best accuracy that each GNN achieved on different datasets.}
+        \caption{Best accuracy that each GNN achieves on different datasets.}
         \label{fig:exp_hyperparameter_on_accuracy_alg_contrast}
     \end{figure}
     
-
-    \end{myquote}
+    In addition, we add more details on the proportions of  the train/evaluation/test sets of the datasets in Section 3.1 ``Experimental Setting'' in the revised manuscript.
+    %
+    Since the vertices of the \texttt{cam} dataset are not attached with feature vectors, we exclude it from the accuracy evaluation.
 \end{reply}
 
 \begin{point}
@@ -738,91 +464,64 @@ There are some grammar errors and typos:
 
 \begin{reply}
 
-    Thanks for the insightful comment and valuable suggestion.
+    Thanks for the insightful comment.
     %
-    The sampling methods indeed affect the test accuracy of GNN models [5, 28, 26, 31].
+    %The sampling methods indeed affect the test accuracy of GNN models [\cite{hamilton2017_graphsage, chiang2019_cluster_gcn, zeng2020_graphsaint}].
     %
-    Without sampling, the GNN models are trained with a \emph{batch} gradient descent manner.
+    With or without the sampling methods, the structure of the GNN remains the same, but the gradients of the model parameters are calculated differently, affecting the accuracy of the GNN model.
+    %
+    With sampling, each GNN layer still consists of $|\mathcal{V}|$ graph neurons ($|\mathcal{V}|$ is the number of vertices in the graph), but only graph neurons corresponding to the vertices in the sampled subgraph are activated.
+    %
+    Thus, the model parameters are updated according to the gradients calculated on the sampled subgraph, instead of the whole graph.
+    %
+    In other words, the GNN models are trained in a \emph{batch} gradient descent manner (i.e., full-batch training) without sampling.
     %
     With sampling, the GNN models are trained with \emph{mini-bach} stochastic gradient descent.
-    %
-    The structure of the GNN remains unchanged between batches.
-    %
-    Each GNN layer always consists of $|\mathcal{V}|$ graph neurons, where $|\mathcal{V}|$ is the number of vertices in the graph.
-    %
-    But the numbers of \emph{activated} graph neurons are different for different batches.
-    %
-    In each batch, only the neurons corresponding to the vertices appearing in the sampled subgraph will be activated.
-    %
-    The model parameters are updated according to the gradients calculated on the sampled subgraph in each batch.
-    %
-    Thus, the test accuracy of the models trained with sampling techniques may be different from the full-graph training.
     
-    To discuss how the sampling techniques affect model accuracy, we have added a new subsection Section 4.2.2 ``Effects on Accuracy'' in Section 4.4 ``Effects of Sampling Techniques'' in the revised manuscript.
+    To find out how the sampling techniques affect accuracy, we train the four typical GNNs with different batch sizes and compare the accuracy with the full-batch training.
     %
-    We quote from Section 4.4.2 of the revised manuscript to present our results.
+    For each combination of dataset and GNN, we use the hyper-parameters that achieve the highest accuracy under the full-batch training.
+    %
+    Figure~\ref{fig:exp_sampling_relative_batch_size_accuracy_graphsage}  and Figure~\ref{fig:exp_sampling_relative_batch_size_accuracy_cluster} shows the accuracy comparisons of the two typical sampling methods under different batch sizes.
+    %
+    Results of the other datasets are available in Section 4.4.3 ``Effects on Accuracy'' in the revised manuscript.
+    %
+    In most cases, the test accuracy of the sampling methods is just slightly lower than the accuracy of the full-batch training when the relative batch size $\geq 3\%$.
+    %
+    In several cases (like GaAN in Figure~\ref{fig:exp_graphsage_sampling_accuracy_on_amp} and Figure~\ref{fig:exp_graphsage_sampling_accuracy_on_amc}), the accuracy of the neighbor sampler was even higher than the full-batch training.
+    %
+    Among the two sampling methods, the performance of the cluster sampler is stabler than the neighbor sampler.
+    %
+    The test accuracy of the cluster sampler is close to the accuracy of full-batch training, while the test accuracy of the neighbor sampler shows more obvious differences for different GNNs.
+        
+
+    \begin{figure}[h]
+            \centering
+            \subfloat[\texttt{amp}\label{fig:exp_graphsage_sampling_accuracy_on_amp}]{\includegraphics[width=0.33\columnwidth]{../figs/experiments/exp_graphsage_sampling_accuracy_on_amp.pdf}}
+            \subfloat[\texttt{amc}\label{fig:exp_graphsage_sampling_accuracy_on_amc}]{\includegraphics[width=0.33\columnwidth]{../figs/experiments/exp_graphsage_sampling_accuracy_on_amc.pdf}}
+            \subfloat[\texttt{fli}\label{fig:exp_graphsage_sampling_accuracy_on_fli}]{\includegraphics[width=0.33\columnwidth]{../figs/experiments/exp_graphsage_sampling_accuracy_on_fli.pdf}}
+            \caption{Test accuracy under different batch sizes of the neighbor sampler. FULL means that the full graph participated in the training.}
+            \label{fig:exp_sampling_relative_batch_size_accuracy_graphsage}
+        \end{figure}
+        
+        \begin{figure}[h]
+            \centering
+            \subfloat[\texttt{amp}\label{fig:exp_cluster_sampling_accuracy_on_amp}]{\includegraphics[width=2in]{../figs/experiments/exp_cluster_sampling_accuracy_on_amp.pdf}}
+            %
+            \subfloat[\texttt{amc}\label{fig:exp_cluster_sampling_accuracy_on_amc}]{\includegraphics[width=2in]{../figs/experiments/exp_cluster_sampling_accuracy_on_amc.pdf}}
+            %
+            \subfloat[\texttt{fli}\label{fig:exp_cluster_sampling_accuracy_on_fli}]{\includegraphics[width=2in]{../figs/experiments/exp_cluster_sampling_accuracy_on_fli.pdf}}
+            \caption{Test accuracy under different batch sizes of the cluster sampler. FULL means that the full graph participated in the training.}
+            \label{fig:exp_sampling_relative_batch_size_accuracy_cluster}
+        \end{figure}
     
-    \begin{myquote}{Section 4.4.2 ``Effects on Accuracy''}
-    
-    Since the size of the sampled subgraph was much smaller than the original graph, the accuracy of the GNN models got by sampling techniques might be different from the full-batch training.
+    The results indicate that the relationships between batch size and test accuracy are complex, especially for the neighbor sampler.
     %
-    To find out how the batch size affected the test accuracy, we trained GNNs with different batch sizes.
+    A larger batch size does not always bring higher accuracy, like GAT in Figure~\ref{fig:exp_graphsage_sampling_accuracy_on_fli}. 
     %
-    \figurename~\ref{fig:exp_sampling_relative_batch_size_accuracy_graphsage} (in the reply) and \figurename~\ref{fig:exp_sampling_relative_batch_size_accuracy_cluster} (in the reply) compare the test accuracy achieved by sampling techniques with the test accuracy of the full-batch training.
+    Our observations are similar to \cite{zeng2020_graphsaint}.
     %
-    For each combination of dataset and GNN, we chose the hyper-parameters that achieved the highest accuracy according to the experimental results in Section 4.1.
-    
-    \begin{figure}[H]
-        \centering
-        \subfloat[\texttt{amp}]{\includegraphics[width=2in]{../figs/experiments/exp_graphsage_sampling_accuracy_on_amp.pdf}}
-        \subfloat[\texttt{amc}]{\includegraphics[width=2in]{../figs/experiments/exp_graphsage_sampling_accuracy_on_amc.pdf}}
-        \subfloat[\texttt{fli}]{\includegraphics[width=2in]{../figs/experiments/exp_graphsage_sampling_accuracy_on_fli.pdf}}
-        \caption{Test accuracy under different batch sizes of the neighbor sampler. FULL means that the full graph participated in the training.}
-        \label{fig:exp_sampling_relative_batch_size_accuracy_graphsage}
-    \end{figure}
-    
-    \begin{figure}[H]
-        \centering
-        \subfloat[\texttt{amp}\label{fig:exp_cluster_sampling_accuracy_on_amp}]{\includegraphics[width=2in]{../figs/experiments/exp_cluster_sampling_accuracy_on_amp.pdf}}
-        %
-        \subfloat[\texttt{amc}\label{fig:exp_cluster_sampling_accuracy_on_amc}]{\includegraphics[width=2in]{../figs/experiments/exp_cluster_sampling_accuracy_on_amc.pdf}}
-        %
-        \subfloat[\texttt{fli}\label{fig:exp_cluster_sampling_accuracy_on_fli}]{\includegraphics[width=2in]{../figs/experiments/exp_cluster_sampling_accuracy_on_fli.pdf}}
-        \caption{Test accuracy under different batch sizes of the cluster sampler. FULL means that the full graph participated in the training.}
-        \label{fig:exp_sampling_relative_batch_size_accuracy_cluster}
-    \end{figure}
-    
-    The experimental results confirmed the effectiveness of the sampling methods in terms of accuracy.
-    %
-    When the relative batch size was greater than or equal to 3\%, the test accuracy of the GNNs trained with sampling was close to the accuracy obtained by full-batch training.
-    %
-    In most cases, the accuracy achieved by the sampling techniques was slightly lower than the full-batch training.
-    %
-    However, there were some exceptions (like GaAN in \figurename~\ref{fig:exp_cluster_sampling_accuracy_on_amp} and \figurename~\ref{fig:exp_cluster_sampling_accuracy_on_amc} in the reply) that the accuracy achieved by sampling was even higher.
-    
-    The relationships between batch size and test accuracy were complex.
-    %
-    A larger batch size did not always bring higher accuracy.
-    %
-    For example, the accuracy of GaAN in \figurename~\ref{fig:exp_cluster_sampling_accuracy_on_amp} (in the reply) and GGNN in \figurename~\ref{fig:exp_cluster_sampling_accuracy_on_fli} (in the reply) decreased as the batch size increased.
-    %
-    A smaller batch size sometimes could achieve higher accuracy.
-    %
-    For example, GAT achieved a higher accuracy with 1\% relative batch size than the full-batch training in \figurename~\ref{fig:exp_cluster_sampling_accuracy_on_amc} (in the reply).
-    %
-    Given a sampling method, we found that the optimal batch size highly depended on the dataset and the GNN algorithm.
-    %
-    Our observations were similar to [31].
-    %
-    How to automatically select a proper batch size is a topic worth further studying.
-    
-    Among the two sampling methods, the performance of the cluster sampler was stabler than the neighbor sampler.
-    %
-    With the cluster sampler, the test accuracy of different GNNs was very close to the accuracy of full-batch training.
-    %
-    With the neighbor sampler, the test accuracy of different GNNs showed more obvious differences.
-    \end{myquote}
-    
+    How to automatically select a proper batch size is a topic worth studying.
 \end{reply}
 
 \begin{point}
@@ -833,19 +532,18 @@ There are some grammar errors and typos:
 
     We are grateful for your insightful suggestion.
     %
-    As suggested, we additionally evaluated the effects of model complexity on accuracy in Section 4.1 ``Effects of Hyper-parameters on Performance'' in the revised manuscript.
+    As suggested, we additionally evaluate the effects of model complexity on accuracy in Section 4.1 ``Effects of Hyper-parameters on Performance'' in the revised manuscript.
     %
-    We added experimental results on how the hyper-parameters of GNNs affected the accuracy.
+    We add experimental results on how the hyper-parameters of GNNs affect the accuracy.
     %
-    Since different GNNs had different model complexity, we further compared the test accuracy of different GNNs on the same dataset.
-    %
-    More details are available in the reply to Reviewer Point P2.4.
+    We also compare the test accuracy of different GNN models on the same dataset.
     
-    We also additionally evaluated the effects of sampling techniques on accuracy in Section 4.4 ``Effects of Sampling Techniques'' in the revised manuscript.
+    We also additionally evaluate the effects of sampling techniques on accuracy in Section 4.4 ``Effects of Sampling Techniques'' in the revised manuscript.
     %
-    We presented the experimental results in a new subsection Section 4.4.2 ``Effects on Accuracy''.
-    %
-    More details are available in the reply to Reviewer Point P2.5.
+    We presented the experimental results in a new subsection Section 4.4.3 ``Effects on Accuracy''.
 \end{reply}
+
+\bibliographystyle{elsarticle}
+\bibliography{../gnnref.bib}
 
 \end{document}
