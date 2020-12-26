@@ -1,7 +1,7 @@
 \section{Evaluation Results and Analysis}
 \label{sec:experiment_results}
 
-We answered the four questions in Section~\ref{sec:experimental_scheme} one by one with experiments.
+We answer the four questions in Section~\ref{sec:experimental_scheme} one by one with experiments.
 %
 Without otherwise mentioned, the reported training time per epoch was the average wall-clock training time of 50 epochs, excluding abnormal epochs.
 %
@@ -21,9 +21,9 @@ They affected the training/inference time, memory usage, and accuracy of the GNN
 
 \subsubsection{Effects on Training Time}
 
-According to \tablename~\ref{tab:gnn_overview_edge} and \tablename~\ref{tab:gnn_overview_vertex}, the time complexity of the messaging function $\phi^l$ and the updating function $\gamma^l$ are linear to each hyper-parameter separately.
+According to \tablename~\ref{tab:gnn_overview_edge} and \tablename~\ref{tab:gnn_overview_vertex}, the time complexity of the messaging function $\phi^l$ and the updating function $\gamma^l$ were linear to each hyper-parameter separately.
 %
-If we increase one of the hyper-parameters and fix the others, the training/inference time should increase linearly in theory.
+If we increased one of the hyper-parameters and fix the others, the training/inference time should increase linearly in theory.
 
 To verify the time complexity analysis in \tablename~\ref{tab:gnn_overview_edge} and \tablename~\ref{tab:gnn_overview_vertex}, we first compared the \emph{training} time of the four GNNs in \figurename~\ref{fig:exp_absolute_training_time}.
 %
@@ -42,7 +42,7 @@ The ranking was consistent with the time complexity analysis.
     \includegraphics[width=0.3\textwidth]{figs/experiments/exp_absolute_training_time_comparison_amazon-computers.pdf}
     \includegraphics[width=0.3\textwidth]{figs/experiments/exp_absolute_training_time_comparison_flickr.pdf}
     \includegraphics[width=0.3\textwidth]{figs/experiments/exp_absolute_training_time_comparison_com-amazon.pdf}
-    \caption{Distribution of the wall-clock training time of 50 epoches on different datasets. GaAN crashed due to out of memory exception on the \texttt{cph} dataset.}
+    \caption{Distribution of the wall-clock training time of 50 epochs on different datasets. GaAN crashed due to out of memory exception on the \texttt{cph} dataset.}
     \label{fig:exp_absolute_training_time}
 \end{figure}
 
@@ -94,7 +94,7 @@ For GCN and GGNN, $dim(\MyVec{h}^0_x)$ and $dim(\MyVec{h}^1_x)$ were solely dete
 %
 Therefore, the only modifiable hyper-parameter was the dimension of $\MyVec{h}^1_x$ that affected the dimension of output hidden vectors of the layer 0 $d^0_{out}$ and the dimension of input hidden vectors of the layer 1 $d^1_{in}$ simultaneously, i.e. $dim(\MyVec{h}^1_x)  = d^0_{out} = d^1_{in}$.
 %
-According to the time complexity analysis, if we fixed other hyper-parameters but only increased $dim(\boldsymbol{h}^1_x)$, the computational costs of the GNN layer 0 and the GNN layer 1 should both increase linearly with $dim(\boldsymbol{h}^1_x)$, causing the training time of the whole GNN also increasing linearly. 
+According to the time complexity analysis, if we fixed other hyper-parameters but only increased $dim(\boldsymbol{h}^1_x)$, the computational costs of the GNN layer 0 and the GNN layer 1 should both increase linearly with $dim(\boldsymbol{h}^1_x)$, causing the training time of the whole GNN also increased linearly. 
 %
 \figurename~\ref{fig:exp_hyperparameter_on_vertex_edge_phase_time_gcn} and \figurename~\ref{fig:exp_hyperparameter_on_vertex_edge_phase_time_ggnn} show that the training time of GCN and GGNN increased linearly with $dim(\boldsymbol{h}^1_x)$ when $dim(\boldsymbol{h}^1_x)$ was big, consistent with the theoretical analysis.
 
@@ -181,7 +181,7 @@ The relationship between model complexity and accuracy was complex.
 %
 Generally speaking, higher model complexity brought more powerful representation capability and might bring higher accuracy, but it also increased the risk of overfitting.
 
-To evaluate the effects of hyper-parameters on accuracy, we measured the accuracy of the typical GNNs with varying hyper-parameters.
+To evaluate the effects of hyper-parameters on the accuracy, we measured the accuracy of the typical GNNs with varying hyper-parameters.
 %
 \figurename~\ref{fig:exp_hyperparameter_accuracy} shows the experimental results.
 %
@@ -211,7 +211,7 @@ As $dim(\MyVec{h}_x^1)$ or $d_{head}$ increased to a certain threshold, the GNNs
     \subfloat[GGNN]{\includegraphics[width=0.3\columnwidth]{figs/experiments/exp_hyperparameter_on_accuracy_ggnn.pdf}}\\
     \subfloat[GAT]{\includegraphics[width=0.6\columnwidth]{figs/experiments/exp_hyperparameter_on_accuracy_gat.pdf}}\\
     \subfloat[GaAN]{\includegraphics[width=0.9\columnwidth]{figs/experiments/exp_hyperparameter_on_accuracy_gaan.pdf}}
-    \caption{Effects of hyper-parameters on accuracy of the typical GNNs.}
+    \caption{Effects of hyper-parameters on the accuracy of the typical GNNs.}
     \label{fig:exp_hyperparameter_accuracy}
 \end{figure}
 
@@ -228,7 +228,7 @@ The relative accuracy between GNNs varied greatly with different datasets.
 %
 GaAN achieved the highest accuracy in three out of five datasets.
 %
-GCN achieved the highest or second highest accuracy in three out of five datasets, though its model was simplest.
+GCN achieved the highest or second-highest accuracy in three out of five datasets, though its model was simplest.
 %
 Simple GNN models (such as GCN) could still achieve good accuracy with proper hyper-parameter settings.
 
@@ -308,7 +308,7 @@ Only for GGNN that had high vertex and low edge calculation complexity, the trai
 
 In summary, \emph{the edge calculation stage was the most time-consuming stage in GNN training}.
 %
-Improving its efficiency is the key to reduce the GNN training time.
+Improving its efficiency was the key to reduce the GNN training time.
 
 \begin{figure}[H]
     \centering
@@ -324,25 +324,25 @@ Improving its efficiency is the key to reduce the GNN training time.
 
 We further investigated the most time-consuming step of the edge calculation stage.
 %
-In the implementation of PyG, the edge calculation stage consists of four steps: collection, messaging, aggregation, and vector updating, as shown in \figurename~\ref{fig:steps_in_edge_calculation}.
+In the implementation of PyG, the edge calculation stage consisted of four steps: collection, messaging, aggregation, and vector updating, as shown in \figurename~\ref{fig:steps_in_edge_calculation}.
 %
-The edge index is a matrix with $|\mathcal{E}|$ rows and two columns.
+The edge index was a matrix with $|\mathcal{E}|$ rows and two columns.
 %
-It holds the edge set of the graph.
+It holded the edge set of the graph.
 %
-The two columns of the edge index store the source and the target vertex IDs of each edge.
+The two columns of the edge index stored the source and the target vertex IDs of each edge.
 %
-The collection step copies the hidden vectors from the previous GNN layer $\MyVec{h}^l_y$ and $\MyVec{h}^l_x$ to the both endpoints of each edge $e_{y,x}$ in the edge index, forming the parameter tensor $[\MyVec{h}^l_{y}, \MyVec{h}^l_{x}, \MyVec{e}_{y,x}]$ of the messaging function $\phi^l$.
+The collection step copied the hidden vectors from the previous GNN layer $\MyVec{h}^l_y$ and $\MyVec{h}^l_x$ to the both endpoints of each edge $e_{y,x}$ in the edge index, forming the parameter tensor $[\MyVec{h}^l_{y}, \MyVec{h}^l_{x}, \MyVec{e}_{y,x}]$ of the messaging function $\phi^l$.
 %
-This step only involves data movement.
+This step only involved data movement.
 %
-The messaging step calls the messaging function $\phi^l$ on all edges to get message vectors $\MyVec{m}^l_{y,x}$.
+The messaging step called the messaging function $\phi^l$ on all edges to get message vectors $\MyVec{m}^l_{y,x}$.
 %
-The aggregation step aggregates the message vectors with the same target vertex into an aggregated vector $\MyVec{s}^l_x$.
+The aggregation step aggregated the message vectors with the same target vertex into an aggregated vector $\MyVec{s}^l_x$.
 %
-The vector updating step is optional.
+The vector updating step was optional.
 %
-It performs an additional transformation on the aggregated vectors (for example, adding the bias in GCN).
+It performed an additional transformation on the aggregated vectors (for example, adding the bias in GCN).
 
 \begin{figure}[H]
     \centering
@@ -365,13 +365,13 @@ Although the collecting step did not conduct any computation and only involved d
 
 The results indicate that \emph{the performance bottlenecks of the edge calculation stage depend on the complexity of the messaging function $\phi^l$}.
 %
-When the time complexity of $\phi^l$ is high, the messaging step is the performance bottleneck.
+When the time complexity of $\phi^l$ was high, the messaging step was the performance bottleneck.
 %
-Optimizing the implementation of $\phi$ can significantly reduce training time.
+Optimizing the implementation of $\phi$ could significantly reduce training time.
 %
-Otherwise, the collection and the aggregation steps are performance bottlenecks.
+Otherwise, the collection and the aggregation steps were performance bottlenecks.
 %
-Improving the efficiency of the two steps can benefit all GNNs.
+Improving the efficiency of the two steps could benefit all GNNs.
 
 \begin{figure}[H]
     \centering
@@ -385,7 +385,7 @@ Improving the efficiency of the two steps can benefit all GNNs.
 
 \subsubsection{Operator Level}
 
-The functions $\phi$, $\Sigma$ and $\gamma$ in the edge and vertex calculation stages are made up of a series of basic operators implemented on the GPU side, such as the matrix multiplication \texttt{mm}, the elementwise multiplication \texttt{mul} and the index-based selection \texttt{index\_select}.
+The functions $\phi$, $\Sigma$ and $\gamma$ in the edge and vertex calculation stages were made up of a series of basic operators implemented on the GPU side, such as the matrix multiplication \texttt{mm}, the elementwise multiplication \texttt{mul} and the index-based selection \texttt{index\_select}.
 %
 \figurename~\ref{fig:exp_top_basic_ops} shows the top-5 time-consuming basic operators in each GNN, averaged over all datasets.
 
@@ -573,7 +573,7 @@ For example, \figurename~\ref{fig:ggnn_vertex_func_computation_graph} shows the 
 %
 Each operator in the computation graph generated an intermediate tensor.
 %
-Some key intermediate tensors are cached.
+Some key intermediate tensors were cached.
 %
 The cached tensors were the main source of memory usage in the loss phase.
 %
@@ -950,7 +950,7 @@ Given a sampling method, we found that the optimal batch size highly depended on
 %
 Our observations were similar to \cite{zeng2020_graphsaint}.
 %
-How to automatically select a proper batch size is a topic worth further studying.
+How to automatically select a proper batch size was a topic worth further studying.
 
 Among the two sampling methods, the performance of the cluster sampler was stabler than the neighbor sampler.
 %
