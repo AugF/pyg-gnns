@@ -139,7 +139,7 @@ In GNNs, gradients are propagated from the prediction layer back to GNN layers l
 The model parameters in the GNN layers are updated based on the feedback from the downstream prediction task. 
 In a fully parameterized way, a GNN can automatically extract an embedding vector for each vertex from its $L$-hop neighborhood, tuned according to the specific prediction task.
 
-\subsection{Graph Neuron and Message-passing Model}
+\subsection{Graph Neuron and Message-passing Framework}
 
 Graph neurons are building blocks of a GNN.
 %
@@ -153,18 +153,18 @@ For the graph neuron corresponding to $v_x$ at the layer $l$, it receives the hi
 %
 The graph neuron of $v_x$ aggregates the received hidden vectors, applies non-linear transformations, and outputs a new hidden vector $\boldsymbol{h}_x^{l+1}$.
 
-We follow the message-passing model \cite{gilmer_messgae_passing} to formally define a graph neuron.
+We follow the message-passing framework \cite{gilmer_messgae_passing} to formally define a graph neuron.
 %
-The message-passing model is widely used in the cutting-edge GNN libraries like PyG \cite{PyG} and DGL \cite{DGL}.
+The message-passing framework is widely used in the cutting-edge GNN libraries like PyG \cite{PyG} and DGL \cite{DGL}.
 %
-\figurename~\ref{fig:graph_neuron_structure} shows the internal structure of a graph neuron in the message-passing model.
+\figurename~\ref{fig:graph_neuron_structure} shows the internal structure of a graph neuron in the message-passing framework.
 %
 A graph neuron at the layer $l$ are made of three \emph{differentiable} functions: the messaging function $\phi^l$, the aggregation function $\Sigma^l$, and the updating function $\gamma^l$.
 
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.5\columnwidth]{figs/illustration/GNN_Unit.pdf}
-    \caption{Graph neuron of $v_3$ in the GNN layer $l$ with the demo graph $\mathcal{G}$ in \figurename~\ref{fig:general_structure_of_gnn}b. $\phi^l$/$\Sigma^l$/$\gamma^l$ are the messaging/aggregation/updating functions in the message-passing model, respecitvely.}
+    \caption{Graph neuron of $v_3$ in the GNN layer $l$ with the demo graph $\mathcal{G}$ in \figurename~\ref{fig:general_structure_of_gnn}b. $\phi^l$/$\Sigma^l$/$\gamma^l$ are the messaging/aggregation/updating functions in the message-passing framework, respecitvely.}
     \label{fig:graph_neuron_structure}
 \end{figure}
 
@@ -181,7 +181,7 @@ The graph neuron of $v_x$ calculates the output hidden vector $\boldsymbol{h}^{l
     \item The updating function $\gamma^l$ calculates the {hidden vector} of this layer $\boldsymbol{h}^{l+1}_x$ based on the hidden vector from the previous layer $\MyVec{h}^l_x$ and the aggregated vector $\MyVec{s}^l_x$ (and other feature vectors associated with $v_x$ if necessary), i.e. $\boldsymbol{h}^{l+1}_x = \gamma^l(\boldsymbol{h}^l_x, \boldsymbol{s}^l_x, \dots)$.
 \end{enumerate}
 
-Briefly, the behaviour of a graph neuron under the message-passing model can be defined as  
+Briefly, the behaviour of a graph neuron under the message-passing framework can be defined as  
 
 \begin{equation}
       \MyVec{h}^{l+1}_x = \gamma^l(\MyVec{h}^l_x, \mathlarger{\Sigma}^l_{v_y \in \MyVec{N}(v_x)}{\phi^l(\MyVec{h}^l_y, \MyVec{h}^l_x,   \MyVec{e}_{y,x}, \dots)}, \dots).
@@ -405,7 +405,7 @@ We will give out more details on sub-layers when we introduce GAT.
 \subsection{Representative GNNs}
 
 %Since we focus on analyzing the performance bottleneck in training GNNs, we classify the typical GNNs from the view of time complexity.
-We use $O_\phi$/$O_\Sigma$/$O_\gamma$ to denote the time complexity of the three functions in the message-passing model.
+We use $O_\phi$/$O_\Sigma$/$O_\gamma$ to denote the time complexity of the three functions in the message-passing framework.
 The time complexity of a GNN layer is made up of two parts: the edge calculation complexity $O_\phi$ + $O_\Sigma$ and the vertex calculation complexity $O_\gamma$.
 %
 In \tablename~\ref{tab:gnn_overview_edge} and \tablename~\ref{tab:gnn_overview_vertex}, we list the edge and vertex calculation complexity of each GNN, respectively.
