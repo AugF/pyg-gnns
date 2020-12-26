@@ -140,29 +140,29 @@ The answers to those questions would give us a more comprehensive view of the pe
           %
           Larger hyper-parameter values usually meant more model parameters and more complex models.
           %
-          To evaluate their effects, we measured how the training/inference time per epoch, the peak memory usage (of the GPU), and the accuracy on the test set changed as we increased the values of the hyper-parameters.
+          To evaluate their effects, we measured how the training/inference time per epoch, the peak memory usage (of the GPU), and the test accuracy changed as we increased the values of the hyper-parameters.
           %
           Through the experiments, we verified the validity of the time complexity analysis in \tablename~\ref{tab:gnn_overview_edge} and \tablename~\ref{tab:gnn_overview_vertex}.
           %
           The complexity analysis allowed us to analyze performance bottlenecks theoretically.
 
-    \item[Q2] \emph{Which stage was the most time-consuming stage in GNN training and inference?} (Section~\ref{sec:training_time_breakdown})
+    \item[Q2] \emph{Which stage was the most time-consuming stage in GNN training and inference?} (Section~\ref{sec:time_breakdown_analysis})
 
-          We decomposed the GNN training time on different levels: the layer level, the edge/vertex calculation level, and the basic operator level.
+          We decomposed the GNN training/inference time on different levels: the layer level, the edge/vertex calculation level, and the basic operator level.
           %
-          On each level, we decomposed the training time of an epoch into several stages.
+          On each level, we decomposed the time of an epoch into several stages.
           %
           The most time-consuming stage was the performance bottleneck.
           %
           Optimizing its implementation would significantly reduce the training time.
           %
-          For GNN inference, we conducted a similar experimental analysis.
+          %For GNN inference, we conducted a similar experimental analysis.
           %
-          We discussed the differences in performance characteristics between training and inference.
+          %We discussed the differences in performance characteristics between training and inference.
 
     \item[Q3] \emph{Which consumed most of memory in GNN training and inference?} (Section~\ref{sec:memory_usage_analysis})
 
-          The limited memory capacity of a GPU prevented us from training GNNs on big graphs.
+          The limited memory capacity of a GPU prevented us from conducting training/inference on big graphs.
           %
           We measured the peak memory usage during GNN training/inference under different graph scales, input feature dimensions, and average degrees.
           %
@@ -170,7 +170,7 @@ The answers to those questions would give us a more comprehensive view of the pe
           %
           Reducing its memory usage would enable us to train GNNs on bigger graphs under the same memory capacity.
 
-    \item[Q4] \emph{Could sampling techniques remove performance bottlenecks in GNN training/inference? Did the use of sampling techniques in training affect model accuracy? } (Section~\ref{sec:effects_of_sampling_techniques_on_performance})
+    \item[Q4] \emph{Could sampling techniques remove performance bottlenecks in GNN training/inference? Did the use of sampling techniques in training sacrifice model accuracy? } (Section~\ref{sec:effects_of_sampling_techniques_on_performance})
 
           Theoretically, sampling techniques could significantly reduce the number of graph neurons that participated in the training of a batch.
           %
@@ -180,10 +180,9 @@ The answers to those questions would give us a more comprehensive view of the pe
           %
           To validate the effectiveness of sampling techniques, we measured the training/inference time, peak memory usage, and test accuracy under different batch sizes.
           %
-          If sampling techniques are effective, they would be the keys to conduct GNN training/inference on very big graphs.
+          If sampling techniques were effective, they would be the keys to conduct GNN training/inference on very big graphs.
           %
           If they were not effective, we wanted to find out which impaired their efficiency.
-          %
 
 
 \end{itemize}
