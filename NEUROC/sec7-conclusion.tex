@@ -1,9 +1,9 @@
 \section{Conclusion}
 \label{sec:conclusion}
 
-In this work, we systematically explore the performance bottleneck in graph neural network training and inference. 
+In this work, we systematically explore the performance bottlenecks in graph neural network training and inference. 
 We model the existing GNNs with the message-passing framework. 
-We classify the GNNs according to their edge and vertex calculation complexities to select four typical GNNs for evaluation. 
+We classify the GNNs according to their edge and vertex calculation complexity to select four typical GNNs for evaluation. 
 The experimental results validate our complexity analysis. Fixing other hyper-parameters, the training time and the memory usage increase linearly with each hyper-parameter of the four GNNs. 
 To find out the performance bottleneck in the training/inference time, we decompose the training/inference time per epoch on different levels. 
 The time breakdown analysis indicates that the edge calculation stage and its related basic operators are the performance bottleneck for most GNNs. 
