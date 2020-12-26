@@ -445,48 +445,30 @@ The index-based selection operator \texttt{index\_select} used in the collection
 %
 Improving the efficiency of \texttt{scatter\_add}/\texttt{gather}/\texttt{index\_select} can benefit all kinds of GNNs.
 
-\paragraph{Summary of Training Time Breakdown}
-%
-The GNN training was suitable for GPUs.
-%
-\emph{The edge calculation stage was the main performance bottleneck in most cases}, except for training GNNs with high vertex calculation complexity on low-average-degree graphs.
-%
-The performance bottleneck in the edge calculation stage depended on the time complexity of the messaging function $\phi$.
-%
-If the time complexity of $\phi$ was {high}, {$\phi$} dominated the training time of the edge calculation stage.
-%
-Optimizations should focus on improving its efficiency.
-%
-Otherwise, the {collection step} and the {aggregation step} dominated the training time.
-%
-The collection step suffered from lots of data movement.
-%
-The aggregation step suffered from data synchronization and non-regular data access.
-
 
 \subsubsection{Performance Bottlenecks in Inference}
-%
-We also did all the above experiments for Inference.
+
 %
 We found that the performance characteristics of GNN inference were highly similar to training on the \emph{layer} level and the \emph{step} level.
 %
 Here, we used GCN as an example. 
 %
-We made similar observations for all GNNs. 
-%
 \figurename~\ref{fig:inference_analysis_on_layer_edge_level_of_gcn} shows the results of GCN inference on the \emph{layer} level and the \emph{step} level.
 %
-Compared to the training time breakdown of GCN \figurename~\ref{fig:exp_vertex_edge_cal_proportion}(a), 
+By cross-comparing \figurename~\ref{fig:exp_vertex_edge_cal_proportion}(a), 
 \figurename~\ref{fig:exp_avg_degree_on_vertex_edge_cal_time}(a), and \figurename~\ref{fig:exp_edge_calc_decomposition}(a),
 we could conclude that the time breakdowns were very similar.
+%
+For the other GNNs, we observed similar phenomena.
+%
 
 % GCN Inference结果对比图
 \begin{figure}[H]
     \centering
-    \subfloat[\emph{layer} level]{\includegraphics[width=0.3\columnwidth]{figs/experiments/exp_inference_full_avg_degree_on_vertex_edge_cal_time_gcn.pdf}}
-    \subfloat[the effect of average degree]{\includegraphics[width=0.3\columnwidth]{figs/experiments/exp_inference_full_avg_degree_on_vertex_edge_cal_time_gcn.pdf}}
-    \subfloat[\emph{edge} level]{\includegraphics[width=0.3\columnwidth]{figs/experiments/exp_inference_full_edge_calc_decomposition_gcn.pdf}}
-    \caption{Time breakdowns on the layer level and edge level, and the effect of average degree on the edge/vertex calculation of GCN Inference.}
+    \subfloat[Layer Level]{\includegraphics[width=0.3\columnwidth]{figs/experiments/exp_inference_full_avg_degree_on_vertex_edge_cal_time_gcn.pdf}}
+    \subfloat[Effects of the average degree]{\includegraphics[width=0.3\columnwidth]{figs/experiments/exp_inference_full_avg_degree_on_vertex_edge_cal_time_gcn.pdf}}
+    \subfloat[Edge Level]{\includegraphics[width=0.3\columnwidth]{figs/experiments/exp_inference_full_edge_calc_decomposition_gcn.pdf}}
+    \caption{Time breakdowns on the layer level and edge level, and effects of average degree on the edge/vertex calculation of GCN inference.}
     \label{fig:inference_analysis_on_layer_edge_level_of_gcn}
 \end{figure}
 
@@ -504,7 +486,7 @@ The main differences between training and inference were reflected in two aspect
 %
 The inference time was much less than the training time.
 %
-Figure~\ref{fig:compare_wall_clock_time_of_training_and_inference} in the response (Figure X in the revised manuscript) compares the wall-clock time of training and inference on the \texttt{amp}, \texttt{amc}, and \texttt{fli} datasets.
+Figure~\ref{fig:compare_wall_clock_time_of_training_and_inference} compares the wall-clock time of training and inference on the \texttt{amp}, \texttt{amc}, and \texttt{fli} datasets.
 %
 The results on the other datasets were similar.
 %
@@ -547,6 +529,24 @@ The basic operators related to the collection and aggregation steps in the edge 
     \caption{Top 5 time-consuming basic operators of typical GNNs. The time proportion of each basic operator was averaged over all datasets with the error bar indicating the maximum and the minimum.}
     \label{fig:exp_inference_top_basic_ops}
 \end{figure}
+
+\paragraph{Summary}
+% TODO:
+The GNN training/inference was suitable for GPUs.
+%
+\emph{The edge calculation stage was the main performance bottleneck in most cases}, except for training GNNs with high vertex calculation complexity on low-average-degree graphs.
+%
+The performance bottleneck in the edge calculation stage depended on the time complexity of the messaging function $\phi$.
+%
+If the time complexity of $\phi$ was {high}, {$\phi$} dominated the training time of the edge calculation stage.
+%
+Optimizations should focus on improving its efficiency.
+%
+Otherwise, the {collection step} and the {aggregation step} dominated the training time.
+%
+The collection step suffered from lots of data movement.
+%
+The aggregation step suffered from data synchronization and non-regular data access.
 
 \subsection{Memory Usage Analysis}
 \label{sec:memory_usage_analysis}
@@ -680,17 +680,6 @@ It indicated that \emph{the intermediate results of the edge calculation stage d
     \label{fig:exp_memory_expansion_ratio_input_graph_number_of_vertices_fixed_edge}
 \end{figure}
 
-\paragraph{Summary of Memory Usage in Training}
-%
-The \emph{high} memory expansion ratio severely restricted the data scalability of GNN training.
-%
-The memory usage mainly came from the intermediate results of the \emph{edge calculation stage}.
-%
-Fixing the number of vertices, the memory usage increased \emph{linearly} along with the number of edges.
-%
-Fixing the GNN structure and the hyper-parameters, increasing the dimension of input feature vectors could reduce the memory expansion ratio.
-%
-To reduce the memory usage of GNN training, optimizations should focus on reducing memory footprints of the edge calculation stage.
 
 \paragraph{Memory Usage of Inference}
 
@@ -711,6 +700,18 @@ To handle big graphs, sample-based inference was necessary.
    \caption{Memory expansion ratios of typical GNNs in Inference.}
    \label{fig:exp_inference_memory_expansion_ratio}
 \end{figure}
+
+\paragraph{Summary of Memory Usage in Training}
+%TODO: 
+The \emph{high} memory expansion ratio severely restricted the data scalability of GNN training.
+%
+The memory usage mainly came from the intermediate results of the \emph{edge calculation stage}.
+%
+Fixing the number of vertices, the memory usage increased \emph{linearly} along with the number of edges.
+%
+Fixing the GNN structure and the hyper-parameters, increasing the dimension of input feature vectors could reduce the memory expansion ratio.
+%
+To reduce the memory usage of GNN training, optimizations should focus on reducing memory footprints of the edge calculation stage.
 
 \subsection{Effects of Sampling Techniques on Performance}
 \label{sec:effects_of_sampling_techniques_on_performance}
@@ -844,18 +845,6 @@ The training time of GaAN increased only when $|\mathcal{V}| \geq 4000$.
     \label{fig:exp_small_graph_train_time}
 \end{figure}
 
-\paragraph{Summary of Sampling Techniques in Training}
-
-The sampled subgraphs had lower average degrees than the original graph.
-%
-With small batch sizes, the sampling techniques could significantly reduce the training time per batch and the peak memory usage.
-%
-However, small batch sizes could not make full use of the computing power of a GPU.
-%
-With big batch sizes, the current implementation of the sampling techniques in PyG was inefficient.
-%
-The time spent on the sampling phase and the data transferring phase even exceeded the training phase.
-
 \subsubsection{Performance Bottlenecks in Inference}
 
 Sample-based inference was an effective technique to handle big graphs.
@@ -958,3 +947,14 @@ With the cluster sampler, the test accuracy of different GNNs was very close to 
 %
 With the neighbor sampler, the test accuracy of different GNNs showed more obvious differences.
 
+\paragraph{Summary of Sampling Techniques}
+% TODO:
+The sampled subgraphs had lower average degrees than the original graph.
+%
+With small batch sizes, the sampling techniques could significantly reduce the training time per batch and the peak memory usage.
+%
+However, small batch sizes could not make full use of the computing power of a GPU.
+%
+With big batch sizes, the current implementation of the sampling techniques in PyG was inefficient.
+%
+The time spent on the sampling phase and the data transferring phase even exceeded the training phase.
