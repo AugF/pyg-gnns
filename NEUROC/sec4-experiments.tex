@@ -714,7 +714,7 @@ To reduce the memory usage of GNN training, optimizations should focus on reduci
 \subsection{Effects of Sampling Techniques on Performance}
 \label{sec:effects_of_sampling_techniques_on_performance}
 
-With the sampling techniques, GNNs were trained and inferenced in a mini-batch manner.
+With the sampling techniques, GNNs were trained and inferred in a mini-batch manner.
 %
 Each epoch was decomposed into many batches.
 %
@@ -722,7 +722,7 @@ In each batch, PyG only sent the sampled subgraph to the GPU to train or inferen
 %
 The batch size determined the size of the sampled subgraph.
 %
-Thus, it affected the accuracy, training/inference time and memory usage of GNNs simultaneously.
+Thus, it affected the accuracy, training/inference time, and memory usage of GNNs simultaneously.
 
 \subsubsection{Size of Sampled Subgraphs}
 
@@ -839,13 +839,13 @@ The training time of GaAN increased only when $|\mathcal{V}| \geq 4000$.
 \begin{figure}[H]
     \centering
     \includegraphics[height=5cm]{figs/experiments/exp_small_graph_train_time.pdf}
-    \caption{Training time per epoch on small random graphs. For each number of vertices, we generated 50 random graphs with the average degree of 4.0 and reported the average training time per batch (without the evaluation phase). The error bar indicates the standard deviation.}
+    \caption{Training time per epoch on small random graphs. For each number of vertices, we generated 50 random graphs with an average degree of 4.0 and reported the average training time per batch (without the evaluation phase). The error bar indicates the standard deviation.}
     \label{fig:exp_small_graph_train_time}
 \end{figure}
 
 \subsubsection{Performance Bottlenecks in Inference}
 
-Sample-based inference was an effective technique to handle big graphs.
+The sample-based inference was an effective technique to handle big graphs.
 %
 Taking the node classification task as an example, to predict labels for a given set of vertices $\mathcal{V}_{predict}$, the inference sampler sampled a subgraph containing complete $L$-hop neighborhoods of all vertices in $\mathcal{V}_{predict}$, where $L$ was the number of GNN layers.
 %
@@ -855,7 +855,7 @@ Figure~\ref{fig:sampled_graph_size} (Figure X in the revised manuscript) shows h
 %
 When the relative batch size was 10\%, the number of edges in the sampled subgraphs were close to the number of edges in the whole graph in most datasets.
 %
-In order to limit the memory usage during inference, the batch size used should be very small.
+To limit the memory usage during inference, the batch size used should be very small.
 
 \begin{figure}[H]
    \centering
@@ -866,7 +866,7 @@ In order to limit the memory usage during inference, the batch size used should 
    \label{fig:sampled_graph_size}
 \end{figure}
 
-However, the overheads brought by sampling and data transfering from CPU to GPU became obvious when the batch size was small.
+However, the overheads brought by sampling and data transferring from CPU to GPU became obvious when the batch size was small.
 %
 Figure~\ref{fig:time_breakdown_of_inference_sampler} shows the time breakdowns of sample-based inference on different datasets.
 %
