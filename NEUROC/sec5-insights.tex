@@ -1,7 +1,7 @@
 \section{Insights}
 \label{sec:insights}
 
-Through the extensive experiments, we propose the following key findings and suggestions for how to optimize the performance of the GNN training.
+Through the extensive experiments, we propose the following key findings and suggestions for how to optimize the performance of the GNN training/inference.
 
 \begin{enumerate}
     \item \emph{The time complexity in \tablename~\ref{tab:gnn_overview_edge} and \tablename~\ref{tab:gnn_overview_vertex} points out performance bottlenecks theoretically.}
@@ -10,9 +10,9 @@ Through the extensive experiments, we propose the following key findings and sug
           Optimization should focus on complex operations in the messaging function $\phi$ and the vertex updating function $\gamma$.
 
     \item \emph{The computational cost of a GNN layer is mainly affected by the dimensions of the input and the output hidden feature vectors.}
-          Theoretically and empirically, the training time and the memory usage of a GNN layer both increase \emph{linearly} with the dimensions of the input/output hidden feature vectors separately.
+          Theoretically and empirically, the training/inference time and the memory usage of a GNN layer both increase \emph{linearly} with the dimensions of the input/output hidden feature vectors separately.
           GNNs are friendly to high-dimensional scenarios. 
-          Algorithm engineers can use high-dimensional feature vectors to improve the expressive power of a GNN without worrying exponential growth in the training time and memory usage
+          Algorithm engineers can use high-dimensional feature vectors to improve the expressive power of a GNN without worrying exponential growth in the training/inference time and memory usage
     \item \emph{Performance optimizations should focus on improving the efficiency of the edge calculation stage.}
           The edge calculation stage is the most time-consuming stage in most GNNs.
           \begin{itemize}
@@ -24,18 +24,18 @@ Through the extensive experiments, we propose the following key findings and sug
                     The existing GNN libraries \cite{DGL, PyG, ma2019_neugraph} already introduce the \emph{fused} operator to improve their efficiency.
                     When the messaging function $\phi$ is an assignment or a scalar multiplication of the hidden feature vector of the source vertex, the libraries replace the collection, messaging, and aggregation steps with a single fused operator.
                     The fused operator calculates the aggregated vectors directly from the input hidden feature vectors, minimizing the memory footprints and overlapping the memory accessing with computation.
-                    In this way, it significantly reduces the training time of GNNs with low edge calculation complexity (like GCN) \cite{yan2020_characterizing_gcn, zhang2020_analysis_neugraph}.
+                    In this way, it significantly reduces the training/inference time of GNNs with low edge calculation complexity (like GCN) \cite{yan2020_characterizing_gcn, zhang2020_analysis_neugraph}.
                     However, the applicable condition of the fused operator is very restricted.
                     It does not work for $\phi$ with more complex operations like matrix multiplication.
                     A potential optimization is to develop composite CUDA kernels that can read the input hidden feature vectors and aggregate message vectors on the fly, without materializing the parameter vectors and the message vectors.          \end{itemize}
-    \item \emph{The high memory usage caused by the intermediate results of the edge calculation stage limits the data scalability of the GNN training.}
+    \item \emph{The high memory usage caused by the intermediate results of the edge calculation stage limits the data scalability of the GNN training/inference.}
           The memory expansion ratios of the typical GNNs are very high, making GPUs unable to handle big graphs.
           One solution is to distribute the dataset among several GPUs and frequently swap parts of the dataset between GPUs and the main memory \cite{ma2019_neugraph}.
-          Another possible solution \cite{chen2016_training_deep} comes from the deep neural network training.
+          Another possible solution \cite{chen2016_training_deep} comes from the deep neural network training. % checkpoints only work for GNN training.
           It only checkpoints key intermediate results during the forward propagation and re-calculates the missing results on demand during the backpropagation.
-          Implementing the checkpoint mechanism in the GNN training is another potential optimization.
+          Implementing the checkpoint mechanism is another potential optimization for GNN training.
 
-    \item \emph{Sampling techniques can significantly reduce the training time and memory usage, but its implementation is still inefficient}.
+    \item \emph{Sampling techniques can significantly reduce the training/inference time and memory usage, but its implementation is still inefficient}.
           The sampling techniques are effective under small batch sizes.
           Its current implementation brings considerable overheads when the batch size becomes large.
           Improving the efficiency of the sampling is a potential optimization.
