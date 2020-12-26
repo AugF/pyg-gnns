@@ -170,7 +170,7 @@ The answers to those questions would give us a more comprehensive view of the pe
           %
           Reducing its memory usage would enable us to train GNNs on bigger graphs under the same memory capacity.
 
-    \item[Q4] \emph{Could sampling techniques remove performance bottlenecks in GNN training? What was the performance bottleneck of sample-based inference? Did the use of sampling techniques in training affect model accuracy? } (Section~\ref{sec:effects_of_sampling_techniques_on_performance})
+    \item[Q4] \emph{Could sampling techniques remove performance bottlenecks in GNN training/inference? Did the use of sampling techniques in training affect model accuracy? } (Section~\ref{sec:effects_of_sampling_techniques_on_performance})
 
           Theoretically, sampling techniques could significantly reduce the number of graph neurons that participated in the training of a batch.
           %
@@ -178,12 +178,12 @@ The answers to those questions would give us a more comprehensive view of the pe
           %
           The model accuracy of GNNs might also be affected.
           %
-          To validate the effectiveness of sampling techniques, we measured the training time, peak memory usage, and test accuracy under different batch sizes.
+          To validate the effectiveness of sampling techniques, we measured the training/inference time, peak memory usage, and test accuracy under different batch sizes.
           %
-          If sampling techniques are effective, they would be the keys to conduct GNN training on very big graphs.
+          If sampling techniques are effective, they would be the keys to conduct GNN training/inference on very big graphs.
           %
           If they were not effective, we wanted to find out which impaired their efficiency.
           %
-          % TODO: 补充Sample-based Inference的介绍
+
 
 \end{itemize}

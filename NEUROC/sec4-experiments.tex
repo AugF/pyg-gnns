@@ -685,9 +685,9 @@ It indicated that \emph{the intermediate results of the edge calculation stage d
 \end{figure}
 
 
-\paragraph{Memory Usage of Inference}
+\paragraph{Comparing Inference and Training}
 
-Figure~\ref{fig:exp_inference_memory_expansion_ratio} shows the memory expansion ratios of typical GNNs during inference.
+Figure~\ref{fig:memory_usage_analysis} shows the memory expansion ratios of typical GNNs during inference.
 %
 Since no intermediate results had to be cached during inference of GGNN, GAT, and GaAN,
 the memory expansion ratios of inference were much less than training for the three GNNs (\figurename~\ref{fig:exp_memory_expansion_ratio}).
@@ -702,11 +702,17 @@ To handle big graphs, the sample-based inference was necessary.
    \centering
    \subfloat{\includegraphics[width=0.5\columnwidth]{figs/experiments/exp_inference_full_memory_expansion_ratio.pdf}}
    \caption{Memory expansion ratios of typical GNNs in Inference.}
-   \label{fig:exp_inference_memory_expansion_ratio}
+   \label{fig:memory_usage_analysis}
 \end{figure}
 
-\paragraph{Summary}
-%TODO: 
+%
+We also did experiments about the effects of input feature dimension, average degrees, and the number of vertices on GNN inference memory usage.
+%
+The results were similar to the GNN training phase.
+%
+
+\paragraph{Summary of Memory Usage Analysis}
+%
 The \emph{high} memory expansion ratio severely restricted the data scalability of GNN training and inference.
 %
 The memory usage mainly came from the intermediate results of the \emph{edge calculation stage}.
@@ -715,7 +721,7 @@ Fixing the number of vertices, the memory usage increased \emph{linearly} along 
 %
 Fixing the GNN structure and the hyper-parameters, increasing the dimension of input feature vectors could reduce the memory expansion ratio.
 %
-To reduce the memory usage of GNN training, optimizations should focus on reducing memory footprints of the edge calculation stage.
+To reduce the memory usage of GNN training and inference, optimizations should focus on reducing memory footprints of the edge calculation stage.
 
 \subsection{Effects of Sampling Techniques on Performance}
 \label{sec:effects_of_sampling_techniques_on_performance}
@@ -952,13 +958,13 @@ With the cluster sampler, the test accuracy of different GNNs was very close to 
 With the neighbor sampler, the test accuracy of different GNNs showed more obvious differences.
 
 \paragraph{Summary of Sampling Techniques}
-% TODO:
+% 
 The sampled subgraphs had lower average degrees than the original graph.
 %
-With small batch sizes, the sampling techniques could significantly reduce the training time per batch and the peak memory usage.
+With small batch sizes, the sampling techniques could significantly reduce the training/inference time per batch and the peak memory usage.
 %
 However, small batch sizes could not make full use of the computing power of a GPU.
 %
 With big batch sizes, the current implementation of the sampling techniques in PyG was inefficient.
 %
-The time spent on the sampling phase and the data transferring phase even exceeded the training phase.
+The time spent on the sampling phase and the data transferring phase even exceeded the training/inference phase.
