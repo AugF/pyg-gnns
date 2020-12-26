@@ -690,7 +690,7 @@ The MERs of inference were 45\% to 83\% (GGNN), 52\% to 61\% (GAT), and 37\% to 
 %
 However, the MERs were still high, disallowing inferencing with big graphs.
 %
-To handle big graphs, sample-based inference was necessary.
+To handle big graphs, the sample-based inference was necessary.
 
 \begin{figure}[H]
    \centering
@@ -699,9 +699,9 @@ To handle big graphs, sample-based inference was necessary.
    \label{fig:exp_inference_memory_expansion_ratio}
 \end{figure}
 
-\paragraph{Summary of Memory Usage in Training}
+\paragraph{Summary}
 %TODO: 
-The \emph{high} memory expansion ratio severely restricted the data scalability of GNN training.
+The \emph{high} memory expansion ratio severely restricted the data scalability of GNN training and inference.
 %
 The memory usage mainly came from the intermediate results of the \emph{edge calculation stage}.
 %
