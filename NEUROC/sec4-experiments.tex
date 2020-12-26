@@ -851,7 +851,7 @@ Taking the node classification task as an example, to predict labels for a given
 %
 Since the real-world graphs often had small-world property, the size of the sampled subgraph increased quickly as the number of vertices in $\mathcal{V}_{predict}$ (i.e., batch size) increased.
 %
-Figure~\ref{fig:sampled_graph_size} (Figure X in the revised manuscript) shows how the relative batch size ($\frac{|\mathcal{V}_{predict}|}{|\mathcal{V}|}$) affected the average degree and the number of edges of the sampled subgraphs during inference.
+Figure~\ref{fig:sampled_graph_size} shows how the relative batch size ($\frac{|\mathcal{V}_{predict}|}{|\mathcal{V}|}$) affected the average degree and the number of edges of the sampled subgraphs during inference.
 %
 When the relative batch size was 10\%, the number of edges in the sampled subgraphs were close to the number of edges in the whole graph in most datasets.
 %
@@ -937,7 +937,7 @@ Given a sampling method, we found that the optimal batch size highly depended on
 %
 Our observations were similar to \cite{zeng2020_graphsaint}.
 %
-How to automatically select a proper batch size was a topic worth further studying.
+How to automatically select a proper batch size is a topic worth further studying.
 
 Among the two sampling methods, the performance of the cluster sampler was stabler than the neighbor sampler.
 %
