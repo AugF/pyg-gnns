@@ -276,7 +276,7 @@ For GaAN, since it required the dimensions of the input/output hidden vectors mu
     \subfloat[GGNN]{\includegraphics[height=4.6cm]{figs/experiments/exp_layer_time_proportion_ggnn.pdf}}\\
     \subfloat[GAT]{\includegraphics[height=4.6cm]{figs/experiments/exp_layer_time_proportion_gat.pdf}}
     \subfloat[GaAN]{\includegraphics[height=4.6cm]{figs/experiments/exp_layer_time_proportion_gaan.pdf}}
-    \caption{Training time breakdown on the layer level. The training time of each layer included the time spent on the forward, backward and evaluation phases. Each layer was further decomposed into the vertex and the edge calculation stages.}
+    \caption{Training time breakdown on the layer level. The training time of each layer included the time spent on the forward, backward, and evaluation phases. Each layer was further decomposed into the vertex and the edge calculation stages.}
     \label{fig:exp_vertex_edge_cal_proportion}
 \end{figure}
 
@@ -328,7 +328,7 @@ In the implementation of PyG, the edge calculation stage consisted of four steps
 %
 The edge index was a matrix with $|\mathcal{E}|$ rows and two columns.
 %
-It holded the edge set of the graph.
+It held the edge set of the graph.
 %
 The two columns of the edge index stored the source and the target vertex IDs of each edge.
 %
@@ -443,7 +443,7 @@ For GPUs, they were less efficient than \texttt{mm}.
 %
 The index-based selection operator \texttt{index\_select} used in the collection step consumed about 10\% of the training time in all GNNs.
 %
-Improving the efficiency of \texttt{scatter\_add}/\texttt{gather}/\texttt{index\_select} can benefit all kinds of GNNs.
+Improving the efficiency of \texttt{scatter\_add}/\texttt{gather}/\texttt{index\_select} could benefit all kinds of GNNs.
 
 
 \subsubsection{Performance Bottlenecks in Inference}
@@ -451,9 +451,7 @@ Improving the efficiency of \texttt{scatter\_add}/\texttt{gather}/\texttt{index\
 %
 We found that the performance characteristics of GNN inference were highly similar to training on the \emph{layer} level and the \emph{step} level.
 %
-Here, we used GCN as an example. 
-%
-\figurename~\ref{fig:inference_analysis_on_layer_edge_level_of_gcn} shows the results of GCN inference on the \emph{layer} level and the \emph{step} level.
+Taking GCN as an example, \figurename~\ref{fig:inference_analysis_on_layer_edge_level_of_gcn} shows the results of GCN inference on the \emph{layer} level and the \emph{step} level.
 %
 By cross-comparing \figurename~\ref{fig:exp_vertex_edge_cal_proportion}(a), 
 \figurename~\ref{fig:exp_avg_degree_on_vertex_edge_cal_time}(a), and \figurename~\ref{fig:exp_edge_calc_decomposition}(a),
@@ -478,7 +476,7 @@ For the other GNNs, we observed similar phenomena.
     \subfloat[\texttt{amc}]{\includegraphics[width=0.3\columnwidth]{figs/experiments/exp_time_comparison_between_training_inference_amazon-computers.pdf}}
     \subfloat[\texttt{amp}]{\includegraphics[width=0.3\columnwidth]{figs/experiments/exp_time_comparison_between_training_inference_amazon-photo.pdf}}
     \subfloat[\texttt{fli}]{\includegraphics[width=0.3\columnwidth]{figs/experiments/exp_time_comparison_between_training_inference_flickr.pdf}}
-    \caption{Wall-clock training/inference time on different datasets.}
+    \caption{Wall-clock inference time on different datasets.}
     \label{fig:compare_wall_clock_time_of_training_and_inference}
 \end{figure}
 
@@ -500,7 +498,7 @@ Some of the top time-consuming operators during training were replaced by new op
 %
 Figure~\ref{fig:exp_inference_top_basic_ops} in the response compares the top 5 time-consuming basic operators in inference.
 %
-For GCN, the \texttt{index} operator used in the prediction layer became the new top 5 time-consuming operator, replacing the \texttt{gather} operator used in the backward phase in training.
+For GCN, the \texttt{index} operator used in the prediction layer became the new top 5 time-consuming operators, replacing the \texttt{gather} operator used in the backward phase in training.
 %
 %    The basic operators related to the edge calculation (\texttt{scatter\_add}, \texttt{index\_select}, and \texttt{mul}) still consumed the majority of the inference time.
 %
@@ -514,7 +512,7 @@ For GAT, the \texttt{input\_put\_impl} operator (used in the backward phase) in 
 %
 For GaAN, the \texttt{mm} operator was replaced by the \texttt{cat} operator used in the vertex updating function.
 
-Although some specific time-consuming operators were different, the performance bottlenecks on the operator level were same for training and inference.
+Although some specific time-consuming operators were different, the performance bottlenecks on the operator level were the same for training and inference.
 %
 The matrix multiplication \texttt{mm} and the element-wise multiplication \texttt{mul} operators were still time-consuming for inference, making GNN inference also {suitable for GPUs}.
 %
