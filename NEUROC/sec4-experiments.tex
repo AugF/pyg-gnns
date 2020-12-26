@@ -244,22 +244,27 @@ Simple GNN models (such as GCN) could still achieve good accuracy with proper hy
 
 The complexity analysis in \tablename~\ref{tab:gnn_overview_edge} and \tablename~\ref{tab:gnn_overview_vertex} was valid for both training and inference.
 %
-Fixing other hyper-parameters, each hyper-parameter itself affected the training time and the memory usage of a GNN Layer \emph{in a linear way}.
+Fixing other hyper-parameters, each hyper-parameter itself affected the training/inference time and the memory usage of a GNN layer \emph{in a linear way}.
 %
-Algorithm engineers could adjust hyper-parameters according to the time complexity to avoid explosive growth in the training/inference time and memory usage.
+Algorithm engineers could adjust hyper-parameters according to the complexity analysis to avoid explosive growth in training/inference time and memory usage.
 %
-The accuracy of GNNs was much more sensitive to the dimension of hidden vectors/heads than the other hyper-parameters.
+The accuracy of GNNs was much more sensitive to the dimensions of hidden vectors/heads than the other hyper-parameters.
 %
 The relative accuracy between GNNs varied greatly with different datasets.
 %
-There was no clear winner for all datasets.
+Simple GNN models (such as GCN) could achieve good accuracy with proper hyper-parameter settings.
 
-\subsection{Training/Inference Time Breakdown}
-\label{sec:training_time_breakdown}
+\subsection{Time Breakdown Analysis}
+\label{sec:time_breakdown_analysis}
 
-To find out which stage/step dominated the training time, we decomposed the training time and analyzed performance bottlenecks level by level.
+To find out which stage/step dominated the training/inference time, we decomposed the training/inference time and analyzed performance bottlenecks level by level.
+%
+We first analyzed the training time in Section~\ref{sec:time_breakdown_analysis_layer_level} to Section~\ref{sec:time_breakdown_analysis_operator_level}.
+%
+The similarities and differences between training and inference were analyzed in Section~\ref{sec:time_breakdown_analysis_inference}.
 
 \subsubsection{Layer Level}
+\label{sec:time_breakdown_analysis_layer_level}
 
 \figurename~\ref{fig:exp_vertex_edge_cal_proportion} decomposes the training time of a GNN on the layer level.
 %
@@ -273,7 +278,7 @@ For GaAN, since it required the dimensions of the input/output hidden vectors mu
 
 \begin{figure}[H]
     \centering
-    \subfloat[GCN]{\includegraphics[height=4.6cm]{figs/experiments/exp_layer_time_proportion_gcn.pdf}}
+    \subfloat[GCN\label{fig:exp_vertex_edge_cal_proportion_gcn}]{\includegraphics[height=4.6cm]{figs/experiments/exp_layer_time_proportion_gcn.pdf}}
     \subfloat[GGNN]{\includegraphics[height=4.6cm]{figs/experiments/exp_layer_time_proportion_ggnn.pdf}}\\
     \subfloat[GAT]{\includegraphics[height=4.6cm]{figs/experiments/exp_layer_time_proportion_gat.pdf}}
     \subfloat[GaAN]{\includegraphics[height=4.6cm]{figs/experiments/exp_layer_time_proportion_gaan.pdf}}
@@ -281,7 +286,7 @@ For GaAN, since it required the dimensions of the input/output hidden vectors mu
     \label{fig:exp_vertex_edge_cal_proportion}
 \end{figure}
 
-Each GNN layer was further divided into the vertex and the edge calculation stages.
+Each GNN layer was further divided into the vertex and edge calculation stages.
 %
 In \figurename~\ref{fig:exp_vertex_edge_cal_proportion}, GCN spent most of the training time on the edge calculation stage on most datasets.
 %
@@ -313,11 +318,11 @@ Improving its efficiency was the key to reduce the GNN training time.
 
 \begin{figure}[H]
     \centering
-    \subfloat[GCN]{\includegraphics[height=4cm]{figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_gcn.pdf}}
+    \subfloat[GCN\label{fig:exp_avg_degree_on_vertex_edge_cal_time_gcn}]{\includegraphics[height=4cm]{figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_gcn.pdf}}
     \subfloat[GGNN]{\includegraphics[height=4cm]{figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_ggnn.pdf}}\\
     \subfloat[GAT]{\includegraphics[height=4cm]{figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_gat.pdf}}
     \subfloat[GaAN]{\includegraphics[height=4cm]{figs/experiments/exp_avg_degree_on_vertex_edge_cal_time_gaan.pdf}}
-    \caption{Effects of the average degree on the time proportion of the edge/vertex calculation. Graphs were generated with the R-MAT generator by fixing the number of vertices as 50,000. }
+    \caption{Effects of average degrees on the vertex/edge calculation time. Graphs were generated with the R-MAT generator by fixing the number of vertices as 50,000. }
     \label{fig:exp_avg_degree_on_vertex_edge_cal_time}
 \end{figure}
 
@@ -364,9 +369,9 @@ Since the messaging function $\phi^l$ of GGNN used the pre-computed $\MyVec{\hat
 %
 Although the collecting step did not conduct any computation and only involved data movement, it occupied noticeable execution time in the four GNNs.
 
-The results indicate that \emph{the performance bottlenecks of the edge calculation stage depend on the complexity of the messaging function $\phi^l$}.
+The results indicate that \emph{the performance bottlenecks of the edge calculation stage depend on the complexity of the messaging function $\phi$}.
 %
-When the time complexity of $\phi^l$ was high, the messaging step was the performance bottleneck.
+When the time complexity of $\phi$ was high, the messaging step was the performance bottleneck.
 %
 Optimizing the implementation of $\phi$ could significantly reduce training time.
 %
@@ -376,27 +381,28 @@ Improving the efficiency of the two steps could benefit all GNNs.
 
 \begin{figure}[H]
     \centering
-    \subfloat[GCN]{\includegraphics[height=4cm]{figs/experiments/exp_edge_calc_decomposition_gcn.pdf}}
-    \subfloat[GGNN]{\includegraphics[height=4cm]{figs/experiments/exp_edge_calc_decomposition_ggnn.pdf}}\\
-    \subfloat[GAT]{\includegraphics[height=4cm]{figs/experiments/exp_edge_calc_decomposition_gat.pdf}}
-    \subfloat[GaAN]{\includegraphics[height=4cm]{figs/experiments/exp_edge_calc_decomposition_gaan.pdf}}
+    \subfloat[GCN\label{fig:exp_edge_calc_decomposition_gcn}]{\includegraphics[width=0.5\columnwidth]{figs/experiments/exp_edge_calc_decomposition_gcn.pdf}}
+    \subfloat[GGNN]{\includegraphics[width=0.5\columnwidth]{figs/experiments/exp_edge_calc_decomposition_ggnn.pdf}}\\
+    \subfloat[GAT]{\includegraphics[width=0.5\columnwidth]{figs/experiments/exp_edge_calc_decomposition_gat.pdf}}
+    \subfloat[GaAN]{\includegraphics[width=0.5\columnwidth]{figs/experiments/exp_edge_calc_decomposition_gaan.pdf}}
     \caption{Training time breakdown of the edge calculation stage.}
     \label{fig:exp_edge_calc_decomposition}
 \end{figure}
 
 \subsubsection{Operator Level}
+\label{sec:time_breakdown_analysis_operator_level}
 
 The functions $\phi$, $\Sigma$ and $\gamma$ in the edge and vertex calculation stages were made up of a series of basic operators implemented on the GPU side, such as the matrix multiplication \texttt{mm}, the elementwise multiplication \texttt{mul} and the index-based selection \texttt{index\_select}.
 %
-\figurename~\ref{fig:exp_top_basic_ops} shows the top-5 time-consuming basic operators in each GNN, averaged over all datasets.
+\figurename~\ref{fig:exp_top_basic_ops} shows the top-5 time-consuming basic operators of training each GNN, averaged over all datasets.
 
 \begin{figure}[H]
     \centering
     \subfloat[GCN]{\includegraphics[height=4cm]{figs/experiments/exp_top_basic_ops_gcn.pdf}}
     \subfloat[GGNN]{\includegraphics[height=4cm]{figs/experiments/exp_top_basic_ops_ggnn.pdf}}\\
-    \subfloat[GAT]{\includegraphics[height=4cm]{figs/experiments/exp_top_basic_ops_gat.pdf}}
+    \subfloat[GAT\label{fig:exp_top_basic_ops_gat}]{\includegraphics[height=4cm]{figs/experiments/exp_top_basic_ops_gat.pdf}}
     \subfloat[GaAN]{\includegraphics[height=4cm]{figs/experiments/exp_top_basic_ops_gaan.pdf}}
-    \caption{Top 5 time-consuming basic operators of typical GNNs. The time proportion of each basic operator was averaged over all datasets with the error bar indicating the maximum and the minimum.}
+    \caption{Top 5 time-consuming basic operators in training. The time proportion of each basic operator was averaged over all datasets with the error bar indicating the maximum and the minimum.}
     \label{fig:exp_top_basic_ops}
 \end{figure}
 
@@ -447,38 +453,26 @@ The index-based selection operator \texttt{index\_select} used in the collection
 Improving the efficiency of \texttt{scatter\_add}/\texttt{gather}/\texttt{index\_select} could benefit all kinds of GNNs.
 
 
-\subsubsection{Performance Bottlenecks in Inference}
+\subsubsection{Comparing Inference and Training}
+\label{sec:time_breakdown_analysis_inference}
 
 %
 We found that the performance characteristics of GNN inference were highly similar to training on the \emph{layer} level and the \emph{step} level.
 %
-Taking GCN as an example, \figurename~\ref{fig:inference_analysis_on_layer_edge_level_of_gcn} shows the results of GCN inference on the \emph{layer} level and the \emph{step} level.
+Taking GCN as an example, \figurename~\ref{fig:inference_analysis_of_gcn} shows the time breakdowns of GCN inference on the \emph{layer} level and \emph{step} level of the edge calculation.
 %
-By cross-comparing \figurename~\ref{fig:exp_vertex_edge_cal_proportion}(a), 
-\figurename~\ref{fig:exp_avg_degree_on_vertex_edge_cal_time}(a), and \figurename~\ref{fig:exp_edge_calc_decomposition}(a),
-we could conclude that the time breakdowns were very similar.
+By cross-comparing \figurename~\ref{fig:exp_vertex_edge_cal_proportion_gcn} with \figurename~\ref{fig:inference_analysis_of_gcn_layer_level}, 
+\figurename~\ref{fig:exp_avg_degree_on_vertex_edge_cal_time_gcn} with \figurename~\ref{fig:inference_analysis_of_gcn_avg_degree}, and \figurename~\ref{fig:exp_edge_calc_decomposition_gcn} with \figurename~\ref{fig:inference_analysis_of_gcn_edge_level}, the time breakdowns of training and inference were very similar.
 %
 For the other GNNs, we observed similar phenomena.
-%
 
-% GCN Inference结果对比图
 \begin{figure}[H]
     \centering
-    \subfloat[Layer Level]{\includegraphics[width=0.3\columnwidth]{figs/experiments/exp_inference_full_avg_degree_on_vertex_edge_cal_time_gcn.pdf}}
-    \subfloat[Effects of the average degree]{\includegraphics[width=0.3\columnwidth]{figs/experiments/exp_inference_full_avg_degree_on_vertex_edge_cal_time_gcn.pdf}}
-    \subfloat[Edge Level]{\includegraphics[width=0.3\columnwidth]{figs/experiments/exp_inference_full_edge_calc_decomposition_gcn.pdf}}
-    \caption{Time breakdowns on the layer level and edge level, and effects of average degree on the edge/vertex calculation of GCN inference.}
-    \label{fig:inference_analysis_on_layer_edge_level_of_gcn}
-\end{figure}
-
-% 绝对时间对比图
-\begin{figure}[H]
-    \centering
-    \subfloat[\texttt{amc}]{\includegraphics[width=0.3\columnwidth]{figs/experiments/exp_time_comparison_between_training_inference_amazon-computers.pdf}}
-    \subfloat[\texttt{amp}]{\includegraphics[width=0.3\columnwidth]{figs/experiments/exp_time_comparison_between_training_inference_amazon-photo.pdf}}
-    \subfloat[\texttt{fli}]{\includegraphics[width=0.3\columnwidth]{figs/experiments/exp_time_comparison_between_training_inference_flickr.pdf}}
-    \caption{Wall-clock inference time on different datasets.}
-    \label{fig:compare_wall_clock_time_of_training_and_inference}
+    \subfloat[Layer level\label{fig:inference_analysis_of_gcn_layer_level}]{\includegraphics[width=0.5\columnwidth]{figs/experiments/exp_inference_full_layer_time_proportion_gcn.pdf}}
+    \subfloat[Effects of average degrees\label{fig:inference_analysis_of_gcn_avg_degree}]{\includegraphics[width=0.4\columnwidth]{figs/experiments/exp_inference_full_avg_degree_on_vertex_edge_cal_time_gcn.pdf}}\\
+    \subfloat[Step level of the edge calculation stage\label{fig:inference_analysis_of_gcn_edge_level}]{\includegraphics[width=0.5\columnwidth]{figs/experiments/exp_inference_full_edge_calc_decomposition_gcn.pdf}}
+    \caption{Time breakdowns of GCN inference.}
+    \label{fig:inference_analysis_of_gcn}
 \end{figure}
 
 The main differences between training and inference were reflected in two aspects: the wall-clock time and the top time-consuming basic operators.
@@ -493,21 +487,30 @@ Since the inference only conducted the forward propagation from the input layer 
 %
 The inference time was 34\% (GCN), 32\% (GGNN), 25\% (GAT), and 32\% (GaAN) of the training time, averaged over all datasets.
 
+\begin{figure}[H]
+    \centering
+    \subfloat[\texttt{amc}]{\includegraphics[width=0.3\columnwidth]{figs/experiments/exp_time_comparison_between_training_inference_amazon-computers.pdf}}
+    \subfloat[\texttt{amp}]{\includegraphics[width=0.3\columnwidth]{figs/experiments/exp_time_comparison_between_training_inference_amazon-photo.pdf}}
+    \subfloat[\texttt{fli}]{\includegraphics[width=0.3\columnwidth]{figs/experiments/exp_time_comparison_between_training_inference_flickr.pdf}}
+    \caption{Wall-clock inference time on different datasets.}
+    \label{fig:compare_wall_clock_time_of_training_and_inference}
+\end{figure}
+
 The top time-consuming basic operators of training and inference also showed a certain degree of difference.
 %
 Some of the top time-consuming operators during training were replaced by new operators in inference.
 %
-Figure~\ref{fig:exp_inference_top_basic_ops} in the response compares the top 5 time-consuming basic operators in inference.
+Figure~\ref{fig:exp_inference_top_basic_ops} shows the top 5 time-consuming basic operators in inference.
 %
 For GCN, the \texttt{index} operator used in the prediction layer became the new top 5 time-consuming operators, replacing the \texttt{gather} operator used in the backward phase in training.
 %
 %    The basic operators related to the edge calculation (\texttt{scatter\_add}, \texttt{index\_select}, and \texttt{mul}) still consumed the majority of the inference time.
 %
-For GGNN, \texttt{index} operator in the prediction layer also became one of the top 5 time-consuming basic operators.
+For GGNN, \texttt{index} operator in the prediction layer also became a time-consuming basic operators.
 %
 %    Due to the high time complexity of the vertex updating function $\gamma$ in GGNN, the basic operators related to the vertex calculation stage (\texttt{mm} and \texttt{thnn\_fused\_gru\_cell}) still consumed near half of the inference time.
 %
-For GAT, the \texttt{input\_put\_impl} operator (used in the backward phase) in Figure~\ref{fig:exp_top_basic_ops}(c) was replaced by the \texttt{scatter\_add} operator used in the forward edge calculation in Figure~\ref{fig:exp_inference_top_basic_ops}(c).
+For GAT, the \texttt{input\_put\_impl} operator (used in the backward phase) in Figure~\ref{fig:exp_top_basic_ops_gat} was replaced by the \texttt{scatter\_add} operator used in the forward edge calculation in Figure~\ref{fig:exp_inference_top_basic_ops_gat}.
 %
 %    The \texttt{scatter\_add} operator was related to the edge calculation step.
 %
@@ -523,25 +526,25 @@ The basic operators related to the collection and aggregation steps in the edge 
     \centering
     \subfloat[GCN]{\includegraphics[height=4cm]{figs/experiments/exp_inference_full_top_basic_ops_gcn.pdf}}
     \subfloat[GGNN]{\includegraphics[height=4cm]{figs/experiments/exp_inference_full_top_basic_ops_ggnn.pdf}}\\
-    \subfloat[GAT]{\includegraphics[height=4cm]{figs/experiments/exp_inference_full_top_basic_ops_gat.pdf}}
+    \subfloat[GAT\label{fig:exp_inference_top_basic_ops_gat}]{\includegraphics[height=4cm]{figs/experiments/exp_inference_full_top_basic_ops_gat.pdf}}
     \subfloat[GaAN]{\includegraphics[height=4cm]{figs/experiments/exp_inference_full_top_basic_ops_gaan.pdf}}
-    \caption{Top 5 time-consuming basic operators of typical GNNs. The time proportion of each basic operator was averaged over all datasets with the error bar indicating the maximum and the minimum.}
+    \caption{Top 5 time-consuming basic operators in inference. The time proportion of each basic operator was averaged over all datasets with the error bar indicating the maximum and the minimum.}
     \label{fig:exp_inference_top_basic_ops}
 \end{figure}
 
-\paragraph{Summary}
-% TODO:
+\paragraph{Summary of Time Breakdown Analysis}
+
 The GNN training/inference was suitable for GPUs.
 %
-\emph{The edge calculation stage was the main performance bottleneck in most cases}, except for training GNNs with high vertex calculation complexity on low-average-degree graphs.
+{The edge calculation stage was the main performance bottleneck in most cases}, except for processing GNNs with high vertex calculation complexity on low-average-degree graphs.
 %
-The performance bottleneck in the edge calculation stage depended on the time complexity of the messaging function $\phi$.
+The performance bottlenecks in the edge calculation stage depended on the time complexity of the messaging function $\phi$.
 %
-If the time complexity of $\phi$ was {high}, {$\phi$} dominated the training time of the edge calculation stage.
+If the time complexity of $\phi$ was {high}, {$\phi$} dominated the training/inference time of the edge calculation stage.
 %
 Optimizations should focus on improving its efficiency.
 %
-Otherwise, the {collection step} and the {aggregation step} dominated the training time.
+Otherwise, the {collection step} and the {aggregation step} dominated the training/inference time.
 %
 The collection step suffered from lots of data movement.
 %
@@ -549,6 +552,8 @@ The aggregation step suffered from data synchronization and non-regular data acc
 
 \subsection{Memory Usage Analysis}
 \label{sec:memory_usage_analysis}
+
+\paragraph{Training}
 
 During the GNN training, we stored all data (including datasets and intermediate results) in the on-chip memory of the GPU.
 %
@@ -761,7 +766,7 @@ The slopes of the curves were similar, indicating that the sampled subgraphs sti
 %
 However, the numbers of high-degree vertices were much less than the original graph, lowering the average degrees.
 %
-According to the experimental results in Section~\ref{sec:training_time_breakdown}, if the average degree became lower, the proportion of the training time spent on the vertex calculation stage would become higher, especially for GGNN.
+According to the experimental results in Section~\ref{sec:time_breakdown_analysis}, if the average degree became lower, the proportion of the training time spent on the vertex calculation stage would become higher, especially for GGNN.
 
 \begin{figure}[H]
     \centering
