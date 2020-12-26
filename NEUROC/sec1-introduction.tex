@@ -30,15 +30,15 @@ Finally, we evaluate whether or not the sampling techniques affect the performan
 The key findings and insights are summarized below.
 
 \begin{itemize}
-    \item \textbf{The training/inference time and the memory usage of a GNN layer is mainly affected by the dimensions of the input/output hidden feature vectors.}
+    \item \textbf{The training and inference time and the memory usage of a GNN layer is mainly affected by the dimensions of the input/output hidden feature vectors.}
     Fixing other hyper-parameters, the training/inference time and the memory usage of a GNN layer increase linearly as the input/output dimensions.
     \item \textbf{The edge-related calculation is the performance bottleneck for most GNNs.}
-    For GNNs with high edge calculation complexity, most of the training/inference time is spent on conducting the messaging function for every edge. 
+    For GNNs with high edge calculation complexity, most of the training and inference time is spent on conducting the messaging function for every edge. 
     For GNNs with low edge calculation complexity, the message collection and aggregation consumes most of the training/inference time.
     \item \textbf{The high memory usage of the edge calculation is the main factor limiting the data scalability of GNN training/inference.}
     The edge calculation generates and caches many intermediate results. 
     They are an order of magnitude larger than the dataset itself. 
-    As GPUs have limited on-chip memory, the high memory consumption prevents us from training/inferring big graphs on GNNs.
+    As GPUs have limited on-chip memory, the high memory consumption prevents us from training and inferring big graphs on GNNs.
     \item \textbf{The sampling techniques can significantly reduce training/inference time and memory usage.}
     They are essential for training big graphs on GPUs. 
     However, the existing implementation is still inefficient. 
