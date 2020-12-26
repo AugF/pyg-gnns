@@ -19,7 +19,7 @@ We implemented all GNNs with PyG 1.5.0\footnote{https://pytorch-geometric.readth
 We used the node classification as the target task in GNNs due to its popularity in real-world applications.
 We trained GNNs in the semi-supervised learning setting.
 All vertices and their input feature vectors were used, but only a part of the vertices were attached with labels during the training and they were used to calculate the loss and gradients.
-The vertices with unseen labels were used in the evaluation phase to evaluate the accuracy of the current parameters.
+The vertices with unseen labels were used in the evaluation and inference phase to evaluate the accuracy of GNN models.
 %Since model parameters of GNNs were not restricted by the topological structure of $\mathcal{G}$, the model learned from the semi-supervised learning can directly extrapolate to unseen vertices.
 
 \paragraph{Datasets}

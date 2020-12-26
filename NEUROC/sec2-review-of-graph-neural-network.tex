@@ -69,7 +69,7 @@ Every edge $e_{y,x}$ of $\mathcal{G}$ may also be attached with a feature vector
 %
 The input layer of a GNN receives feature vectors from all vertices and passes the feature vectors to the first GNN layer (i.e. GNN layer 0).
 
-A GNN usually consists of more than one GNN layers.
+A GNN usually consists of more than one GNN layer.
 %
 Each GNN layer consists of $|\mathcal{V}|$ graph neurons, where $|\mathcal{V}|$ is the number of vertices in $\mathcal{G}$.
 %
@@ -77,7 +77,7 @@ Each graph neuron corresponds to a vertex in $\mathcal{G}$.
 %
 Different GNNs mainly differ in the graph neurons that they use.
 %
-We elaborate on details of graph neurons later.
+We elaborate on the details of graph neurons later.
 %
 GNN layers are \emph{sparsely} connected with the input layer and other GNN layers.
 %
@@ -133,10 +133,10 @@ If we need to predict a label for the whole graph, a pooling (max/mean/...) laye
 
 Supporting end-to-end training is a prominent advantage of GNNs, compared with traditional graph-based machine learning methods.
 The traditional methods need to construct input feature vectors for vertices and edges manually or use embedding methods like DeepWalk \cite{bryan2014_deepwalk} and node2vec \cite{aditya2016_node2vec}.
-The feature vector generation is independent from the model training.
+The feature vector generation is independent of model training.
 Therefore, generated feature vectors may not be suitable for downstream prediction tasks.
 In GNNs, gradients are propagated from the prediction layer back to GNN layers layer by layer. 
-The model parameters in the GNN layers are updated based on the feedbacks from the downstream prediction task. 
+The model parameters in the GNN layers are updated based on the feedback from the downstream prediction task. 
 In a fully parameterized way, a GNN can automatically extract an embedding vector for each vertex from its $L$-hop neighborhood, tuned according to the specific prediction task.
 
 \subsection{Graph Neuron and Message-passing Model}
@@ -172,7 +172,7 @@ The graph neuron of $v_x$ calculates the output hidden vector $\boldsymbol{h}^{l
 %
 \begin{enumerate}
     %
-    \item  For every adjacent edge $(v_y, v_x)$ of $v_x$ ($v_y \in \mathcal{N}(v_x)$), the messaging function $\phi^l$ receives the output hidden vectors $\boldsymbol{h}^l_x$ and $\boldsymbol{h}^l_y$ from the previous GNN layer and the edge feature vector $\boldsymbol{e}_{y,x}$ (and other feature vectors associated with $v_x$/$v_y$ if necessary) as the input.
+    \item  For every adjacent edge $(v_y, v_x)$ of $v_x$ ($v_y \in \mathcal{N}(v_x)$), the messaging function $\phi^l$ receives the output hidden vectors $\boldsymbol{h}^l_y$ and $\boldsymbol{h}^l_x$ from the previous GNN layer and the edge feature vector $\boldsymbol{e}_{y,x}$ (and other feature vectors associated with $v_x$/$v_y$ if necessary) as the input.
     %
     $\phi^l$ emits a \emph{message vector} $\boldsymbol{m}^l_{y,x}$ for every edge $(v_y, v_x)$ at the layer $l$, i.e. $\boldsymbol{m}^l_{y,x} = \phi^l(\boldsymbol{h}^l_y, \boldsymbol{h}^l_x, \boldsymbol{e}_{y,x}, \dots)$;
     %
@@ -261,7 +261,7 @@ We will give out more details on sub-layers when we introduce GAT.
             Gated                                                                                                                     &
             sum                                                                                                                       &
             $\MyVec{m}^l_{y, x} = \MyVec{\hat{h}}^l_y$                                           &
-            $O(d_{in} * d_{out})$                                                                                                       \\
+            $O(1)$                                                                                                       \\
             \textbf{GAT}   \cite{huang2018_gat}                                                                                       &
             Attention                                                                                                                 &
             sum                                                                                                                       &
@@ -358,7 +358,7 @@ We will give out more details on sub-layers when we introduce GAT.
                     \end{aligned}$
             \end{scriptsize}
                                                                                                                                                                                                                              &
-            $O(d_{in} * d_{out})$                                                                                                                                                                                              \\
+            $O(d_{in} * d_{out})$                                                                                                                                                                                             \\
             \textbf{GAT} \cite{huang2018_gat}                                                                                                                                                                                &
             \begin{scriptsize}
                 $\begin{aligned}[t]
@@ -438,7 +438,7 @@ As $\hat{\boldsymbol{h}}^l_y$ has the same dimension as $\boldsymbol{h}^{l+1}_x$
 
 GGNN \cite{li2015_ggnn} introduces the gated recurrent unit (GRU) into graph neural networks.
 %
-The updating function $\phi^l$ of GGNN is a modified GRU unit that has 12 model parameters to learn, having high computational complexity.
+The updating function $\gamma^l$ of GGNN is a modified GRU unit that has 12 model parameters to learn, having high computational complexity.
 %
 To lower the training cost, all GNN layers share the same group of parameters in GGNN.
 %
@@ -531,15 +531,15 @@ The sampled subgraphs of different GNN layers may be \emph{different}, as shown 
 %
 GraphSAGE \cite{hamilton2017_graphsage} is a representative neighbor sampling technique.
 %
-The tecnnique first samples several vertices from $\mathcal{V}$ in the last GNN layer.
+The technique first samples several vertices from $\mathcal{V}$ in the last GNN layer.
 %
 Then it repeatedly samples the neighbors of the sampled vertices from the previous layer until the input layer.
 %
 For every sampled vertex $v_x$ in the GNN layer $l$, GraphSAGE samples at most $\eta^l$ neighbors of $v_x$ from the previous layer.
 %
-$\eta^l$ is the hyper-parameter that is usually much smaller than $|\mathcal{V}|$.
+$\eta^l$ is the hyper-parameter that is usually small.
 %
-By this way, GraphSAGE limits neighborhood sizes of vertices in the sampled subgraph, especially high-degree vertices.
+In this way, GraphSAGE limits neighborhood sizes of vertices in the sampled subgraph, especially high-degree vertices.
 
 \begin{figure}[H]
     \centering
@@ -559,7 +559,7 @@ The cluster sampler technique \cite{chiang2019_cluster_gcn} is a representative 
 %
 Given a training graph $\mathcal{G}$, it partitions $\mathcal{G}$ into several dense clusters.
 %
-For each mini-batch, it randomly pick $N$ clusters to form the sampled subgraph, where $N$ is the hyper-parameter.
+For each mini-batch, it randomly picks $N$ clusters to form the sampled subgraph, where $N$ is the hyper-parameter.
 
 In the implementation in PyG, the model parameters of GNNs reside on the GPU side and the input graph resides on the host side.
 %
@@ -576,7 +576,7 @@ PyG conducts the evaluation phase every several epochs or batches (either on the
 
 The model parameters of a GNN consist of the weight vectors/matrices in the prediction layer and the messaging/aggregation/updating functions of each GNN layer.
 %
-For transductive learning, the input graphs of training and inference are same.
+For transductive learning, the input graphs of training and inference are the same.
 %
 The structure of the GNN does not need to adjust. 
 %
@@ -610,7 +610,7 @@ Thus, if we want to predict labels for a group of vertices, we only need to samp
 
 The implementation of sample-based inference in PyG stores the whole input graph and its feature vectors in the main memory.
 %
-In the node classification task, it splits the vertices in the test set into batches accoding to a given batch size.
+In the node classification task, it splits the vertices in the test set into batches according to the given batch size.
 %
 The subgraph corresponding to each batch is sampled on the CPU side and sent to the GPU side to perform inference.
 %
