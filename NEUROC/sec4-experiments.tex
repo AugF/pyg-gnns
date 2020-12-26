@@ -174,6 +174,7 @@ For the other GNNs, we observed similar phenomena.
 \end{figure}
 
 \subsubsection{Effects on Accuracy}
+\label{sec:hyper_parameter_accuracy}
 
 %
 The values of hyper-parameters determined the model complexity of a GNN.
@@ -685,12 +686,12 @@ It indicated that \emph{the intermediate results of the edge calculation stage d
 \end{figure}
 
 
-\paragraph{Comparing Inference and Training}
+\paragraph{Inference}
 
 Figure~\ref{fig:memory_usage_analysis} shows the memory expansion ratios of typical GNNs during inference.
 %
 Since no intermediate results had to be cached during inference of GGNN, GAT, and GaAN,
-the memory expansion ratios of inference were much less than training for the three GNNs (\figurename~\ref{fig:exp_memory_expansion_ratio}).
+the MERs of inference were much less than training for the three GNNs (compared with \figurename~\ref{fig:exp_memory_expansion_ratio}).
 %
 The MERs of inference were 45\% to 83\% (GGNN), 52\% to 61\% (GAT), and 37\% to 69\% (GaAN) of training.
 %
@@ -706,9 +707,9 @@ To handle big graphs, the sample-based inference was necessary.
 \end{figure}
 
 %
-We also did experiments about the effects of input feature dimension, average degrees, and the number of vertices on GNN inference memory usage.
+We also conducted experiments about the effects of input feature dimensions, average degrees, and the number of vertices on the memory usage of inference.
 %
-The results were similar to the GNN training phase.
+The results were similar to GNN training.
 %
 
 \paragraph{Summary of Memory Usage Analysis}
@@ -734,7 +735,7 @@ In each batch, PyG only sent the sampled subgraph to the GPU to train or inferen
 %
 The batch size determined the size of the sampled subgraph.
 %
-Thus, it affected the accuracy, training/inference time, and memory usage of GNNs simultaneously.
+Thus, it affected the accuracy, training/inference time, and memory usage simultaneously.
 
 \subsubsection{Size of Sampled Subgraphs}
 
@@ -781,11 +782,9 @@ According to the experimental results in Section~\ref{sec:time_breakdown_analysi
     \label{fig:exp_sampling_minibatch_degrees_distribution}
 \end{figure}
 
-\subsubsection{Performance Bottlenecks Analysis}
+\subsubsection{Performance Bottlenecks in Sample-based Training}
 
 To find out performance bottlenecks of the sampling techniques, we decomposed the training/inference time per batch into three phases: \emph{sampling} on the CPU side, \emph{transferring} sampled subgraphs from the CPU side to the GPU side, and \emph{training/inference} with the sampled subgraphs on the GPU side.
-
-\paragraph{Training Time}
 
 \figurename~\ref{fig:exp_sampling_batch_train_time} shows the \emph{training} time breakdown of the four GNNs under different relative batch sizes.
 %
@@ -857,7 +856,7 @@ The training time of GaAN increased only when $|\mathcal{V}| \geq 4000$.
 
 \subsubsection{Performance Bottlenecks in Inference}
 
-The sample-based inference was an effective technique to handle big graphs.
+The sample-based inference was an effective technique to conduct inference on big graphs.
 %
 Taking the node classification task as an example, to predict labels for a given set of vertices $\mathcal{V}_{predict}$, the inference sampler sampled a subgraph containing complete $L$-hop neighborhoods of all vertices in $\mathcal{V}_{predict}$, where $L$ was the number of GNN layers.
 %
@@ -867,14 +866,14 @@ Figure~\ref{fig:sampled_graph_size} shows how the relative batch size ($\frac{|\
 %
 When the relative batch size was 10\%, the number of edges in the sampled subgraphs were close to the number of edges in the whole graph in most datasets.
 %
-To limit the memory usage during inference, the batch size used should be very small.
+To limit the memory usage during inference, the batch size used should be very small in inference.
 
 \begin{figure}[H]
    \centering
    \subfloat[Average degree]{\includegraphics[width=0.5\columnwidth]{figs/experiments/exp_inference_sampling_graph_info_inference_sampler_avg_degrees.pdf}}
    \subfloat[Number of edges]{\includegraphics[width=0.5\columnwidth]{figs/experiments/exp_inference_sampling_graph_info_inference_sampler_edges.pdf}}
    
-   \caption{Characteristics of the sampled subgraphs produced by the inference sampler under different relative batch sizes.}
+   \caption{Sizes of sampled subgraphs produced by the inference sampler under different relative batch sizes.}
    \label{fig:sampled_graph_size}
 \end{figure}
 
@@ -886,7 +885,7 @@ On the \texttt{amp} and \texttt{cam} datasets, the sampling time even accounted 
 %
 The results indicated that the current implementation of inference sampler in PyG was also inefficient.
 %
-Improving its efficiency could significantly reduce the inference time.
+Improving its efficiency could significantly reduce the sample-based inference time.
 
 
 \begin{figure}[H]
@@ -899,13 +898,13 @@ Improving its efficiency could significantly reduce the inference time.
 
 \subsubsection{Effects on Accuracy}
 
-Since the size of the sampled subgraph was much smaller than the original graph, the accuracy of the GNN models got by sampling techniques might be different from the full-batch training.
+Since the size of the sampled subgraph was much smaller than the original graph, the accuracy of the GNN models trained with sampling techniques might be different from the full-batch training.
 %
 To find out how the batch size affected the test accuracy, we trained GNNs with different batch sizes.
 %
 \figurename~\ref{fig:exp_sampling_relative_batch_size_accuracy_graphsage} and \figurename~\ref{fig:exp_sampling_relative_batch_size_accuracy_cluster} compare the test accuracy achieved by sampling techniques with the test accuracy of the full-batch training.
 %
-For each combination of dataset and GNN, we chose the hyper-parameters that achieved the highest accuracy according to the experimental results in Section 4.1.4.
+For each combination of dataset and GNN, we chose the hyper-parameters that achieved the highest accuracy according to the experimental results in Section~\ref{sec:hyper_parameter_accuracy}.
 
 \begin{figure}[H]
     \centering
@@ -959,12 +958,14 @@ With the neighbor sampler, the test accuracy of different GNNs showed more obvio
 
 \paragraph{Summary of Sampling Techniques}
 % 
-The sampled subgraphs had lower average degrees than the original graph.
+The sampled subgraphs produced by the neighbor sampler and the cluster sampler had lower average degrees than the original graph.
 %
 With small batch sizes, the sampling techniques could significantly reduce the training/inference time per batch and the peak memory usage.
 %
-However, small batch sizes could not make full use of the computing power of a GPU.
+However, the batch size should be small to limit the memory usage, especially for inference.
 %
-With big batch sizes, the current implementation of the sampling techniques in PyG was inefficient.
+The current implementation of the sampling techniques in PyG was inefficient to handle small batches.
 %
-The time spent on the sampling phase and the data transferring phase even exceeded the training/inference phase.
+Small batches could not make full use of the computing power of a GPU.
+%
+The time spent on the sampling phase and the data transferring phase could even exceed the training/inference phase.
