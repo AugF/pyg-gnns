@@ -96,7 +96,7 @@
 	\medskip}
 
 % Numbering figures according to reviewers
-\renewcommand{\thefigure}{\thereviewer{}.\arabic{figure}}
+\renewcommand{\thefigure}{\thereviewer{}-\arabic{figure}}
 
 \begin{document}
 
@@ -121,7 +121,7 @@ Specifically, we added experiments on how the hyper-parameters of GNNs affect th
 %
 We presented the time breakdown analysis of GNN inference in Section 4.2.4.
 %
-We also presented the memory usage analysis of GNN inference in Section 4.3., and the performance bottlenecks of sample-based inference were analyzed in Section 4.4.2.
+We also presented the memory usage analysis of GNN inference in Section 4.3, and the performance bottlenecks of the sample-based inference were analyzed in Section 4.4.3.
 
 \item According to reviewer 2's comments, we have added an evaluation of how the model complexity and the sampling techniques affect the accuracy of GNNs.
 %
@@ -137,14 +137,14 @@ Finally, we analyzed the effects of the sampling techniques on accuracy in Secti
 %
 We unified the symbol usage through the manuscript and added a table to summarize the frequently-used symbols as suggested by reviewer 1.
 %
-We improved the description of the sub-layer concept in Section 2.1 and Section 2.2.
+We improved the description of the sub-layer concept in Section 2.2 and Section 2.3.
 %
 We also replotted some figures to improve readability.
 
 
 \end{enumerate}
 
-We then respond to all reviewers point by point as follows.
+We then respond to the concerns of all reviewers point by point as follows.
 
 
 % Let's start point-by-point with Reviewer 1
@@ -184,7 +184,7 @@ We then respond to all reviewers point by point as follows.
     %
     As for edges and their feature vectors, we use $e_{y,x}$ to represent an edge pointing from $v_y$ to $v_x$ and we use $\boldsymbol{e}_{y,x}$ to represent its feature vector.
     
-    In order to facilitate readers to quickly locate the meaning of symbols, we have added Table 1 at the beginning of Section 2 ``Review of Graph Neural Networks'' in the revised manuscript.
+    To facilitate readers to quickly locate the meaning of symbols, we have added Table 1 at the beginning of Section 2 ``Review of Graph Neural Networks'' in the revised manuscript.
     
 %    \begin{table}[H]
 %        \footnotesize
@@ -267,12 +267,9 @@ There are some grammar errors and typos:
 
 \begin{reply}
     
-    As suggested, we have split Figure 6 and Figure 7 into five figures (Figure 6 to 10) in the revised manuscript to enlarge their subfigures.
+    As suggested, we have split Figure 6 into four figures (Figure 6 to 9) in the revised manuscript to enlarge their subfigures.
     %
-    We have also adjusted font sizes in all figures (besides Figure 6 and Figure 7) to make sure that they are equal to or greater than the font size of figure captions.
-    
-    
-    
+    Besides Figure 6 and Figure 7, we have also adjusted font sizes in all figures to make them equal to or greater than the font size of figure captions.    
 \end{reply}
 
 % R1Q5
@@ -287,7 +284,9 @@ There are some grammar errors and typos:
     %
     We add a brief description of GNN inference in Section 2.5 ``Inference with GNNs'' in the revised manuscript.
     %
-    As suggested, we also use the same methodology as the training phase to analyze the performance bottlenecks in the inference phase and we add corresponding experimental results in every subsection of Section 4 ``Evaluation Results and Analysis''.
+    As suggested, we also use the same methodology as the training phase to analyze the performance bottlenecks in the inference phase.
+    %
+    We add corresponding experimental results in every subsection of Section 4 ``Evaluation Results and Analysis.''
     %
     \begin{enumerate}
     
@@ -299,7 +298,7 @@ There are some grammar errors and typos:
     %
     The complexity analysis of GNNs holds for both training and inference.
     %
-    We present specific experimental results in Section 4.1.2 ``Effects on Inference'' in the revised manuscript.
+    We present specific experimental results in Section 4.1.2 ``Effects on Inference Time'' and Section 4.1.3 ``Effects on Peak Memory Usage'' in the revised manuscript.
     
     \item In Section 4.2 ``Time Breakdown Analysis'', we additionally conduct time breakdown analysis for GNN inference and compare the similarities and differences between training and inference.
     %
@@ -352,9 +351,9 @@ There are some grammar errors and typos:
     %
     The memory expansion ratios of inference are 45\% to 83\% (GGNN), 52\% to 61\% (GAT), and 37\% to 69\% (GaAN) of training, as indicated by Figure~\ref{fig:compare_memory_expasion_ratio}.
     %
-    GGNN, GAT and GaAN have to cache some intermediate results during training, the memory space of those results is saved during inference.
+    GGNN, GAT, and GaAN have to cache some intermediate results during training, the memory space of those results is saved during inference.
     %
-    However, the memory expansion ratios of inference are still high, preventing us from inferencing with big graphs.
+    However, the memory expansion ratios of inference are still high, preventing us from performing inference on big graphs.
     %
     More details are available in Section 4.3 ``Memory Usage of Inference'' in the revised manuscript.
     
@@ -369,7 +368,7 @@ There are some grammar errors and typos:
     %
     We find that the batch size used in inference should be smaller than training to avoid the out of memory exception on the GPU side.
     %
-    The current implementation of the sampler used in inference in PyG is still inefficient.
+    The current implementation of the inference sampler in PyG is still inefficient.
     %
     The overheads of sampling and data transferring are significant in the total inference time.
     %
@@ -381,8 +380,8 @@ There are some grammar errors and typos:
     %
     They account for near half of the total inference time on the \texttt{amp} and \texttt{cam} datasets, as shown in Figure~\ref{fig:time_breakdown_of_inference_sampler}.
     %
-    We present more details of our experimental analysis in the ``Inference Time'' paragraph of Section 4.4.3 ``Performance Bottlenecks in Inference''
-    
+    We present more details of our experimental analysis in Section 4.4.3 ``Performance Bottlenecks in Inference'' in the revised manuscript.
+
      \begin{figure}[h]
             \centering           
             \includegraphics[width=0.5\columnwidth]{../figs/experiments/exp_inference_sampling_fix_batch_size_train_time_stack_2048.pdf}
@@ -441,9 +440,9 @@ There are some grammar errors and typos:
 \begin{reply}
     Thank you for the valuable suggestions.
     %
-    The model complexity directly affects the accuracy.
+    The model complexity directly affects accuracy.
     %
-    In order to analyze the relationship between model complexity and accuracy, we have conducted two kinds of extra experiments in the revised manuscript: (1) how the hyper-parameters of the GNNs (like the dimension of hidden vectors and the number of heads) affect the accuracy of GNNs (in Section 4.1.4); (2) how the batch size in the sampling methods affects the accuracy of GNNs (in Section 4.4.4).
+    To analyze the relationship between model complexity and accuracy, we have conducted two kinds of extra experiments in the revised manuscript: (1) how hyper-parameters of GNNs (like the dimension of hidden vectors and the number of heads) affect accuracy (in Section 4.1.4); (2) how the batch size in the sampling methods affects the accuracy of GNNs (in Section 4.4.4).
     %
     In this reply, we focus on the first kind of experiments.
     %
@@ -457,13 +456,13 @@ There are some grammar errors and typos:
     
     First, the accuracy of GNNs is much more sensitive to the dimension of hidden vectors (for GCN/GGNN/GaAN) and the dimension of each head (for GAT) than the other hyper-parameters.
     %
-    Figure~\ref{fig:effect_of_hyper_parameter_on_accuracy_of_gaan} shows the results of GaAN.
+    Figure~\ref{fig:effect_of_hyper_parameter_on_accuracy_of_gaan} shows the results of GaAN as an example.
     %
     The accuracy of GaAN is low when the dimensions are very low ($\leq 8$).
     %
-    As the dimensions increase to a certain threshold, the GNNs gain sufficient representation capability to achieve good accuracy.
+    As the dimensions increase to a certain threshold, GaAN gains sufficient representation capability to achieve better accuracy.
     %
-    But high dimensions ($\geq 2048$) are also harmful to accuracy on the \texttt{amp} dataset, as they increase the risk of overfitting.
+    But the high dimensions ($\geq 2048$) are also harmful to the accuracy of the \texttt{amp} dataset, as they increase the risk of overfitting.
     %
     The results of the other GNNs are available in Section 4.1.4 ``Effects on Accuracy'' in the revised manuscript.
     %
@@ -530,9 +529,9 @@ There are some grammar errors and typos:
     %
     Among the two sampling methods, the performance of the cluster sampler is more stable than the neighbor sampler.
     %
-    Figure~\ref{fig:exp_sampling_relative_batch_size_accuracy_graphsage}  and Figure~\ref{fig:exp_sampling_relative_batch_size_accuracy_cluster} shows the accuracy comparisons of the two typical sampling methods under different batch sizes.
+    Figure~\ref{fig:exp_sampling_relative_batch_size_accuracy_graphsage} and Figure~\ref{fig:exp_sampling_relative_batch_size_accuracy_cluster} shows the accuracy of the two typical sampling methods under different batch sizes.
     %
-    The results of the other datasets are available in Section 4.4.3 ``Effects on Accuracy'' in the revised manuscript.
+    The results of the other datasets are available in Section 4.4.4 ``Effects on Accuracy'' in the revised manuscript.
     %
     In several cases (like GaAN in Figure~\ref{fig:exp_graphsage_sampling_accuracy_on_amp} and Figure~\ref{fig:exp_graphsage_sampling_accuracy_on_amc}), the accuracy of the neighbor sampler is even higher than the full-batch training.
     %
@@ -576,9 +575,9 @@ There are some grammar errors and typos:
 
     We are grateful for your insightful suggestion.
     %
-    Followed your suggestion, we additionally evaluate the effects of model complexity on accuracy in Section 4.1 ``Effects of Hyper-parameters on Performance'' in the revised manuscript.
+    Followed your suggestion, we additionally evaluate the effects of model complexity on accuracy in a new subsection Section 4.1.4 ``Effects on Accuracy'' in Section 4.1 ``Effects of Hyper-parameters on Performance''.
     %
-    We add a discussion on how the hyper-parameters of GNNs affect the accuracy.
+    We add a discussion of how hyper-parameters of GNNs affect accuracy.
     %
     We also compare the test accuracy of different GNN models on the same dataset.
     
