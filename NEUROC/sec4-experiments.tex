@@ -124,9 +124,9 @@ When the values of hyper-parameters became high enough, training time increased 
 
 For all GNNs, we found that the effects of hyper-parameters on the inference time were the same as the training time.
 %
-Taking GGNN as an exmple, \figurename~\ref{fig:exp_hyperparameter_on_inference_vertex_edge_phase_time_ggnn} shows the effects of hyper-parameters on inference time of GGNN.
+Taking GGNN as an exmple, \figurename~\ref{fig:exp_hyperparameter_on_inference_vertex_edge_phase_time_ggnn} shows the effects of hyper-parameters on the inference time of GGNN.
 %
-By cross-comparing \figurename~\ref{fig:exp_hyperparameter_on_inference_vertex_edge_phase_time_ggnn} and \figurename~\ref{fig:exp_hyperparameter_on_vertex_edge_phase_time_ggnn}, the trends of inference time and training time were the same: as $dim(\MyVec{h}^1_x)$ increased, the vertex and edge calculation time both grew linearly when $dim(\MyVec{h}^1_x)$ was large enough.
+By cross-comparing \figurename~\ref{fig:exp_hyperparameter_on_inference_vertex_edge_phase_time_ggnn} and \figurename~\ref{fig:exp_hyperparameter_on_vertex_edge_phase_time_ggnn}, the trends of the inference time and training time were the same: as $dim(\MyVec{h}^1_x)$ increased, the vertex and edge calculation time both grew linearly when $dim(\MyVec{h}^1_x)$ was large enough.
 %
 For the other GNNs, we observed similar phenomena.
 %
@@ -142,13 +142,13 @@ The results indicated that the complexity analysis presented in \tablename~\ref{
 
 \subsubsection{Effects on Peak Memory Usage}
 
-We further measured the effects of the hyper-parameters on the peak GPU memory usage during training in \figurename~\ref{fig:exp_hyperparameter_memory_usage}.
+We further measured the effects of hyper-parameters on the peak GPU memory usage during training in \figurename~\ref{fig:exp_hyperparameter_memory_usage}.
 %
 The memory usage also increased linearly as the hyper-parameters increased for all GNNs, except for GaAN on $dim(\MyVec{h}^1_x)$.
 %
 As the hidden vectors $\MyVec{h}^1_x$ in GaAN consumed a small proportion of memory, the growth in the memory usage was not noticeable until $dim(\boldsymbol{h}^1_x)$ was large enough.
 %
-The effects of the hyper-parameters on inference memory usage were the same as training.
+The effects of hyper-parameters on the inference memory usage were the same as the training.
 %
 Taking GAT as an example, \figurename~\ref{fig:exp_inference_hyperparameter_memory_usage_gat} shows that the peak memory usage during inference grew linearly with the increasing hyper-parameters.
 %
@@ -247,9 +247,9 @@ The complexity analysis in \tablename~\ref{tab:gnn_overview_edge} and \tablename
 %
 Fixing other hyper-parameters, each hyper-parameter itself affected the training/inference time and the memory usage of a GNN layer \emph{in a linear way}.
 %
-Algorithm engineers could adjust hyper-parameters according to the complexity analysis to avoid explosive growth in training/inference time and memory usage.
+Algorithm engineers could adjust hyper-parameters according to the complexity analysis to avoid explosive growth in the training/inference time and memory usage.
 %
-The accuracy of GNNs was much more sensitive to the dimensions of hidden vectors/heads than the other hyper-parameters.
+The accuracy of GNNs was much more sensitive to the dimension of hidden vectors/heads than the other hyper-parameters.
 %
 The relative accuracy between GNNs varied greatly with different datasets.
 %
