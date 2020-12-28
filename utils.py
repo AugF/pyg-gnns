@@ -31,6 +31,15 @@ graphsage_batchs = {
     'com-amazon': [3349, 10046, 20092, 33487, 83716, 167432]
 }
 
+datasets_maps = {
+    'amazon-photo': 'amp',
+    'pubmed': 'pub',
+    'amazon-computers': 'amc',
+    'coauthor-physics': 'cph',
+    'flickr': 'fli',
+    'com-amazon': 'cam'
+}
+
 df = {}
 
 def get_dataset(name, normalize_features=False, transform=None): #

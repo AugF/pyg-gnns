@@ -1,5 +1,5 @@
 """
-Full-Batch Inference阶段的空间性能瓶颈测量工具
+2020-6-7版本的代码
 """
 import torch
 import torch.nn.functional as F
@@ -14,12 +14,12 @@ from gaan.models import GaAN
 from ggnn.models import GGNN
 from gat.models import GAT
 from gcn.models import GCN
-from sklearn.metrics import f1_score
 from utils import get_dataset, get_split_by_file, nvtx_push, nvtx_pop, log_memory, small_datasets
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--dataset', type=str, default='cora', help="dataset: [cora, flickr, com-amazon, reddit, com-lj,"
                                                                     "amazon-computers, amazon-photo, coauthor-physics, pubmed]")
+
 parser.add_argument('--model', type=str, default='gcn', help="gnn models: [gcn, ggnn, gat, gaan]")
 parser.add_argument('--epochs', type=int, default=50, help="epochs for training")
 parser.add_argument('--layers', type=int, default=2, help="layers for hidden layer")
@@ -52,35 +52,31 @@ torch.manual_seed(args.seed)
 if gpu:
     torch.cuda.manual_seed(args.seed)
 
-device = torch.device(args.device if gpu else 'cpu')
-
 # for feats experiment
 dataset_info = args.dataset.split('_')
 if dataset_info[0] in small_datasets and len(dataset_info) > 1:
     args.dataset = dataset_info[0]
 
-# 1. load data
+# 1. load epochs
 dataset = get_dataset(args.dataset, normalize_features=True)
 data = dataset[0]
 
 # add train, val, test split
-if args.dataset in ['amazon-computers', 'amazon-photo', 'coauthor-physics']: 
+if args.dataset in ['amazon-computers', 'amazon-photo', 'coauthor-physics']:
     file_path = osp.join('/home/wangzhaokang/wangyunpan/gnns-project/datasets', args.dataset + "/raw/role.json")
     data.train_mask, data.val_mask, data.test_mask = get_split_by_file(file_path, data.num_nodes)
 
 num_features = dataset.num_features
 if dataset_info[0] in small_datasets and len(dataset_info) > 1:
     file_path = osp.join('/home/wangzhaokang/wangyunpan/gnns-project/datasets', "data/feats_x/" + '_'.join(dataset_info) + '_feats.npy')
-    print(file_path)
     if osp.exists(file_path):
         data.x = torch.from_numpy(np.load(file_path)).to(torch.float) # 因为这里是随机生成的，不考虑normal features
         num_features = data.x.size(1)
 
-print("feat_dims", data.x.size())
-
 if args.x_sparse:
     data.x = data.x.to_sparse()
-
+    
+device = torch.device(args.device if gpu else 'cpu')
 # 2. model
 if args.model == 'gcn':
     model = GCN(
@@ -92,8 +88,7 @@ elif args.model == 'gat':
     model = GAT(
         layers=args.layers,
         n_features=num_features, n_classes=dataset.num_classes,
-        head_dims=args.head_dims, heads=args.heads, gpu=gpu, flag=flag,
-        sparse_flag=args.x_sparse, device=device
+        head_dims=args.head_dims, heads=args.heads, gpu=gpu, flag=flag, sparse_flag=args.x_sparse, device=device
     )
 elif args.model == 'ggnn':
     model = GGNN(
@@ -117,9 +112,9 @@ model, data = model.to(device), data.to(device)
 optimizer = torch.optim.Adam(model.parameters(),
                              lr=args.lr,
                              weight_decay=args.weight_decay)
- 
+
 log_memory(flag, device, 'data load')
-    
+
 def train(epoch):
     t = time.time()
 
@@ -154,6 +149,7 @@ def train(epoch):
 def test():
     model.eval()
     out = model(data.x, data.edge_index)
+    log_memory(flag, device, 'other_start')    
     nvtx_push(gpu, "other")
     logits, accs = F.log_softmax(out, dim=1), []
     for _, mask in data('train_mask', 'val_mask', 'test_mask'):
@@ -163,22 +159,32 @@ def test():
     nvtx_pop(gpu)
     return accs
 
-
-for epoch in range(args.epochs):
-    nvtx_push(gpu, "epochs" + str(epoch))
-    # nvtx_push(gpu, "train")
-    # train(epoch)
-    # nvtx_pop(gpu)
-    nvtx_push(gpu, "eval")
-    log_memory(flag, device, 'eval_start')
-    log = 'Accuracy: Train: {:.4f}, Val: {:.4f}, Test: {:.4f}'
-    print(log.format(*test()))
-    log_memory(flag, device, 'eval_end')
-    nvtx_pop(gpu)
-    nvtx_pop(gpu)
-    
+if not gpu:
+    for epoch in range(args.epochs + 1):
+        train(epoch)
+        log = 'Accuracy: Train: {:.4f}, Val: {:.4f}, Test: {:.4f}'
+        print(log.format(*test()))
+else:
+    with torch.cuda.profiler.profile():
+        train(-1)
+        log_memory(flag, device, 'eval_end')
+        with torch.autograd.profiler.emit_nvtx(record_shapes=not args.no_record_shapes):
+            for epoch in range(args.epochs):
+                nvtx_push(gpu, "epochs" + str(epoch))
+                nvtx_push(gpu, "train")
+                train(epoch)
+                nvtx_pop(gpu)
+                nvtx_push(gpu, "eval")
+                log = 'Accuracy: Train: {:.4f}, Val: {:.4f}, Test: {:.4f}'
+                print(log.format(*test()))
                 
-if flag:
-    from utils import df
-    with open(args.json_path, "w") as f:
-        json.dump(df, f)
+                # add 
+                log_memory(flag, device, 'eval_end')
+                
+                nvtx_pop(gpu)
+                nvtx_pop(gpu)
+                
+    if flag:
+        from utils import df
+        with open(args.json_path, "w") as f:
+            json.dump(df, f)

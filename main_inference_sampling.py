@@ -46,7 +46,7 @@ parser.add_argument('--no_record_shapes', action='store_false', default=True, he
 parser.add_argument('--json_path', type=str, default='', help="json file path for memory")
 parser.add_argument('--infer_json_path', type=str, default='', help="inference stage: json file path for memory")
 parser.add_argument('--mode', type=str, default='cluster', help='sampling: [cluster, graphsage]')
-parser.add_argument('--batch_size', type=int, default=512, help='batch size')
+parser.add_argument('--batch_size', type=int, default=1024, help='batch size')
 parser.add_argument('--batch_partitions', type=int, default=20, help='number of cluster partitions per batch')
 parser.add_argument('--cluster_partitions', type=int, default=1500, help='number of cluster partitions')
 parser.add_argument('--num_workers', type=int, default=40, help='number of Data Loader partitions')
@@ -88,7 +88,7 @@ if dataset_info[0] in small_datasets and len(dataset_info) > 1:
     
 # 2. set sampling
 # 2.1 test_data
-subgraph_loader = NeighborSampler(data.edge_index, sizes=[-1], batch_size=1024,
+subgraph_loader = NeighborSampler(data.edge_index, sizes=[-1], batch_size=args.batch_size,
                                   shuffle=False, num_workers=args.num_workers)
 
 # 2.2 train_data

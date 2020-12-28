@@ -175,7 +175,7 @@ if not gpu:
     pass
 else:
     with torch.cuda.profiler.profile():
-        # train(-1)
+        train(-1)
         log_memory(flag, device, 'eval_end')
         with torch.autograd.profiler.emit_nvtx(record_shapes=not args.no_record_shapes):
             logger = Logger(args.runs, args)

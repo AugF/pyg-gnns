@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+export LD_LIBRARY_PATH=/home/wangzhaokang/anaconda3/envs/pyg1.5/lib/python3.7/site-packages/torch/lib:${LD_LIBRARY_PATH}
 dir_config="dir_gcn_ggnn_inference_qdrep"
 dir_sqlite="dir_gcn_ggnn_inference_sqlite"
 
@@ -13,7 +14,7 @@ then
 fi
 
 datasets=(amazon-photo pubmed amazon-computers coauthor-physics flickr com-amazon)
-models=(gcn ggnn)
+models=(gcn)
 hds=(16 32 64 128 256 512 1024 2048)
 
 for data in ${datasets[@]}

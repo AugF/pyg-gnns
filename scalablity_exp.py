@@ -1,5 +1,5 @@
 import numpy as np
-import snap # in linux, need py35, py36 or py37
+#import snap # in linux, need py35, py36 or py37
 import json
 import os
 import scipy.sparse as sp
@@ -7,13 +7,13 @@ import scipy.sparse as sp
 # https://snap.stanford.edu/snappy/doc/reference/GenRMat.html
 # directed graph
 
-def input_dense_feature_exp(datasets, nodes, seed=1):
+def input_dense_feature_exp(datasets, nodes, dir_in=".", seed=1):
     dims = [16, 32, 64, 128, 256, 512]
     np.random.seed(seed)
     for i, name in enumerate(datasets):
         for d in dims:
           feats = np.random.randn(nodes[i], d)
-          np.save("data/feats_x/" + name + "_" + str(d) + "_feats", feats)
+          np.save(dir_in + "/data/feats_x/" + name + "_" + str(d) + "_feats", feats)
 
 
 def input_sparse_feature_exp(datasets, nodes, seed=1):
@@ -249,7 +249,8 @@ def gen_real_degrees_memory(seed=1):
         np.savez(raw_dir + "/adj_full", data=f.data, indptr=f.indptr, indices=f.indices, shape=f.shape)
         gen_graph(raw_dir, nodes, edges)
 
-gen_real_degrees_exp()
-gen_real_edges_memory()
-gen_real_degrees_memory()
+# gen_real_degrees_exp()
+# gen_real_edges_memory()
+# gen_real_degrees_memory()
 # gen_min_edges_graph(seed=1)
+input_dense_feature_exp(["com-amazon"], [334863], dir_in="/home/wangzhaokang/wangyunpan/gnns-project/datasets", seed=1)

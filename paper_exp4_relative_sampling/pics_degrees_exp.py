@@ -5,12 +5,14 @@ plt.style.use("ggplot")
 plt.rcParams['font.size'] = 12
 
 graph_path = "amp_graph.npy"
-cluster_path = "amp_cluster.npy"
-graphsage_path = "amp_graphsage.npy"
+cluster_path = "amp_cluster_90.npy"
+graphsage_path = "amp_graphsage_459.npy"
 
 paths = [graph_path, cluster_path, graphsage_path]
 names = ['Original Graph', 'Cluster Sampling', 'Neighbor Sampling']
 
+dir_in = "/home/wangzhaokang/wangyunpan/gnns-project/pyg-gnns/paper_exp4_relative_sampling/batch_degrees_distribution"
+dir_out = "/home/wangzhaokang/wangyunpan/gnns-project/pyg-analysis/exp_supplement"
 
 def get_degrees_counts(path):
     # 1. 统计出每个节点的度数
@@ -45,7 +47,7 @@ def get_degrees_counts(path):
     return degrees_counts
 
 
-fig, ax = plt.subplots()
+fig, ax = plt.subplots(figsize=(7, 5), tight_layout=True)
 
 #ax.set_yscale("symlog", basey=2)
 #ax.set_xscale("symlog", basey=2)
@@ -53,17 +55,20 @@ ax.set_yscale('log')
 ax.set_xscale('log')
 ax.set_ylim(ymin=0.5, ymax=1e4)
 ax.set_xlim(xmin=0.5, xmax=1e4)
-ax.set_xlabel("Degrees")
-ax.set_ylabel("Numbers")
+ax.set_xlabel("Degrees", fontsize=16)
+ax.set_ylabel("Numbers", fontsize=16)
+plt.xticks(fontsize=14)
+plt.yticks(fontsize=14)
 
 markers = 'oD^'
 colors = 'rgb'
 for i, path in enumerate(paths):
-    degrees_counts = get_degrees_counts(path)
+    degrees_counts = get_degrees_counts(dir_in + "/" + path)
     xs = list(degrees_counts.keys())
     ys = [degrees_counts[d] for d in xs]
     ax.scatter(xs, ys, color=colors[i], label=names[i], marker=markers[i])
 
-ax.legend()
+ax.legend(fontsize=14)
 
-fig.savefig("exp_sampling_minibatch_degrees_distribution_amazon-photo.png")
+fig.savefig(dir_out + "/exp_sampling_minibatch_degrees_distribution_amazon-photo.png")
+fig.savefig(dir_out + "/exp_sampling_minibatch_degrees_distribution_amazon-photo.pdf")
