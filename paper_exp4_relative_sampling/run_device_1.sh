@@ -1,2 +1,0 @@
-bash batch_acc_cum_graphsage_fix_time.sh
-bash batch_acc_cum_graphsage.sh

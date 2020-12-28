@@ -1,2 +1,0 @@
-bash batch_acc_cum_cluster_fix_time.sh
-bash batch_acc_cum_cluster.sh
