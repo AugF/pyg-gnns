@@ -17,3 +17,5 @@ out*
 */batch_*/
 */small_graph*/
 sampling*/
+*sqlite
+*qdrep
