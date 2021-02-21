@@ -31,6 +31,44 @@ Based on the analysis, we propose several potential optimizations for the GNN li
 %
 We believe that our analysis can help developers to have a better understanding of the characteristics of GNN training and inference.
 
+% start, added by wangyunpan, 2021-2-21
+In the future, we will focus on but not limited to the following directions:
+%
+\begin{enumerate}
+    \item \emph{Performance bottlenecks in training/inference with multi-GPUs or distributed environments.}
+    %
+    For massive data in the real world, multi-GPUs and distributed training/inference are often the more common methods\cite{zhang2020_analysis_neugraph, zhu2019_aligraph}.
+    %
+    These methods will inevitably introduce overheads such as communication between GPUs (inter-machines). 
+    %
+    How these overheads affect performance bottlenecks is worthy to focus on.
+    %
+    \item \emph{Impacts of different programming models on performance bottlenecks.}
+    %
+    Our work is based on the mainstream programming model---messaging framework.
+    %
+    However, some GNNs systems also proposed some new programming models.
+    %
+    For example, NeuGraph\cite{zhang2020_analysis_neugraph} proposed the SAGA framework, 
+    which includes four stages: Scatter, ApplyEdge, Gather, and ApplyVertex;
+    %
+    EuGN\cite{he2019_EnGN} provides an edge-centric programming model.
+    %
+    Whether different programming models will lead to changes in performance bottlenecks is worth discussing.
+    %
+    \item \emph{Impacts of spatial-temporal graph on performance bottlenecks.}
+    %
+    Spatial-temporal graphs appear in a variety of applications such as traffic speed forecasting\cite{li2018_DCRNN}, 
+    driver maneuver anticipation\cite{jain2016_SRNN}, and human action recognition\cite{yan2018_STGCN}.
+    %
+    Learning hidden patterns from spatial-temporal graphs becomes increasingly important.
+    %
+    Many GNNs are also proposed\cite{li2018_DCRNN, jain2016_SRNN, yan2018_STGCN, seo2018_SSGCN, yu2018_STGCN}.
+    %
+    Whether spatial-temporal graphs will affect performance is worthy of our attention.
+    %
+\end{enumerate}
+% end, added by wangyunpan, 2021-2-21
 \section*{Acknowledgements}
 
 This work is funded in part by the National Key R\&D Program of China (2019YFC1711000), the China NSF Grants (No. U1811461, 62072230), the Collaborative Innovation Center of Novel Software Technology and Industrialization, Alibaba Innovative Resarch Project, and the program B for outstanding PhD candidate of Nanjing University.
