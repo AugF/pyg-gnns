@@ -33,12 +33,12 @@ We believe that our analysis can help developers to have a better understanding 
 
 In this work, we analyze performance bottlenecks in a \emph{single-GPU} environment on \emph{static} graphs with the \emph{message-passing} framework.
 %
-Performance bottlenecks in multi-GPU/distributed GNN training/inference, dynamic graphs and other GNN frameworks are also worth studying.
+Performance bottlenecks in multi-GPU/distributed GNN training/inference with dynamic graphs and other GNN frameworks are also worth studying.
 %
 In the future, we plan to extend our analysis of performance bottlenecks in GNN training/inference with the following directions:
 %
 \begin{enumerate}
-    \item \emph{Multi-GPU or distributed environment.}
+    \item \emph{Multi-GPU and distributed GNN training/inference.}
     %
     To handle large-scale graph datasets, multi-GPU and distributed training/inference are necessary.
     %
@@ -62,12 +62,13 @@ In the future, we plan to extend our analysis of performance bottlenecks in GNN 
     %
     \item \emph{Other GNN frameworks.}
     %
-    In this work, we analyzed with the popular message-passing framework.
+    In this work, we analyzed with the popular message-passing framework of GNNs.
     %
     Some emerging GNN learning systems also adopt different GNN frameworks like SAGA framework \cite{ma2019_neugraph} and edge-centric framework \cite{he2019_EnGN}.
     %
     Whether different frameworks lead to different performance bottlenecks is worth discussing.
 \end{enumerate}
+
 \section*{Acknowledgements}
 
 This work is funded in part by the National Key R\&D Program of China (2019YFC1711000), the China NSF Grants (No. U1811461, 62072230), the Collaborative Innovation Center of Novel Software Technology and Industrialization, Alibaba Innovative Resarch Project, and the program B for outstanding PhD candidate of Nanjing University.
