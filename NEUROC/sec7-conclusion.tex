@@ -1,4 +1,4 @@
-\section{Conclusion}
+\section{Conclusion and Future Work}
 \label{sec:conclusion}
 
 In this work, we systematically explore the performance bottlenecks in graph neural network training and inference.
@@ -31,44 +31,44 @@ Based on the analysis, we propose several potential optimizations for the GNN li
 %
 We believe that our analysis can help developers to have a better understanding of the characteristics of GNN training and inference.
 
-% start, added by wangyunpan, 2021-2-21
-In the future, we will focus on but not limited to the following directions:
+In this work, we analyze performance bottlenecks in a \emph{single-GPU} environment on \emph{static} graphs with the \emph{message-passing} framework.
+%
+Performance bottlenecks in multi-GPU/distributed GNN training/inference, dynamic graphs and other GNN frameworks are also worth studying.
+%
+In the future, we plan to extend our analysis of performance bottlenecks in GNN training/inference with the following directions:
 %
 \begin{enumerate}
-    \item \emph{Performance bottlenecks in training/inference with multi-GPUs or distributed environments.}
+    \item \emph{Multi-GPU or distributed environment.}
     %
-    For massive data in the real world, multi-GPUs and distributed training/inference are often the more common methods\cite{zhang2020_analysis_neugraph, zhu2019_aligraph}.
+    To handle large-scale graph datasets, multi-GPU and distributed training/inference are necessary.
     %
-    These methods will inevitably introduce overheads such as communication between GPUs (inter-machines). 
+    These methods will inevitably introduce overheads such as inter-GPU and inter-machine communication. 
     %
     How these overheads affect performance bottlenecks is worthy to focus on.
     %
-    \item \emph{Impacts of different programming models on performance bottlenecks.}
+    \item \emph{Spatial-temporal graph datasets.}
     %
-    Our work is based on the mainstream programming model---messaging framework.
+    Spatial-temporal graphs have dynamic topology structures.
     %
-    However, some GNNs systems also proposed some new programming models.
+    They appear in a variety of applications like traffic speed forecasting \cite{li2018_DCRNN} and human action recognition \cite{yan2018_STGCN}.
     %
-    For example, NeuGraph\cite{zhang2020_analysis_neugraph} proposed the SAGA framework, 
-    which includes four stages: Scatter, ApplyEdge, Gather, and ApplyVertex;
+    %Learning hidden patterns from spatial-temporal graphs becomes increasingly important.
     %
-    EuGN\cite{he2019_EnGN} provides an edge-centric programming model.
+    Many new GNNs are proposed to handle this kind of graphs.
     %
-    Whether different programming models will lead to changes in performance bottlenecks is worth discussing.
+    How the performance bottlenecks of these GNNs are different from the classic GNNs is also worthy of in-depth study.
     %
-    \item \emph{Impacts of spatial-temporal graph on performance bottlenecks.}
+    %Whether spatial-temporal graphs will affect performance is worthy of our attention.
     %
-    Spatial-temporal graphs appear in a variety of applications such as traffic speed forecasting\cite{li2018_DCRNN}, 
-    driver maneuver anticipation\cite{jain2016_SRNN}, and human action recognition\cite{yan2018_STGCN}.
+    \item \emph{Other GNN frameworks.}
     %
-    Learning hidden patterns from spatial-temporal graphs becomes increasingly important.
+    In this work, we conducted the anlaysis with the popular message-passing framework.
     %
-    Many GNNs are also proposed\cite{li2018_DCRNN, jain2016_SRNN, yan2018_STGCN, seo2018_SSGCN, yu2018_STGCN}.
+    Some emerging GNN learning systems also adopt different GNN frameworks like SAGA framework \cite{ma2019_neugraph} and edge-centric framework \cite{he2019_EnGN}.
     %
-    Whether spatial-temporal graphs will affect performance is worthy of our attention.
-    %
+    Whether different frameworks lead to different performance bottlenecks is worth discussing.
 \end{enumerate}
-% end, added by wangyunpan, 2021-2-21
+
 \section*{Acknowledgements}
 
 This work is funded in part by the National Key R\&D Program of China (2019YFC1711000), the China NSF Grants (No. U1811461, 62072230), the Collaborative Innovation Center of Novel Software Technology and Industrialization, Alibaba Innovative Resarch Project, and the program B for outstanding PhD candidate of Nanjing University.
