@@ -117,9 +117,46 @@ We have made modifications to our manuscript according to Reviewer 1's comments.
 \begin{reply}
     Thank you for the insightful suggesion.
     %
-    We have revised the manuscript according to your suggestions. 
+    According to the suggestion, we have added a paragraph at the end of Section 7 ``Conclusion and Future Work'' to discuss limitations of our work and points out potential future research directions.
     %
-    Please see the replies below.
+    In this work, we mainly analyze performance bottlenecks of GNN training/inference in a \emph{single-GPU} environment on \emph{static} graphs with the \emph{message-passing} framework.
+    %
+    Performance bottlenecks in \emph{multi-GPU}/\emph{distributed} GNN training/inference with \emph{dynamic} graphs and \emph{other} GNN frameworks are also worth studying.
+    %
+    In the future, we plan to extend our work in the following directions:
+    %
+\begin{enumerate}
+    \item \emph{Multi-GPU and distributed GNN training/inference.}
+    %
+    To handle large-scale graph datasets, training/inferring GNNs with multiple GPUs or in a distributed environment is necessary.
+    %
+    Multi-GPU and distributed GNN training/inference will inevitably introduce overheads such as inter-GPU and inter-machine communication. 
+    %
+    How these overheads affect performance bottlenecks is worthy to focus on.
+    %
+    \item \emph{Spatial-temporal graph datasets.}
+    %
+    Spatial-temporal graphs have dynamic topology structures.
+    %
+    They appear in a variety of applications like traffic speed forecasting [\cite{li2018_DCRNN}] and human action recognition [\cite{yan2018_STGCN}].
+    %
+    %Learning hidden patterns from spatial-temporal graphs become increasingly important.
+    %
+    Many new GNNs are proposed to handle this kind of dynamic graphs.
+    %
+    How the performance bottlenecks of these GNNs are different from the classic GNNs is also worthy of in-depth study.
+    %
+    %Whether spatial-temporal graphs will affect performance is worthy of our attention.
+    %
+    \item \emph{Other GNN frameworks.}
+    %
+    In this work, we conducted analysis with the message-passing framework that is popular among existing GNN learning systems.
+    %
+    Some emerging GNN learning systems also adopt different frameworks like SAGA framework [\cite{ma2019_neugraph}] and edge-centric framework [\cite{he2019_EnGN}].
+    %
+    Whether different frameworks lead to different performance bottlenecks is worth further investigation.
+\end{enumerate}
+
 \end{reply}
 
 \bibliographystyle{apalike}

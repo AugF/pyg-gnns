@@ -31,18 +31,20 @@ Based on the analysis, we propose several potential optimizations for the GNN li
 %
 We believe that our analysis can help developers to have a better understanding of the characteristics of GNN training and inference.
 
+\paragraph{Future Work}
+
 In this work, we analyze performance bottlenecks in a \emph{single-GPU} environment on \emph{static} graphs with the \emph{message-passing} framework.
 %
 Performance bottlenecks in multi-GPU/distributed GNN training/inference with dynamic graphs and other GNN frameworks are also worth studying.
 %
-In the future, we plan to extend our analysis of performance bottlenecks in GNN training/inference with the following directions:
+In the future, we plan to extend our analysis of performance bottlenecks in the following directions:
 %
 \begin{enumerate}
     \item \emph{Multi-GPU and distributed GNN training/inference.}
     %
-    To handle large-scale graph datasets, multi-GPU and distributed training/inference are necessary.
+    To handle large-scale graph datasets, training/inferring GNNs with multiple GPUs or in a distributed environment is necessary.
     %
-    These methods will inevitably introduce overheads such as inter-GPU and inter-machine communication. 
+    Multi-GPU and distributed GNN training will inevitably introduce overheads such as inter-GPU and inter-machine communication. 
     %
     How these overheads affect performance bottlenecks is worthy to focus on.
     %
@@ -54,7 +56,7 @@ In the future, we plan to extend our analysis of performance bottlenecks in GNN 
     %
     %Learning hidden patterns from spatial-temporal graphs become increasingly important.
     %
-    Many new GNNs are proposed to handle this kind of graph.
+    Many new GNNs are proposed to handle this kind of dynamic graphs.
     %
     How the performance bottlenecks of these GNNs are different from the classic GNNs is also worthy of in-depth study.
     %
@@ -62,11 +64,11 @@ In the future, we plan to extend our analysis of performance bottlenecks in GNN 
     %
     \item \emph{Other GNN frameworks.}
     %
-    In this work, we analyzed with the popular message-passing framework of GNNs.
+    In this work, we conducted analysis with the message-passing framework that is popular among existing GNN learning systems.
     %
-    Some emerging GNN learning systems also adopt different GNN frameworks like SAGA framework \cite{ma2019_neugraph} and edge-centric framework \cite{he2019_EnGN}.
+    Some emerging GNN learning systems also adopt different frameworks like SAGA framework \cite{ma2019_neugraph} and edge-centric framework \cite{he2019_EnGN}.
     %
-    Whether different frameworks lead to different performance bottlenecks is worth discussing.
+    Whether different frameworks lead to different performance bottlenecks is worth further investigation.
 \end{enumerate}
 
 \section*{Acknowledgements}
