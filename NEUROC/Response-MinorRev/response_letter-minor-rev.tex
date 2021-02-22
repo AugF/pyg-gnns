@@ -1,0 +1,128 @@
+% !TEX program=pdflatex
+% LaTeX rebuttal letter example. 
+% 
+% Copyright 2019 Friedemann Zenke, fzenke.net
+%
+% Based on examples by Dirk Eddelbuettel, Fran and others from 
+% https://tex.stackexchange.com/questions/2317/latex-style-or-macro-for-detailed-response-to-referee-report
+% 
+% Licensed under cc by-sa 3.0 with attribution required.
+
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{lipsum} % to generate some filler text
+\usepackage{fullpage}
+\usepackage{times}
+\usepackage{amsmath, amsthm, amsfonts}
+\usepackage{booktabs}
+\usepackage{makecell}
+\usepackage{multirow}
+\usepackage{lscape}
+\usepackage{xcolor}
+\usepackage{float}
+\usepackage{subfig}
+\usepackage{graphicx}
+\usepackage{framed}
+\usepackage{soul}
+\usepackage[colorlinks=true, linkcolor=blue, citecolor=black]{hyperref}
+\usepackage{natbib}
+% Vector
+\newcommand{\MyVec}[1]{\boldsymbol{#1}}
+% Matrix
+\newcommand{\MyMat}[1]{\boldsymbol{#1}}
+% Vectors with hat
+\newcommand{\hvec}[1]{\hat{\boldsymbol{h}}_{#1}}
+% Model parameters
+\newcommand{\Param}[1]{\textcolor{blue}{#1}}
+
+\usepackage{blindtext}
+\usepackage[most]{tcolorbox} 
+\definecolor{block-gray}{gray}{0.95}
+
+
+\newtcolorbox{zitat}[2][]{%
+    colback=block-gray,
+    grow to right by=-0mm,
+    grow to left by=-0mm, 
+    boxrule=0pt,
+    boxsep=0pt,
+    breakable,
+    enhanced jigsaw,
+    borderline west={4pt}{0pt}{gray},
+    title={#2\par},
+    colbacktitle={block-gray},
+    coltitle={black},
+    fonttitle={\bfseries},
+    attach title to upper={},
+    #1,
+}
+
+\newenvironment{myquote}[1]%
+{\vspace{0.5em}\begin{zitat}{#1}}
+{\end{zitat}\vspace{0.5em}}
+
+
+% import Eq and Section references from the main manuscript where needed
+% \usepackage{xr}
+% \externaldocument{manuscript}
+
+% package needed for optional arguments
+\usepackage{xifthen}
+% define counters for reviewers and their points
+\newcounter{reviewer}
+\setcounter{reviewer}{0}
+\newcounter{point}[reviewer]
+\setcounter{point}{0}
+
+% This refines the format of how the reviewer/point reference will appear.
+\renewcommand{\thepoint}{P\,\thereviewer.\arabic{point}} 
+
+% command declarations for reviewer points and our responses
+\newcommand{\reviewersection}{\stepcounter{reviewer} \bigskip \hrule \setcounter{figure}{0}\section*{Reviewer \thereviewer}}
+
+\newenvironment{point}
+   {\refstepcounter{point} \bigskip \noindent {\textbf{Reviewer~Point~\thepoint} } ---\ \begin{sf}}
+   {\end{sf} \par}
+
+\newcommand{\shortpoint}[1]{\refstepcounter{point}  \bigskip \noindent 
+	{\textbf{Reviewer~Point~\thepoint} } ---\begin{sf} ~#1 \end{sf}\par}
+
+\newenvironment{reply}
+   {\medskip \noindent \textbf{Reply}:\  }
+   {\medskip}
+
+\newcommand{\shortreply}[2][]{\medskip \noindent \textbf{Reply}:\  #2
+	\ifthenelse{\equal{#1}{}}{}{ \hfill \footnotesize (#1)}%
+	\medskip}
+
+% Numbering figures according to reviewers
+\renewcommand{\thefigure}{\thereviewer{}-\arabic{figure}}
+
+\begin{document}
+
+\section*{Response to the Reviewers}
+% General intro text goes here
+We thank the reviewers for their insightful comments on our work.
+%
+We have made modifications to our manuscript according to Reviewer 1's comments. 
+
+% Let's start point-by-point with Reviewer 1
+\reviewersection
+
+% R1Q0
+\begin{point}
+    In the revised manuscript, the authors have addressed all my concerns, especially adding more computation efficiency discussion. Current version looks very impressive. Just a small issue left. Some discussions about limitations or future efforts should be better added.
+\end{point}
+
+\begin{reply}
+    Thank you for the insightful suggesion.
+    %
+    We have revised the manuscript according to your suggestions. 
+    %
+    Please see the replies below.
+\end{reply}
+
+\bibliographystyle{apalike}
+\bibliography{../gnnref.bib}
+
+\end{document}
