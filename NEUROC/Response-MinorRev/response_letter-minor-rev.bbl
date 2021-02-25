@@ -1,0 +1,23 @@
+\begin{thebibliography}{}
+
+\bibitem[Li et~al., 2018]{li2018_DCRNN}
+Li, Y., Yu, R., Shahabi, C., and Liu, Y. (2018).
+\newblock Diffusion convolutional recurrent neural network: Data-driven traffic
+  forecasting.
+\newblock In {\em Proceedings of the 6th International Conference on Learning
+  Representations}.
+
+\bibitem[Ma et~al., 2019]{ma2019_neugraph}
+Ma, L., Yang, Z., Miao, Y., Xue, J., Wu, M., Zhou, L., and Dai, Y. (2019).
+\newblock Neugraph: Parallel deep neural network computation on large graphs.
+\newblock In {\em Proceedings of the 2019 {USENIX} Annual Technical
+  Conference}, pages 443--458. {USENIX} Association.
+
+\bibitem[Yan et~al., 2018]{yan2018_STGCN}
+Yan, S., Xiong, Y., and Lin, D. (2018).
+\newblock Spatial temporal graph convolutional networks for skeleton-based
+  action recognition.
+\newblock In {\em Proceedings of the 32nd {AAAI} Conference on Artificial
+  Intelligence}, pages 7444--7452. AAAI.
+
+\end{thebibliography}

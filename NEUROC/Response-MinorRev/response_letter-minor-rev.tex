@@ -9,7 +9,7 @@
 % Licensed under cc by-sa 3.0 with attribution required.
 
 \documentclass[12pt]{article}
-\usepackage{fontspec} % For loading fonts
+\usepackage{mathptmx}
 \usepackage{lipsum} % to generate some filler text
 \usepackage{fullpage}
 \usepackage{amsmath, amsthm, amsfonts}
@@ -25,7 +25,6 @@
 \usepackage{soul}
 \usepackage[colorlinks=true, linkcolor=blue, citecolor=black]{hyperref}
 \usepackage{natbib}
-\setmainfont{Times New Roman}
 % Vector
 \newcommand{\MyVec}[1]{\boldsymbol{#1}}
 % Matrix
@@ -148,7 +147,7 @@ We have made modifications to our manuscript according to Reviewer 1's comments.
     %
     In this work, we analyzed the widely-used message-passing framework in GNN learning systems.
     %
-    However, some emerging GNN learning systems adopt different frameworks like SAGA framework [\cite{ma2019_neugraph}].
+    However, some emerging GNN learning systems adopt different frameworks like the SAGA framework [\cite{ma2019_neugraph}].
     %
     It is interesting to research whether different frameworks would lead to different performance bottlenecks.
 \end{enumerate}
