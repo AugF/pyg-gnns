@@ -1,0 +1,73 @@
+\section{Conclusion and Future Work}
+\label{sec:conclusion}
+
+In this work, we systematically explore the performance bottlenecks in graph neural network training and inference.
+%
+We model the existing GNNs with the message-passing framework. 
+%
+We classify the GNNs according to their edge and vertex calculation complexity to select four typical GNNs for evaluation. 
+%
+The experimental results validate our complexity analysis.
+%
+Fixing other hyper-parameters, the training time, inference time, and memory usage increase linearly with each hyper-parameter of the four GNNs.
+%
+To find out the performance bottlenecks in the training/inference time, we decompose the training/inference time per epoch on different levels.
+%
+The time breakdown analysis indicates that the edge calculation stage and its related basic operators are the performance bottlenecks for most GNNs.
+%
+Moreover, the intermediate results produced by the edge calculation stage cause high memory usage, limiting the data scalability.
+%
+Adopting sampling techniques can reduce the memory usage of training and inference significantly, without sacrificing accuracy. 
+%
+However, the current implementation of the sampling techniques in PyG brings considerable sampling overheads.
+%
+The small sampled subgraphs cannot make full use of the computing power of a GPU card either.
+% 
+Our analysis indicates that the edge calculation stage should be the main target of optimizations.
+%
+Reducing its memory usage and improving its efficiency can significantly improve the performance of GNN training and inference.
+%
+Based on the analysis, we propose several potential optimizations for the GNN libraries/systems.
+%
+We believe that our analysis can help developers to have a better understanding of the characteristics of GNN training and inference.
+
+\paragraph{Future Work}
+
+Specifically, in this work, we mainly analyze performance bottlenecks of GNN training/inference in the single-GPU environment on static graphs with the message-passing framework.
+%
+In fact, performance bottlenecks of GNN training/inference over the multi-GPU or distributed environment, dynamic graphs, and other GNN frameworks are also worth studying.
+%
+In the future, we plan to explore the GNN training/inference performance analysis under the following scenarios:
+%
+\begin{enumerate}
+    \item \emph{Multi-GPU or distributed GNN training/inference.}
+    %
+    To handle large-scale graph datasets, training/inferring GNNs with the multi-GPU environment or the distributed environment is essential.
+    %
+    Multi-GPU and distributed GNN training/inference will inevitably introduce overheads such as inter-GPU and inter-machine communication. 
+    %
+    How these overheads affect performance bottlenecks is worthy to study.
+    %
+    \item \emph{Spatial-temporal graph datasets.}
+    %
+    Spatial-temporal graphs usually have dynamic topology structures.
+    %
+    They appear in a variety of applications like traffic speed forecasting \cite{li2018_DCRNN} and human action recognition \cite{yan2018_STGCN}.
+    %
+    Many new GNNs are proposed to handle this kind of dynamic graphs.
+    %
+    The differences of performance issues between these GNNs and the classic GNNs are also worthy of in-depth investigation.
+    %
+    \item \emph{Emerging GNN frameworks.}
+    %
+    In this work, we analyzed the widely-used message-passing framework in GNN learning systems.
+    %
+    However, some emerging GNN learning systems adopt different frameworks like the SAGA framework \cite{ma2019_neugraph}.
+    %
+    It is interesting to research whether different frameworks would lead to different performance bottlenecks.
+\end{enumerate}
+
+\section*{Acknowledgements}
+
+This work is funded in part by the National Key R\&D Program of China (2019YFC1711000), the China NSF Grants (No. U1811461, 62072230), the Collaborative Innovation Center of Novel Software Technology and Industrialization, Jiangsu, China, Alibaba Innovative Research Project, and the program B for outstanding PhD candidate of Nanjing University.
+

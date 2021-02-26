@@ -1,0 +1,81 @@
+% !TEX program = pdflatex
+\documentclass{elsarticle}
+\usepackage{geometry}
+\geometry{left=3cm, right=3cm, top=2.5cm, bottom=2.5cm} 
+\usepackage{lineno}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage[colorlinks=true, allcolors=red]{hyperref}
+\usepackage{amsmath, amsthm, amsfonts}
+\usepackage{relsize}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{makecell}
+\usepackage{lscape}
+\usepackage{xcolor}
+\usepackage{subfig}
+\usepackage{float}
+\usepackage{times}
+\modulolinenumbers[5]
+\bibliographystyle{elsarticle-num}
+
+% Vector
+\newcommand{\MyVec}[1]{\boldsymbol{#1}}
+% Matrix
+\newcommand{\MyMat}[1]{\boldsymbol{#1}}
+% Vectors with hat
+\newcommand{\hvec}[1]{\hat{\boldsymbol{h}}_{#1}}
+% Model parameters
+\newcommand{\Param}[1]{\textcolor{blue}{#1}}
+
+
+\begin{document}
+
+\begin{frontmatter}
+
+	\title{Empirical Analysis of Performance Bottlenecks in Graph Neural Network Training and Inference with GPUs}
+    \author{Zhaokang Wang, Yunpan Wang, Chunfeng Yuan, Rong Gu$^*$ \corref{correspondingauthor1}, Yihua Huang$^*$ \corref{correspondingauthor2}}
+    \cortext[correspondingauthor]{Corresponding authors with equal contribution}
+    \ead{\{wangzhaokang, wangyp\}@smail.nju.edu.cn, \{cfyuan, gurong, yhuang\}@nju.edu.cn}
+	\address{State Key Laboratory for Novel Software Technology, \\Department of Computer Science and Technology, Nanjing University, \\Nanjing 210023, China}
+
+	\begin{abstract}
+		The graph neural network (GNN) has become a popular research area for its state-of-the-art performance in many graph analysis tasks.
+        %
+		Recently, various graph neural network libraries have emerged.
+        %
+        They make the development of GNNs convenient, but their performance bottlenecks on large datasets are not well studied.
+        %
+		In this work, we analyze the performance bottlenecks in GNN training and inference with GPUs empirically.
+        % 
+		A GNN layer can be decomposed into two parts: the vertex and the edge calculation parts.
+        %
+		According to their computational complexity, we select four representative GNNs (GCN, GGNN, GAT, GaAN) for evaluation.
+        % 
+		We decompose their running time and memory usage, evaluate the effects of hyper-parameters and assess the efficiency of the sampling techniques.
+        %
+		The experimental evaluation with PyTorch Geometric indicates that the edge-related calculation is the performance bottleneck for most GNNs, dominating the training/inference time and memory usage.
+        %
+        The sampling techniques are essential for GNN training and inference on big graphs with GPUs, but their current implementation still has non-trivial overheads in sampling and data transferring.
+	\end{abstract}
+
+	\begin{keyword}
+		graph neural network, performance bottleneck analysis, empirical evaluation, machine learning system, GPU
+	\end{keyword}
+
+\end{frontmatter}
+
+\linenumbers
+
+\input{sec1-introduction.tex}
+\input{sec2-review-of-graph-neural-network.tex}
+\input{sec3-experiment-design.tex}
+\input{sec4-experiments.tex}
+\input{sec5-insights.tex}
+\input{sec6-related-work.tex}
+\input{sec7-conclusion.tex}
+
+%\nocite{*}% Show all bib entries - both cited and uncited; comment this line to view only cited bib entries;
+\bibliography{gnnref.bib}
+
+\end{document}
