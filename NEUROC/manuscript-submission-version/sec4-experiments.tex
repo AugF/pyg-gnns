@@ -702,7 +702,7 @@ To handle big graphs, the sample-based inference was necessary.
 \begin{figure}[H]
    \centering
    \subfloat{\includegraphics[width=0.5\columnwidth]{figs/experiments/exp_inference_full_memory_expansion_ratio.pdf}}
-   \caption{Memory expansion ratios of typical GNNs in Inference.}
+   \caption{Memory expansion ratios of typical GNNs in inference.}
    \label{fig:memory_usage_analysis}
 \end{figure}
 
@@ -778,7 +778,7 @@ According to the experimental results in Section~\ref{sec:time_breakdown_analysi
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.4\columnwidth]{figs/experiments/exp_sampling_minibatch_degrees_distribution_amazon-photo.pdf}
-    \caption{Vertex degree distribution of the sampled subgraph (relative batch size: 6\%) and the original graph. Dataset:\texttt{amp}.}
+    \caption{Vertex degree distribution of the sampled subgraph (relative batch size: 6\%) and the original graph. Dataset: \texttt{amp}.}
     \label{fig:exp_sampling_minibatch_degrees_distribution}
 \end{figure}
 
@@ -870,8 +870,8 @@ To limit the memory usage during inference, the batch size used should be very s
 
 \begin{figure}[H]
    \centering
-   \subfloat[Average degree]{\includegraphics[width=0.5\columnwidth]{figs/experiments/exp_inference_sampling_graph_info_inference_sampler_avg_degrees.pdf}}
-   \subfloat[Number of edges]{\includegraphics[width=0.5\columnwidth]{figs/experiments/exp_inference_sampling_graph_info_inference_sampler_edges.pdf}}
+   \subfloat[Average degree]{\includegraphics[width=0.4\columnwidth]{figs/experiments/exp_inference_sampling_graph_info_inference_sampler_avg_degrees.pdf}}
+   \subfloat[Number of edges]{\includegraphics[width=0.4\columnwidth]{figs/experiments/exp_inference_sampling_graph_info_inference_sampler_edges.pdf}}
    
    \caption{Sizes of sampled subgraphs produced by the inference sampler under different relative batch sizes.}
    \label{fig:sampled_graph_size}

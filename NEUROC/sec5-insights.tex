@@ -36,11 +36,9 @@ Through the extensive experiments, we propose the following key findings and sug
           It only checkpoints key intermediate results during the forward propagation and re-calculates the missing results on demand during the backpropagation.
           Implementing the checkpoint mechanism is another potential optimization for GNN training.
 
-    \item \emph{Sampling techniques can significantly reduce the memory usage per batch, but their implementations are still inefficient}.
+    \item \emph{Sampling techniques can significantly reduce the memory usage per batch, but their implementation is still inefficient}.
           %
           The sampling techniques are effective under small batch sizes for both training and inference.
-          %
-          The accuracy of the GNN models trained with the sampling techniques is close to the accuracy of full-batch training.
           %
           With proper batch sizes, the accuracy of the sample-based training can be close to the accuracy of the full-batch training.
           %
@@ -51,5 +49,6 @@ Through the extensive experiments, we propose the following key findings and sug
           The small sampled subgraphs cannot make full use of the computing power of the GPU either.
           %
           How to improve the GPU utilization under small batch sizes is another problem to solve.
+          %
           One possible solution is to train multiple batches asynchronously on the same GPU and use the asynchronous stochastic gradient descent to speed up the converge.
 \end{enumerate}
