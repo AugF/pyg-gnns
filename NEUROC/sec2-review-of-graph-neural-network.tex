@@ -501,7 +501,7 @@ The first two sub-layers are similar to GAT, and the last two sub-layers build t
 The first sub-layer aims to get the sum of attention weights of every vertex in all heads $\MyVec{h}^{l,0}_x$.
 The second sub-layer aggregates the hidden vectors from the previous GaAN layer with the normalized attention weights for all heads $\alpha_{(k)}$.
 The third and fourth sub-layers aggregate the hidden vectors from the GaAN previous layer with the element-wise max and mean operators separately.
-The vertex updating funciton $\gamma^{l,3}$ of the fourth sub-layer uses the hidden vectors of the last two sub-layers $\MyVec{h}^{l, 1}_x, \MyVec{h}^{l, 2}_x$ to generate the output hidden vector $\MyVec{h}^{l+1}_x$.
+The vertex updating funciton $\gamma^{l,3}$ of the fourth sub-layer uses the hidden vectors of the last three sub-layers $\MyVec{h}^{l, 1}_x, \MyVec{h}^{l, 2}_x, \MyVec{h}^{l, 3}_x$ to generate the output hidden vector $\MyVec{h}^{l+1}_x$.
 
 \subsection{Sampling Techniques}
 
